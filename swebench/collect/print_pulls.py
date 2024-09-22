@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Given the `<owner/name>` of a GitHub repo, this script writes the raw information for all the repo's PRs to a single `.jsonl` file."""
+"""Given the `<owner/name>` of a GitHub repo, this script writes the raw information for specific or all repo's PRs to a single `.jsonl` file."""
 
 from __future__ import annotations
 
@@ -46,32 +46,64 @@ def log_all_pulls(
             if cutoff_date is not None and pull.created_at < cutoff_date:
                 break
 
+def log_specific_pulls(
+        repo: Repo,
+        pull_numbers: list[int],
+        output: str,
+    ) -> None:
+    """
+    Log specific pull requests to a file
+
+    Args:
+        repo (Repo): repository object
+        pull_numbers (list[int]): List of pull request numbers to log
+        output (str): output file name
+    """
+    # 打开输出文件
+    with open(output, "w") as file:
+        # 获取特定的 PR
+        for pull in repo.get_specific_pulls(pull_numbers):
+            # 提取关联的 issue
+            setattr(pull, "resolved_issues", repo.extract_resolved_issues(pull))
+            # 将 PR 数据写入到输出文件
+            print(json.dumps(obj2dict(pull)), end="\n", flush=True, file=file)
+
+
 def main(
         repo_name: str,
         output: str,
         token: Optional[str] = None,
+        pull_numbers: list[int] = None,
         max_pulls: int = None,
         cutoff_date: str = None,
     ):
+    print("list:",pull_numbers)
     """
-    Logic for logging all pull requests in a repository
+    Logic for logging specific or all pull requests in a repository
 
     Args:
         repo_name (str): name of the repository
         output (str): output file name
+        pull_numbers (list[int], optional): List of pull request numbers to log
         token (str, optional): GitHub token
     """
     if token is None:
         token = os.environ.get("GITHUB_TOKEN")
     owner, repo = repo_name.split("/")
     repo = Repo(owner, repo, token=token)
-    log_all_pulls(repo, output, max_pulls=max_pulls, cutoff_date=cutoff_date)
+
+    # 如果指定了 pull_numbers，则调用 log_specific_pulls，否则调用 log_all_pulls
+    if pull_numbers:
+        log_specific_pulls(repo, pull_numbers, output)
+    else:
+        log_all_pulls(repo, output, max_pulls, cutoff_date)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("repo_name", type=str, help="Name of the repository")
     parser.add_argument("output", type=str, help="Output file name")
+    # parser.add_argument("--pull_numbers", nargs='+', type=int, help="List of specific pull request numbers to log",default=None)
     parser.add_argument("--token", type=str, help="GitHub token")
     parser.add_argument("--max_pulls", type=int, help="Maximum number of pulls to log", default=None)
     parser.add_argument("--cutoff_date", type=str, help="Cutoff date for PRs to consider in format YYYYMMDD", default=None)

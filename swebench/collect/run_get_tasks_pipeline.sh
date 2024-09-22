@@ -5,6 +5,7 @@
 # * Declare GITHUB_TOKENS=token1,token2,token3...
 
 python get_tasks_pipeline.py \
-    --repos 'scikit-learn/scikit-learn', 'pallets/flask' \
-    --path_prs '<path to folder to save PRs to>' \
-    --path_tasks '<path to folder to save tasks to>'
+    --repos 'rust-lang/rustlings' \
+    --path_prs '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/prs' \
+    --path_tasks '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks'\
+    --pull_numbers 184

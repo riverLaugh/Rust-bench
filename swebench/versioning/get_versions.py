@@ -85,6 +85,8 @@ def get_version(instance, is_build=False, path_repo=None):
                 path_to_version,
             )
             init_text = requests.get(url).text
+            print(f'url: {url}')
+            print(f'init_text: {init_text}')
         version = _find_version_in_text(init_text, instance)
         if version is not None:
             if "." in version:
@@ -200,6 +202,8 @@ def get_versions_from_web(data: dict):
     version_not_found = data["not_found_list"]
     for instance in data_tasks:
         version = get_version(instance)
+        print(f'instance: {instance}')
+        print(f'version: {version}')
         if version is not None:
             instance["version"] = version
             logger.info(f'For instance {instance["instance_id"]}, version is {version}')
@@ -258,26 +262,40 @@ def main(args):
 
     # If retrieval method includes GitHub, then search GitHub for versions via parallel call
     if any([x == args.retrieval_method for x in ["github", "mix"]]):
-        manager = Manager()
-        shared_result_list = manager.list()
-        pool = Pool(processes=args.num_workers)
-        pool.map(
-            get_versions_from_web,
-            [
-                {
-                    "data_tasks": data_task_list,
-                    "save_path": f"{repo_prefix}_versions_{i}.json"
-                    if args.retrieval_method == "github"
-                    else f"{repo_prefix}_versions_{i}_web.json",
-                    "not_found_list": shared_result_list
-                    if args.retrieval_method == "mix"
-                    else None,
-                }
-                for i, data_task_list in enumerate(data_task_lists)
-            ],
-        )
-        pool.close()
-        pool.join()
+        # manager = Manager()
+        # shared_result_list = manager.list()
+        # pool = Pool(processes=args.num_workers)
+        # pool.map(
+        #     get_versions_from_web,
+        #     [
+        #         {
+        #             "data_tasks": data_task_list,
+        #             "save_path": f"{repo_prefix}_versions_{i}.json"
+        #             if args.retrieval_method == "github"
+        #             else f"{repo_prefix}_versions_{i}_web.json",
+        #             "not_found_list": shared_result_list
+        #             if args.retrieval_method == "mix"
+        #             else None,
+        #         }
+        #         for i, data_task_list in enumerate(data_task_lists)
+        #     ],
+        # )
+        # pool.close()
+        # pool.join()
+
+
+
+        for i, data_task_list in enumerate(data_task_lists):
+            # print(f"data_task_list: {data_task_list}")
+            get_versions_from_web({
+                "data_tasks": data_task_list,
+                "save_path": f"{repo_prefix}_versions_{i}.json"
+                if args.retrieval_method == "github"
+                else f"{repo_prefix}_versions_{i}_web.json",
+                "not_found_list": shared_result_list
+                if args.retrieval_method == "mix"
+                else None,
+            })
 
         if args.retrieval_method == "github":
             # If retrieval method is just GitHub, then merge results and return

@@ -109,7 +109,8 @@ def main(
             logger.info(f"{output_file.absolute().as_posix()} already exists. Aborting")
             return
     if Path(dataset_name_or_path).exists():
-        dataset = load_from_disk(dataset_name_or_path)
+        # dataset = load_from_disk(dataset_name_or_path)
+        dataset = load_dataset('json', data_files=dataset_name_or_path)
     else:
         dataset = load_dataset(dataset_name_or_path)
 
@@ -169,8 +170,18 @@ def main(
     if push_to_hub_user is not None:
         dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
     else:
-        dataset.save_to_disk(output_file)
+        dataset.save_to_disk(str(output_file))
     logger.info(f"Finsihed saving to {output_file}")
+
+    if push_to_hub_user is not None:
+        dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
+    else:
+        output_file = str(output_file)+'.jsonl'
+        # 将数据集保存为 JSON Lines 格式
+        with open(output_file, 'w', encoding='utf-8') as f:
+            for example in dataset:
+                f.write(json.dumps(example, ensure_ascii=False) + '\n')
+
 
 
 if __name__ == "__main__":

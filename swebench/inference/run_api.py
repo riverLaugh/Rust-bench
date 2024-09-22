@@ -3,6 +3,7 @@
 """This python script is designed to run inference on a dataset using either the OpenAI or Anthropic API, depending on the model specified. 
 It sorts instances by length and continually writes the outputs to a specified file, so that the script can be stopped and restarted without losing progress.
 """
+import requests
 
 import json
 import os
@@ -138,20 +139,51 @@ def call_chat(model_name_or_path, inputs, use_azure, temperature, top_p, **model
                 **model_args,
             )
         else:
-            response = openai.chat.completions.create(
-                model=model_name_or_path,
-                messages=[
-                    {"role": "system", "content": system_messages},
-                    {"role": "user", "content": user_message},
+            # response = openai.chat.completions.create(
+            #     model=model_name_or_path,
+            #     messages=[
+            #         {"role": "system", "content": system_messages},
+            #         {"role": "user", "content": user_message},
+            #     ],
+            #     temperature=temperature,
+            #     top_p=top_p,
+            #     **model_args,
+            # )
+            api_key = 'sk-iA4HS8tiky1uILosB6Ad5fCbC5B347E0846e3cA4D59975B0'
+            headers = {'Authorization': api_key, 'Content-Type': 'application/json', }
+            json_data = {
+                'model': model_name_or_path,
+                'messages': [
+                    {
+                        'role': 'system',
+                        'content': system_messages,
+                    },
+                    {
+                        'role': 'user',
+                        'content': user_message,
+                    },
                 ],
-                temperature=temperature,
-                top_p=top_p,
-                **model_args,
-            )
-        input_tokens = response.usage.prompt_tokens
-        output_tokens = response.usage.completion_tokens
-        cost = calc_cost(response.model, input_tokens, output_tokens)
-        return response, cost
+                'stream': False,
+                'temperature': temperature,
+                'n': 1,
+            }
+            response = requests.post('https://api5.xhub.chat/v1/chat/completions', headers=headers,json = json_data, timeout=300)
+            if response.status_code == 200:
+                response_json = response.json()
+
+                # print(response_json)
+                if not response_json or 'choices' not in response_json:
+                    raise ValueError("Received a None response from api_wandou_response")
+            else:
+                print(f"Request failed with status code {response.status_code}. Retrying...")
+                error_msg = str(response.json())
+                print(error_msg)
+        #calculate cost
+        # input_tokens = response.usage.prompt_tokens
+        # output_tokens = response.usage.completion_tokens
+        # cost = calc_cost(response.model, input_tokens, output_tokens)
+        cost = 0.7
+        return response_json, cost
     except openai.BadRequestError as e:
         if e.code == "context_length_exceeded":
             print("Context length exceeded")
@@ -231,7 +263,7 @@ def openai_inference(
                 temperature,
                 top_p,
             )
-            completion = response.choices[0].message.content
+            completion = response['choices'][0]['message']['content']
             total_cost += cost
             print(f"Total Cost: {total_cost:.2f}")
             output_dict["full_output"] = completion
@@ -448,6 +480,7 @@ def main(
     output_dir,
     model_args,
     max_cost,
+    instance_ids=None,
 ):
     if shard_id is None and num_shards is not None:
         logger.warning(
@@ -467,12 +500,16 @@ def main(
     output_file = Path(output_dir, output_file + ".jsonl")
     logger.info(f"Will write to {output_file}")
     existing_ids = set()
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     if os.path.exists(output_file):
         with open(output_file) as f:
             for line in f:
                 data = json.loads(line)
                 instance_id = data["instance_id"]
                 existing_ids.add(instance_id)
+    else:
+        with open(output_file, 'w', encoding='utf-8') as file:
+            pass  # 不写入任何内容，只创建文件
     logger.info(f"Read {len(existing_ids)} already completed ids from {output_file}")
     if Path(dataset_name_or_path).exists():
         dataset = load_from_disk(dataset_name_or_path)
@@ -481,6 +518,16 @@ def main(
     if not split in dataset:
         raise ValueError(f"Invalid split {split} for dataset {dataset_name_or_path}")
     dataset = dataset[split]
+
+    if instance_ids is not None:
+        # print(f"Filtering by instance IDs: {instance_ids}")
+        # print(dataset["instance_id"][:3])
+        dataset = dataset.filter(
+            lambda x: x["instance_id"] in instance_ids,
+            desc="Filtering by instance IDs",
+            load_from_cache_file=False,
+        )
+    
     lens = np.array(list(map(len, dataset["text"])))
     dataset = dataset.select(np.argsort(lens))
     if len(existing_ids) > 0:
@@ -525,6 +572,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model_name_or_path",
         type=str,
+        default='gpt-3.5-turbo-1106',
         help="Name of API model. Update MODEL* constants in this file to add new models.",
         choices=sorted(list(MODEL_LIMITS.keys())),
     )
@@ -556,8 +604,15 @@ if __name__ == "__main__":
     parser.add_argument(
         "--max_cost",
         type=float,
-        default=None,
+        default=2,
         help="Maximum cost to spend on inference.",
+    )
+    parser.add_argument(
+        "--instance_ids",
+        nargs="+",
+        type=str,
+        # default=['astropy__astropy-12907'],
+        help="Instance IDs to run (space separated)",
     )
     args = parser.parse_args()
     main(**vars(args))
