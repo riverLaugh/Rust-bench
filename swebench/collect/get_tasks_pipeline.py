@@ -48,13 +48,14 @@ def construct_data_files(data: dict):
             path_tasks (str): Path to save task instance data files to
             token (str): GitHub token to use for API requests
     """
-    repos, path_prs, path_tasks, max_pulls, cutoff_date, token = (
+    repos, path_prs, path_tasks, max_pulls, cutoff_date, token, pull_numbers = (
         data["repos"],
         data["path_prs"],
         data["path_tasks"],
         data["max_pulls"],
         data["cutoff_date"],
         data["token"],
+        data.get("pull_numbers")
     )
     for repo in repos:
         repo = repo.strip(",").strip()
@@ -65,13 +66,23 @@ def construct_data_files(data: dict):
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
             if not os.path.exists(path_pr):
                 print(f"Pull request data for {repo} not found, creating...")
-                print_pulls(
-                    repo,
-                    path_pr,
-                    token,
-                    max_pulls=max_pulls,
-                    cutoff_date=cutoff_date
-                )
+                if pull_numbers:
+                    print(f"Processing specific PR numbers: {pull_numbers}")
+                    print_pulls(
+                        repo_name=repo,
+                        output=path_pr,
+                        token= token,  # 注意此处不需要重复传递 pull_numbers
+                        pull_numbers=pull_numbers  # 只传递一次 pull_numbers
+                    )
+                else:
+                    print_pulls(
+                        repo_name=repo,
+                        output= path_pr,
+                        token= token,
+                        max_pulls=max_pulls,
+                        cutoff_date=cutoff_date
+                    )
+
                 print(f"✅ Successfully saved PR data for {repo} to {path_pr}")
             else:
                 print(f"📁 Pull request data for {repo} already exists at {path_pr}, skipping...")
@@ -95,6 +106,7 @@ def main(
         repos: list,
         path_prs: str,
         path_tasks: str,
+        pull_numbers: list,
         max_pulls: int = None,
         cutoff_date: str = None,
     ):
@@ -112,7 +124,7 @@ def main(
     print(f"Will save task instance data to {path_tasks}")
     print(f"Received following repos to create task instances for: {repos}")
 
-    tokens = os.getenv("GITHUB_TOKENS")
+    tokens = os.getenv("GITHUB_TOKEN")
     if not tokens: raise Exception("Missing GITHUB_TOKENS, consider rerunning with GITHUB_TOKENS=$(gh auth token)")
     tokens = tokens.split(",")
     data_task_lists = split_instances(repos, len(tokens))
@@ -124,7 +136,8 @@ def main(
             "path_tasks": path_tasks,
             "max_pulls": max_pulls,
             "cutoff_date": cutoff_date,
-            "token": token
+            "token": token,
+            "pull_numbers": pull_numbers
         }
         for repos, token in zip(data_task_lists, tokens)
     ]
@@ -158,5 +171,11 @@ if __name__ == "__main__":
         help="Cutoff date for PRs to consider in format YYYYMMDD",
         default=None,
     )
+    parser.add_argument(
+        "--pull_numbers", 
+        nargs='+', 
+        type=int, 
+        help="List of specific pull request numbers to log")
+
     args = parser.parse_args()
     main(**vars(args))

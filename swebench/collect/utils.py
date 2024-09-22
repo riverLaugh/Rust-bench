@@ -33,6 +33,8 @@ class Repo:
         self.token = token
         self.api = GhApi(token=token)
         self.repo = self.call_api(self.api.repos.get, owner=owner, repo=name)
+    
+
 
     def call_api(self, func: Callable, **kwargs) -> dict|None:
         """
@@ -198,6 +200,37 @@ class Repo:
         )
         return issues
 
+    def get_specific_pulls(
+        self,
+        pull_numbers: list[int],
+        quiet: bool = False,
+    ) -> Iterator:
+        """
+        Wrapper for API call to get specific PRs from a repository
+
+        Args:
+            pull_numbers (list[int]): List of PR numbers to fetch
+            quiet (bool): Whether to print progress or not
+
+        Returns:
+            Iterator: Iterator of pull request objects
+        """
+        pulls = []
+        
+        
+        for pull_number in pull_numbers:
+            if not quiet:
+                print(f"Fetching PR #{pull_number}...")
+            try:
+                pull = self.api.pulls.get(owner = self.owner, repo = self.name ,pull_number=pull_number)
+                pulls.append(pull)
+            except Exception as e:
+                if not quiet:
+                    print(f"Error fetching PR #{pull_number}: {e}")
+
+        return iter(pulls)
+
+
     def get_all_pulls(
         self,
         per_page: int = 100,
@@ -322,13 +355,14 @@ def extract_patches(pull: dict, repo: Repo) -> tuple[str, str]:
     patch_test = ""
     patch_fix  = ""
     for hunk in PatchSet(patch):
-        if any(
-            test_word in hunk.path for test_word in
-            ['test', 'tests', 'e2e', 'testing']
-        ):
-            patch_test += str(hunk)
-        else:
-            patch_fix += str(hunk)
+        # if any(
+        #     test_word in hunk.path for test_word in
+        #     ['test', 'tests', 'e2e', 'testing']
+        # ):
+        #     patch_test += str(hunk)
+        # else:
+        #     patch_fix += str(hunk)
+        patch_fix += str(hunk)
     return patch_fix, patch_test
 
 

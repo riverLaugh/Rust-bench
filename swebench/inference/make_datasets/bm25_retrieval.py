@@ -325,7 +325,7 @@ def search(instance, index_path):
         while True:
             try:
                 hits = searcher.search(
-                    instance["problem_statement"][:cutoff],
+                    instance["problem_statement"][:cutoff], 
                     k=20,
                     remove_dups=True,
                 )

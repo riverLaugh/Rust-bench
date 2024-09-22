@@ -899,6 +899,14 @@ SPECS_PYDICOM.update(
 
 SPECS_HUMANEVAL = {k: {"python": "3.9", "test_cmd": "python"} for k in ["1.0"]}
 
+SPECS_RUSTLINGS = {
+    k: {
+        "python": "3.9",
+        
+    }
+
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "astropy/astropy": SPECS_ASTROPY,
@@ -921,6 +929,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "sqlfluff/sqlfluff": SPECS_SQLFLUFF,
     "swe-bench/humaneval": SPECS_HUMANEVAL,
     "sympy/sympy": SPECS_SYMPY,
+    "rust-lang/rustlings": SPECS_RUSTLINGS,
 }
 
 # Constants - Repository Specific Installation Instructions
