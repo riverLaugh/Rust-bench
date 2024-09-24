@@ -53,7 +53,7 @@ TEST_PYTEST_VERBOSE = "pytest -rA --tb=long"
 TEST_SPHINX = "tox --current-env -epy39 -v --"
 TEST_SYMPY = "PYTHONWARNINGS='ignore::UserWarning,ignore::SyntaxWarning' bin/test -C --verbose"
 TEST_SYMPY_VERBOSE = "bin/test -C --verbose"
-
+TEST_CARGO = "cargo test"
 
 # Constants - Installation Specifications
 SPECS_SKLEARN = {
@@ -900,11 +900,10 @@ SPECS_PYDICOM.update(
 SPECS_HUMANEVAL = {k: {"python": "3.9", "test_cmd": "python"} for k in ["1.0"]}
 
 SPECS_RUSTLINGS = {
-    k: {
-        "python": "3.9",
-        
-    }
 
+}
+SPECS_SERDE = {
+    "test_cmd":TEST_CARGO
 }
 
 # Constants - Task Instance Instllation Environment
@@ -930,6 +929,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "swe-bench/humaneval": SPECS_HUMANEVAL,
     "sympy/sympy": SPECS_SYMPY,
     "rust-lang/rustlings": SPECS_RUSTLINGS,
+    "serde-rs/serde": SPECS_SERDE
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -951,6 +951,9 @@ MAP_REPO_TO_REQS_PATHS = {
     "sympy/sympy": ["requirements-dev.txt"],
 }
 
+MAP_REPO_TO_CARGO_TOML_PATHS = {
+    "rust-lang/rustlings": ["Cargo.toml"]
+}
 
 # Constants - Task Instance environment.yml File Paths
 MAP_REPO_TO_ENV_YML_PATHS = {

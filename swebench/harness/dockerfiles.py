@@ -11,15 +11,23 @@ git \
 build-essential \
 libffi-dev \
 libtiff-dev \
-python3 \
-python3-pip \
-python-is-python3 \
 jq \
 curl \
 locales \
 locales-all \
 tzdata \
 && rm -rf /var/lib/apt/lists/*
+ 工具链
+# 安装 Rustup 和指定的 Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH=/root/.cargo/bin:$PATH
+
+# 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
+RUN rustup default stable
+
+# 安装一些常用的 Rust 工具，如 clippy, rustfmt
+RUN rustup component add clippy rustfmt
+
 
 # Download and install conda
 RUN wget 'https://repo.anaconda.com/miniconda/Miniconda3-py311_23.11.0-2-Linux-{conda_arch}.sh' -O miniconda.sh \
