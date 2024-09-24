@@ -520,8 +520,7 @@ def main(
     dataset = dataset[split]
 
     if instance_ids is not None:
-        # print(f"Filtering by instance IDs: {instance_ids}")
-        # print(dataset["instance_id"][:3])
+        print(f"Filtering by instance IDs: {instance_ids}")
         dataset = dataset.filter(
             lambda x: x["instance_id"] in instance_ids,
             desc="Filtering by instance IDs",
@@ -611,7 +610,7 @@ if __name__ == "__main__":
         "--instance_ids",
         nargs="+",
         type=str,
-        # default=['astropy__astropy-12907'],
+        default=['serde-rs__serde-721','serde-rs__serde-721','serde-rs__serde-2709'],
         help="Instance IDs to run (space separated)",
     )
     args = parser.parse_args()

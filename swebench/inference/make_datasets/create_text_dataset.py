@@ -78,6 +78,7 @@ def main(
     max_context_len,
     tokenizer_name,
     push_to_hub_user,
+    nname
 ):
     if push_to_hub_user is not None:
         hub_token = os.environ.get("HUGGING_FACE_HUB_TOKEN", None)
@@ -87,7 +88,7 @@ def main(
         assert tokenizer_name is not None
     if push_to_hub_user is None and not Path(output_dir).exists():
         Path(output_dir).mkdir(parents=True)
-    output_file = f"SWE-bench__{prompt_style}__fs-{file_source}"
+    output_file = f"SWE-bench_{nname}_{prompt_style}__fs-{file_source}"
     if k is not None:
         assert file_source not in {
             "all",
@@ -109,11 +110,10 @@ def main(
             logger.info(f"{output_file.absolute().as_posix()} already exists. Aborting")
             return
     if Path(dataset_name_or_path).exists():
-        # dataset = load_from_disk(dataset_name_or_path)
-        dataset = load_dataset('json', data_files=dataset_name_or_path)
+        dataset = load_from_disk(dataset_name_or_path)
     else:
         dataset = load_dataset(dataset_name_or_path)
-
+        
     split_instances = dict()
     logger.info(f'Found {set(dataset.keys())} splits')
     if set(splits) - set(dataset.keys()) != set():
@@ -168,19 +168,19 @@ def main(
     for split in dataset:
         logger.info(f"Found {len(dataset[split])} {split} instances")
     if push_to_hub_user is not None:
-        dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
+        dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', token=hub_token)
     else:
         dataset.save_to_disk(str(output_file))
     logger.info(f"Finsihed saving to {output_file}")
 
-    if push_to_hub_user is not None:
-        dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
-    else:
-        output_file = str(output_file)+'.jsonl'
-        # 将数据集保存为 JSON Lines 格式
-        with open(output_file, 'w', encoding='utf-8') as f:
-            for example in dataset:
-                f.write(json.dumps(example, ensure_ascii=False) + '\n')
+    # if push_to_hub_user is not None:
+    #     dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
+    # else:
+    #     output_file = str(output_file)+'.jsonl'
+    #     # 将数据集保存为 JSON Lines 格式
+    #     with open(output_file, 'w', encoding='utf-8') as f:
+    #         for example in dataset:
+    #             f.write(json.dumps(example, ensure_ascii=False) + '\n')
 
 
 
@@ -249,5 +249,10 @@ if __name__ == "__main__":
         "--push_to_hub_user",
         type=str,
         help="Username to use for pushing to the Hub. If not provided, will save to disk.",
+    )
+    parser.add_argument(
+        "--nname",
+        type=str,
+        help="dataset nickname"
     )
     main(**vars(parser.parse_args()))
