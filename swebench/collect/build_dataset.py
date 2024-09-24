@@ -167,16 +167,16 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                     repos[repo_name] = load_repo(repo_name)
                 repo = repos[repo_name]
                 instance = create_instance(repo, pull)
-                # if is_valid_instance(instance):
+                if is_valid_instance(instance):
                     # If valid, write to .all output file
-                print(
-                    json.dumps(instance), end="\n", flush=True, file=all_output
-                )  # write all instances to a separate file
-                completed += 1
-                # if has_test_patch(instance):
-                    # If has test suite, write to output file
-                print(json.dumps(instance), end="\n", flush=True, file=output)
-                with_tests += 1
+                    print(
+                        json.dumps(instance), end="\n", flush=True, file=all_output
+                    )  # write all instances to a separate file
+                    completed += 1
+                    if has_test_patch(instance):
+                        # If has test suite, write to output file
+                        print(json.dumps(instance), end="\n", flush=True, file=output)
+                        with_tests += 1
     logger.info(f"[{', '.join(repos.keys())}] Total instances: {total_instances}, completed: {completed}, with tests: {with_tests}")
     logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been inspected")
 
