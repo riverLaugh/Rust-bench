@@ -20,6 +20,7 @@ MAP_REPO_TO_VERSION_PATHS = {
     "sphinx-doc/sphinx": ["sphinx/__init__.py"],
     "sympy/sympy": ["sympy/release.py", "sympy/__init__.py"],
     "rust-lang/rustlings": ["Cargo.toml"],
+    "serde-rs/serde": ["serde/Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -56,8 +57,10 @@ MAP_REPO_TO_VERSION_PATTERNS.update({k: [r"version_info = [\d]+,[\d\s]+,"] for k
 
 
 MAP_REPO_TO_VERSION_PATTERNS.update({
-    "rust-lang/rustlings": [
-        r'version\s*=\s*"(\d+\.\d+\.\d+)"'
+    k:[r'version\s*=\s*"(\d+\.\d+\.\d+)"']
+    for k in [
+        "rust-lang/rustlings",
+        "serde-rs/serde"
     ]
 })
 
