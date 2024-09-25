@@ -128,9 +128,9 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         # Remove the remote so the agent won't see newer commits.
         f"git remote remove origin",
         # Make sure conda is available for later use
-        "source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
-        f'echo "Current environment: $CONDA_DEFAULT_ENV"',
+        # "source /opt/miniconda3/bin/activate",
+        # f"conda activate {env_name}",
+        # f'echo "Current environment: $CONDA_DEFAULT_ENV"',
     ]
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
@@ -153,7 +153,7 @@ def make_env_script_list(instance, specs, env_name):
     HEREDOC_DELIMITER = "EOF_59812759871"
     reqs_commands = [
         "source /opt/miniconda3/bin/activate",
-        f"conda create -n {env_name} -y",
+        # f"conda create -n {env_name} -y",
 
     ]
 
@@ -226,13 +226,14 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     )
     test_command = " ".join(
         [
-            MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"],
+            # MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"],
+            MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"],
             *get_test_directives(instance),
         ]
     )
     eval_commands = [
-        f"source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
+        # f"source /opt/miniconda3/bin/activate",
+        # f"conda activate {env_name}",
         f"cd {repo_directory}",
     ]
     if "eval_commands" in specs:
@@ -244,8 +245,8 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         f"git status",
         f"git show",
         f"git diff {base_commit}",
-        "source /opt/miniconda3/bin/activate",
-        f"conda activate {env_name}",
+        # "source /opt/miniconda3/bin/activate",
+        # f"conda activate {env_name}",
     ]
     if "install" in specs:
         eval_commands.append(specs["install"])
