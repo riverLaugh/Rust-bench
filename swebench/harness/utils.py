@@ -296,6 +296,18 @@ def get_test_directives(instance: SWEbenchInstance) -> list:
         d for d in directives if not any(d.endswith(ext) for ext in NON_TEST_EXTS)
     ]
 
+    if instance["repo"] == "serde-rs/serde":
+        directives_transformed = []
+        for d in directives:
+            # 只考虑以 ".rs" 结尾的文件，并转换为 Rust 模块路径
+            if d.endswith(".rs"):
+                # 移除文件扩展名 ".rs"
+                d = d[:-3]
+                # 将路径中的斜杠替换为 `::`，以符合 Rust 的模块引用格式
+                d = d.replace("/", "::")
+                directives_transformed.append(d)
+        directives = directives_transformed
+
     # For Django tests, remove extension + "tests/" prefix and convert slashes to dots (module referencing)
     if instance["repo"] == "django/django":
         directives_transformed = []
