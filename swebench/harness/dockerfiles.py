@@ -17,7 +17,6 @@ locales \
 locales-all \
 tzdata \
 && rm -rf /var/lib/apt/lists/*
- 工具链
 # 安装 Rustup 和指定的 Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH=/root/.cargo/bin:$PATH

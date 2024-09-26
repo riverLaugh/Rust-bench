@@ -40,7 +40,7 @@ class TestSpec:
     """
     instance_id: str
     repo: str
-    version: str
+    # version: str
     repo_script_list: list[str]
     eval_script_list: list[str]
     env_script_list: list[str]
@@ -160,7 +160,7 @@ def make_env_script_list(instance, specs, env_name):
     """
     HEREDOC_DELIMITER = "EOF_59812759871"
     reqs_commands = [
-        "source /opt/miniconda3/bin/activate",
+        # "source /opt/miniconda3/bin/activate",
         # f"conda create -n {env_name} -y",
 
     ]
@@ -211,7 +211,7 @@ def make_env_script_list(instance, specs, env_name):
     #     cmd = f"conda create -n {env_name} python={specs['python']} {pkgs} -y"
     #     reqs_commands.append(cmd)
 
-    reqs_commands.append(f"conda activate {env_name}")
+    # reqs_commands.append(f"conda activate {env_name}")
 
     # Install additional packages if specified
     if "pip_packages" in specs:
@@ -231,18 +231,20 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
+        # f"cd serde-tests"
     )
-    test_command = " ".join(
-        [
-            # MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"],
-            MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"],
-            *get_test_directives(instance),
-        ]
-    )
+
+    test_command_list = [
+    f'{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]} {directive}'
+    for directive in get_test_directives(instance)
+    ]
+    test_command = " && ".join(test_command_list)
+    pwd_command = "pwd" # For debugging
+    ls_command = "ls -la" # For debugging
     eval_commands = [
         # f"source /opt/miniconda3/bin/activate",
         # f"conda activate {env_name}",
-        f"cd {repo_directory}",
+        # f"cd {repo_directory}",
     ]
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
@@ -252,7 +254,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         # This is just informational, so we have a record
         f"git status",
         f"git show",
-        f"git diff {base_commit}",
+        # f"git diff {base_commit}",
         # "source /opt/miniconda3/bin/activate",
         # f"conda activate {env_name}",
     ]
@@ -275,7 +277,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         return None
     instance_id = instance[KEY_INSTANCE_ID]
     repo = instance["repo"]
-    version = instance["version"]
+    # version = instance["version"]
     base_commit = instance["base_commit"]
     problem_statement = instance["problem_statement"]
     hints_text = instance["hints_text"]  # Unused
@@ -292,10 +294,8 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     env_name = "testbed"
     repo_directory = f"/{env_name}"
-    if version not in MAP_REPO_VERSION_TO_SPECS[repo]:
-        logger.warning(f"Version {version} not found for repo {repo}, skipping")
-        return None
-    specs = MAP_REPO_VERSION_TO_SPECS[repo][version]
+    # specs = MAP_REPO_VERSION_TO_SPECS[repo][version]
+    specs = MAP_REPO_VERSION_TO_SPECS[repo]
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
     try:
@@ -318,7 +318,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         env_script_list=env_script_list,
         repo_script_list=repo_script_list,
         eval_script_list=eval_script_list,
-        version=version,
+        # version=version,
         arch=arch,
         FAIL_TO_PASS=fail_to_pass,
         PASS_TO_PASS=pass_to_pass,

@@ -238,6 +238,9 @@ def parse_log_matplotlib(log: str) -> dict[str, str]:
             test_status_map[test_case[1]] = test_case[0]
     return test_status_map
 
+def parse_log_serde(log:str) ->dict[str, str]:
+    
+    pass
 
 parse_log_astroid = parse_log_pytest
 parse_log_flask = parse_log_pytest
@@ -254,6 +257,8 @@ parse_log_pylint = parse_log_pytest_options
 parse_log_astropy = parse_log_pytest_v2
 parse_log_scikit = parse_log_pytest_v2
 parse_log_sphinx = parse_log_pytest_v2
+
+
 
 
 MAP_REPO_TO_PARSER = {
@@ -275,4 +280,5 @@ MAP_REPO_TO_PARSER = {
     "sqlfluff/sqlfluff": parse_log_sqlfluff,
     "sphinx-doc/sphinx": parse_log_sphinx,
     "sympy/sympy": parse_log_sympy,
+    "serde-rs/serde": parse_log_serde,
 }
