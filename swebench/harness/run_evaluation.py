@@ -184,7 +184,8 @@ def run_instance(
         report = get_eval_report(
             test_spec=test_spec,
             prediction=pred,
-            log_path=test_output_path,
+            log_path=log_file,
+            test_output_path=test_output_path,
             include_tests_status=True,
         )
         logger.info(
@@ -255,7 +256,7 @@ def run_instances(
 
     # run instances in parallel
     print(f"Running {len(instances)} instances...")
-    with tqdm(total=len(instances), smoothing=0) as pbar:
+    with tqdm(total=len(instances), smoothing=0, desc="Running instances") as pbar:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Create a future for running each instance
             futures = {
