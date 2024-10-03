@@ -242,6 +242,42 @@ def parse_log_serde(log:str) ->dict[str, str]:
     
     pass
 
+def parse_log_bitflags(log:str) ->dict[str, str]:
+    """
+    Parses cargo test output and extracts the test case names and their statuses (PASSED or FAILED).
+    
+    Args:
+        log (str): The cargo test output log as a string.
+    
+    Returns:
+        dict: A dictionary where the keys are test case names and the values are 'PASSED' or 'FAILED'.
+    """
+    test_status_map = {}
+
+    # Split the log into lines for easier processing
+    lines = log.split("\n")
+
+    # Regular expressions to match test results
+    passed_re = re.compile(r'test (\S+) ... ok')
+    failed_re = re.compile(r'test (\S+) ... error') or re.compile(r'test (\S+) ... failed')
+
+    for line in lines:
+        # Match passed tests
+        passed_match = passed_re.match(line)
+        if passed_match:
+            test_status_map[passed_match.group(1)] = "PASSED"
+            continue
+
+        # Match failed tests
+        failed_match = failed_re.match(line)
+        if failed_match:
+            test_status_map[failed_match.group(1)] = "FAILED"
+            continue
+
+    return test_status_map
+
+
+
 parse_log_astroid = parse_log_pytest
 parse_log_flask = parse_log_pytest
 parse_log_marshmallow = parse_log_pytest
@@ -281,4 +317,5 @@ MAP_REPO_TO_PARSER = {
     "sphinx-doc/sphinx": parse_log_sphinx,
     "sympy/sympy": parse_log_sympy,
     "serde-rs/serde": parse_log_serde,
+    "bitflags/bitflags": parse_log_bitflags
 }

@@ -201,7 +201,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--validation_ratio",
         type=float,
-        default=0.01,
+        default=0,
         help="Ratio of the training set to use for validation.",
     )
     parser.add_argument(

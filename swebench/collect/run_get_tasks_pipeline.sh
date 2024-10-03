@@ -5,6 +5,7 @@
 # * Declare GITHUB_TOKENS=token1,token2,token3...
 
 python get_tasks_pipeline.py \
-    --repos 'serde-rs/serde' \
+    --repos 'bitflags/bitflags' \
     --path_prs '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/prs' \
     --path_tasks '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks'\
+    --pull_numbers 411

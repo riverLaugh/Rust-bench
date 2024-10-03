@@ -906,6 +906,10 @@ SPECS_SERDE = {
     "test_cmd":TEST_CARGO
 }
 
+SPECS_BITFLAGS = {
+    "test_cmd":TEST_CARGO
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "astropy/astropy": SPECS_ASTROPY,
@@ -929,7 +933,8 @@ MAP_REPO_VERSION_TO_SPECS = {
     "swe-bench/humaneval": SPECS_HUMANEVAL,
     "sympy/sympy": SPECS_SYMPY,
     "rust-lang/rustlings": SPECS_RUSTLINGS,
-    "serde-rs/serde": SPECS_SERDE
+    "serde-rs/serde": SPECS_SERDE,
+    "bitflags/bitflags": SPECS_BITFLAGS,
 }
 
 # Constants - Repository Specific Installation Instructions
