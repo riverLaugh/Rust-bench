@@ -5,7 +5,7 @@ import os
 
 def json_to_dataset(json_file_path):
     """
-    将多行 JSON 文件转换为 Hugging Face Dataset 格式。
+    将 JSON 文件（整体是一个列表）转换为 Hugging Face Dataset 格式。
     
     Args:
         json_file_path (str): JSON 文件的路径。
@@ -13,19 +13,21 @@ def json_to_dataset(json_file_path):
     Returns:
         dataset (datasets.Dataset): 转换后的数据集。
     """
-    data = []
     with open(json_file_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            try:
-                # 每行解析一个 JSON 对象
-                json_line = json.loads(line.strip())  # 去除行尾的空白符并解析 JSON
-                data.append(json_line)
-            except json.JSONDecodeError as e:
-                print(f"Skipping invalid JSON line: {line.strip()} - Error: {e}")
-    
-    # 创建 Dataset 对象
-    dataset = Dataset.from_list(data)
-    return dataset
+        try:
+            # 直接读取整个 JSON 文件为一个列表
+            data = json.load(f)
+            
+            # 确保 data 是一个包含字典的列表
+            if isinstance(data, list) and all(isinstance(item, dict) for item in data):
+                dataset = Dataset.from_list(data)
+                return dataset
+            else:
+                raise ValueError("The JSON file does not contain a list of dictionaries.")
+                
+        except json.JSONDecodeError as e:
+            print(f"Failed to decode JSON file: {json_file_path} - Error: {e}")
+            raise
 
 def upload_to_huggingface(dataset, dataset_name, token):
     """
@@ -49,8 +51,8 @@ def upload_to_huggingface(dataset, dataset_name, token):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/output_validated.jsonl"  # 替换为你的 JSON 文件路径
-    dataset_name = "r1v3r/bitflags_tests_dataset"  # 替换为你想要的数据集名称
+    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/bitflags-task-instances_versions.json"  # 替换为你的 JSON 文件路径
+    dataset_name = "r1v3r/bitflags_version_dataset"  # 替换为你想要的数据集名称
     hf_token = os.environ.get("HUGGING_FACE_HUB_TOKEN", None)
 
     # 将 JSON 转换为数据集

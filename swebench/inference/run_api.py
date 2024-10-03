@@ -614,7 +614,7 @@ if __name__ == "__main__":
         "--instance_ids",
         nargs="+",
         type=str,
-        default=['serde-rs__serde-801', 'serde-rs__serde-371', 'serde-rs__serde-1251'],
+        # default=['serde-rs__serde-801', 'serde-rs__serde-371', 'serde-rs__serde-1251'],
         help="Instance IDs to run (space separated)",
     )
     args = parser.parse_args()

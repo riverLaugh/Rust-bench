@@ -9,8 +9,8 @@
 
 # Example call for getting versions from github web interface
 python get_versions.py \
-    --instances_path "/root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks/rustlings-task-instances.jsonl" \
+    --instances_path /root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks/bitflags-task-instances.jsonl \
     --retrieval_method github \
-    --num_workers 1 \
+    --num_workers 4 \
     --output_dir "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results"\
     --cleanup

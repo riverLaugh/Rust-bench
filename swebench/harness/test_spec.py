@@ -231,16 +231,18 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
-        # f"cd serde-tests"
     )
 
-    test_command_list = [
-    f'{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]} {directive}'
-    for directive in get_test_directives(instance)
-    ]
-    test_command = " && ".join(test_command_list)
+    # rustFlags_command = 'export RUSTFLAGS="-A mixed_script_confusables -Awarnings"'
+    # test_command_list = [
+    # f'{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]} {directive} --quiet '
+    # for directive in get_test_directives(instance)
+    # ]
+    # test_command = " && ".join(test_command_list)
+    test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]}"
     pwd_command = "pwd" # For debugging
-    ls_command = "ls -la" # For debugging
+    ls_command = "ls -la " # For debugging
+    cd_command = "cd serde_tests"
     eval_commands = [
         # f"source /opt/miniconda3/bin/activate",
         # f"conda activate {env_name}",
@@ -262,7 +264,11 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         eval_commands.append(specs["install"])
     eval_commands += [
         reset_tests_command,
+        # rustFlags_command,
         apply_test_patch_command,
+        # pwd_command,
+        # ls_command,
+        # cd_command,
         test_command,
         reset_tests_command,  # Revert tests after done, leave the repo in the same state as before
     ]

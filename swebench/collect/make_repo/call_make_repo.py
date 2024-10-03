@@ -2,7 +2,7 @@
 
 import subprocess
 
-repos = ["serde-rs/serde"]
+repos = ["bitflags/bitflags"]
 
 for repo in repos:
     print(f"Making mirror repo for {repo}")

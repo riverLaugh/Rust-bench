@@ -21,6 +21,7 @@ MAP_REPO_TO_VERSION_PATHS = {
     "sympy/sympy": ["sympy/release.py", "sympy/__init__.py"],
     "rust-lang/rustlings": ["Cargo.toml"],
     "serde-rs/serde": ["serde/Cargo.toml"],
+    "bitflags/bitflags":["Cargo.toml"]
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -60,7 +61,8 @@ MAP_REPO_TO_VERSION_PATTERNS.update({
     k:[r'version\s*=\s*"(\d+\.\d+\.\d+)"']
     for k in [
         "rust-lang/rustlings",
-        "serde-rs/serde"
+        "serde-rs/serde",
+        "bitflags/bitflags"
     ]
 })
 

@@ -88,12 +88,12 @@ def run_instance(
     # Run the instance
     container = None
     try:
-        if test_spec.version is None:
-            raise EvaluationError(
-                instance_id,
-                "No version found for instance",
-                logger,
-            )
+        # if test_spec.version is None:
+        #     raise EvaluationError(
+        #         instance_id,
+        #         "No version found for instance",
+        #         logger,
+        #     )
         # Build + start instance container (instance image should already be built)
         container = build_container(test_spec, client, run_id, logger, rm_image, force_rebuild)
         container.start()
@@ -359,6 +359,7 @@ def main(
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
     
+    
     # open dataset_name and add the results fields to it 
     with open(dataset_name, "r") as f:
         data = [json.loads(task) for task in Path(dataset_name).read_text().strip().split('\n')]
@@ -382,7 +383,7 @@ def main(
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--dataset_name", default="princeton-nlp/SWE-bench_Lite", type=str, help="Name of dataset or path to JSON file.")
-    parser.add_argument("--split", type=str, default="test", help="Split of the dataset")
+    parser.add_argument("--split", type=str, default="train", help="Split of the dataset")
     parser.add_argument("--instance_ids", nargs="+", type=str, help="Instance IDs to run (space separated)")
     parser.add_argument("--max_workers", type=int, default=4, help="Maximum number of workers (should be <= 75%% of CPU cores)")
     parser.add_argument("--open_file_limit", type=int, default=4096, help="Open file limit")
