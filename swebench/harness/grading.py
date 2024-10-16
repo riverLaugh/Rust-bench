@@ -37,6 +37,7 @@ def get_logs_eval(log_fp: str, test_output_fp: str) -> tuple[dict[str, str], boo
 
     Args:
         log_fp (str): path to log file
+        test_output_fp: path to test output file
     Returns:
         bool: whether the patch applied successfully
         dict: status map
@@ -69,7 +70,7 @@ def get_logs_eval(log_fp: str, test_output_fp: str) -> tuple[dict[str, str], boo
             # Eval patch was not applied successfully
             return {}, False
 
-        # Get status map of evaluation results
+        # if patch is applied sucessfully, get status map of evaluation results
         test_content = f2.read()
         return log_parser(test_content), True
 
