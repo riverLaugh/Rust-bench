@@ -49,7 +49,7 @@ RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
 WORKDIR /testbed/
 
 # Automatically activate the testbed environment
-RUN echo "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate testbed" > /root/.bashrc
+# RUN echo "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate testbed" > /root/.bashrc
 """
 
 _DOCKERFILE_INSTANCE = r"""FROM --platform={platform} {env_image_name}

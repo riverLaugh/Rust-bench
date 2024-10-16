@@ -414,7 +414,7 @@ def make_run_report(
             # Otherwise, the instance was not run successfully
             error_ids.add(instance_id)
 
-    # get remaining images and containers
+    # get remaining instance images and containers
     images = list_images(client)
     test_specs = list(map(make_test_spec, full_dataset))
     for spec in test_specs:
@@ -460,7 +460,7 @@ def make_run_report(
         "unremoved_images": list(sorted(unremoved_images)),
         "schema_version": 2,
     }
-    report_file = Path(
+    report_file = Path("reports")/(
         list(predictions.values())[0]["model_name_or_path"].replace("/", "__")
         + f".{run_id}"
         + ".json"
