@@ -11,6 +11,6 @@
 python get_versions.py \
     --instances_path /root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks/bitflags-task-instances.jsonl \
     --retrieval_method github \
-    --num_workers 4 \
+    --num_workers 1 \
     --output_dir "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results"\
     --cleanup

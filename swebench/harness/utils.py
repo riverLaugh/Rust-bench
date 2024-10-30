@@ -215,46 +215,63 @@ def get_requirements_by_commit(repo: str, commit: str) -> str:
         reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, commit, req_path)
         reqs = requests.get(reqs_url)
         if reqs.status_code == 200:
-            break
-    else:
-        raise ValueError(
-            f"Could not find requirements.txt at paths {MAP_REPO_TO_REQS_PATHS[repo]} for repo {repo} at commit {commit}"
-        )
+            # 获取原始 Cargo.toml 内容
+            cargo_toml_content = reqs.text
 
-    lines = reqs.text
-    original_req = []
-    additional_reqs = []
-    req_dir = "/".join(req_path.split("/")[:-1])
-    exclude_line = lambda line: any(
-        [line.strip().startswith(x) for x in ["-e .", "#", ".[test"]]
+            # 初始化最小化 Cargo.toml 的基础结构
+            minimized_cargo_toml = []
+            package_section_found = False
+            dependencies_section_found = False
+            dev_dependencies_section_found = False
+
+            # 遍历原始 Cargo.toml 的每一行，提取 name 和 edition 字段，并最小化内容
+            for line in cargo_toml_content.splitlines():
+                stripped_line = line.strip()
+                
+                if stripped_line.startswith("[package]"):
+                    package_section_found = True
+                    dependencies_section_found = False
+                    dev_dependencies_section_found = False
+                    minimized_cargo_toml.append("[package]")
+                    continue
+                elif stripped_line.startswith("[dependencies]"):
+                    dependencies_section_found = True
+                    package_section_found = False
+                    dev_dependencies_section_found = False
+                    minimized_cargo_toml.append("[dependencies]")
+                    continue
+                elif stripped_line.startswith("[dev-dependencies]"):
+                    dev_dependencies_section_found = True
+                    package_section_found = False
+                    dependencies_section_found = False
+                    minimized_cargo_toml.append("[dev-dependencies]")
+                    continue
+                
+                # 处理 [package] 部分的 name 和 edition 字段，并将 version 设置为 0.0.0
+                if package_section_found:
+                    if stripped_line.startswith("name = "):
+                        minimized_cargo_toml.append(stripped_line)
+                    elif stripped_line.startswith("edition = "):
+                        minimized_cargo_toml.append(stripped_line)
+                    elif stripped_line.startswith("rust_version = "):
+                        minimized_cargo_toml.append(stripped_line)
+                    elif stripped_line.startswith("version = "):
+                        minimized_cargo_toml.append("version = \"0.0.0\"")
+                
+                # 复制 [dependencies] 部分内容
+                elif dependencies_section_found:
+                    minimized_cargo_toml.append(stripped_line)
+
+                # 复制 [dev-dependencies] 部分内容
+                elif dev_dependencies_section_found:
+                    minimized_cargo_toml.append(stripped_line)
+
+            # 返回构建好的最小化 Cargo.toml 内容
+            return "\n".join(minimized_cargo_toml)
+
+    raise ValueError(
+        f"Could not find Cargo.toml at paths {MAP_REPO_TO_REQS_PATHS[repo]} for repo {repo} at commit {commit}"
     )
-
-    for line in lines.split("\n"):
-        if line.strip().startswith("-r"):
-            # Handle recursive requirements
-            file_name = line[len("-r") :].strip()
-            reqs_url = os.path.join(
-                SWE_BENCH_URL_RAW,
-                repo,
-                commit,
-                req_dir,
-                file_name,
-            )
-            reqs = requests.get(reqs_url)
-            if reqs.status_code == 200:
-                for line_extra in reqs.text.split("\n"):
-                    if not exclude_line(line_extra):
-                        additional_reqs.append(line_extra)
-        else:
-            if not exclude_line(line):
-                original_req.append(line)
-
-    # Combine all requirements into single text body
-    additional_reqs.append("\n".join(original_req))
-    all_reqs = "\n".join(additional_reqs)
-
-    return all_reqs
-
 
 def get_requirements(instance: SWEbenchInstance) -> str:
     """
@@ -320,6 +337,26 @@ def get_test_directives(instance: SWEbenchInstance) -> list:
         directives = directives_transformed
 
     return directives
+
+
+def get_rust_test_command(instance: "SWEbenchInstance", specs: dict) -> list:
+    # 获取 fail_to_pass 列表
+    fail_to_pass = specs.get("fail_to_pass", [])
+
+    commands = []
+
+    for test_case in fail_to_pass:
+        if test_case.endwith(".rs"):
+            # 如果是编译测试文件，使用 --test 参数来指定文件
+            test_file = test_case.split("/")[-1].replace(".rs", "")
+            commands.append(f"cargo test --test {test_file}")
+        else:
+            # 对于模块内测试，直接使用模块路径生成命令
+            commands.append(f"cargo test {test_case}")
+
+    # 将所有命令连接为一个字符串，用 " && " 分隔
+    # final_command = " && ".join(commands)
+    return commands
 
 
 def str2bool(v):
