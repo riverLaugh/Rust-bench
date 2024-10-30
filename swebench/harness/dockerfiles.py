@@ -24,19 +24,6 @@ ENV PATH=/root/.cargo/bin:$PATH
 # 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
 RUN rustup default stable
 
-# 安装一些常用的 Rust 工具，如 clippy, rustfmt
-RUN rustup component add clippy rustfmt
-
-
-# # Download and install conda
-# RUN wget 'https://repo.anaconda.com/miniconda/Miniconda3-py311_23.11.0-2-Linux-{conda_arch}.sh' -O miniconda.sh \
-#     && bash miniconda.sh -b -p /opt/miniconda3
-# # Add conda to PATH
-# ENV PATH=/opt/miniconda3/bin:$PATH
-# # Add conda to shell startup scripts like .bashrc (DO NOT REMOVE THIS)
-# RUN conda init --all
-# RUN conda config --append channels conda-forge
-
 RUN adduser --disabled-password --gecos 'dog' nonroot
 """
 

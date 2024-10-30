@@ -342,11 +342,13 @@ def main(
     
     predictions = {pred[KEY_INSTANCE_ID]: pred for pred in predictions}
 
-    # get dataset from predictions
+    # get dataset from predictions, list of instances
     dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predictions, run_id)
     for instance in dataset:
         instance['FAIL_TO_PASS'] = []
         instance['PASS_TO_PASS'] = []
+        instance['FAIL_TO_FAIL'] = []
+        instance['PASS_TO_FAIL'] = []
     existing_images = list_images(client)
     print(f"Running {len(dataset)} unevaluated instances...")
     if not dataset:
@@ -359,25 +361,37 @@ def main(
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
     
-    
-    # open dataset_name and add the results fields to it 
-    with open(dataset_name, "r") as f:
-        data = [json.loads(task) for task in Path(dataset_name).read_text().strip().split('\n')]
-        for instance in data:
-            instance_id = instance["instance_id"]
-            if instance_id in results:
-                # merge two dictionaries, crash on duplicate keys
-                assert not any(k in instance for k in results[instance_id]), f"Duplicate keys in {instance_id}"
-                instance.update(results[instance_id])
-                
-    last_dot_idx = dataset_name.rfind(".")   
-    dataset_name_w_results_all = dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
-    dataset_name_w_results = dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
-    with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
-        for instance in data:
-            print(json.dumps(instance), file=f_all)
-            if len(instance["FAIL_TO_PASS"]) > 0:
-                print(json.dumps(instance), file=f)
+    # print("Results:——————————————————————————————————————————————————————————————————————")
+
+
+    for instance in dataset:
+        instance_id = instance["instance_id"]
+        print("instance-----------------------------------------------------------------------")
+        print(instance.keys())
+        if instance_id in results:
+            # merge two dictionaries, crash on duplicate keys
+            # assert not any(k in instance for k in results[instance_id]), f"Duplicate keys in {instance_id}"
+            instance.update(results[instance_id])
+
+    if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
+        last_dot_idx = dataset_name.rfind(".")
+        dataset_name_w_results_all =dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
+        dataset_name_w_results =dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
+        with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
+            for instance in dataset:
+                print(json.dumps(instance), file=f_all)
+                if len(instance["FAIL_TO_PASS"]) > 0:
+                    print(json.dumps(instance), file=f)
+    else :
+        last_dot_idx = dataset_name.rfind("/")   
+        dataset_name_w_results_all = "/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/"+ dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
+        dataset_name_w_results ="/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/"+ dataset_name[last_dot_idx+1:] + "_validated" + ".json"
+        
+        with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
+            for instance in dataset:
+                print(json.dumps(instance), file=f_all)
+                if len(instance["FAIL_TO_PASS"]) > 0:
+                    print(json.dumps(instance), file=f)
 
 
 if __name__ == "__main__":

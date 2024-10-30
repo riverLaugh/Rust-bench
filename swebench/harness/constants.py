@@ -898,7 +898,11 @@ SPECS_SERDE = {
 }
 
 SPECS_BITFLAGS = {
-    "test_cmd":TEST_CARGO
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO
+    }
+    for k in["2.5","2.4","2.3","2.2","2.1"]
 }
 
 # Constants - Task Instance Instllation Environment
@@ -945,6 +949,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "pyvista/pyvista": ["requirements_test.txt", "requirements.txt"],
     "sqlfluff/sqlfluff": ["requirements_dev.txt"],
     "sympy/sympy": ["requirements-dev.txt"],
+    "bitflags/bitflags":["Cargo.toml"]
 }
 
 MAP_REPO_TO_CARGO_TOML_PATHS = {

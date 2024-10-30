@@ -24,8 +24,8 @@ from swebench.harness.dockerfiles import (
 )
 from swebench.harness.utils import (
     get_requirements,
-    get_environment_yml,
-    get_test_directives,
+
+    get_rust_test_command
 )
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class TestSpec:
     """
     instance_id: str
     repo: str
-    # version: str
+    version: str
     repo_script_list: list[str]
     eval_script_list: list[str]
     env_script_list: list[str]
@@ -159,61 +159,24 @@ def make_env_script_list(instance, specs, env_name):
     This is the setup script for the environment image.
     """
     HEREDOC_DELIMITER = "EOF_59812759871"
-    reqs_commands = [
-        # "source /opt/miniconda3/bin/activate",
-        # f"conda create -n {env_name} -y",
+    reqs_commands = []
 
-    ]
+    reqs_commands.append(f"rustup default {specs['rustc']}")
 
-    # Create conda environment according to install instructinos
-    # pkgs = specs.get("packages", "")
-    # if pkgs == "requirements.txt":
-    #     # Create environment
-    #     cmd = f"conda create -n {env_name} python={specs['python']} -y"
-    #     reqs_commands.append(cmd)
+    reqs = get_requirements(instance)
 
-    #     # Install dependencies
-    #     reqs = get_requirements(instance)
-    #     path_to_reqs = "$HOME/requirements.txt"
-    #     reqs_commands.append(
-    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
-    #     )
-    #     cmd = f"conda activate {env_name} && python -m pip install -r {path_to_reqs}"
-    #     reqs_commands.append(cmd)
-    #     reqs_commands.append(f"rm {path_to_reqs}")
-    # elif pkgs == "environment.yml":
-    #     # Create environment from yml
-    #     reqs = get_environment_yml(instance, env_name)
-    #     path_to_reqs = "environment.yml"
-    #     reqs_commands.append(
-    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
-    #     )
-    #     if "no_use_env" in specs and specs["no_use_env"]:
-    #         # `conda create` based installation
-    #         cmd = f"conda create -c conda-forge -n {env_name} python={specs['python']} -y"
-    #         reqs_commands.append(cmd)
+    path_to_reqs = "./Cargo.toml"
 
-    #         # Install dependencies
-    #         cmd = f"conda env update -f {path_to_reqs}"
-    #         reqs_commands.append(cmd)
-    #     else:
-    #         # `conda env create` based installation
-    #         cmd = f"conda env create --file {path_to_reqs}"
-    #         reqs_commands.append(cmd)
+    reqs_commands.append(
+        f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
+    )
 
-    #         cmd = f"conda activate {env_name} && conda install python={specs['python']} -y"
-    #         reqs_commands.append(cmd)
+    reqs_commands.append("mkdir -p src && echo 'fn main() {}' > src/main.rs")
 
-    #     # Remove environment.yml
-    #     reqs_commands.append(f"rm {path_to_reqs}")
-    # else:
-    #     # Create environment + install dependencies
-    #     cmd = f"conda create -n {env_name} python={specs['python']} {pkgs} -y"
-    #     reqs_commands.append(cmd)
+    reqs_commands.append("cargo fetch")
 
-    # reqs_commands.append(f"conda activate {env_name}")
+    reqs_commands.append(f"rm {path_to_reqs}")
 
-    # Install additional packages if specified
     if "pip_packages" in specs:
         pip_packages = " ".join(specs["pip_packages"])
         cmd = f"python -m pip install {pip_packages}"
@@ -232,14 +195,14 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
-
+    # test_command = get_rust_test_command(instance, specs)
     # rustFlags_command = 'export RUSTFLAGS="-A mixed_script_confusables -Awarnings"'
     # test_command_list = [
     # f'{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]} {directive} --quiet '
     # for directive in get_test_directives(instance)
     # ]
     # test_command = " && ".join(test_command_list)
-    test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]}"
+    test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
     pwd_command = "pwd" # For debugging
     ls_command = "ls -la " # For debugging
     cd_command = "cd serde_tests"
@@ -283,7 +246,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         return None
     instance_id = instance[KEY_INSTANCE_ID]
     repo = instance["repo"]
-    # version = instance["version"]
+    version = instance["version"]
     base_commit = instance["base_commit"]
     problem_statement = instance["problem_statement"]
     hints_text = instance["hints_text"]  # Unused
@@ -300,8 +263,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     env_name = "testbed"
     repo_directory = f"/{env_name}"
-    # specs = MAP_REPO_VERSION_TO_SPECS[repo][version]
-    specs = MAP_REPO_VERSION_TO_SPECS[repo]
+    specs = MAP_REPO_VERSION_TO_SPECS[repo][version]
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
     try:
@@ -324,7 +286,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         env_script_list=env_script_list,
         repo_script_list=repo_script_list,
         eval_script_list=eval_script_list,
-        # version=version,
+        version=version,
         arch=arch,
         FAIL_TO_PASS=fail_to_pass,
         PASS_TO_PASS=pass_to_pass,
