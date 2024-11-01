@@ -6,7 +6,7 @@ from typing import TypedDict
 BASE_IMAGE_BUILD_DIR = Path("logs/build_images/base")
 ENV_IMAGE_BUILD_DIR = Path("logs/build_images/env")
 INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
-RUN_EVALUATION_LOG_DIR = Path("logs/run_evaluation")
+RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
 # Constants - Task Instance Class
 class SWEbenchInstance(TypedDict):
@@ -904,6 +904,18 @@ SPECS_BITFLAGS = {
     }
     for k in["2.5","2.4","2.3","2.2","2.1"]
 }
+SPECS_BITFLAGS.update({
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            r'''sed -i '/\[dependencies\]/a serde = { version = "1.0.210", features = ["derive"] }' Cargo.toml''',
+            r'''sed -i 's/serde_json = "1.0"/serde_json = "1.0.69"/' Cargo.toml''',
+            r'''sed -i 's/default = \[\]/default = ["derive"]/' Cargo.toml''',
+            r'''sed -i '/example_generated = \[\]/i derive = ["serde/derive"]' Cargo.toml'''
+    ]}
+    for k in ["1.3"]
+})
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
