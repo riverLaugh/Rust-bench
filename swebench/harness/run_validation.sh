@@ -1,6 +1,7 @@
 python run_validation.py \
-    --dataset_name r1v3r/bitflags_version_dataset \
-    --run_id run_validation_bitflags \
+    --dataset_name r1v3r/bitflags \
+    --run_id bitflags_v1_validation \
     --max_workers 4 \
-    --cache_level env \
-    --instance_ids bitflags__bitflags-380 
+    --cache_level instance \
+    --instance_ids bitflags__bitflags-266 bitflags__bitflags-282 bitflags__bitflags-281 bitflags__bitflags-276 bitflags__bitflags-268
+

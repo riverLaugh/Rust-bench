@@ -4,7 +4,7 @@ import platform
 import re
 from tqdm.auto import tqdm
 import logging
-
+import os,requests
 from dataclasses import dataclass
 from typing import Any, Union, cast
 
@@ -14,8 +14,10 @@ from swebench.harness.constants import (
     FAIL_TO_PASS,
     PASS_TO_PASS,
     MAP_REPO_TO_INSTALL,
+    MAP_REPO_TO_REQS_PATHS,
     MAP_REPO_VERSION_TO_SPECS,
     USE_X86,
+    SWE_BENCH_URL_RAW
 )
 from swebench.harness.dockerfiles import (
     get_dockerfile_base,
@@ -24,7 +26,7 @@ from swebench.harness.dockerfiles import (
 )
 from swebench.harness.utils import (
     get_requirements,
-
+get_test_directives,
     get_rust_test_command
 )
 
@@ -45,8 +47,10 @@ class TestSpec:
     eval_script_list: list[str]
     env_script_list: list[str]
     arch: str
+    cargo_toml: str
     FAIL_TO_PASS: list[str]
     PASS_TO_PASS: list[str]
+    tests_changed: list[str]
 
     @property
     def setup_env_script(self):
@@ -133,12 +137,7 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
         f"git reset --hard {base_commit}",
-        # Remove the remote so the agent won't see newer commits.
         f"git remote remove origin",
-        # Make sure conda is available for later use
-        # "source /opt/miniconda3/bin/activate",
-        # f"conda activate {env_name}",
-        # f'echo "Current environment: $CONDA_DEFAULT_ENV"',
     ]
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
@@ -177,10 +176,6 @@ def make_env_script_list(instance, specs, env_name):
 
     reqs_commands.append(f"rm {path_to_reqs}")
 
-    if "pip_packages" in specs:
-        pip_packages = " ".join(specs["pip_packages"])
-        cmd = f"python -m pip install {pip_packages}"
-        reqs_commands.append(cmd)
     return reqs_commands
 
 
@@ -195,22 +190,8 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
-    # test_command = get_rust_test_command(instance, specs)
-    # rustFlags_command = 'export RUSTFLAGS="-A mixed_script_confusables -Awarnings"'
-    # test_command_list = [
-    # f'{MAP_REPO_VERSION_TO_SPECS[instance["repo"]]["test_cmd"]} {directive} --quiet '
-    # for directive in get_test_directives(instance)
-    # ]
-    # test_command = " && ".join(test_command_list)
     test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
-    pwd_command = "pwd" # For debugging
-    ls_command = "ls -la " # For debugging
-    cd_command = "cd serde_tests"
-    eval_commands = [
-        # f"source /opt/miniconda3/bin/activate",
-        # f"conda activate {env_name}",
-        # f"cd {repo_directory}",
-    ]
+    eval_commands = []
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
     eval_commands += [
@@ -227,11 +208,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         eval_commands.append(specs["install"])
     eval_commands += [
         reset_tests_command,
-        # rustFlags_command,
         apply_test_patch_command,
-        # pwd_command,
-        # ls_command,
-        # cd_command,
         test_command,
         reset_tests_command,  # Revert tests after done, leave the repo in the same state as before
     ]
@@ -280,6 +257,15 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     else:
         arch = "x86_64"
 
+    # get cargo.toml
+    req_path = MAP_REPO_TO_REQS_PATHS[repo]
+    reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path[0])
+    reqs = requests.get(reqs_url)
+    cargo_toml = reqs.text
+
+    tests_changed = get_test_directives(instance)
+
+
     return TestSpec(
         instance_id=instance_id,
         repo=repo,
@@ -288,6 +274,8 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         eval_script_list=eval_script_list,
         version=version,
         arch=arch,
+        tests_changed=tests_changed,
+        cargo_toml=cargo_toml,
         FAIL_TO_PASS=fail_to_pass,
         PASS_TO_PASS=pass_to_pass,
     )

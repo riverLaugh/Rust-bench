@@ -3,13 +3,14 @@ import os
 from pathlib import Path
 import re
 import requests
-
+import tomlkit
+from tomlkit import parse, dumps
 from argparse import ArgumentTypeError
 from datasets import Dataset, load_dataset
 from dotenv import load_dotenv
 from functools import cache
 from typing import cast
-
+import toml
 from swebench.harness.constants import (
     SWEbenchInstance,
     MAP_REPO_TO_ENV_YML_PATHS,
@@ -214,64 +215,65 @@ def get_requirements_by_commit(repo: str, commit: str) -> str:
     for req_path in MAP_REPO_TO_REQS_PATHS[repo]:
         reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, commit, req_path)
         reqs = requests.get(reqs_url)
-        if reqs.status_code == 200:
-            # 获取原始 Cargo.toml 内容
-            cargo_toml_content = reqs.text
-
-            # 初始化最小化 Cargo.toml 的基础结构
-            minimized_cargo_toml = []
-            package_section_found = False
-            dependencies_section_found = False
-            dev_dependencies_section_found = False
-
-            # 遍历原始 Cargo.toml 的每一行，提取 name 和 edition 字段，并最小化内容
-            for line in cargo_toml_content.splitlines():
-                stripped_line = line.strip()
-                
-                if stripped_line.startswith("[package]"):
-                    package_section_found = True
-                    dependencies_section_found = False
-                    dev_dependencies_section_found = False
-                    minimized_cargo_toml.append("[package]")
-                    continue
-                elif stripped_line.startswith("[dependencies]"):
-                    dependencies_section_found = True
-                    package_section_found = False
-                    dev_dependencies_section_found = False
-                    minimized_cargo_toml.append("[dependencies]")
-                    continue
-                elif stripped_line.startswith("[dev-dependencies]"):
-                    dev_dependencies_section_found = True
-                    package_section_found = False
-                    dependencies_section_found = False
-                    minimized_cargo_toml.append("[dev-dependencies]")
-                    continue
-                
-                # 处理 [package] 部分的 name 和 edition 字段，并将 version 设置为 0.0.0
-                if package_section_found:
-                    if stripped_line.startswith("name = "):
-                        minimized_cargo_toml.append(stripped_line)
-                    elif stripped_line.startswith("edition = "):
-                        minimized_cargo_toml.append(stripped_line)
-                    elif stripped_line.startswith("rust_version = "):
-                        minimized_cargo_toml.append(stripped_line)
-                    elif stripped_line.startswith("version = "):
-                        minimized_cargo_toml.append("version = \"0.0.0\"")
-                
-                # 复制 [dependencies] 部分内容
-                elif dependencies_section_found:
-                    minimized_cargo_toml.append(stripped_line)
-
-                # 复制 [dev-dependencies] 部分内容
-                elif dev_dependencies_section_found:
-                    minimized_cargo_toml.append(stripped_line)
-
-            # 返回构建好的最小化 Cargo.toml 内容
-            return "\n".join(minimized_cargo_toml)
+        original_cargo_toml = reqs.text
+        cleaned_cargo_toml = clean_cargo_toml(original_cargo_toml)
+        return cleaned_cargo_toml
 
     raise ValueError(
         f"Could not find Cargo.toml at paths {MAP_REPO_TO_REQS_PATHS[repo]} for repo {repo} at commit {commit}"
     )
+
+
+def clean_cargo_toml(cargo_toml_content):
+    """
+    清理 Cargo.toml 内容，删除指定的部分，只保留 cargo fetch 需要的部分。
+    确保相同的依赖项生成相同的输出字符串（去除注释、排序键值等）。
+
+    :param cargo_toml_content: str, 原始 Cargo.toml 内容
+    :return: str, 清理后的 Cargo.toml 内容
+    """
+    # 解析 TOML 内容
+    try:
+        cargo_data = toml.loads(cargo_toml_content)
+    except toml.TomlDecodeError as e:
+        raise ValueError(f"无法解析 Cargo.toml 内容。错误: {e}")
+    
+    # 定义需要保留的部分
+    sections_to_keep = ['dependencies', 'dev-dependencies', 'build-dependencies']
+
+    # 定义 [package] 部分需要保留的键
+    package_keys_to_keep = ['name', 'version', 'edition']
+
+    cleaned_data = {}
+
+    # 处理 [package] 部分
+    if 'package' in cargo_data:
+        package = cargo_data['package']
+        cleaned_package = {}
+        for key in package_keys_to_keep:
+            if key in package:
+                cleaned_package[key] = package[key]
+        if cleaned_package:
+            # 按键排序
+            cleaned_package['version']='0.0.0'
+            cleaned_data['package'] = dict(sorted(cleaned_package.items()))
+    
+    # 保留其他指定的部分
+    for section in sections_to_keep:
+        if section in cargo_data:
+            # 按键排序
+            cleaned_section = dict(sorted(cargo_data[section].items()))
+            cleaned_data[section] = cleaned_section
+
+    # 序列化回 TOML 字符串
+    cleaned_cargo_toml = toml.dumps(cleaned_data)
+
+    # 为了确保一致性，移除多余的空行和尾随空格
+    cleaned_cargo_toml = '\n'.join(line.rstrip() for line in cleaned_cargo_toml.splitlines())
+
+    return cleaned_cargo_toml
+
+
 
 def get_requirements(instance: SWEbenchInstance) -> str:
     """
@@ -318,11 +320,11 @@ def get_test_directives(instance: SWEbenchInstance) -> list:
         for d in directives:
             # 只考虑以 ".rs" 结尾的文件，并提取文件名
             if d.endswith(".rs"):
-                # 提取文件名，不包括路径
-                filename = d.split("/")[-1]  # 或者使用 os.path.basename(d)
-                # 移除文件扩展名 ".rs"
-                filename = filename[:-3]
-                directives_transformed.append(filename)
+                # # 提取文件名，不包括路径
+                # filename = d.split("/")[-1]  # 或者使用 os.path.basename(d)
+                # # 移除文件扩展名 ".rs"
+                # filename = filename[:-3]
+                directives_transformed.append(d)
         directives = directives_transformed
 
 

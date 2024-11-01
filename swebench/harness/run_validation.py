@@ -85,6 +85,15 @@ def run_instance(
         return instance_id, json.loads(report_path.read_text())
     logger = setup_logger(instance_id, log_file)
 
+    #store cargo.toml
+    cargo_toml_path = Path(log_dir / "Cargo.toml")
+    cargo_toml_path.write_text(test_spec.cargo_toml)
+
+    tests_changed = Path(log_dir / "tests_changed.txt")
+# 将数组写入文件，每个元素写入一行
+    tests_changed.write_text("\n".join(test_spec.tests_changed))
+
+
     # Run the instance
     container = None
     try:
@@ -361,7 +370,6 @@ def main(
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
     
-    # print("Results:——————————————————————————————————————————————————————————————————————")
 
 
     for instance in dataset:
