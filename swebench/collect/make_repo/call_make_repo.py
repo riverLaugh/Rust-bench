@@ -2,7 +2,7 @@
 
 import subprocess
 
-repos = ["bitflags/bitflags"]
+repos = ["apache/arrow-rs"]
 
 for repo in repos:
     print(f"Making mirror repo for {repo}")

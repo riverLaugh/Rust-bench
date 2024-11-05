@@ -93,7 +93,8 @@ def construct_data_files(data: dict):
                 build_dataset(path_pr, path_task, token)
                 print(f"✅ Successfully saved task instance data for {repo} to {path_task}")
             else:
-                print(f"📁 Task instance data for {repo} already exists at {path_task}, skipping...")
+                build_dataset(path_pr, path_task, token)
+                print(f"📁 Task instance data for {repo} already exists at {path_task}, countinue...")
         except Exception as e:
             print("-"*80)
             print(f"Something went wrong for {repo}, skipping: {e}")
@@ -177,7 +178,8 @@ if __name__ == "__main__":
         "--pull_numbers", 
         nargs='+', 
         type=int, 
-        help="List of specific pull request numbers to log")
+        help="List of specific pull request numbers to log"
+    )
 
     args = parser.parse_args()
     main(**vars(args))

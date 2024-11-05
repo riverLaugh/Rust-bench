@@ -1,4 +1,4 @@
-from datasets import Dataset, DatasetDict
+from datasets import Dataset, DatasetDict,load_dataset,concatenate_datasets
 from huggingface_hub import HfApi, HfFolder, Repository
 import json
 import os
@@ -22,7 +22,7 @@ def multiJson2dataset(json_file_path):
     return dataset
 
 def json2dataset(json_file_path):
-
+    
     pass
 
 
@@ -91,11 +91,13 @@ def upload_to_huggingface(dataset, dataset_name):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/bitflags_version_dataset_validated.all.json"  # 替换为你的 JSON 文件路径
-    dataset_name = "r1v3r/bitflags_validated_all"  # 替换为你想要的数据集名称
+    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/bitflags_validated.json"  # 替换为你的 JSON 文件路径
+    dataset_name = "r1v3r/bitflags_validated"  # 替换为你想要的数据集名称
     dataset_list = multiJson2dataset(json_file_path)
     dataset = Dataset.from_list(dataset_list)
 
+    huggingface_dataset = load_dataset('r1v3r/bitflags_validated_v2', split='train')
 
+    combined_dataset = concatenate_datasets([huggingface_dataset, dataset])
     # 将数据集上传到 Hugging Face 数据集中心
-    upload_to_huggingface(dataset, dataset_name)
+    upload_to_huggingface(combined_dataset, dataset_name)
