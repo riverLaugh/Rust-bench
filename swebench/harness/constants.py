@@ -902,17 +902,14 @@ SPECS_BITFLAGS = {
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO
     }
-    for k in["2.5","2.4","2.3","2.2","2.1"]
+    for k in["2.5","2.4","2.3","2.2","2.1","1.2"]
 }
 SPECS_BITFLAGS.update({
     k:{
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
         "pre_install":[
-            r'''sed -i '/\[dependencies\]/a serde = { version = "1.0.210", features = ["derive"] }' Cargo.toml''',
-            r'''sed -i 's/serde_json = "1.0"/serde_json = "1.0.69"/' Cargo.toml''',
-            r'''sed -i 's/default = \[\]/default = ["derive"]/' Cargo.toml''',
-            r'''sed -i '/example_generated = \[\]/i derive = ["serde/derive"]' Cargo.toml'''
+            "cargo upgrade"
     ]}
     for k in ["1.3"]
 })
@@ -964,9 +961,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "bitflags/bitflags":["Cargo.toml"]
 }
 
-MAP_REPO_TO_CARGO_TOML_PATHS = {
-    "rust-lang/rustlings": ["Cargo.toml"]
-}
+
 
 # Constants - Task Instance environment.yml File Paths
 MAP_REPO_TO_ENV_YML_PATHS = {

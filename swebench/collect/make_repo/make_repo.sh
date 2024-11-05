@@ -64,7 +64,7 @@ if [ -d "$NEW_REPO_NAME/.github/workflows" ]; then
     cd "$NEW_REPO_NAME";
     git add -A;
     git commit -m "Removed .github/workflows";
-    git push origin main;  # Change 'master' to your desired branch
+    git push origin master;  # Change 'master' to your desired branch
     cd ..;
 else
     echo "$REPO_NAME/.github/workflows does not exist. No action required."

@@ -4,7 +4,7 @@ import docker
 import json
 import resource
 import traceback
-
+import sys
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -60,6 +60,9 @@ def run_instance(
         client (docker.DockerClient): Docker client
         run_id (str): Run ID
         timeout (int): Timeout for running tests
+
+    Returns:
+
     """ 
     # Set up logging directory
     instance_id = test_spec.instance_id
@@ -90,7 +93,7 @@ def run_instance(
     cargo_toml_path.write_text(test_spec.cargo_toml)
 
     tests_changed = Path(log_dir / "tests_changed.txt")
-# 将数组写入文件，每个元素写入一行
+    # 将数组写入文件，每个元素写入一行
     tests_changed.write_text("\n".join(test_spec.tests_changed))
 
 
@@ -187,7 +190,7 @@ def run_instance(
             container.exec_run("git diff", workdir="/testbed").output.decode("utf-8").strip()
         )
 
-        # Check if git diff changed after running eval script
+        # Check if git diff changed after running eval script, avoid test patch overlap the patch
         logger.info(f"Git diff after:\n{git_diff_output_after}")
         if git_diff_output_after != git_diff_output_before:
             logger.info(f"Git diff changed after running eval script")
@@ -224,7 +227,7 @@ def run_instance(
                 report_map["FAIL_TO_FAIL"].append(test)
             elif status == "FAILED" and eval_sm_ref.get(test, None) == "PASSED":
                 report_map["PASS_TO_FAIL"].append(test)
-                
+        
         return report_map
     except EvaluationError as e:
         error_msg = traceback.format_exc()
