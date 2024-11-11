@@ -297,7 +297,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     # get cargo.toml
     req_path = MAP_REPO_TO_REQS_PATHS[repo]
-    reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path[0])
+    reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
     reqs = requests.get(reqs_url)
     cargo_toml = reqs.text
 
