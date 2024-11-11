@@ -242,7 +242,7 @@ def parse_log_serde(log:str) ->dict[str, str]:
     
     pass
 
-def parse_log_bitflags(log:str) ->dict[str, str]:
+def parse_log_cargo(log:str) ->dict[str, str]:
     """
     Parses cargo test output and extracts the test case names and their statuses (PASSED or FAILED).
     
@@ -259,7 +259,7 @@ def parse_log_bitflags(log:str) ->dict[str, str]:
 
     # Regular expressions to match test results
     passed_re = re.compile(r'test (\S+) ... ok')
-    failed_re = re.compile(r'test (\S+) ... error') or re.compile(r'test (\S+) ... failed')
+    failed_re = re.compile(r'test (\S+) ... error') or re.compile(r'test (\S+) ... failed') or re.compile(r'test (\S+) ... FAILED')
 
     for line in lines:
         # Match passed tests
@@ -316,6 +316,7 @@ MAP_REPO_TO_PARSER = {
     "sqlfluff/sqlfluff": parse_log_sqlfluff,
     "sphinx-doc/sphinx": parse_log_sphinx,
     "sympy/sympy": parse_log_sympy,
-    "serde-rs/serde": parse_log_serde,
-    "bitflags/bitflags": parse_log_bitflags
+    "serde-rs/serde": parse_log_cargo,
+    "bitflags/bitflags": parse_log_cargo,
+    "apache/arrow-rs": parse_log_cargo
 }

@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from functools import cache
 from typing import cast
 import toml
+from typing import Dict, List
 from swebench.harness.constants import (
     SWEbenchInstance,
     MAP_REPO_TO_ENV_YML_PATHS,
@@ -209,19 +210,34 @@ def get_environment_yml(instance: SWEbenchInstance, env_name: str) -> str:
 
     return get_environment_yml_by_commit(instance["repo"], commit, env_name)
 
+def is_workspace_cargo_toml(f):
+    """
+    判断给定路径的 Cargo.toml 是否是工作区配置。
+
+    :param cargo_toml_path: str, Cargo.toml 文件的路径
+    :return: bool, 如果是工作区配置返回 True,否则返回 False
+    """
+    try:
+        
+        cargo_data = toml.load(f)
+        
+        workspace = cargo_data.get('workspace', {})
+        members = workspace.get('members', [])
+        
+        return bool(workspace) and isinstance(members, list) and len(members) > 0
+    except Exception as e:
+        print(f"Error reading cargo.toml: {e}")
+        return False
+
 
 @cache
-def get_requirements_by_commit(repo: str, commit: str) -> str:
-    for req_path in MAP_REPO_TO_REQS_PATHS[repo]:
-        reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, commit, req_path)
-        reqs = requests.get(reqs_url)
-        original_cargo_toml = reqs.text
-        cleaned_cargo_toml = clean_cargo_toml(original_cargo_toml)
-        return cleaned_cargo_toml
+def get_requirements_by_commit(repo: str, commit: str,req_path) -> str:
+    reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, commit, req_path)
+    reqs = requests.get(reqs_url)
+    original_cargo_toml = reqs.text
+    return original_cargo_toml
 
-    raise ValueError(
-        f"Could not find Cargo.toml at paths {MAP_REPO_TO_REQS_PATHS[repo]} for repo {repo} at commit {commit}"
-    )
+
 
 
 def clean_cargo_toml(cargo_toml_content):
@@ -239,7 +255,7 @@ def clean_cargo_toml(cargo_toml_content):
         raise ValueError(f"无法解析 Cargo.toml 内容。错误: {e}")
     
     # 定义需要保留的部分
-    sections_to_keep = ['dependencies', 'dev-dependencies', 'build-dependencies']
+    sections_to_keep = ['dependencies', 'dev-dependencies', 'build-dependencies','features']
 
     # 定义 [package] 部分需要保留的键
     package_keys_to_keep = ['name', 'version', 'edition']
@@ -273,9 +289,114 @@ def clean_cargo_toml(cargo_toml_content):
 
     return cleaned_cargo_toml
 
+def clean_workspace_cargo_toml(cargo_toml_content: str) -> str:
+    """
+    清理工作区的 Cargo.toml 内容，仅保留对 cargo fetch 有用的部分。
+    确保相同的依赖项生成相同的输出字符串（去除注释、排序键值等）。
+
+    :param cargo_toml_content: str, 原始 Cargo.toml 内容
+    :return: str, 清理后的 Cargo.toml 内容
+    """
+    try:
+        cargo_data = toml.loads(cargo_toml_content)
+    except toml.TomlDecodeError as e:
+        raise ValueError(f"无法解析 Cargo.toml 内容。错误: {e}")
+
+    cleaned_data = {}
+
+    if 'workspace' in cargo_data:
+        workspace = cargo_data['workspace']
+        cleaned_workspace = {}
+
+        # 定义需要保留的键
+        workspace_keys_to_keep = ['members', 'exclude', 'resolver']
+        for key in workspace_keys_to_keep:
+            if key in workspace:
+                cleaned_workspace[key] = workspace[key]
+
+        # 处理 [workspace.dependencies] 部分（如果存在）
+        if 'dependencies' in workspace:
+            dependencies = workspace['dependencies']
+            cleaned_dependencies = {}
+
+            for dep_name, dep_info in dependencies.items():
+                # 检查依赖项是否为字典类型（例如 path 依赖的定义格式）
+                if isinstance(dep_info, dict):
+                    # 复制依赖信息并将版本设置为 "0.0.0"
+                    cleaned_dep_info = dep_info.copy()
+                    cleaned_dep_info['version'] = "0.0.0"
+                    cleaned_dependencies[dep_name] = cleaned_dep_info
+                else:
+                    # 如果依赖项只是一个版本号字符串，则直接设置为 "0.0.0"
+                    cleaned_dependencies[dep_name] = "0.0.0"
+
+            # 按键排序
+            cleaned_workspace['dependencies'] = dict(sorted(cleaned_dependencies.items()))
+
+        # 处理 [workspace.package] 部分（如果存在）
+        if 'package' in workspace:
+            workspace_package = workspace['package']
+            # 定义需要保留的键
+            workspace_package_keys_to_keep = [
+                # 'version',
+                # 'homepage',
+                # 'repository',
+                # 'authors',
+                # 'license',
+                # 'keywords',
+                # 'include',
+                'edition',
+
+            ]
+            cleaned_workspace_package = {}
+            for key in workspace_package_keys_to_keep:
+                if key in workspace_package:
+                    cleaned_workspace_package[key] = workspace_package[key]
+            if cleaned_workspace_package:
+                # 按键排序
+                cleaned_workspace['package'] = dict(sorted(cleaned_workspace_package.items()))
+
+        if cleaned_workspace:
+            # 按键排序
+            cleaned_workspace = dict(sorted(cleaned_workspace.items()))
+            cleaned_data['workspace'] = cleaned_workspace
+
+    # 序列化回 TOML 字符串
+    cleaned_cargo_toml = toml.dumps(cleaned_data)
+
+    # 移除多余的空行和尾随空格，确保一致性
+    cleaned_cargo_toml = '\n'.join(line.rstrip() for line in cleaned_cargo_toml.splitlines())
+
+    return cleaned_cargo_toml
 
 
-def get_requirements(instance: SWEbenchInstance) -> str:
+def clean_comment(cargo_toml_content):
+    """
+    清理 Cargo.toml 内容，删除注释部分。
+    :param cargo_toml_content: str, 原始 Cargo.toml 内容
+    :return: str, 清理后的 Cargo.toml 内容
+    """
+    cargo_data = toml.loads(cargo_toml_content)
+    
+    # 移除 [[bin]]、[[example]] 和 [[test]] 部分
+    cargo_data.pop("bin", None)
+    cargo_data.pop("example", None)
+    cargo_data.pop("test", None)
+    cargo_data.pop("bench", None)
+    cleaned_cargo_toml = toml.dumps(cargo_data)
+
+    # 逐行处理，删除注释
+    cleaned_lines = []
+    for line in cleaned_cargo_toml.split('\n'):
+        # 删除行内注释
+        line = line.split('#', 1)[0]
+        cleaned_lines.append(line)
+    # 返回处理后的内容
+    return '\n'.join(cleaned_lines)
+
+
+
+def get_requirements(instance: SWEbenchInstance, req_path) -> str:
     """
     Get requirements.txt for given task instance
 
@@ -291,7 +412,7 @@ def get_requirements(instance: SWEbenchInstance) -> str:
         else instance["base_commit"]
     )
 
-    return get_requirements_by_commit(instance["repo"], commit)
+    return get_requirements_by_commit(instance["repo"], commit,req_path)
 
 
 def get_test_directives(instance: SWEbenchInstance) -> list:

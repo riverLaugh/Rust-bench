@@ -908,11 +908,27 @@ SPECS_BITFLAGS.update({
     k:{
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
-        "pre_install":[
-            "cargo upgrade"
-    ]}
+    #     "pre_install":[
+    #         "cargo upgrade"
+    # ]
+            "pre_install":[
+            r'''sed -i '/\[dependencies\]/a serde = { version = "1.0.210", features = ["derive"] }' Cargo.toml''',
+            r'''sed -i 's/serde_json = "1.0"/serde_json = "1.0.69"/' Cargo.toml''',
+            r'''sed -i 's/default = \[\]/default = ["derive"]/' Cargo.toml''',
+            r'''sed -i '/example_generated = \[\]/i derive = ["serde/derive"]' Cargo.toml'''
+    ]
+    }
     for k in ["1.3"]
 })
+
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO
+    }
+    for k in ["53.2","53.0"]
+}
+
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
@@ -939,6 +955,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
     "serde-rs/serde": SPECS_SERDE,
     "bitflags/bitflags": SPECS_BITFLAGS,
+    "apache/arrow-rs": SPECS_ARROW,
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -947,18 +964,19 @@ MAP_REPO_TO_INSTALL = {}
 
 # Constants - Task Instance Requirements File Paths
 MAP_REPO_TO_REQS_PATHS = {
-    "dbt-labs/dbt-core": ["dev-requirements.txt", "dev_requirements.txt"],
-    "django/django": ["tests/requirements/py3.txt"],
-    "matplotlib/matplotlib": [
-        "requirements/dev/dev-requirements.txt",
-        "requirements/testing/travis_all.txt",
-    ],
-    "pallets/flask": ["requirements/dev.txt"],
-    "pylint-dev/pylint": ["requirements_test.txt"],
-    "pyvista/pyvista": ["requirements_test.txt", "requirements.txt"],
-    "sqlfluff/sqlfluff": ["requirements_dev.txt"],
-    "sympy/sympy": ["requirements-dev.txt"],
-    "bitflags/bitflags":["Cargo.toml"]
+    # "dbt-labs/dbt-core": ["dev-requirements.txt", "dev_requirements.txt"],
+    # "django/django": ["tests/requirements/py3.txt"],
+    # "matplotlib/matplotlib": [
+    #     "requirements/dev/dev-requirements.txt",
+    #     "requirements/testing/travis_all.txt",
+    # ],
+    # "pallets/flask": ["requirements/dev.txt"],
+    # "pylint-dev/pylint": ["requirements_test.txt"],
+    # "pyvista/pyvista": ["requirements_test.txt", "requirements.txt"],
+    # "sqlfluff/sqlfluff": ["requirements_dev.txt"],
+    # "sympy/sympy": ["requirements-dev.txt"],
+    "bitflags/bitflags":"Cargo.toml",
+    "apache/arrow-rs": "Cargo.toml"
 }
 
 
