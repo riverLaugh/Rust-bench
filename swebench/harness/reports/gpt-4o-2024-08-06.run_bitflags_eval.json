@@ -1,0 +1,34 @@
+{
+    "total_instances": 8,
+    "submitted_instances": 1,
+    "completed_instances": 1,
+    "resolved_instances": 1,
+    "unresolved_instances": 0,
+    "empty_patch_instances": 0,
+    "error_instances": 0,
+    "unstopped_instances": 0,
+    "completed_ids": [
+        "bitflags__bitflags-266"
+    ],
+    "incomplete_ids": [
+        "bitflags__bitflags-268",
+        "bitflags__bitflags-281",
+        "bitflags__bitflags-341",
+        "bitflags__bitflags-345",
+        "bitflags__bitflags-351",
+        "bitflags__bitflags-355",
+        "bitflags__bitflags-411"
+    ],
+    "empty_patch_ids": [],
+    "submitted_ids": [
+        "bitflags__bitflags-266"
+    ],
+    "resolved_ids": [
+        "bitflags__bitflags-266"
+    ],
+    "unresolved_ids": [],
+    "error_ids": [],
+    "unstopped_containers": [],
+    "unremoved_images": [],
+    "schema_version": 2
+}

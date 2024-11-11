@@ -2,6 +2,7 @@ import hashlib
 import json
 import platform
 import re
+import toml
 from tqdm.auto import tqdm
 import logging
 import os,requests
@@ -26,8 +27,11 @@ from swebench.harness.dockerfiles import (
 )
 from swebench.harness.utils import (
     get_requirements,
-get_test_directives,
-    get_rust_test_command
+    get_test_directives,
+    clean_cargo_toml,
+    clean_workspace_cargo_toml,
+    get_rust_test_command,
+    clean_comment
 )
 
 logger = logging.getLogger(__name__)
@@ -133,11 +137,11 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
     This is the setup script for the instance image.
     """
     setup_commands = [
-        f"git clone -o origin https://github.com/{repo} {repo_directory}",
-        f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
+        # f"git clone -o origin https://github.com/{repo} {repo_directory}",
+        # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
         f"git reset --hard {base_commit}",
-        f"git remote remove origin",
+        # f"git remote remove origin",
     ]
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
@@ -152,29 +156,63 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
     return setup_commands
 
 
-def make_env_script_list(instance, specs, env_name):
+def make_env_script_list(instance, specs, repo, repo_directory, env_name):
     """
     Creates the list of commands to set up the conda environment for testing.
     This is the setup script for the environment image.
     """
     HEREDOC_DELIMITER = "EOF_59812759871"
-    reqs_commands = []
+    reqs_commands = [
+        f"rustup default {specs['rustc']}",
+        f"git clone -o origin https://github.com/{repo} {repo_directory}",
+        f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
+        f"cd {repo_directory}",
+        f"git reset --hard {instance['environment_setup_commit']}",
+        "cargo fetch"
+    ]
 
-    reqs_commands.append(f"rustup default {specs['rustc']}")
 
-    reqs = get_requirements(instance)
+    # if "[workspace]" in reqs:
+    #     workspace_data = toml.loads(reqs)
+    #     workspace_cargo_toml = clean_comment(reqs)
+    #     reqs_commands.append(
+    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{workspace_cargo_toml}\n{HEREDOC_DELIMITER}"
+    #     )
 
-    path_to_reqs = "./Cargo.toml"
+    #     # 使用 cat 写入 main.rs 文件
+    #     reqs_commands.append(
+    #         f"mkdir -p src && cat <<'{HEREDOC_DELIMITER}' > src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
+    #     )
 
-    reqs_commands.append(
-        f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{reqs}\n{HEREDOC_DELIMITER}"
-    )
+    #     members = workspace_data.get('workspace', {}).get('members', [])
+    #     for member in members:
+    #         toml_path = os.path.join(member, "Cargo.toml")
+    #         member_reqs = get_requirements(instance, toml_path)
+    #         member_reqs = clean_comment(member_reqs)
 
-    reqs_commands.append("mkdir -p src && echo 'fn main() {}' > src/main.rs")
+    #         # 使用 cat 写入 main.rs 和 lib.rs 文件
+    #         reqs_commands.append(
+    #             f"mkdir -p {member}/src && cat <<'{HEREDOC_DELIMITER}' > {member}/src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
+    #         )
+    #         reqs_commands.append(
+    #             f"cat <<'{HEREDOC_DELIMITER}' > {member}/src/lib.rs\npub fn hello() {{}}\n{HEREDOC_DELIMITER}"
+    #         )
+    #         reqs_commands.append(
+    #             f"cat <<'{HEREDOC_DELIMITER}' > {toml_path}\n{member_reqs}\n{HEREDOC_DELIMITER}"
+    #         )
+    # else:
+    #     cleaned_reqs = clean_comment(reqs)
+    #     reqs_commands.append(
+    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{cleaned_reqs}\n{HEREDOC_DELIMITER}"
+    #     )
 
-    reqs_commands.append("cargo fetch")
-
-    reqs_commands.append(f"rm {path_to_reqs}")
+        # # 使用 cat 写入 src 目录下的 main.rs 和 lib.rs 文件
+        # reqs_commands.append(
+        #     f"mkdir -p src && cat <<'{HEREDOC_DELIMITER}' > src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
+        # )
+        # reqs_commands.append(
+        #     f"cat <<'{HEREDOC_DELIMITER}' > src/lib.rs\npub fn hello() {{}}\n{HEREDOC_DELIMITER}"
+        # )
 
     return reqs_commands
 
@@ -244,7 +282,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
     try:
-        env_script_list = make_env_script_list(instance, specs, env_name)
+        env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
     except Exception as e:
         logger.warning(f"Failed to create make env script for {instance_id}: {e}")
         return None
