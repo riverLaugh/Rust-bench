@@ -169,14 +169,14 @@ def build_base_images(
     # Get the base images to build from the dataset
     test_specs = get_test_specs_from_dataset(dataset)
     base_images = {
-        x.base_image_key: (x.base_dockerfile, x.platform) for x in test_specs
+        x.base_image_key: (x.base_dockerfile, x.platform, x.repo,x.image_tag ) for x in test_specs
     }
     if force_rebuild:
         for key in base_images:
             remove_image(client, key, "quiet")
 
     # Build the base images
-    for image_name, (dockerfile, platform) in base_images.items():
+    for image_name, (dockerfile, platform, repo, tag) in base_images.items():
         try:
             # Check if the base image already exists
             client.images.get(image_name)
@@ -190,6 +190,20 @@ def build_base_images(
             pass
         # Build the base image (if it does not exist or force rebuild is enabled)
         print(f"Building base image ({image_name})")
+        if repo == "asterinas/asterinas":
+            try:
+                # 拉取指定的镜像
+                print(f"Downloading image {image_name}:{tag}...")
+                image = client.images.pull(image_name, tag=tag)
+                print(f"Image {image_name}:{tag} downloaded successfully.")
+                return image
+            except docker.errors.APIError as e:
+                print(f"Failed to download image {image_name}:{tag}. Error: {e}")
+            finally:
+                # 关闭 Docker 客户端
+                client.close()
+
+
         build_image(
             image_name=image_name,
             setup_scripts={},
@@ -198,6 +212,7 @@ def build_base_images(
             client=client,
             build_dir=BASE_IMAGE_BUILD_DIR / image_name.replace(":", "__"),
         )
+    
     print("Base images built successfully.")
 
 

@@ -18,7 +18,9 @@ from swebench.harness.constants import (
     MAP_REPO_TO_REQS_PATHS,
     MAP_REPO_VERSION_TO_SPECS,
     USE_X86,
-    SWE_BENCH_URL_RAW
+    SWE_BENCH_URL_RAW,
+    NON_OSDK_CRATES,
+    OSDK_CRATES
 )
 from swebench.harness.dockerfiles import (
     get_dockerfile_base,
@@ -31,7 +33,8 @@ from swebench.harness.utils import (
     clean_cargo_toml,
     clean_workspace_cargo_toml,
     get_rust_test_command,
-    clean_comment
+    clean_comment,
+    findCrate,
 )
 
 logger = logging.getLogger(__name__)
@@ -55,6 +58,7 @@ class TestSpec:
     FAIL_TO_PASS: list[str]
     PASS_TO_PASS: list[str]
     tests_changed: list[str]
+    image_tag: str
 
     @property
     def setup_env_script(self):
@@ -71,6 +75,8 @@ class TestSpec:
 
     @property
     def base_image_key(self):
+        if self.repo == "asterinas/asterinas":
+            return f"asterinas/asterinas"
         return f"sweb.base.{self.arch}:latest"
 
     @property
@@ -136,6 +142,8 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
     Create a list of bash commands to set up the repository for testing.
     This is the setup script for the instance image.
     """
+    if repo == "asterinas/asterinas":
+        repo_directory = "/root/asterinas"
     setup_commands = [
         # f"git clone -o origin https://github.com/{repo} {repo_directory}",
         # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
@@ -143,6 +151,7 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         f"git reset --hard {base_commit}",
         # f"git remote remove origin",
     ]
+
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
 
@@ -162,14 +171,23 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
     This is the setup script for the environment image.
     """
     HEREDOC_DELIMITER = "EOF_59812759871"
-    reqs_commands = [
-        f"rustup default {specs['rustc']}",
-        f"git clone -o origin https://github.com/{repo} {repo_directory}",
-        f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
-        f"cd {repo_directory}",
+    if repo == "asterinas/asterinas":
+        reqs_commands = [
+        f"git clone -o origin https://github.com/{repo} /root/asterinas",
+        f"chmod -R 777 /root/asterinas",  # So nonroot user can run tests
+        f"cd /root/asterinas",
         f"git reset --hard {instance['environment_setup_commit']}",
-        "cargo fetch"
-    ]
+        f"make build",
+        ]
+    else:
+        reqs_commands = [
+            f"rustup default {specs['rustc']}",
+            f"git clone -o origin https://github.com/{repo} {repo_directory}",
+            f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
+            f"cd {repo_directory}",
+            f"git reset --hard {instance['environment_setup_commit']}",
+            "cargo fetch"
+        ]
 
 
     # if "[workspace]" in reqs:
@@ -228,6 +246,15 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
+    if instance["repo"] == "asterinas/asterinas":
+        test_command = []
+        test_crates = findCrate(test_files)
+        for test_crate in test_crates:
+            if test_crate in NON_OSDK_CRATES:
+                test_command.append(f"cd asterinas/{test_crate} & cargo test")
+            if test_crate in OSDK_CRATES:
+                test_command.append(f"cd asterinas/{test_crate} & cargo osdk test")
+
     test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
     eval_commands = []
     if "eval_commands" in specs:
@@ -235,20 +262,16 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     eval_commands += [
         f"git config --global --add safe.directory {repo_directory}",  # for nonroot user
         f"cd {repo_directory}",
-        # This is just informational, so we have a record
         f"git status",
         f"git show",
-        # f"git diff {base_commit}",
-        # "source /opt/miniconda3/bin/activate",
-        # f"conda activate {env_name}",
     ]
     if "install" in specs:
         eval_commands.append(specs["install"])
     eval_commands += [
         reset_tests_command,
         apply_test_patch_command,
-        test_command,
-        reset_tests_command,  # Revert tests after done, leave the repo in the same state as before
+        *(test_command if isinstance(test_command, list) else [test_command]),
+        reset_tests_command
     ]
     return eval_commands
 
@@ -266,7 +289,6 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     problem_statement = instance["problem_statement"]
     hints_text = instance["hints_text"]  # Unused
     test_patch = instance["test_patch"]
-
     def _from_json_or_obj(key: str) -> Any:
         """If key points to string, load with json"""
         if isinstance(instance[key], str):
@@ -300,9 +322,8 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
     reqs = requests.get(reqs_url)
     cargo_toml = reqs.text
-
     tests_changed = get_test_directives(instance)
-
+    image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version]["image_tag"]
 
     return TestSpec(
         instance_id=instance_id,
@@ -316,4 +337,5 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         cargo_toml=cargo_toml,
         FAIL_TO_PASS=fail_to_pass,
         PASS_TO_PASS=pass_to_pass,
+        image_tag=image_tag,
     )

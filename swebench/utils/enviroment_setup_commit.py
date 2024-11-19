@@ -5,7 +5,7 @@ from dataset_utils import upload_to_huggingface
 
 def main():
 # 加载数据集
-    dataset_name = 'r1v3r/bitflags'
+    dataset_name = 'r1v3r/asterinas'
     split = 'train'
     dataset = load_dataset(dataset_name, split=split)
 
