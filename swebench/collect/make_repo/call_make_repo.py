@@ -2,7 +2,7 @@
 
 import subprocess
 
-repos = ["apache/arrow-rs"]
+repos = ["asterinas/asterinas"]
 
 for repo in repos:
     print(f"Making mirror repo for {repo}")

@@ -22,7 +22,8 @@ MAP_REPO_TO_VERSION_PATHS = {
     "rust-lang/rustlings": ["Cargo.toml"],
     "serde-rs/serde": ["serde/Cargo.toml"],
     "bitflags/bitflags":["Cargo.toml"],
-    "apache/arrow-rs":["Cargo.toml","arrow/Cargo.toml"]
+    "apache/arrow-rs":["Cargo.toml","arrow/Cargo.toml"],
+    "asterinas/asterinas":["kernel/Cargo.toml","Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -64,7 +65,8 @@ MAP_REPO_TO_VERSION_PATTERNS.update({
         "rust-lang/rustlings",
         "serde-rs/serde",
         "bitflags/bitflags",
-        "apache/arrow-rs"
+        "apache/arrow-rs",
+        "asterinas/asterinas"
     ]
 })
 

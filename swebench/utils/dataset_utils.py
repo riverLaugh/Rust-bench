@@ -91,8 +91,9 @@ def upload_to_huggingface(dataset, dataset_name):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/arrow-rs-task-instances_versions.json"  # 替换为你的 JSON 文件路径
-    dataset_name = "r1v3r/arrow-rs"  # 替换为你想要的数据集名称
+    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/asterinas-task-instances_versions.json"  # 替换为你的 JSON 文件路径
+    dataset_name = "r1v3r/asterinas"  # 替换为你想要的数据集名称
+    print("transforming")
     dataset_list = List2dataset(json_file_path)
 
     # huggingface_dataset = load_dataset('r1v3r/bitflags_validated_v2', split='train')

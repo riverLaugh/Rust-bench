@@ -318,5 +318,6 @@ MAP_REPO_TO_PARSER = {
     "sympy/sympy": parse_log_sympy,
     "serde-rs/serde": parse_log_cargo,
     "bitflags/bitflags": parse_log_cargo,
-    "apache/arrow-rs": parse_log_cargo
+    "apache/arrow-rs": parse_log_cargo,
+    "asterinas/asterinas": parse_log_cargo,
 }

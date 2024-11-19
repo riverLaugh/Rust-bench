@@ -19,6 +19,8 @@ from swebench.harness.constants import (
     NON_TEST_EXTS,
     SWE_BENCH_URL_RAW,
     KEY_INSTANCE_ID,
+    NON_OSDK_CRATES,
+    OSDK_CRATES
 )
 
 load_dotenv()
@@ -480,6 +482,20 @@ def get_rust_test_command(instance: "SWEbenchInstance", specs: dict) -> list:
     # 将所有命令连接为一个字符串，用 " && " 分隔
     # final_command = " && ".join(commands)
     return commands
+
+def findCrate(test_files:list):
+    crates_found = set()
+    # Iterate over each file path in test_files
+    for file_path in test_files:
+        # Check if any NON_OSDK_CRATE is in the file path
+        for crate in NON_OSDK_CRATES:
+            if crate in file_path:
+                crates_found.add(crate)
+        # Check if any OSDK_CRATE is in the file path
+        for crate in OSDK_CRATES:
+            if crate in file_path:
+                crates_found.add(crate)
+    return list(crates_found)
 
 
 def str2bool(v):

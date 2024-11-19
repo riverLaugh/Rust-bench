@@ -5,7 +5,6 @@
 # * Declare GITHUB_TOKENS=token1,token2,token3...
 
 python get_tasks_pipeline.py \
-    --repos 'apache/arrow-rs' \
+    --repos 'asterinas/asterinas' \
     --path_prs '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/prs' \
     --path_tasks '/root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks'\
-    --cutoff_date 20200101

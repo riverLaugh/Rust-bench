@@ -8,6 +8,41 @@ ENV_IMAGE_BUILD_DIR = Path("logs/build_images/env")
 INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
 RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
+NON_OSDK_CRATES=[
+    "ostd/libs/align_ext",
+    "ostd/libs/id-alloc",
+    "ostd/libs/linux-bzimage/builder",
+    "ostd/libs/linux-bzimage/boot-params",
+    "ostd/libs/ostd-macros",
+    "ostd/libs/ostd-test",
+    "kernel/libs/cpio-decoder",
+    "kernel/libs/int-to-c-enum",
+    "kernel/libs/int-to-c-enum/derive",
+    "kernel/libs/aster-rights",
+    "kernel/libs/aster-rights-proc",
+    "kernel/libs/keyable-arc",
+    "kernel/libs/typeflags",
+    "kernel/libs/typeflags-util",
+    "kernel/libs/atomic-integer-wrapper"
+]
+
+OSDK_CRATES=[
+    "osdk/test-kernel",
+    "ostd",
+    "ostd/libs/linux-bzimage/setup",
+    "kernel",
+    "kernel/comps/block",
+    "kernel/comps/console",
+    "kernel/comps/framebuffer",
+    "kernel/comps/input",
+    "kernel/comps/network",
+    "kernel/comps/softirq",
+    "kernel/comps/time",
+    "kernel/comps/virtio",
+    "kernel/libs/aster-util",
+    "kernel/libs/aster-bigtcp"
+]
+
 # Constants - Task Instance Class
 class SWEbenchInstance(TypedDict):
     repo: str
@@ -928,7 +963,14 @@ SPECS_ARROW = {
     }
     for k in ["53.2","53.0"]
 }
-
+SPECS_ASTERINAS={
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.9.4"
+    }
+    for k in ["0.1.0"]
+}
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
@@ -956,6 +998,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "serde-rs/serde": SPECS_SERDE,
     "bitflags/bitflags": SPECS_BITFLAGS,
     "apache/arrow-rs": SPECS_ARROW,
+    "asterinas/asterinas": SPECS_ASTERINAS,
 }
 
 # Constants - Repository Specific Installation Instructions

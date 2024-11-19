@@ -9,7 +9,7 @@
 
 # Example call for getting versions from github web interface
 python get_versions.py \
-    --instances_path /root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks/arrow-rs-task-instances.jsonl \
+    --instances_path /root/ARiSE/SWEbench/SWE-bench/swebench/collect/tasks/asterinas-task-instances.jsonl \
     --retrieval_method github \
     --num_workers 1 \
     --output_dir "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results"\
