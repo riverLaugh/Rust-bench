@@ -193,12 +193,13 @@ def build_base_images(
         if repo == "asterinas/asterinas":
             try:
                 # 拉取指定的镜像
-                print(f"Downloading image {image_name}:{tag}...")
-                image = client.images.pull(image_name, tag=tag)
-                print(f"Image {image_name}:{tag} downloaded successfully.")
+                print(f"Downloading image {image_name}...")
+                a = image_name.split(":")
+                image = client.images.pull(a[0], tag=a[1])
+                print(f"Image {image_name} downloaded successfully.")
                 return image
             except docker.errors.APIError as e:
-                print(f"Failed to download image {image_name}:{tag}. Error: {e}")
+                print(f"Failed to download image {image_name}. Error: {e}")
             finally:
                 # 关闭 Docker 客户端
                 client.close()

@@ -961,16 +961,45 @@ SPECS_ARROW = {
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO
     }
-    for k in ["53.2","53.0"]
+    for k in ["53.2","53.0","52.2","0.3", "0.6", "0.8", "10.0", "11.0", "11.1", "13.0", "14.0", "15.0", "16.0", "17.0", "18.0", "19.0", "20.0", "21.0", "24.0", "25.0", "26.0", "27.0", "28.0", "29.0", "30.0", "31.0", "7.0", "8.0", "9.0"]
 }
+
 SPECS_ASTERINAS={
     k:{
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
-        "image_tag":"0.9.4"
+        "image_tag":"0.8.3",
+        "pre_install":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            """
+        ],
+        #env level
+        "env_setup":[
+            r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        ]
     }
-    for k in ["0.1.0"]
+    for k in ["0.1"]
 }
+
+SPECS_ASTERINAS.update({
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.7.0",
+        #repo level
+        "pre_install":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            """
+        ],
+        #env level
+        "env_setup":[
+            r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        ]
+    }
+    for k in ["0.4"]
+})
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
@@ -1019,7 +1048,8 @@ MAP_REPO_TO_REQS_PATHS = {
     # "sqlfluff/sqlfluff": ["requirements_dev.txt"],
     # "sympy/sympy": ["requirements-dev.txt"],
     "bitflags/bitflags":"Cargo.toml",
-    "apache/arrow-rs": "Cargo.toml"
+    "apache/arrow-rs": "Cargo.toml",
+    "asterinas/asterinas": "Cargo.toml",
 }
 
 

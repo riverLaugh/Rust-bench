@@ -22,7 +22,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH=/root/.cargo/bin:$PATH
 
 # 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
-RUN rustup default stable
+RUN rustup default 1.81.0
 
 RUN adduser --disabled-password --gecos 'dog' nonroot
 """
@@ -37,6 +37,15 @@ WORKDIR /testbed/
 
 # Automatically activate the testbed environment
 # RUN echo "source /opt/miniconda3/etc/profile.d/conda.sh && conda activate testbed" > /root/.bashrc
+"""
+
+_DOCKERFILE_ENV_asterinas = r"""
+FROM --platform={platform} asterinas/asterinas:{tag}
+
+COPY ./setup_env.sh /root/
+RUN chmod +x /root/setup_env.sh
+RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
+
 """
 
 _DOCKERFILE_INSTANCE = r"""FROM --platform={platform} {env_image_name}
@@ -62,3 +71,7 @@ def get_dockerfile_env(platform, arch):
 
 def get_dockerfile_instance(platform, env_image_name):
     return _DOCKERFILE_INSTANCE.format(platform=platform, env_image_name=env_image_name)
+
+
+def get_dockerfile_env_asterinas(platform, tag):
+    return _DOCKERFILE_ENV_asterinas.format(platform=platform, tag=tag)
