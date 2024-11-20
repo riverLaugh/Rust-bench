@@ -395,8 +395,8 @@ def main(
                     print(json.dumps(instance), file=f)
     else :
         last_dot_idx = dataset_name.rfind("/")   
-        dataset_name_w_results_all = "/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/"+ dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
-        dataset_name_w_results ="/root/ARiSE/SWEbench/SWE-bench/swebench/harness/results/"+ dataset_name[last_dot_idx+1:] + "_validated" + ".json"
+        dataset_name_w_results_all = "./results/"+ dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
+        dataset_name_w_results ="./results/"+ dataset_name[last_dot_idx+1:] + "_validated" + ".json"
         
         with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
             for instance in dataset:

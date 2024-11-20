@@ -26,6 +26,7 @@ from swebench.harness.dockerfiles import (
     get_dockerfile_base,
     get_dockerfile_env,
     get_dockerfile_instance,
+    get_dockerfile_env_asterinas,
 )
 from swebench.harness.utils import (
     get_requirements,
@@ -76,7 +77,7 @@ class TestSpec:
     @property
     def base_image_key(self):
         if self.repo == "asterinas/asterinas":
-            return f"asterinas/asterinas"
+            return f"asterinas/asterinas:{self.image_tag}"
         return f"sweb.base.{self.arch}:latest"
 
     @property
@@ -108,6 +109,8 @@ class TestSpec:
 
     @property
     def env_dockerfile(self):
+        if self.repo == "asterinas/asterinas":
+            return get_dockerfile_env_asterinas(self.platform, tag=self.image_tag)
         return get_dockerfile_env(self.platform, self.arch)
 
     @property
@@ -145,6 +148,7 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
     if repo == "asterinas/asterinas":
         repo_directory = "/root/asterinas"
     setup_commands = [
+        "pwd",
         # f"git clone -o origin https://github.com/{repo} {repo_directory}",
         # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
@@ -172,65 +176,30 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
     """
     HEREDOC_DELIMITER = "EOF_59812759871"
     if repo == "asterinas/asterinas":
+        env_setup_commands = specs.get("env_setup", [])  # 如果没有 "env_setup"，则返回空列表 []
         reqs_commands = [
+        "pwd",
+        "ls -la .",
         f"git clone -o origin https://github.com/{repo} /root/asterinas",
         f"chmod -R 777 /root/asterinas",  # So nonroot user can run tests
         f"cd /root/asterinas",
         f"git reset --hard {instance['environment_setup_commit']}",
-        f"make build",
+        *env_setup_commands,
+        # f"make build",
+        f"ls -la /root/asterinas",
         ]
     else:
+        env_setup_commands = specs.get("env_setup", [])  # 如果没有 "env_setup"，则返回空列表 []
         reqs_commands = [
             f"rustup default {specs['rustc']}",
             f"git clone -o origin https://github.com/{repo} {repo_directory}",
             f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
             f"cd {repo_directory}",
             f"git reset --hard {instance['environment_setup_commit']}",
-            "cargo fetch"
+            *env_setup_commands,
+            "cargo fetch",
+            f"ls -la {repo_directory}",
         ]
-
-
-    # if "[workspace]" in reqs:
-    #     workspace_data = toml.loads(reqs)
-    #     workspace_cargo_toml = clean_comment(reqs)
-    #     reqs_commands.append(
-    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{workspace_cargo_toml}\n{HEREDOC_DELIMITER}"
-    #     )
-
-    #     # 使用 cat 写入 main.rs 文件
-    #     reqs_commands.append(
-    #         f"mkdir -p src && cat <<'{HEREDOC_DELIMITER}' > src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
-    #     )
-
-    #     members = workspace_data.get('workspace', {}).get('members', [])
-    #     for member in members:
-    #         toml_path = os.path.join(member, "Cargo.toml")
-    #         member_reqs = get_requirements(instance, toml_path)
-    #         member_reqs = clean_comment(member_reqs)
-
-    #         # 使用 cat 写入 main.rs 和 lib.rs 文件
-    #         reqs_commands.append(
-    #             f"mkdir -p {member}/src && cat <<'{HEREDOC_DELIMITER}' > {member}/src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
-    #         )
-    #         reqs_commands.append(
-    #             f"cat <<'{HEREDOC_DELIMITER}' > {member}/src/lib.rs\npub fn hello() {{}}\n{HEREDOC_DELIMITER}"
-    #         )
-    #         reqs_commands.append(
-    #             f"cat <<'{HEREDOC_DELIMITER}' > {toml_path}\n{member_reqs}\n{HEREDOC_DELIMITER}"
-    #         )
-    # else:
-    #     cleaned_reqs = clean_comment(reqs)
-    #     reqs_commands.append(
-    #         f"cat <<'{HEREDOC_DELIMITER}' > {path_to_reqs}\n{cleaned_reqs}\n{HEREDOC_DELIMITER}"
-    #     )
-
-        # # 使用 cat 写入 src 目录下的 main.rs 和 lib.rs 文件
-        # reqs_commands.append(
-        #     f"mkdir -p src && cat <<'{HEREDOC_DELIMITER}' > src/main.rs\nfn main() {{}}\n{HEREDOC_DELIMITER}"
-        # )
-        # reqs_commands.append(
-        #     f"cat <<'{HEREDOC_DELIMITER}' > src/lib.rs\npub fn hello() {{}}\n{HEREDOC_DELIMITER}"
-        # )
 
     return reqs_commands
 
@@ -323,7 +292,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     reqs = requests.get(reqs_url)
     cargo_toml = reqs.text
     tests_changed = get_test_directives(instance)
-    image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version]["image_tag"]
+    image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version].get("image_tag", None)
 
     return TestSpec(
         instance_id=instance_id,

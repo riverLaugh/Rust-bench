@@ -1,0 +1,9 @@
+python run_validation.py \
+    --dataset_name r1v3r/arrow-rs \
+    --run_id arrow-rs \
+    --max_workers 8 \
+    --cache_level instance \
+    --instance_ids apache__arrow-rs-6649
+    # --instance_ids apache__arrow-rs-3602 apache__arrow-rs-3557 apache__arrow-rs-3542 apache__arrow-rs-3514 apache__arrow-rs-3453 apache__arrow-rs-3305 apache__arrow-rs-3238 apache__arrow-rs-3222 apache__arrow-rs-3188 apache__arrow-rs-3176 apache__arrow-rs-3152 apache__arrow-rs-3148 apache__arrow-rs-3132 apache__arrow-rs-3054 apache__arrow-rs-3013 apache__arrow-rs-3010 apache__arrow-rs-2942 apache__arrow-rs-2890 apache__arrow-rs-2862 apache__arrow-rs-2819 apache__arrow-rs-2612 apache__arrow-rs-2601 apache__arrow-rs-2557 apache__arrow-rs-2407 apache__arrow-rs-2377 apache__arrow-rs-2317 apache__arrow-rs-2259 apache__arrow-rs-2237 apache__arrow-rs-2231 apache__arrow-rs-2229 apache__arrow-rs-2144 apache__arrow-rs-2103 apache__arrow-rs-2102 apache__arrow-rs-2098 apache__arrow-rs-2094 apache__arrow-rs-2044 apache__arrow-rs-2042 apache__arrow-rs-1995 apache__arrow-rs-1992 apache__arrow-rs-1954 apache__arrow-rs-1848 apache__arrow-rs-1822 apache__arrow-rs-1789 apache__arrow-rs-1767 apache__arrow-rs-1739 apache__arrow-rs-1719 apache__arrow-rs-1703 apache__arrow-rs-1689 apache__arrow-rs-1677 apache__arrow-rs-1636 apache__arrow-rs-1588 apache__arrow-rs-1571 apache__arrow-rs-1564 apache__arrow-rs-1476 apache__arrow-rs-1448 apache__arrow-rs-1446 apache__arrow-rs-1407 apache__arrow-rs-1339 apache__arrow-rs-1261 apache__arrow-rs-1216 apache__arrow-rs-1180 apache__arrow-rs-1165 apache__arrow-rs-1154 apache__arrow-rs-1110 apache__arrow-rs-1076 apache__arrow-rs-1003 apache__arrow-rs-992 apache__arrow-rs-941 apache__arrow-rs-779 apache__arrow-rs-712 apache__arrow-rs-652 apache__arrow-rs-560 apache__arrow-rs-532 apache__arrow-rs-453 apache__arrow-rs-443 apache__arrow-rs-398 apache__arrow-rs-384 apache__arrow-rs-377 apache__arrow-rs-288 apache__arrow-rs-14\
+
+
