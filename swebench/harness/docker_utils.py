@@ -8,7 +8,7 @@ import threading
 import time
 import traceback
 from pathlib import Path
-
+import re
 from docker.models.containers import Container
 
 HEREDOC_DELIMITER = "EOF_1399519320"  # different from dataset HEREDOC_DELIMITERs!
@@ -173,6 +173,12 @@ def cleanup_container(client, container, logger):
         )
 
 
+ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;]*m')
+
+def remove_ansi_escape_sequences(text):
+    return ANSI_ESCAPE.sub('', text)
+
+
 def exec_run_with_timeout(container, cmd, timeout: int|None=60):
     """
     Run a command in a container with a timeout.
@@ -215,7 +221,8 @@ def exec_run_with_timeout(container, cmd, timeout: int|None=60):
             container.exec_run(f"kill -TERM {exec_pid}", detach=True)
         timed_out = True
     end_time = time.time()
-    return exec_result.decode(), timed_out, end_time - start_time
+    clean_exec_result = remove_ansi_escape_sequences(exec_result.decode())
+    return clean_exec_result, timed_out, end_time - start_time
 
 
 def find_dependent_images(client: docker.DockerClient, image_name: str):
