@@ -82,6 +82,7 @@ def upload_to_huggingface(dataset, dataset_name):
     """
     hf_token = os.environ.get("HUGGING_FACE_HUB_TOKEN", None)
     # 设置 API Token
+    # print(f"hf_token:{hf_token}")
     HfFolder.save_token(hf_token)
     api = HfApi()
     
@@ -89,11 +90,10 @@ def upload_to_huggingface(dataset, dataset_name):
     dataset.push_to_hub(dataset_name, token=hf_token)
     print(f"Dataset '{dataset_name}' uploaded successfully!")
 
-if __name__ == "__main__":
-    # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/asterinas-task-instances_versions.json"  # 替换为你的 JSON 文件路径
-    dataset_name = "r1v3r/asterinas"  # 替换为你想要的数据集名称
-    print("transforming")
+
+def upload_version(json_file_path:str):
+    dataset_name = json_file_path.split("/")[-1].split("-")[0]
+    print(f"transforming {dataset_name}")
     dataset_list = List2dataset(json_file_path)
 
     # huggingface_dataset = load_dataset('r1v3r/bitflags_validated_v2', split='train')
@@ -102,3 +102,10 @@ if __name__ == "__main__":
 
     # 将数据集上传到 Hugging Face 数据集中心
     upload_to_huggingface(dataset_list, dataset_name)
+
+
+if __name__ == "__main__":
+    # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
+    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/results/bottlerocket-task-instances_versions.json"  # 替换为你的 JSON 文件路径
+    
+    upload_version(json_file_path)

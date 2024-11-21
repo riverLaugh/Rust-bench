@@ -145,8 +145,6 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
     Create a list of bash commands to set up the repository for testing.
     This is the setup script for the instance image.
     """
-    if repo == "asterinas/asterinas":
-        repo_directory = "/root/asterinas"
     setup_commands = [
         "pwd",
         # f"git clone -o origin https://github.com/{repo} {repo_directory}",
@@ -180,13 +178,13 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
         reqs_commands = [
         "pwd",
         "ls -la .",
-        f"git clone -o origin https://github.com/{repo} /root/asterinas",
-        f"chmod -R 777 /root/asterinas",  # So nonroot user can run tests
-        f"cd /root/asterinas",
+        f"git clone -o origin https://github.com/{repo} {repo_directory}",
+        f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
+        f"cd {repo_directory}",
         f"git reset --hard {instance['environment_setup_commit']}",
         *env_setup_commands,
-        # f"make build",
-        f"ls -la /root/asterinas",
+        f"make build",
+        # f"git reset --hard {instance['environment_setup_commit']}"
         ]
     else:
         env_setup_commands = specs.get("env_setup", [])  # 如果没有 "env_setup"，则返回空列表 []
@@ -198,7 +196,8 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
             f"git reset --hard {instance['environment_setup_commit']}",
             *env_setup_commands,
             "cargo fetch",
-            f"ls -la {repo_directory}",
+            # f"git reset --hard {instance['environment_setup_commit']}",
+            # f"ls -la {repo_directory}", 
         ]
 
     return reqs_commands
@@ -220,19 +219,19 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         test_crates = findCrate(test_files)
         for test_crate in test_crates:
             if test_crate in NON_OSDK_CRATES:
-                test_command.append(f"cd asterinas/{test_crate} & cargo test")
+                test_command.append(f"cd {env_name}/{test_crate} & cargo test --color never")
             if test_crate in OSDK_CRATES:
-                test_command.append(f"cd asterinas/{test_crate} & cargo osdk test")
-
-    test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
+                test_command.append(f"export CARGO_TERM_COLOR=never && cd {env_name}/{test_crate} & cargo osdk test")
+    else:
+        test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
     eval_commands = []
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
     eval_commands += [
         f"git config --global --add safe.directory {repo_directory}",  # for nonroot user
         f"cd {repo_directory}",
-        f"git status",
-        f"git show",
+        # f"git status",
+        # f"git show",
     ]
     if "install" in specs:
         eval_commands.append(specs["install"])
