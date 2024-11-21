@@ -258,8 +258,8 @@ def parse_log_cargo(log:str) ->dict[str, str]:
     lines = log.split("\n")
 
     # Regular expressions to match test results
-    passed_re = re.compile(r'test (\S+) ... ok')
-    failed_re = re.compile(r'test (\S+) ... error') or re.compile(r'test (\S+) ... failed') or re.compile(r'test (\S+) ... FAILED')
+    passed_re = re.compile(r'test ([\s\S]+) ... ok')
+    failed_re = re.compile(r'test ([\s\S]+) ... (error|failed|FAILED)')
 
     for line in lines:
         # Match passed tests
