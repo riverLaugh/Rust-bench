@@ -1036,17 +1036,6 @@ MAP_REPO_TO_INSTALL = {}
 
 # Constants - Task Instance Requirements File Paths
 MAP_REPO_TO_REQS_PATHS = {
-    # "dbt-labs/dbt-core": ["dev-requirements.txt", "dev_requirements.txt"],
-    # "django/django": ["tests/requirements/py3.txt"],
-    # "matplotlib/matplotlib": [
-    #     "requirements/dev/dev-requirements.txt",
-    #     "requirements/testing/travis_all.txt",
-    # ],
-    # "pallets/flask": ["requirements/dev.txt"],
-    # "pylint-dev/pylint": ["requirements_test.txt"],
-    # "pyvista/pyvista": ["requirements_test.txt", "requirements.txt"],
-    # "sqlfluff/sqlfluff": ["requirements_dev.txt"],
-    # "sympy/sympy": ["requirements-dev.txt"],
     "bitflags/bitflags":"Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
