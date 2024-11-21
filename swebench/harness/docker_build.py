@@ -48,15 +48,29 @@ def setup_logger(instance_id: str, log_file: Path, mode="w"):
     """
     log_file.parent.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger(f"{instance_id}.{log_file.name}")
-    handler = logging.FileHandler(log_file, mode=mode)
+    handler = NoColorFileHandler(log_file, mode=mode)
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     logger.propagate = False
     setattr(logger, "log_file", log_file)
     return logger
 
+ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;]*m')
+def remove_ansi_escape_sequences(text):
+    return ANSI_ESCAPE.sub('', text)
+
+# 自定义日志处理程序
+class NoColorFileHandler(logging.FileHandler):
+    def emit(self, record):
+        # 获取日志消息
+        msg = self.format(record)
+        # 去掉颜色编码
+        msg = remove_ansi_escape_sequences(msg)
+        # 写入文件
+        self.stream.write(msg + self.terminator)
+        self.flush()
 
 def close_logger(logger):
     # To avoid too many open files
