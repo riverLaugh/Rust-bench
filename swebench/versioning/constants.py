@@ -23,49 +23,24 @@ MAP_REPO_TO_VERSION_PATHS = {
     "serde-rs/serde": ["serde/Cargo.toml"],
     "bitflags/bitflags":["Cargo.toml"],
     "apache/arrow-rs":["Cargo.toml","arrow/Cargo.toml"],
-    "asterinas/asterinas":["kernel/Cargo.toml","Cargo.toml"],
+    "asterinas/asterinas":["VERSION","Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
-MAP_REPO_TO_VERSION_PATTERNS = {
-    k: [r'__version__ = [\'"](.*)[\'"]', r"VERSION = \((.*)\)"]
-    for k in [
-        "dbt-labs/dbt-core",
-        "django/django",
-        "huggingface/transformers",
-        "marshmallow-code/marshmallow",
-        "mwaskom/seaborn",
-        "pallets/flask",
-        "psf/requests",
-        "pyca/cryptography",
-        "pylint-dev/astroid",
-        "pylint-dev/pylint",
-        "scikit-learn/scikit-learn",
-        "sphinx-doc/sphinx",
-        "sympy/sympy",
-    ]
-}
-MAP_REPO_TO_VERSION_PATTERNS.update(
-    {
-        k: [
-            r'__version__ = [\'"](.*)[\'"]',
-            r'__version__ = version = [\'"](.*)[\'"]',
-            r"VERSION = \((.*)\)",
-        ]
-        for k in ["pytest-dev/pytest", "matplotlib/matplotlib"]
-    }
-)
-MAP_REPO_TO_VERSION_PATTERNS.update({k: [r"(.*)"] for k in ["Qiskit/qiskit"]})
-MAP_REPO_TO_VERSION_PATTERNS.update({k: [r"version_info = [\d]+,[\d\s]+,"] for k in ["pyvista/pyvista"]})
-
-
-MAP_REPO_TO_VERSION_PATTERNS.update({
+MAP_REPO_TO_VERSION_PATTERNS={
     k:[r'version\s*=\s*"(\d+\.\d+\.\d+)"']
     for k in [
         "rust-lang/rustlings",
         "serde-rs/serde",
         "bitflags/bitflags",
         "apache/arrow-rs",
+        "asterinas/asterinas"
+    ]
+}
+
+MAP_REPO_TO_VERSION_PATTERNS.update({
+    k:[r'\d+\.\d+\.\d+']
+    for k in [
         "asterinas/asterinas"
     ]
 })

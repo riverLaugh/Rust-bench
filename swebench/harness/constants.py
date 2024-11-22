@@ -137,7 +137,7 @@ SPECS_ASTERINAS={
             r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
         ]
     }
-    for k in ["0.1"]
+    for k in ["0.8"]
 }
 
 SPECS_ASTERINAS.update({
@@ -156,7 +156,99 @@ SPECS_ASTERINAS.update({
             r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
         ]
     }
-    for k in ["0.4"]
+    for k in ["0.7"]
+})
+
+SPECS_ASTERINAS.update({
+        k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.6.2",
+        # #repo level
+        # "pre_install":[
+        #     r"""
+        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+        #     """
+        # ],
+        # #env level
+        # "env_setup":[
+        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        # ]
+    }
+    for k in ["0.6"]
+})
+
+SPECS_ASTERINAS.update({
+        k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.5.1",
+        # #repo level
+        # "pre_install":[
+        #     r"""
+        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+        #     """
+        # ],
+        # #env level
+        # "env_setup":[
+        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        # ]
+    }
+    for k in ["0.5"]
+})
+SPECS_ASTERINAS.update({
+        k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.3.0",
+        # #repo level
+        # "pre_install":[
+        #     r"""
+        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+        #     """
+        # ],
+        # #env level
+        # "env_setup":[
+        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        # ]
+    }
+    for k in ["0.3"]
+})
+SPECS_ASTERINAS.update({
+        k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.2.2",
+        # #repo level
+        # "pre_install":[
+        #     r"""
+        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+        #     """
+        # ],
+        # #env level
+        # "env_setup":[
+        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        # ]
+    }
+    for k in ["0.2"]
+})
+SPECS_ASTERINAS.update({
+        k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "image_tag":"0.1.1",
+        # #repo level
+        # "pre_install":[
+        #     r"""
+        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+        #     """
+        # ],
+        # #env level
+        # "env_setup":[
+        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+        # ]
+    }
+    for k in ["0.1"]
 })
 
 # Constants - Task Instance Instllation Environment

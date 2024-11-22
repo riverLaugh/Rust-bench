@@ -77,6 +77,8 @@ class TestSpec:
     @property
     def base_image_key(self):
         if self.repo == "asterinas/asterinas":
+            if self.version =="0.1" or self.version == '0.2':
+                return f"jinuxdev/jinux:{self.image_tag}"
             return f"asterinas/asterinas:{self.image_tag}"
         return f"sweb.base.{self.arch}:latest"
 

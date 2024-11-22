@@ -384,25 +384,51 @@ def main(
             # assert not any(k in instance for k in results[instance_id]), f"Duplicate keys in {instance_id}"
             instance.update(results[instance_id])
 
+    update_json_file(dataset_name,dataset)
+
+import os
+import json
+
+def update_json_file(dataset_name, dataset):
     if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
         last_dot_idx = dataset_name.rfind(".")
-        dataset_name_w_results_all =dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
-        dataset_name_w_results =dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
-        with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
-            for instance in dataset:
-                print(json.dumps(instance), file=f_all)
-                if len(instance["FAIL_TO_PASS"]) > 0:
-                    print(json.dumps(instance), file=f)
-    else :
-        last_dot_idx = dataset_name.rfind("/")   
-        dataset_name_w_results_all = "./results/"+ dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
-        dataset_name_w_results ="./results/"+ dataset_name[last_dot_idx+1:] + "_validated" + ".json"
-        
-        with open(dataset_name_w_results, "w") as f, open(dataset_name_w_results_all, "w") as f_all:
-            for instance in dataset:
-                print(json.dumps(instance), file=f_all)
-                if len(instance["FAIL_TO_PASS"]) > 0:
-                    print(json.dumps(instance), file=f)
+        dataset_name_w_results_all = dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
+        dataset_name_w_results = dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
+    else:
+        last_dot_idx = dataset_name.rfind("/")
+        dataset_name_w_results_all = "./results/" + dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
+        dataset_name_w_results = "./results/" + dataset_name[last_dot_idx+1:] + "_validated" + ".json"
+
+    # Helper function to update a file with new data
+    def update_file(file_path, dataset):
+        # Load existing data if file exists
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                existing_data = json.load(f)
+        else:
+            existing_data = []
+
+        # Create a dictionary index by instance_id for quick lookup
+        instance_dict = {item["instance_id"]: item for item in existing_data}
+
+        # Update or add new instances
+        for instance in dataset:
+            instance_id = instance.get("instance_id")
+            if instance_id:
+                instance_dict[instance_id] = instance  # Update or add new instance
+            else:
+                print("Warning: Missing 'instance_id' in instance:", instance)
+
+        # Write updated data back to file
+        with open(file_path, "w") as f:
+            json.dump(list(instance_dict.values()), f, indent=4)
+
+    # Update both validated and validated.all files
+    update_file(dataset_name_w_results_all, dataset)
+
+    # Only include instances with FAIL_TO_PASS for validated file
+    update_file(dataset_name_w_results, [inst for inst in dataset if len(inst.get("FAIL_TO_PASS", [])) > 0])
+
 
 
 if __name__ == "__main__":
