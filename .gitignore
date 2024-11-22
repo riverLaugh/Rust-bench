@@ -170,9 +170,10 @@ cython_debug/
 data/repos/copies
 notebooks/
 *logs/
-/harness/reports/*
-/harness/results/*
-/harness/log/*
-/versioning/results/*
-/collect/scripts/*
-/collect/tasks/*
+temp/*
+swebench/harness/reports/*
+swebench/harness/results/*
+swebench/harness/log/*
+swebench/versioning/results/*
+swebench/collect/scripts/*
+swebench/collect/tasks/*
