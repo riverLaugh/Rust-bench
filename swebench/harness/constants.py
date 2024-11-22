@@ -9,6 +9,7 @@ INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
 RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
 NON_OSDK_CRATES=[
+    "osdk",
     "ostd/libs/align_ext",
     "ostd/libs/id-alloc",
     "ostd/libs/linux-bzimage/builder",
@@ -119,7 +120,7 @@ SPECS_ARROW = {
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO
     }
-    for k in ["53.2","53.0","52.2","0.3", "0.6", "0.8", "10.0", "11.0", "11.1", "13.0", "14.0", "15.0", "16.0", "17.0", "18.0", "19.0", "20.0", "21.0", "24.0", "25.0", "26.0", "27.0", "28.0", "29.0", "30.0", "31.0", "7.0", "8.0", "9.0"]
+    for k in ["53.2","53.0","52.2"]
 }
 
 SPECS_ARROW.update(
