@@ -92,7 +92,8 @@ def upload_to_huggingface(dataset, dataset_name):
 
 
 def upload_version(json_file_path:str):
-    dataset_name = json_file_path.split("/")[-1].split("-")[0]
+    # dataset_name = json_file_path.split("/")[-1].split("-")[0]
+    dataset_name = "arrow_validated"
     print(f"transforming {dataset_name}")
     dataset_list = List2dataset(json_file_path)
     data_dict = dataset_list.to_dict()
@@ -112,6 +113,6 @@ def upload_version(json_file_path:str):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/results/asterinas-task-instances_versions.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/arrow-rs.json"  # 替换为你的 JSON 文件路径
     
     upload_version(json_file_path)

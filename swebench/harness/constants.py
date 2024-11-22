@@ -118,7 +118,10 @@ SPECS_BITFLAGS.update({
 SPECS_ARROW = {
     k:{
         "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            r"""git submodule update --init""",
+        ]
     }
     for k in ["53.2","53.0","52.2"]
 }
@@ -141,6 +144,18 @@ SPECS_ARROW.update(
         for k in ["49.0", "48.0","47.0"]
     }
 )
+
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            r"""git submodule update --init""",
+        ]
+    }
+    for k in ["53.2","53.0","52.2"]
+}
+
 
 SPECS_ARROW.update(
     {
