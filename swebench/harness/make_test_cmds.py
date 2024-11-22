@@ -7,8 +7,15 @@ from swebench.harness.constants import (
 )
 from swebench.harness.utils import findCrate
 
+
 def arrow_rs_tests(
-    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    instance,
+    specs,
+    env_name,
+    repo_directory,
+    base_commit,
+    test_patch,
+    tests_changed: list[str],
 ):
     # ban warnning
     cmds = ['export RUSTFLAGS="-Awarnings"']
@@ -51,17 +58,19 @@ def asterinas_tests(
     test_crates = findCrate(test_files)
     for test_crate in test_crates:
         if test_crate in NON_OSDK_CRATES:
-            cmds.append(f"cd {env_name}/{test_crate} & cargo test --no-fail-fast")
+            cmds.append(f"cd /{env_name}/{test_crate} ")
+            cmds.append(f"cargo test --no-fail-fast ")
         if test_crate in OSDK_CRATES:
-            cmds.append(
-                f"export CARGO_TERM_COLOR=never && cd {env_name}/{test_crate} & cargo osdk test --no-fail-fast"
-            )
+            cmds.append(f"cd /{env_name}/{test_crate} ")
+            cmds.append("cargo osdk test ")
     return cmds
+
 
 AVAIL_REPOS = {
     "apache/arrow-rs": arrow_rs_tests,
     "asterinas/asterinas": asterinas_tests,
 }
+
 
 def make_test_cmds(
     instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
