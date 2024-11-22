@@ -170,6 +170,7 @@ cython_debug/
 data/repos/copies
 notebooks/
 *logs/
+temp/*
 swebench/harness/reports/*
 swebench/harness/results/*
 swebench/harness/log/*
