@@ -122,6 +122,44 @@ SPECS_ARROW = {
     for k in ["53.2","53.0","52.2","0.3", "0.6", "0.8", "10.0", "11.0", "11.1", "13.0", "14.0", "15.0", "16.0", "17.0", "18.0", "19.0", "20.0", "21.0", "24.0", "25.0", "26.0", "27.0", "28.0", "29.0", "30.0", "31.0", "7.0", "8.0", "9.0"]
 }
 
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": "cargo test --no-fail-fast",
+            "env_setup": [
+                r"""sed -i 's/ahash = { version = "0.8"/ahash = { version = "0.8.8"/' ./arrow/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1.0.69"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/ahash = { version = "0.8"/ahash = { version = "0.8.8"/' ./arrow/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1.0.69"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in ["49.0", "48.0","47.0"]
+    }
+)
+
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1.0.66"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1.0.66"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in ["46.0", "45.0"]
+    }
+)
+
 SPECS_ASTERINAS={
     k:{
         "rustc": "1.81.0",
