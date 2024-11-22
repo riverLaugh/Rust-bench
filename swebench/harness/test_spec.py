@@ -9,6 +9,7 @@ import os,requests
 from dataclasses import dataclass
 from typing import Any, Union, cast
 
+from swebench.harness.make_test_cmds import make_test_cmds
 from swebench.harness.constants import (
     SWEbenchInstance,
     KEY_INSTANCE_ID,
@@ -205,7 +206,7 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
     return reqs_commands
 
 
-def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit, test_patch):
+def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed):
     """
     Applies the test patch and runs the tests.
     """
@@ -216,19 +217,23 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
-    if instance["repo"] == "asterinas/asterinas":
-        test_command = []
-        test_crates = findCrate(test_files)
-        for test_crate in test_crates:
-            if test_crate in NON_OSDK_CRATES:
-                test_command.append(f"cd /{env_name}/{test_crate} ")
-                test_command.append(f"cargo test --no-fail-fast ")
-            if test_crate in OSDK_CRATES:
-                test_command.append(f"cd /{env_name}/{test_crate} ")
-                test_command.append("cargo osdk test ")
+    
+    # if instance["repo"] == "asterinas/asterinas":
+    #     test_command = []
+    #     test_crates = findCrate(test_files)
+    #     for test_crate in test_crates:
+    #         if test_crate in NON_OSDK_CRATES:
+    #             test_command.append(f"cd /{env_name}/{test_crate} ")
+    #             test_command.append(f"cargo test --no-fail-fast ")
+    #         if test_crate in OSDK_CRATES:
+    #             test_command.append(f"cd /{env_name}/{test_crate} ")
+    #             test_command.append("cargo osdk test ")
+    # else:
+    #     test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "
 
-    else:
-        test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "
+    test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
+    test_commands = test_commands if test_commands else [f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "]
+    
     eval_commands = []
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
@@ -243,7 +248,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     eval_commands += [
         reset_tests_command,
         apply_test_patch_command,
-        *(test_command if isinstance(test_command, list) else [test_command]),
+        *(test_commands),
         reset_tests_command
     ]
     return eval_commands
@@ -281,9 +286,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     except Exception as e:
         logger.warning(f"Failed to create make env script for {instance_id}: {e}")
         return None
-    eval_script_list = make_eval_script_list(
-        instance, specs, env_name, repo_directory, base_commit, test_patch
-    )
+
     if platform.machine() in {"aarch64", "arm64"}:
         # use arm64 unless explicitly specified
         arch = "arm64" if instance_id not in USE_X86 else "x86_64"
@@ -297,6 +300,11 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     cargo_toml = reqs.text
     tests_changed = get_test_directives(instance)
     image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version].get("image_tag", None)
+
+    # get eval script list
+    eval_script_list = make_eval_script_list(
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    )
 
     return TestSpec(
         instance_id=instance_id,
