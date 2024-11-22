@@ -9,6 +9,8 @@ from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from tqdm import tqdm
+import os
+import json
 
 from swebench.harness.constants import (
     APPLY_PATCH_FAIL,
@@ -386,14 +388,15 @@ def main(
 
     update_json_file(dataset_name,dataset)
 
-import os
-import json
+
 
 def update_json_file(dataset_name, dataset):
+    if not os.path.exists('./results'):
+        os.makedirs('./results')
     if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
         last_dot_idx = dataset_name.rfind(".")
-        dataset_name_w_results_all = dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
-        dataset_name_w_results = dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
+        dataset_name_w_results_all = "./results/"+ dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
+        dataset_name_w_results ="./results/"+ dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
     else:
         last_dot_idx = dataset_name.rfind("/")
         dataset_name_w_results_all = "./results/" + dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
@@ -405,6 +408,7 @@ def update_json_file(dataset_name, dataset):
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
                 existing_data = json.load(f)
+                print(existing_data)
         else:
             existing_data = []
 

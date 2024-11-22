@@ -221,9 +221,11 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         test_crates = findCrate(test_files)
         for test_crate in test_crates:
             if test_crate in NON_OSDK_CRATES:
-                test_command.append(f"cd {env_name}/{test_crate} & cargo test --no-fail-fast")
+                test_command.append(f"cd /{env_name}/{test_crate} & cargo test --no-fail-fast")
             if test_crate in OSDK_CRATES:
-                test_command.append(f"export CARGO_TERM_COLOR=never && cd {env_name}/{test_crate} & cargo osdk test --no-fail-fast")
+                test_command.append(f"cd /{env_name}/{test_crate} & cargo osdk test ")
+        # if instance["instance_id"] == "asterinas__asterinas-1362":
+        #     test_command=["cd osdk & cargo test --no-fail-fast"]
     else:
         test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]}"
     eval_commands = []
