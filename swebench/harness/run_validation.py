@@ -204,8 +204,6 @@ def run_instance(
             "FAIL_TO_FAIL": [],
             "PASS_TO_FAIL": [],
         }
-        
-        
         eval_sm, found = get_logs_eval(log_file, test_output_path)
         eval_sm_ref, found_ref = get_logs_eval(log_file, test_output_before_patch_path)
         if not found:
@@ -375,8 +373,6 @@ def main(
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
     
-
-
     for instance in dataset:
         instance_id = instance["instance_id"]
         print("instance-----------------------------------------------------------------------")

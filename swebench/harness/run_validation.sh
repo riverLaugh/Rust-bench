@@ -3,6 +3,5 @@ python run_validation.py \
     --run_id asterinas \
     --max_workers 4 \
     --cache_level instance \
-    --instance_id asterinas__asterinas-1362
 
 
