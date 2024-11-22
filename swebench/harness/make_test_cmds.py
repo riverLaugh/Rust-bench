@@ -46,6 +46,18 @@ def arrow_rs_tests(
         cmds.append(f"cd ./{'/'.join(dirs)}")
         cmds.append(f"cargo test --no-fail-fast --test {file.replace('.rs','')}")
         cmds.append(f"cd ./{'../'*len(dirs)}")
+    # run bin test
+    for test_path in tests_changed:
+        if "src/bin" not in test_path:
+            continue
+        idx = test_path.rfind("src/bin")
+        dirs, file = (
+            test_path[: idx + len("src/bin")].split('/'),
+            test_path[idx + len("src/bin") + 1 :],
+        )
+        cmds.append(f"cd ./{'/'.join(dirs)}")
+        cmds.append(f"cargo test --no-fail-fast --bin {file.replace('.rs','')}")
+        cmds.append(f"cd ./{'../'*len(dirs)}")
     return cmds
 
 
