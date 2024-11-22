@@ -40,11 +40,16 @@ def _find_version_in_text(text: str, instance: dict) -> str:
         matches = re.search(pattern, text)
         if matches is not None:
             print(instance['repo'])
+            print(matches)
             if instance['repo'] == 'pyvista/pyvista':
                 text = matches.group(0)
                 text = text.split('=')[-1].strip() if '=' in text else text.strip()
                 text = '.'.join(text.split(','))
                 return text
+            if instance['repo'] == 'asterinas/asterinas':
+                if matches.group(0) == None:
+                    return "0.1.0"
+                return matches.group(0)
             return str(matches.group(1)).replace(" ", "")
 
 

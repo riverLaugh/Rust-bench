@@ -95,17 +95,23 @@ def upload_version(json_file_path:str):
     dataset_name = json_file_path.split("/")[-1].split("-")[0]
     print(f"transforming {dataset_name}")
     dataset_list = List2dataset(json_file_path)
+    data_dict = dataset_list.to_dict()
+    for i in range(len(data_dict["instance_id"])):
+        if data_dict["instance_id"][i] == "asterinas__asterinas-183":  # 定位 id=2 的对象
+            data_dict["version"][i] = "0.1"  # 修改 value 属性
 
+    # 转换回数据集
+    modified_data = Dataset.from_dict(data_dict)
     # huggingface_dataset = load_dataset('r1v3r/bitflags_validated_v2', split='train')
 
     # combined_dataset = concatenate_datasets([huggingface_dataset, dataset_list])
 
     # 将数据集上传到 Hugging Face 数据集中心
-    upload_to_huggingface(dataset_list, dataset_name)
+    upload_to_huggingface(modified_data, dataset_name)
 
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/results/bottlerocket-task-instances_versions.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/results/asterinas-task-instances_versions.json"  # 替换为你的 JSON 文件路径
     
     upload_version(json_file_path)

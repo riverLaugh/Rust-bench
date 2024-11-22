@@ -169,14 +169,14 @@ def build_base_images(
     # Get the base images to build from the dataset
     test_specs = get_test_specs_from_dataset(dataset)
     base_images = {
-        x.base_image_key: (x.base_dockerfile, x.platform, x.repo,x.image_tag ) for x in test_specs
+        x.base_image_key: (x.base_dockerfile, x.platform, x.repo ) for x in test_specs
     }
     if force_rebuild:
         for key in base_images:
             remove_image(client, key, "quiet")
 
     # Build the base images
-    for image_name, (dockerfile, platform, repo, tag) in base_images.items():
+    for image_name, (dockerfile, platform, repo) in base_images.items():
         try:
             # Check if the base image already exists
             client.images.get(image_name)
@@ -197,14 +197,10 @@ def build_base_images(
                 a = image_name.split(":")
                 image = client.images.pull(a[0], tag=a[1])
                 print(f"Image {image_name} downloaded successfully.")
-                return image
+                continue
             except docker.errors.APIError as e:
                 print(f"Failed to download image {image_name}. Error: {e}")
-            finally:
-                # 关闭 Docker 客户端
-                client.close()
-
-
+        
         build_image(
             image_name=image_name,
             setup_scripts={},
