@@ -123,8 +123,9 @@ SPECS_ARROW = {
             r"""git submodule update --init""",
         ]
     }
-    for k in ["53.2","53.0","52.2"]
+    for k in ["53.2","53.0","52.2","52.1","52.0","51.0"]
 }
+
 
 SPECS_ARROW.update(
     {
@@ -145,18 +146,6 @@ SPECS_ARROW.update(
     }
 )
 
-SPECS_ARROW = {
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-            r"""git submodule update --init""",
-        ]
-    }
-    for k in ["53.2","53.0","52.2"]
-}
-
-
 SPECS_ARROW.update(
     {
         k: {
@@ -176,6 +165,24 @@ SPECS_ARROW.update(
     }
 )
 
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            r"""git submodule update --init""",
+        ],
+        "env_setup":[
+            r"""sed -i 's/proc-macro2 = { version = "=1.0.50" /proc-macro2 = { version = "=1.0.75" /' ./arrow-flight/Cargo.toml""",
+        ],
+
+    }
+    for k in ["31.0"]
+}
+
+
+
+
 SPECS_ASTERINAS={
     k:{
         "rustc": "1.81.0",
@@ -184,11 +191,15 @@ SPECS_ASTERINAS={
         "pre_install":[
             r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
         ],
         #env level
         "env_setup":[
-            r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
         ]
     }
     for k in ["0.8"]
@@ -202,12 +213,14 @@ SPECS_ASTERINAS.update({
         #repo level
         "pre_install":[
             r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
         ],
         #env level
         "env_setup":[
-            r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+            r"""
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
         ]
     }
     for k in ["0.7"]
@@ -218,16 +231,21 @@ SPECS_ASTERINAS.update({
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
         "image_tag":"0.6.2",
-        # #repo level
-        # "pre_install":[
-        #     r"""
-        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-        #     """
-        # ],
-        # #env level
-        # "env_setup":[
-        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-        # ]
+        #repo level
+        "pre_install":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
+            """
+        ],
+        #env level
+        "env_setup":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
+        ],
     }
     for k in ["0.6"]
 })
@@ -237,16 +255,19 @@ SPECS_ASTERINAS.update({
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
         "image_tag":"0.5.1",
-        # #repo level
-        # "pre_install":[
-        #     r"""
-        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-        #     """
-        # ],
-        # #env level
-        # "env_setup":[
-        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-        # ]
+        "pre_install":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
+        ],
+        #env level
+        "env_setup":[
+            r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
+        ]
     }
     for k in ["0.5"]
 })
