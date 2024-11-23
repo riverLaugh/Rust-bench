@@ -170,6 +170,7 @@ SPECS_ARROW = {
         "rustc": "1.81.0",
         "test_cmd":TEST_CARGO,
         "pre_install":[
+            r"""sed -i 's|proc-macro2 = { version = "=1.0.50"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
             r"""git submodule update --init""",
         ],
         "env_setup":[
