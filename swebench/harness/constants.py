@@ -173,7 +173,7 @@ SPECS_ARROW = {
             r"""git submodule update --init""",
         ],
         "env_setup":[
-            r"""sed -i 's/proc-macro2 = { version = "=1.0.50" /proc-macro2 = { version = "=1.0.75" /' ./arrow-flight/Cargo.toml""",
+            r"""sed -i 's|proc-macro2 = { version = "=1.0.50"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
         ],
 
     }
