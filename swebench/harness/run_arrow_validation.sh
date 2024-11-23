@@ -171,12 +171,12 @@
 #     --instance_ids apache__arrow-rs-3686 apache__arrow-rs-3673
 
 # 31.0
-python run_validation.py \
-    --dataset_name r1v3r/arrow-rs \
-    --run_id arrow-rs \
-    --max_workers 1 \
-    --cache_level env \
-    --instance_ids apache__arrow-rs-3602 apache__arrow-rs-3557 apache__arrow-rs-3542 apache__arrow-rs-3514
+# python run_validation.py \
+#     --dataset_name r1v3r/arrow-rs \
+#     --run_id arrow-rs \
+#     --max_workers 1 \
+#     --cache_level env \
+#     --instance_ids apache__arrow-rs-3602 apache__arrow-rs-3557 apache__arrow-rs-3542 apache__arrow-rs-3514
 
 # 30.0
 # python run_validation.py \
@@ -195,12 +195,12 @@ python run_validation.py \
 #     --instance_ids apache__arrow-rs-3305
 
 # 28.0
-# python run_validation.py \
-#     --dataset_name r1v3r/arrow-rs \
-#     --run_id arrow-rs \
-#     --max_workers 1 \
-#     --cache_level env \
-#     --instance_ids apache__arrow-rs-3238 apache__arrow-rs-3222 apache__arrow-rs-3188
+python run_validation.py \
+    --dataset_name r1v3r/arrow-rs \
+    --run_id arrow-rs \
+    --max_workers 1 \
+    --cache_level env \
+    --instance_ids apache__arrow-rs-3238 apache__arrow-rs-3222 apache__arrow-rs-3188
 
 # 27.0
 # python run_validation.py \
