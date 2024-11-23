@@ -8,7 +8,7 @@ ENV_IMAGE_BUILD_DIR = Path("logs/build_images/env")
 INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
 RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
-NON_OSDK_CRATES=[
+NON_OSDK_CRATES = [
     "osdk",
     "ostd/libs/align_ext",
     "ostd/libs/id-alloc",
@@ -24,10 +24,10 @@ NON_OSDK_CRATES=[
     "kernel/libs/keyable-arc",
     "kernel/libs/typeflags",
     "kernel/libs/typeflags-util",
-    "kernel/libs/atomic-integer-wrapper"
+    "kernel/libs/atomic-integer-wrapper",
 ]
 
-OSDK_CRATES=[
+OSDK_CRATES = [
     "osdk/test-kernel",
     "ostd",
     "ostd/libs/linux-bzimage/setup",
@@ -41,8 +41,9 @@ OSDK_CRATES=[
     "kernel/comps/time",
     "kernel/comps/virtio",
     "kernel/libs/aster-util",
-    "kernel/libs/aster-bigtcp"
+    "kernel/libs/aster-bigtcp",
 ]
+
 
 # Constants - Task Instance Class
 class SWEbenchInstance(TypedDict):
@@ -66,10 +67,12 @@ FAIL_TO_FAIL = "FAIL_TO_FAIL"
 PASS_TO_PASS = "PASS_TO_PASS"
 PASS_TO_FAIL = "PASS_TO_FAIL"
 
+
 class ResolvedStatus(Enum):
     NO = "RESOLVED_NO"
     PARTIAL = "RESOLVED_PARTIAL"
     FULL = "RESOLVED_FULL"
+
 
 class TestStatus(Enum):
     FAILED = "FAILED"
@@ -77,75 +80,68 @@ class TestStatus(Enum):
     SKIPPED = "SKIPPED"
     ERROR = "ERROR"
 
+
 # TEST_PYTEST = "pytest --no-header -rA --tb=no -p no:cacheprovider"
 # TEST_PYTEST_VERBOSE = "pytest -rA --tb=long -p no:cacheprovider"
 
 TEST_CARGO = "cargo test --no-fail-fast"
 
 # Constants - Installation Specifications
+SPECS_RUSTLINGS = {}
 
-SPECS_RUSTLINGS = {
-
-}
-SPECS_SERDE = {
-    "test_cmd":TEST_CARGO
-}
+SPECS_SERDE = {"test_cmd": TEST_CARGO}
 
 SPECS_BITFLAGS = {
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO
-    }
-    for k in["2.5","2.4","2.3","2.2","2.1","1.2"]
+    k: {"rustc": "1.81.0", "test_cmd": TEST_CARGO}
+    for k in ["2.5", "2.4", "2.3", "2.2", "2.1", "1.2"]
 }
-SPECS_BITFLAGS.update({
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-    #     "pre_install":[
-    #         "cargo upgrade"
-    # ]
-            "pre_install":[
-            r'''sed -i '/\[dependencies\]/a serde = { version = "1.0.210", features = ["derive"] }' Cargo.toml''',
-            r'''sed -i 's/serde_json = "1.0"/serde_json = "1.0.69"/' Cargo.toml''',
-            r'''sed -i 's/default = \[\]/default = ["derive"]/' Cargo.toml''',
-            r'''sed -i '/example_generated = \[\]/i derive = ["serde/derive"]' Cargo.toml'''
-    ]
+SPECS_BITFLAGS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            #     "pre_install":[
+            #         "cargo upgrade"
+            # ]
+            "pre_install": [
+                r"""sed -i '/\[dependencies\]/a serde = { version = "1.0.210", features = ["derive"] }' Cargo.toml""",
+                r"""sed -i 's/serde_json = "1.0"/serde_json = "1.0.69"/' Cargo.toml""",
+                r"""sed -i 's/default = \[\]/default = ["derive"]/' Cargo.toml""",
+                r"""sed -i '/example_generated = \[\]/i derive = ["serde/derive"]' Cargo.toml""",
+            ],
+        }
+        for k in ["1.3"]
     }
-    for k in ["1.3"]
-})
+)
 
 SPECS_ARROW = {
-    k:{
+    k: {
         "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
+        "test_cmd": TEST_CARGO,
+        "pre_install": [
             r"""git submodule update --init""",
-        ]
+        ],
     }
-    for k in ["53.2","53.0","52.2","52.1","52.0","51.0"]
+    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0"]
 }
-
-
 SPECS_ARROW.update(
     {
         k: {
             "rustc": "1.81.0",
-            "test_cmd": "cargo test --no-fail-fast",
+            "test_cmd": TEST_CARGO,
             "env_setup": [
                 r"""sed -i 's/ahash = { version = "0.8"/ahash = { version = "0.8.8"/' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1.0.69"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
             ],
             "pre_install": [
                 r"""sed -i 's/ahash = { version = "0.8"/ahash = { version = "0.8.8"/' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1.0.69"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["49.0", "48.0","47.0"]
+        for k in ["49.0", "48.0", "47.0"]
     }
 )
-
 SPECS_ARROW.update(
     {
         k: {
@@ -153,220 +149,306 @@ SPECS_ARROW.update(
             "test_cmd": TEST_CARGO,
             "env_setup": [
                 r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1.0.66"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
             ],
             "pre_install": [
                 r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1.0.66"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["46.0", "45.0"]
+        for k in ["46.0", "45.0", "40.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in ["39.0", "38.0", "37.0", "36.0", "35.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""apt-get update""",
+                r"""apt-get install protobuf-compiler -y""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in ["34.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in ["33.0", "32.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "pre_install": [
+                r"""git submodule update --init""",
+            ],
+            "env_setup": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.50"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+            ],
+        }
+        for k in ["31.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "pre_install": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+            "env_setup": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+            ],
+        }
+        for k in ["30.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "pre_install": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+            "env_setup": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+            ],
+        }
+        for k in ["29.0"]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "pre_install": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+            "env_setup": [
+                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+            ],
+        }
+        for k in ["28.0"]
     }
 )
 
-SPECS_ARROW = {
-    k:{
+SPECS_ASTERINAS = {
+    k: {
         "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-            r"""git submodule update --init""",
-        ],
-        "env_setup":[
-            r"""sed -i 's|proc-macro2 = { version = "=1.0.50"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-        ],
-
-    }
-    for k in ["31.0"]
-}
-SPECS_ARROW = {
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-                        r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-
-            r"""git submodule update --init""",
-        ],
-        "env_setup":[
-            r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-        ],
-    }
-    for k in ["30.0"]
-}
-SPECS_ARROW = {
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-                        r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-
-            r"""git submodule update --init""",
-        ],
-        "env_setup":[
-            r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-        ],
-    }
-    for k in ["29.0"]
-}
-
-SPECS_ARROW = {
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-            r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-            r"""git submodule update --init""",
-        ],
-        "env_setup":[
-            r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-        ],
-    }
-    for k in ["28.0"]
-}
-
-SPECS_ASTERINAS={
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.8.3",
-        "pre_install":[
+        "test_cmd": TEST_CARGO,
+        "image_tag": "0.8.3",
+        "pre_install": [
             r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
         ],
-        #env level
-        "env_setup":[
+        # env level
+        "env_setup": [
             r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
-        ]
+        ],
     }
     for k in ["0.8"]
 }
-
-SPECS_ASTERINAS.update({
-    k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.7.0",
-        #repo level
-        "pre_install":[
-            r"""
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.7.0",
+            # repo level
+            "pre_install": [
+                r"""
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
-        ],
-        #env level
-        "env_setup":[
-            r"""
+            ],
+            # env level
+            "env_setup": [
+                r"""
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
-        ]
+            ],
+        }
+        for k in ["0.7"]
     }
-    for k in ["0.7"]
-})
-
-SPECS_ASTERINAS.update({
-        k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.6.2",
-        #repo level
-        "pre_install":[
-            r"""
+)
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.6.2",
+            # repo level
+            "pre_install": [
+                r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
             """
-        ],
-        #env level
-        "env_setup":[
-            r"""
+            ],
+            # env level
+            "env_setup": [
+                r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
-        ],
+            ],
+        }
+        for k in ["0.6"]
     }
-    for k in ["0.6"]
-})
+)
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.5.1",
+            "pre_install": [
+                r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
+            ],
+            # env level
+            "env_setup": [
+                r"""
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            """
+            ],
+        }
+        for k in ["0.5"]
+    }
+)
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.3.0",
+            # #repo level
+            # "pre_install":[
+            #     r"""
+            #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            #     """
+            # ],
+            # #env level
+            # "env_setup":[
+            #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+            # ]
+        }
+        for k in ["0.3"]
+    }
+)
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.2.2",
+            # #repo level
+            # "pre_install":[
+            #     r"""
+            #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            #     """
+            # ],
+            # #env level
+            # "env_setup":[
+            #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+            # ]
+        }
+        for k in ["0.2"]
+    }
+)
+SPECS_ASTERINAS.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.1.1",
+            # #repo level
+            # "pre_install":[
+            #     r"""
+            #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            #     """
+            # ],
+            # #env level
+            # "env_setup":[
+            #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+            # ]
+        }
+        for k in ["0.1"]
+    }
+)
 
-SPECS_ASTERINAS.update({
-        k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.5.1",
-        "pre_install":[
-            r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
-            """
-        ],
-        #env level
-        "env_setup":[
-            r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
-            """
-        ]
+# Constants - Repo Test Features
+FEATURES_ARROW = {
+    # instance id
+    instance_id: {
+        # integration test file name(without extension)
+        "pyarrow": {
+            # install feature dependencies
+            "install": [
+                "apt-get update",
+                "apt-get install python3-pip -y",
+                "pip install pyarrow",
+            ],
+            # cargo test feature names(in Cargo.toml or in error text)
+            "features": ["pyarrow"],
+        }
     }
-    for k in ["0.5"]
-})
-SPECS_ASTERINAS.update({
-        k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.3.0",
-        # #repo level
-        # "pre_install":[
-        #     r"""
-        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-        #     """
-        # ],
-        # #env level
-        # "env_setup":[
-        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-        # ]
-    }
-    for k in ["0.3"]
-})
-SPECS_ASTERINAS.update({
-        k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.2.2",
-        # #repo level
-        # "pre_install":[
-        #     r"""
-        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-        #     """
-        # ],
-        # #env level
-        # "env_setup":[
-        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-        # ]
-    }
-    for k in ["0.2"]
-})
-SPECS_ASTERINAS.update({
-        k:{
-        "rustc": "1.81.0",
-        "test_cmd":TEST_CARGO,
-        "image_tag":"0.1.1",
-        # #repo level
-        # "pre_install":[
-        #     r"""
-        #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-        #     """
-        # ],
-        # #env level
-        # "env_setup":[
-        #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-        # ]
-    }
-    for k in ["0.1"]
-})
+    for instance_id in ["apache__arrow-rs-6368"]
+}
+
+# Constants - Task Instance Test Features
+MAP_REPO_ID_TO_FEATURES = {
+    "apache/arrow-rs": FEATURES_ARROW
+}
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
@@ -383,11 +465,10 @@ MAP_REPO_TO_INSTALL = {}
 
 # Constants - Task Instance Requirements File Paths
 MAP_REPO_TO_REQS_PATHS = {
-    "bitflags/bitflags":"Cargo.toml",
+    "bitflags/bitflags": "Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
 }
-
 
 
 # Constants - Task Instance environment.yml File Paths
