@@ -165,10 +165,6 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         for pre_install in specs["pre_install"]:
             setup_commands.append(pre_install)
 
-    if "env_setup" in specs:
-        for env_setup in specs["env_setup"]:
-            setup_commands.append(env_setup)
-
     if "install" in specs:
         setup_commands.append(specs["install"])
     return setup_commands
