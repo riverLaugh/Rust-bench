@@ -179,9 +179,52 @@ SPECS_ARROW = {
     }
     for k in ["31.0"]
 }
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+                        r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
 
+            r"""git submodule update --init""",
+        ],
+        "env_setup":[
+            r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+        ],
+    }
+    for k in ["30.0"]
+}
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+                        r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
 
+            r"""git submodule update --init""",
+        ],
+        "env_setup":[
+            r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+        ],
+    }
+    for k in ["29.0"]
+}
 
+SPECS_ARROW = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+                        r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+
+            r"""git submodule update --init""",
+        ],
+        "env_setup":[
+            r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
+        ],
+    }
+    for k in ["28.0"]
+}
 
 SPECS_ASTERINAS={
     k:{
