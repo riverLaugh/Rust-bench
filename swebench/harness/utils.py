@@ -47,6 +47,7 @@ def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", instance
     elif name.lower() in {"swe-bench-lite", "swebench-lite", "swe_bench_lite", "swe-bench_lite", "lite"}:
         name = "princeton-nlp/SWE-bench_Lite"
     dataset = cast(Dataset, load_dataset(name, split=split))
+    # print(f"Loaded {len(dataset)} instances from {name} dataset")
     return [cast(SWEbenchInstance, instance) for instance in dataset]
 
 

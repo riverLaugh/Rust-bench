@@ -207,70 +207,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["33.0", "32.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "pre_install": [
-                r"""git submodule update --init""",
-            ],
-            "env_setup": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.50"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-            ],
-        }
-        for k in ["31.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "pre_install": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-            "env_setup": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.49"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-            ],
-        }
-        for k in ["30.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "pre_install": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-            "env_setup": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-            ],
-        }
-        for k in ["29.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "pre_install": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-            "env_setup": [
-                r"""sed -i 's|proc-macro2 = { version = "=1.0.47"|proc-macro2 = { version = "=1.0.75"|g' ./arrow-flight/Cargo.toml""",
-            ],
-        }
-        for k in ["28.0"]
+        for k in ["33.0", "32.0","31.0","30.0","29.0","28.0","27.0","26.0"]
     }
 )
 
@@ -442,8 +379,32 @@ FEATURES_ARROW = {
             "features": ["pyarrow"],
         }
     }
-    for instance_id in ["apache__arrow-rs-6368"]
+    for instance_id in ["apache__arrow-rs-6368","apache__arrow-rs-3188"]
 }
+
+FEATURES_ARROW.update({
+    instance_id: {
+        "array_cast": {
+            "install": [
+            
+            ],
+            "features": ["chrono-tz"],
+        }
+    }
+    for instance_id in ["apache__arrow-rs-3238","apache__arrow-rs-3542","apache__arrow-rs-3222"]
+})
+
+FEATURES_ARROW.update({
+    instance_id:{
+        "csv": {
+            "install": [
+            
+            ],
+            "features": ["chrono-tz","csv"],
+        }
+    }
+    for instance_id in ["apache__arrow-rs-3514"]
+})
 
 # Constants - Task Instance Test Features
 MAP_REPO_ID_TO_FEATURES = {
