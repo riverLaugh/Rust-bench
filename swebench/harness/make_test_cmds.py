@@ -75,6 +75,10 @@ def asterinas_tests(
         if test_crate in OSDK_CRATES:
             cmds.append(f"cd /{env_name}/{test_crate} ")
             cmds.append("cargo osdk test ")
+    for i in test_files:
+        if "/test/apps" in i:
+            cmds.append("make run AUTO_TEST=test")
+            break
     return cmds
 
 

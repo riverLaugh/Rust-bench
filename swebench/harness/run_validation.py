@@ -375,8 +375,8 @@ def main(
     
     for instance in dataset:
         instance_id = instance["instance_id"]
-        print("instance-----------------------------------------------------------------------")
-        print(instance.keys())
+        # print("instance-----------------------------------------------------------------------")
+        # print(instance.keys())
         if instance_id in results:
             # merge two dictionaries, crash on duplicate keys
             # assert not any(k in instance for k in results[instance_id]), f"Duplicate keys in {instance_id}"
@@ -404,7 +404,6 @@ def update_json_file(dataset_name, dataset):
         if os.path.exists(file_path):
             with open(file_path, "r") as f:
                 existing_data = json.load(f)
-                print(existing_data)
         else:
             existing_data = []
 

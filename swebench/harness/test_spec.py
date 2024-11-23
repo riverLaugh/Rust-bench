@@ -165,6 +165,10 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         for pre_install in specs["pre_install"]:
             setup_commands.append(pre_install)
 
+    if "env_setup" in specs:
+        for env_setup in specs["env_setup"]:
+            setup_commands.append(env_setup)
+
     if "install" in specs:
         setup_commands.append(specs["install"])
     return setup_commands
@@ -214,22 +218,11 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
     # Reset test files to the state they should be in before the patch.
     reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
+    if instance["instance_id"] == "asterinas__asterinas-1138":
+        reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)} && rm -rf /testbed/osdk/my-first-os"
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
-    
-    # if instance["repo"] == "asterinas/asterinas":
-    #     test_command = []
-    #     test_crates = findCrate(test_files)
-    #     for test_crate in test_crates:
-    #         if test_crate in NON_OSDK_CRATES:
-    #             test_command.append(f"cd /{env_name}/{test_crate} ")
-    #             test_command.append(f"cargo test --no-fail-fast ")
-    #         if test_crate in OSDK_CRATES:
-    #             test_command.append(f"cd /{env_name}/{test_crate} ")
-    #             test_command.append("cargo osdk test ")
-    # else:
-    #     test_command = f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "
 
     test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
     test_commands = test_commands if test_commands else [f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "]

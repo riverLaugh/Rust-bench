@@ -1,6 +1,6 @@
 from datasets import load_dataset
 
-def filter_versions(dataset_name, dataset_split, version_key="version", id_key="instance_id", max_version=31.0):
+def filter_versions(dataset_name, dataset_split, version_key="version", id_key="instance_id", max_version=31.0, min_version=30.0):
     """
     下载 Hugging Face 数据集并筛选符合条件的对象，打印 instance_id 和去重的版本号。
     
@@ -17,7 +17,6 @@ def filter_versions(dataset_name, dataset_split, version_key="version", id_key="
     
     # 筛选出符合条件的对象
     print(f"Filtering objects where '{version_key}' <= {max_version}...")
-    min_version = 31.0
     filtered_data = [item for item in dataset if version_key in item and (float(item[version_key]) <= max_version and float(item[version_key])>= min_version)]
     
     # 获取 instance_id 列表
@@ -40,6 +39,7 @@ if __name__ == "__main__":
     version_key = "version"  # 替换为版本字段名
     id_key = "instance_id"   # 替换为实例 ID 字段名
     max_version = 53.2     # 最大版本号
-    
+    min_version = 51.0
+
     # 筛选并打印结果
-    filter_versions(dataset_name, dataset_split, version_key, id_key, max_version)
+    filter_versions(dataset_name, dataset_split, version_key, id_key, max_version,min_version)
