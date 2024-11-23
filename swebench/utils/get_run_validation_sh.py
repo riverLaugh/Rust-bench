@@ -30,8 +30,8 @@ def main(dataset_name: str):
             fd.write(f"# python run_validation.py \\\n")
             fd.write(f"#     --dataset_name {dataset_name} \\\n")
             fd.write(f"#     --run_id {run_id} \\\n")
-            fd.write(f"#     --max_workers 1 \\\n")
-            fd.write(f"#     --cache_level env \\\n")
+            fd.write(f"#     --max_workers 4 \\\n")
+            fd.write(f"#     --cache_level instance \\\n")
             fd.write(f'#     --instance_ids {" ".join(ids)}\n')
             fd.write(f"\n")
 
