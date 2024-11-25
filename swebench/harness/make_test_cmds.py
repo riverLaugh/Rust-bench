@@ -53,7 +53,7 @@ def make_arrow_rs_test_cmds(
         features = get_test_features(repo, instance_id, name)
         cmds.append(f"cd ./{'/'.join(dirs)}")
         if features:
-            cmds.extend(features["install"])
+            cmds.extend(features["install"] if 'install' in features else [])
             cmds.append(
                 f"cargo test --no-fail-fast --features=\"{' '.join(features['features'])}\" --test {name}"
             )
