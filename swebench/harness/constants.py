@@ -122,7 +122,7 @@ SPECS_ARROW = {
             r"""git submodule update --init""",
         ],
     }
-    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0"]
+    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
 SPECS_ARROW.update(
     {
@@ -173,7 +173,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["34.0"]
+        for k in ["34.0", "24.0", "19.0"]
     }
 )
 SPECS_ARROW.update(
@@ -189,7 +189,39 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["33.0", "32.0", "31.0", "30.0", "29.0", "28.0", "27.0", "26.0"]
+        for k in [
+            "33.0",
+            "32.0",
+            "31.0",
+            "30.0",
+            "29.0",
+            "28.0",
+            "27.0",
+            "26.0",
+            "25.0",
+            "21.0",
+            "20.0",
+        ]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""apt-get update""",
+                r"""apt-get install cmake -y""",
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in [
+            "18.0"
+        ]
     }
 )
 
@@ -374,6 +406,8 @@ FEATURES_ARROW = {
     **{
         instance_id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
         for instance_id in [
+            "apache__arrow-rs-6453",
+            "apache__arrow-rs-5769",
             "apache__arrow-rs-5065",
             "apache__arrow-rs-4201",
             "apache__arrow-rs-3994",
