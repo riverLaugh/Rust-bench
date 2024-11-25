@@ -155,7 +155,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["46.0", "45.0", "40.0","39.0", "38.0", "37.0", "36.0", "35.0"]
+        for k in ["46.0", "45.0", "40.0", "39.0", "38.0", "37.0", "36.0", "35.0"]
     }
 )
 SPECS_ARROW.update(
@@ -189,7 +189,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["33.0", "32.0","31.0","30.0","29.0","28.0","27.0","26.0"]
+        for k in ["33.0", "32.0", "31.0", "30.0", "29.0", "28.0", "27.0", "26.0"]
     }
 )
 
@@ -361,24 +361,32 @@ FEATURES_ARROW = {
             "features": ["pyarrow"],
         }
     },
-    "apache__arrow-rs-3673": {"array_cast": {"features": ["chrono-tz"]}},
+    "apache__arrow-rs-5319": {"arithmetic": {"features": ["chrono-tz"]}},
     **{
-        id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
-        for id in [
+        instance_id: {"array_cast": {"features": ["chrono-tz"]}}
+        for instance_id in [
+            "apache__arrow-rs-3673",
+            "apache__arrow-rs-3238",
+            "apache__arrow-rs-3542",
+            "apache__arrow-rs-3222",
+        ]
+    },
+    **{
+        instance_id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
+        for instance_id in [
             "apache__arrow-rs-5065",
             "apache__arrow-rs-4201",
             "apache__arrow-rs-3994",
             "apache__arrow-rs-3961",
         ]
     },
-    "apache__arrow-rs-5319": {"arithmetic": {"features": ["chrono-tz"]}},
     **{
-        id: {
+        instance_id: {
             "flight_sql_client_cli": {
                 "features": ["cli", "flight-sql-experimental", "tls"]
             }
         }
-        for id in [
+        for instance_id in [
             "apache__arrow-rs-6332",
             "apache__arrow-rs-5474",
             "apache__arrow-rs-4797",
@@ -387,31 +395,14 @@ FEATURES_ARROW = {
             "apache__arrow-rs-3816",
         ]
     },
-    "apache__arrow-rs-4909": {"csv": {"features": ["csv", "chrono-tz"]}},
+    **{
+        instance_id: {"csv": {"features": ["csv", "chrono-tz"]}}
+        for instance_id in ["apache__arrow-rs-4909", "apache__arrow-rs-3514"]
+    },
 }
-
-FEATURES_ARROW.update({
-    instance_id: {
-        "array_cast": {
-            "features": ["chrono-tz"],
-        }
-    }
-    for instance_id in ["apache__arrow-rs-3238","apache__arrow-rs-3542","apache__arrow-rs-3222"]
-})
-
-FEATURES_ARROW.update({
-    instance_id:{
-        "csv": {
-            "features": ["chrono-tz","csv"],
-        }
-    }
-    for instance_id in ["apache__arrow-rs-3514"]
-})
 
 # Constants - Task Instance Test Features
-MAP_REPO_ID_TO_FEATURES = {
-    "apache/arrow-rs": FEATURES_ARROW
-}
+MAP_REPO_ID_TO_FEATURES = {"apache/arrow-rs": FEATURES_ARROW}
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
