@@ -25,6 +25,12 @@ ENV PATH=/root/.cargo/bin:$PATH
 RUN rustup default 1.81.0
 
 RUN adduser --disabled-password --gecos 'dog' nonroot
+
+# 安装常见软件包
+RUN apt-get update
+RUN apt-get install python3-pip -y
+RUN apt-get install cmake -y
+RUN apt-get install protobuf-compiler -y
 """
 
 _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest

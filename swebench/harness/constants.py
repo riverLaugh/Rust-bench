@@ -164,24 +164,6 @@ SPECS_ARROW.update(
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
             "env_setup": [
-                r"""apt-get update""",
-                r"""apt-get install protobuf-compiler -y""",
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-            ],
-            "pre_install": [
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-        }
-        for k in ["34.0", "24.0", "19.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "env_setup": [
                 r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
             ],
             "pre_install": [
@@ -190,6 +172,7 @@ SPECS_ARROW.update(
             ],
         }
         for k in [
+            "34.0",
             "33.0",
             "32.0",
             "31.0",
@@ -199,28 +182,14 @@ SPECS_ARROW.update(
             "27.0",
             "26.0",
             "25.0",
+            "24.0",
             "21.0",
             "20.0",
-        ]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "env_setup": [
-                r"""apt-get update""",
-                r"""apt-get install cmake -y""",
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-            ],
-            "pre_install": [
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-        }
-        for k in [
-            "18.0"
+            "19.0",
+            "18.0",
+            "17.0",
+            "16.0",
+            "15.0",
         ]
     }
 )
@@ -385,8 +354,6 @@ FEATURES_ARROW = {
         "pyarrow": {
             # install feature dependencies
             "install": [
-                "apt-get update",
-                "apt-get install python3-pip -y",
                 "pip install pyarrow",
             ],
             # cargo test feature names(in Cargo.toml or in error text)
