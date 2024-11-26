@@ -526,15 +526,28 @@ def build_container(
 
         # Create the container
         logger.info(f"Creating container for {test_spec.instance_id}...")
-        container = client.containers.create(
-            image=test_spec.instance_image_key,
-            name=test_spec.get_instance_container_name(run_id),
-            user=user,
-            detach=True,
-            command="tail -f /dev/null",
-            nano_cpus=nano_cpus,
-            platform=test_spec.platform,
-        )
+        if(test_spec.repo == "asterinas/asterinas"):
+            container = client.containers.create(
+                image=test_spec.instance_image_key,
+                name=test_spec.get_instance_container_name(run_id),
+                user=user,
+                privileged=True,
+                devices=["/dev/kvm:/dev/kvm"], 
+                detach=True,
+                command="tail -f /dev/null",
+                nano_cpus=nano_cpus,
+                platform=test_spec.platform,
+            )
+        else:
+            container = client.containers.create(
+                image=test_spec.instance_image_key,
+                name=test_spec.get_instance_container_name(run_id),
+                user=user,
+                detach=True,
+                command="tail -f /dev/null",
+                nano_cpus=nano_cpus,
+                platform=test_spec.platform,
+            )
         logger.info(f"Container for {test_spec.instance_id} created: {container.id}")
         return container
     except Exception as e:
