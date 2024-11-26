@@ -123,7 +123,7 @@ SPECS_ARROW = {
             r"""git submodule update --init""",
         ],
     }
-    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0"]
+    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
 SPECS_ARROW.update(
     {
@@ -149,24 +149,6 @@ SPECS_ARROW.update(
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
             "env_setup": [
-                r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
-            ],
-            "pre_install": [
-                r"""sed -i '/^\[dependencies\]/a quote = "=1.0.35"' ./arrow/Cargo.toml""",
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-        }
-        for k in ["46.0", "45.0", "40.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "env_setup": [
                 r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/gen/Cargo.toml""",
             ],
             "pre_install": [
@@ -174,25 +156,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["39.0", "38.0", "37.0", "36.0", "35.0"]
-    }
-)
-SPECS_ARROW.update(
-    {
-        k: {
-            "rustc": "1.81.0",
-            "test_cmd": TEST_CARGO,
-            "env_setup": [
-                r"""apt-get update""",
-                r"""apt-get install protobuf-compiler -y""",
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-            ],
-            "pre_install": [
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
-                r"""git submodule update --init""",
-            ],
-        }
-        for k in ["34.0"]
+        for k in ["46.0", "45.0", "40.0", "39.0", "38.0", "37.0", "36.0", "35.0"]
     }
 )
 SPECS_ARROW.update(
@@ -208,7 +172,54 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["33.0", "32.0","31.0","30.0","29.0","28.0","27.0","26.0"]
+        for k in [
+            "34.0",
+            "33.0",
+            "32.0",
+            "31.0",
+            "30.0",
+            "29.0",
+            "28.0",
+            "27.0",
+            "26.0",
+            "25.0",
+            "24.0",
+            "21.0",
+            "20.0",
+            "19.0",
+            "18.0",
+            "17.0",
+            "16.0",
+            "15.0",
+            "14.0",
+            "13.0",
+            "11.1",
+            "11.0",
+            "10.0",
+            "9.0",
+            "8.0",
+            "7.0",
+        ]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in [
+            "0.8",
+            "0.6",
+            "0.3"
+        ]
     }
 )
 
@@ -371,50 +382,61 @@ SPECS_ASTERINAS.update(
 # Constants - Repo Test Features
 FEATURES_ARROW = {
     # instance id
-    instance_id: {
+    "apache__arrow-rs-6368": {
         # integration test file name(without extension)
         "pyarrow": {
             # install feature dependencies
             "install": [
-                "apt-get update",
-                "apt-get install python3-pip -y",
                 "pip install pyarrow",
             ],
             # cargo test feature names(in Cargo.toml or in error text)
             "features": ["pyarrow"],
         }
-    }
-    for instance_id in ["apache__arrow-rs-6368","apache__arrow-rs-3188"]
+    },
+    "apache__arrow-rs-5319": {"arithmetic": {"features": ["chrono-tz"]}},
+    **{
+        instance_id: {"array_cast": {"features": ["chrono-tz"]}}
+        for instance_id in [
+            "apache__arrow-rs-3673",
+            "apache__arrow-rs-3238",
+            "apache__arrow-rs-3542",
+            "apache__arrow-rs-3222",
+        ]
+    },
+    **{
+        instance_id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
+        for instance_id in [
+            "apache__arrow-rs-6453",
+            "apache__arrow-rs-5769",
+            "apache__arrow-rs-5065",
+            "apache__arrow-rs-4201",
+            "apache__arrow-rs-3994",
+            "apache__arrow-rs-3961",
+        ]
+    },
+    **{
+        instance_id: {
+            "flight_sql_client_cli": {
+                "features": ["cli", "flight-sql-experimental", "tls"]
+            }
+        }
+        for instance_id in [
+            "apache__arrow-rs-6332",
+            "apache__arrow-rs-5474",
+            "apache__arrow-rs-4797",
+            "apache__arrow-rs-4250",
+            "apache__arrow-rs-4055",
+            "apache__arrow-rs-3816",
+        ]
+    },
+    **{
+        instance_id: {"csv": {"features": ["csv", "chrono-tz"]}}
+        for instance_id in ["apache__arrow-rs-4909", "apache__arrow-rs-3514"]
+    },
 }
-
-FEATURES_ARROW.update({
-    instance_id: {
-        "array_cast": {
-            "install": [
-            
-            ],
-            "features": ["chrono-tz"],
-        }
-    }
-    for instance_id in ["apache__arrow-rs-3238","apache__arrow-rs-3542","apache__arrow-rs-3222"]
-})
-
-FEATURES_ARROW.update({
-    instance_id:{
-        "csv": {
-            "install": [
-            
-            ],
-            "features": ["chrono-tz","csv"],
-        }
-    }
-    for instance_id in ["apache__arrow-rs-3514"]
-})
 
 # Constants - Task Instance Test Features
-MAP_REPO_ID_TO_FEATURES = {
-    "apache/arrow-rs": FEATURES_ARROW
-}
+MAP_REPO_ID_TO_FEATURES = {"apache/arrow-rs": FEATURES_ARROW}
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {

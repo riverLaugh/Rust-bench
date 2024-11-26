@@ -95,7 +95,7 @@ class TestSpec:
         hash_object.update(str(self.env_script_list).encode("utf-8"))
         hash_value = hash_object.hexdigest()
         val = hash_value[:22]  # 22 characters is still very likely to be unique
-        return f"sweb.env.{self.arch}.{val}:latest"
+        return f"sweb.env.{self.arch}.{val}.{self.repo.replace('/','_')}.{self.version.replace('.','_')}:latest"
 
     @property
     def instance_image_key(self):
