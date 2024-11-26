@@ -190,6 +190,34 @@ SPECS_ARROW.update(
             "17.0",
             "16.0",
             "15.0",
+            "14.0",
+            "13.0",
+            "11.1",
+            "11.0",
+            "10.0",
+            "9.0",
+            "8.0",
+            "7.0",
+        ]
+    }
+)
+SPECS_ARROW.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "env_setup": [
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+            ],
+            "pre_install": [
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""git submodule update --init""",
+            ],
+        }
+        for k in [
+            "0.8",
+            "0.6",
+            "0.3"
         ]
     }
 )
