@@ -122,7 +122,7 @@ SPECS_ARROW = {
             r"""git submodule update --init""",
         ],
     }
-    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0"]
+    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
 SPECS_ARROW.update(
     {
@@ -164,8 +164,6 @@ SPECS_ARROW.update(
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
             "env_setup": [
-                r"""apt-get update""",
-                r"""apt-get install protobuf-compiler -y""",
                 r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
             ],
             "pre_install": [
@@ -173,7 +171,34 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["34.0"]
+        for k in [
+            "34.0",
+            "33.0",
+            "32.0",
+            "31.0",
+            "30.0",
+            "29.0",
+            "28.0",
+            "27.0",
+            "26.0",
+            "25.0",
+            "24.0",
+            "21.0",
+            "20.0",
+            "19.0",
+            "18.0",
+            "17.0",
+            "16.0",
+            "15.0",
+            "14.0",
+            "13.0",
+            "11.1",
+            "11.0",
+            "10.0",
+            "9.0",
+            "8.0",
+            "7.0",
+        ]
     }
 )
 SPECS_ARROW.update(
@@ -182,14 +207,18 @@ SPECS_ARROW.update(
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
             "env_setup": [
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
             ],
             "pre_install": [
-                r"""sed -i 's/proc-macro2 = { version = "=1\.0\.[0-9]\+"/proc-macro2 = { version = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
+                r"""sed -i 's/proc-macro2 = "=1\.0\.[0-9]\+"/proc-macro2 = "=1.0.75"/' ./arrow-flight/Cargo.toml""",
                 r"""git submodule update --init""",
             ],
         }
-        for k in ["33.0", "32.0", "31.0", "30.0", "29.0", "28.0", "27.0", "26.0"]
+        for k in [
+            "0.8",
+            "0.6",
+            "0.3"
+        ]
     }
 )
 
@@ -353,8 +382,6 @@ FEATURES_ARROW = {
         "pyarrow": {
             # install feature dependencies
             "install": [
-                "apt-get update",
-                "apt-get install python3-pip -y",
                 "pip install pyarrow",
             ],
             # cargo test feature names(in Cargo.toml or in error text)
@@ -374,6 +401,8 @@ FEATURES_ARROW = {
     **{
         instance_id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
         for instance_id in [
+            "apache__arrow-rs-6453",
+            "apache__arrow-rs-5769",
             "apache__arrow-rs-5065",
             "apache__arrow-rs-4201",
             "apache__arrow-rs-3994",
