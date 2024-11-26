@@ -41,7 +41,7 @@ def make_arrow_rs_test_cmds(
     for test_path in tests_changed:
         if not test_path.endswith("src/lib.rs"):
             continue
-        dirs = test_path.replace("src/lib.rs", "").split("/")
+        dirs = [dir for dir in test_path.replace("src/lib.rs", "").split("/") if dir]
         cmds.append(f"cd ./{'/'.join(dirs)}")
         cmds.append(f"cargo test --no-fail-fast --lib")
         cmds.append(f"cd ./{'../'*len(dirs)}")
@@ -53,7 +53,7 @@ def make_arrow_rs_test_cmds(
         features = get_test_features(repo, instance_id, name)
         cmds.append(f"cd ./{'/'.join(dirs)}")
         if features:
-            cmds.extend(features["install"])
+            cmds.extend(features["install"] if "install" in features else [])
             cmds.append(
                 f"cargo test --no-fail-fast --features=\"{' '.join(features['features'])}\" --test {name}"
             )
