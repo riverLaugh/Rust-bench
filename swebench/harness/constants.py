@@ -8,6 +8,7 @@ ENV_IMAGE_BUILD_DIR = Path("logs/build_images/env")
 INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
 RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
+
 NON_OSDK_CRATES = [
     "osdk",
     "ostd/libs/align_ext",
@@ -266,6 +267,8 @@ SPECS_ASTERINAS.update(
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
+            cargo update -p unwinding
+            sed '/^\[target\.x86_64-unknown-none\.dependencies\]$/d' ostd/libs/linux-bzimage/setup/Cargo.toml
             """
             ],
             # env level
@@ -273,6 +276,8 @@ SPECS_ASTERINAS.update(
                 r"""
             sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
+            cargo update -p unwinding
             """
             ],
         }

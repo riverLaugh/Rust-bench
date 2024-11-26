@@ -31,7 +31,7 @@ python run_validation.py \
     --run_id asterinas \
     --max_workers 4 \
     --cache_level env \
-    --instance_ids asterinas__asteinas-1098
+    --instance_ids asterinas__asterinas-1073
 
 # 0.5
 # python run_validation.py \

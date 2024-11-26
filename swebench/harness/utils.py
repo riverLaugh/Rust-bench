@@ -445,12 +445,12 @@ def get_test_directives(instance: SWEbenchInstance) -> list:
     directives_transformed = []
     for d in directives:
         # 只考虑以 ".rs" 结尾的文件，并提取文件名
-        if d.endswith(".rs"):
-            # 提取文件名，不包括路径
-            filename = d.split("/")[-1]  # 或者使用 os.path.basename(d)
-            # 移除文件扩展名 ".rs"
-            filename = filename[:-3]
-            directives_transformed.append(d)
+        # if d.endswith(".rs"):
+            # # 提取文件名，不包括路径
+            # filename = d.split("/")[-1]  # 或者使用 os.path.basename(d)
+            # # 移除文件扩展名 ".rs"
+            # filename = filename[:-3]
+        directives_transformed.append(d)
     directives = directives_transformed
 
     return directives
@@ -487,6 +487,8 @@ def findCrate(test_files:list):
         for crate in OSDK_CRATES:
             if crate in file_path:
                 crates_found.add(crate)
+        if "test/apps" in file_path:
+            crates_found.add("test/apps")
     return list(crates_found)
 
 
