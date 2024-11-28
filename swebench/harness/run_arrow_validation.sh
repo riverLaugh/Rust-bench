@@ -216,7 +216,7 @@ python run_validation.py \
     --run_id arrow-rs \
     --max_workers 4 \
     --cache_level instance \
-    --instance_ids apache__arrow-rs-3013 apache__arrow-rs-3010
+    --instance_ids apache__arrow-rs-2407
 
 # 25.0
 # python run_validation.py \
