@@ -6,6 +6,7 @@ from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unidiff
+import re
 from tqdm.auto import tqdm
 
 from swebench.inference.make_datasets.tokenize_dataset import TOKENIZER_FUNCS
@@ -186,6 +187,60 @@ def prompt_style_2(instance):
     final_text = "\n".join(final_text)
     return final_text
 
+def prompt_bug_report(instance):
+    premise = "You will be provided with a codebase. Analyze the code and generate a detailed bug report highlighting potential issues, their causes, and possible solutions."
+    
+    readmes_text = make_code_text(instance.get("readmes", ""))
+    code_text = make_code_text(instance.get("file_contents", ""))
+    test_patch = instance["test_patch"]
+    test_file = make_code_text(instance.get("test_file",""))
+    instructions = (
+        "Please respond with a comprehensive bug report in the following format:\n\n"
+        "### Bug Report\n"
+        "1. **Issue Summary**: A brief description of the bug.\n"
+        "2. **Detailed Description**: An in-depth explanation of the issue, including affected components.\n"
+        "3. **Steps to Reproduce**: Clear and concise steps to reproduce the bug.\n"
+        "4. **Expected Behavior**: What should happen if the bug is not present.\n"
+        "5. **Actual Behavior**: What actually happens due to the bug.\n"
+        "6. **Possible Causes**: Potential reasons or root causes of the bug.\n"
+        "7. **Suggested Fixes**: Recommendations on how to fix the issue.\n"
+        "8. **Additional Notes**: Any other relevant information or observations.\n"
+    )
+    
+    bug_report_example = """### Bug Report
+    1. **Issue Summary**: Null Pointer Exception in User Authentication Module.
+    2. **Detailed Description**: When a user attempts to log in without providing a password, the system crashes with a Null Pointer Exception in the authentication module.
+    3. **Steps to Reproduce**:
+        1. Navigate to the login page.
+        2. Enter a valid username.
+        3. Leave the password field empty.
+        4. Click the "Login" button.
+    4. **Expected Behavior**: The system should prompt the user to enter a password without crashing.
+    5. **Actual Behavior**: The application crashes and returns a Null Pointer Exception.
+    6. **Possible Causes**: The authentication handler does not check for null or empty password inputs before processing.
+    7. **Suggested Fixes**: Implement input validation to ensure that the password field is not empty before proceeding with authentication. Add error handling to manage unexpected null values gracefully.
+    8. **Additional Notes**: This issue affects all users attempting to log in without a password and could lead to security vulnerabilities if not addressed promptly.
+"""
+
+    final_text = [
+        premise,
+        "<codebase>",
+        readmes_text,
+        code_text,
+        "</codebase>",
+        instructions,
+        "<bug_report>",
+        bug_report_example,
+        "</bug_report>",
+        "<Trigger Test>",
+        test_file,
+        test_patch,
+        "<Trigger Test>",
+        ""
+    ]
+    
+    final_text = "\n".join(final_text)
+    return final_text
 
 def prompt_style_2_edits_only(instance):
     premise = "You will be provided with a partial code base and an issue statement explaining a problem to resolve."
@@ -295,6 +350,7 @@ PROMPT_FUNCTIONS = {
     "style-3": prompt_style_3,
     "full_file_gen": full_file_gen,
     "style-2-edits-only": prompt_style_2_edits_only,
+    "bug_report": prompt_bug_report
 }
 
 
@@ -333,6 +389,56 @@ def get_oracle_filenames(instance):
         gold_docs.add(source_file)
     return gold_docs
 
+def get_test_directives(instance) -> list:
+    """
+    Get test directives from the test_patch of a task instance
+
+    Args:
+        instance (dict): task instance
+    Returns:
+        directives (list): List of test directives
+    """
+    # For seq2seq code repos, testing command is fixed
+    if instance["repo"] == "swe-bench/humaneval":
+        return ["test.py"]
+
+    # Get test directives from test patch and remove non-test files
+    diff_pat = r"diff --git a/.* b/(.*)"
+    add_file_pat = r"^--- /dev/null\n\+\+\+ b/(.*)"
+    
+    test_patch = instance["test_patch"]
+    directives = re.findall(diff_pat, test_patch)
+    new_directives = re.findall(add_file_pat, test_patch)
+    directives.extend(new_directives)
+    directives = [
+        d for d in directives if not any(d.endswith(ext) for ext in NON_TEST_EXTS)
+    ]
+    directives_transformed = []
+    for d in directives:
+        # 只考虑以 ".rs" 结尾的文件，并提取文件名
+        # if d.endswith(".rs"):
+            # # 提取文件名，不包括路径
+            # filename = d.split("/")[-1]  # 或者使用 os.path.basename(d)
+            # # 移除文件扩展名 ".rs"
+            # filename = filename[:-3]
+        directives_transformed.append(d)
+    directives = directives_transformed
+
+    return directives
+
+NON_TEST_EXTS = [
+    ".json",
+    ".png",
+    "csv",
+    ".txt",
+    ".md",
+    ".jpg",
+    ".jpeg",
+    ".pkl",
+    ".yml",
+    ".yaml",
+    ".toml",
+]
 
 def add_text_inputs(
     input_instances,
@@ -377,6 +483,9 @@ def add_text_inputs(
                 ) as cm:
                     readmes = cm.get_readme_files()
                     instance["readmes"] = ingest_files(readmes)
+                    test_file = get_test_directives(instance)
+                    instance["test_file"] = ingest_files(test_file)
+                    print(instance["test_file"])
                     if max_context_len is not None:
                         instance["file_contents"] = dict()
                         base_text_inputs = PROMPT_FUNCTIONS[prompt_style](instance)
