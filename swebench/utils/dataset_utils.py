@@ -113,6 +113,11 @@ def upload_version(json_file_path:str):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/arrow-rs.json"  # 替换为你的 JSON 文件路径
+    # json_file_path = "/home/riv3r/SWE-bench/arrow-rs.json"  # 替换为你的 JSON 文件路径
     
-    upload_version(json_file_path)
+    # upload_version(json_file_path)
+    # dataset = load_dataset('csv', data_files="/home/riv3r/SWE-bench/swebench/utils/analysis_results.csv")
+
+    # upload_to_huggingface(dataset,"r1v3r/data_classification")
+    dataset = List2dataset("/home/riv3r/SWE-bench/swebench/harness/results/asterinas_validated.json")
+    upload_to_huggingface(dataset=dataset,dataset_name="r1v3r/asterinas_validated")
