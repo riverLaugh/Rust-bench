@@ -3,9 +3,11 @@
 import argparse
 import json
 import logging
+import multiprocessing
 import os
 from typing import Optional
 from tqdm.auto import tqdm
+import re
 
 from swebench.collect.utils import (
     extract_patches,
@@ -31,8 +33,7 @@ def create_instance(repo: Repo, pull: dict) -> dict:
         test_patch (str): test suite as .patch (apply to base commit),
     }
     """
-    # patch, test_patch = extract_patches(pull, repo)
-    patch =  extract_patches(pull,repo)
+    patch, test_patch = extract_patches(pull, repo)
     problem_statement, hints = extract_problem_statement_and_hints(pull, repo)
     return {
         "repo": repo.repo.full_name,
@@ -43,7 +44,7 @@ def create_instance(repo: Repo, pull: dict) -> dict:
         "issue_numbers": pull["resolved_issues"],
         "base_commit": pull["base"]["sha"],
         "patch": patch,
-        # "test_patch": test_patch,
+        "test_patch": test_patch,
         "problem_statement": problem_statement,
         "hints_text": hints,
         "created_at": pull["created_at"],
@@ -95,8 +96,16 @@ def has_test_patch(instance: dict) -> bool:
         return False
     return True
 
+def extract_repo_name(file_path):
+    # 使用正则表达式匹配仓库名
+    match = re.search(r'/([^/]+)-task-instances\.jsonl$', file_path)
+    if match:
+        return match.group(1)
+    else:
+        return None
 
-def main(pr_file: str, output: str, token: Optional[str] = None):
+
+def main(pr_file: str, output: str, token: Optional[str] = None, task_lock: multiprocessing.Lock = None):
     """
     Main thread for creating task instances from pull requests
 
@@ -114,12 +123,19 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
         owner, repo = repo_name.split("/")
         return Repo(owner, repo, token=token)
 
+
     repos = dict()
     completed = 0
     with_tests = 0
     total_instances = 0
     all_output = output + ".all"
+    reponame = extract_repo_name(output)
+
+    auto = task_lock is not None
     seen_prs = set()
+    if auto:
+        log = os.path.join(os.getcwd(),'logs/task_log')
+        log_file = open(log, 'a')
 
     # Continue where we left off if output file already exists
     if os.path.exists(all_output):
@@ -134,12 +150,13 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                 seen_prs.add(instance_id)
                 if is_valid_instance(pr):
                     completed += 1
-                    # if has_test_patch(pr):
-                    #     with_tests += 1
+                    if has_test_patch(pr):
+                        with_tests += 1
     logger.info(f"Will skip {len(seen_prs)} pull requests that have already been inspected")
 
     # Write to .all file for all PRs
     write_mode_all = "w" if not os.path.exists(all_output) else "a"
+
     with open(all_output, write_mode_all) as all_output:
         # Write to output file for PRs with test suites
         write_mode = "w" if not os.path.exists(output) else "a"
@@ -159,12 +176,15 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                     pull["base"]["repo"]["full_name"] + "-" + str(pull["number"])
                 )
                 instance_id = instance_id.replace("/", "__")
+                # skip instances which had been converted
                 if instance_id in seen_prs:
                     seen_prs -= {instance_id}
                     continue
+                # check if there is a related issue
                 if not is_valid_pull(pull):
                     # Throw out invalid PRs
                     continue
+
                 # Create task instance
                 repo_name = pull["base"]["repo"]["full_name"]
                 if repo_name not in repos:
@@ -177,12 +197,24 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                         json.dumps(instance), end="\n", flush=True, file=all_output
                     )  # write all instances to a separate file
                     completed += 1
-                    # if has_test_patch(instance):
-                    #     # If has test suite, write to output file
-                    #     print(json.dumps(instance), end="\n", flush=True, file=output)
-                    #     with_tests += 1
+
+                    if auto:
+                        # count tasks done
+                        if completed % 100 == 0 & completed != 0:
+                            with task_lock:
+                                log_file.write( "{}: {} tasks done\n".format(reponame, completed))
+                                log_file.flush()
+
+                    if has_test_patch(instance):
+                        # If has test suite, write to output file
+                        print(json.dumps(instance), end="\n", flush=True, file=output)
+                        with_tests += 1
+    if auto:
+        with task_lock:
+            log_file.write('Done:{}\n'.format(reponame))
+            log_file.close()
     logger.info(f"[{', '.join(repos.keys())}] Total instances: {total_instances}, completed: {completed}, with tests: {with_tests}")
-    logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been inspected")
+    logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been beeninspected")
 
 
 if __name__ == "__main__":
