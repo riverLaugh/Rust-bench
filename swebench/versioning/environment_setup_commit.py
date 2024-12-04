@@ -1,18 +1,22 @@
 from datasets import load_dataset
 from datetime import datetime
+from swebench.utils.dataset_utils import upload_to_huggingface
+from datasets import load_dataset
+import argparse
 
-from dataset_utils import upload_to_huggingface
 
-def main():
+def main(args):
 # 加载数据集
-    dataset_name = 'r1v3r/asterinas'
-    split = 'train'
-    dataset = load_dataset(dataset_name, split=split)
+    dataset_name = args.dataset_name
+
+    if dataset_name.endswith('.json'):
+        dataset = load_dataset("json", data_files= dataset_name)['train']
+        dataset_name = dataset_name.split('/')[-1].split('.')[0]
+    else:
+        split = 'train'
+        dataset = load_dataset(dataset_name, split=split)
 
     # 查看数据集的列名和第一条记录
-    print("Columns:", dataset.column_names)
-    print("First record before adding new column:", dataset[0])
-
     # 定义一个函数，将字符串转换为 datetime 对象
     def parse_created_at(example):
         example['created_at_parsed'] = datetime.strptime(example['created_at'], "%Y-%m-%dT%H:%M:%SZ")
@@ -25,6 +29,7 @@ def main():
     version_to_latest_commit = {}
 
     for example in dataset:
+        # print(example)
         version = example['version']
         created_at = example['created_at_parsed']
         base_commit = example['base_commit']
@@ -54,8 +59,11 @@ def main():
     
     upload_to_huggingface(dataset,dataset_name)
     # 查看添加新列后的列名和第一条记录
-    print("Columns after adding new column:", dataset.column_names)
-    print("First record after adding new column:", dataset[0])
+    # print("Columns after adding new column:", dataset.column_names)
+    # print("First record after adding new column:", dataset[0])
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset_name", required=True, type=str, default=None, help="Path to task instances")
+    args = parser.parse_args()
+    main(args)

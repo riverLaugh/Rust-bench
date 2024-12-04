@@ -31,7 +31,8 @@ def create_instance(repo: Repo, pull: dict) -> dict:
         test_patch (str): test suite as .patch (apply to base commit),
     }
     """
-    patch, test_patch = extract_patches(pull, repo)
+    # patch, test_patch = extract_patches(pull, repo)
+    patch =  extract_patches(pull,repo)
     problem_statement, hints = extract_problem_statement_and_hints(pull, repo)
     return {
         "repo": repo.repo.full_name,
@@ -42,7 +43,7 @@ def create_instance(repo: Repo, pull: dict) -> dict:
         "issue_numbers": pull["resolved_issues"],
         "base_commit": pull["base"]["sha"],
         "patch": patch,
-        "test_patch": test_patch,
+        # "test_patch": test_patch,
         "problem_statement": problem_statement,
         "hints_text": hints,
         "created_at": pull["created_at"],
@@ -133,8 +134,8 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                 seen_prs.add(instance_id)
                 if is_valid_instance(pr):
                     completed += 1
-                    if has_test_patch(pr):
-                        with_tests += 1
+                    # if has_test_patch(pr):
+                    #     with_tests += 1
     logger.info(f"Will skip {len(seen_prs)} pull requests that have already been inspected")
 
     # Write to .all file for all PRs
@@ -176,10 +177,10 @@ def main(pr_file: str, output: str, token: Optional[str] = None):
                         json.dumps(instance), end="\n", flush=True, file=all_output
                     )  # write all instances to a separate file
                     completed += 1
-                    if has_test_patch(instance):
-                        # If has test suite, write to output file
-                        print(json.dumps(instance), end="\n", flush=True, file=output)
-                        with_tests += 1
+                    # if has_test_patch(instance):
+                    #     # If has test suite, write to output file
+                    #     print(json.dumps(instance), end="\n", flush=True, file=output)
+                    #     with_tests += 1
     logger.info(f"[{', '.join(repos.keys())}] Total instances: {total_instances}, completed: {completed}, with tests: {with_tests}")
     logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been inspected")
 

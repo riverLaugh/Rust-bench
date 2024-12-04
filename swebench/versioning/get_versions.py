@@ -240,7 +240,7 @@ def merge_results(instances_path: str, repo_prefix: str, output_dir: str = None)
     if output_dir is not None:
         instances_path_new = os.path.join(output_dir, instances_path_new)
     with open(f"{instances_path_new}", "w") as f:
-        json.dump(merged, fp=f)
+        json.dump(merged, fp=f,indent=4)
     logger.info(f"Saved merged results to {instances_path_new} ({len(merged)} instances)")
     return len(merged)
 

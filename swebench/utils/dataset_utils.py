@@ -90,10 +90,11 @@ def upload_to_huggingface(dataset, dataset_name):
     dataset.push_to_hub(dataset_name, token=hf_token)
     print(f"Dataset '{dataset_name}' uploaded successfully!")
 
+def backroll_dataset(dataset_name,commit):
 
-def upload_version(json_file_path:str):
-    # dataset_name = json_file_path.split("/")[-1].split("-")[0]
-    dataset_name = "arrow_validated"
+    pass
+
+def upload_version(json_file_path:str , dataset_name):
     print(f"transforming {dataset_name}")
     dataset_list = List2dataset(json_file_path)
     data_dict = dataset_list.to_dict()
@@ -113,11 +114,11 @@ def upload_version(json_file_path:str):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    # json_file_path = "/home/riv3r/SWE-bench/arrow-rs.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/swebench/harness/results/processed_instances_versions_validated.json"  # 替换为你的 JSON 文件路径
     
-    # upload_version(json_file_path)
+    upload_version(json_file_path,"bitflags-filterbyLLM-verified")
     # dataset = load_dataset('csv', data_files="/home/riv3r/SWE-bench/swebench/utils/analysis_results.csv")
 
     # upload_to_huggingface(dataset,"r1v3r/data_classification")
-    dataset = List2dataset("/home/riv3r/SWE-bench/swebench/harness/results/asterinas_validated.json")
-    upload_to_huggingface(dataset=dataset,dataset_name="r1v3r/asterinas_validated")
+    # dataset = List2dataset("/home/riv3r/SWE-bench/swebench/harness/results/asterinas_validated.json")
+    # upload_to_huggingface(dataset=dataset,dataset_name="r1v3r/asterinas_validated")
