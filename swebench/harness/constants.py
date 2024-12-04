@@ -94,7 +94,7 @@ SPECS_SERDE = {"test_cmd": TEST_CARGO}
 
 SPECS_BITFLAGS = {
     k: {"rustc": "1.81.0", "test_cmd": TEST_CARGO}
-    for k in ["2.5", "2.4", "2.3", "2.2", "2.1", "1.2"]
+    for k in ["2.5", "2.4", "2.3", "2.2", "2.1","2.0","1.2"]
 }
 SPECS_BITFLAGS.update(
     {

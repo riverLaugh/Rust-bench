@@ -67,3 +67,8 @@ from swebench.versioning.get_versions import (
 from swebench.versioning.utils import (
     split_instances,
 )
+
+
+from swebench.collect.utils import (
+    PatchManager
+    )

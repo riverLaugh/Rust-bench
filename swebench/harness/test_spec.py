@@ -219,7 +219,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     apply_test_patch_command = (
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
-
+    diff_cmd = "git diff"
     test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
     test_commands = test_commands if test_commands else [f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "]
     
@@ -235,8 +235,9 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     if "install" in specs:
         eval_commands.append(specs["install"])
     eval_commands += [
-        reset_tests_command,
+        # reset_tests_command,
         apply_test_patch_command,
+        diff_cmd,
         *(test_commands),
         reset_tests_command
     ]
