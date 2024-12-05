@@ -2,7 +2,8 @@
 
 """Script to collect pull requests and convert them to candidate task instances"""
 
-import argparse, os
+import argparse, os, time
+import multiprocessing
 import traceback
 
 from dotenv import load_dotenv
@@ -36,8 +37,19 @@ def split_instances(input_list: list, n: int) -> list:
 
     return result
 
+def check_log():
+    path_log = os.path.join(os.getcwd(), f"logs/pr_log")
+    pr_done = []
+    with open(path_log, "r") as f:
+        lines = f.read().splitlines()
+        for line in lines:
+            if line.startswith("#"):
+                repo_name = line.split(':')[1].strip()
+                pr_done.append(repo_name)
+    return pr_done
 
-def construct_data_files(data: dict):
+
+def construct_data_files(data: dict,pr_lock,task_lock):
     """
     Logic for combining multiple .all PR files into a single fine tuning dataset
 
@@ -57,6 +69,12 @@ def construct_data_files(data: dict):
         data["token"],
         data.get("pull_numbers")
     )
+
+    auto = pr_lock is not None
+    pr_done = []
+    if auto:
+        pr_done = check_log()
+
     for repo in repos:
         repo = repo.strip(",").strip()
         repo_name = repo.split("/")[1]
@@ -64,7 +82,15 @@ def construct_data_files(data: dict):
             path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
             if cutoff_date:
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
-            if not os.path.exists(path_pr):
+            do_pull = True
+            if auto:
+                do_pull = repo not in pr_done
+            else:
+                do_pull = not os.path.exists(path_pr)
+
+            # if not os.path.exists(path_pr):
+            # if repo not in pr_done:
+            if do_pull:
                 print(f"Pull request data for {repo} not found, creating...")
                 if pull_numbers:
                     print(f"Processing specific PR numbers: {pull_numbers}")
@@ -72,7 +98,8 @@ def construct_data_files(data: dict):
                         repo_name=repo,
                         output=path_pr,
                         token= token,  # 注意此处不需要重复传递 pull_numbers
-                        pull_numbers=pull_numbers  # 只传递一次 pull_numbers
+                        pull_numbers=pull_numbers,  # 只传递一次 pull_numbers
+                        pr_lock=pr_lock,
                     )
                 else:
                     print_pulls(
@@ -80,20 +107,24 @@ def construct_data_files(data: dict):
                         output= path_pr,
                         token= token,
                         max_pulls=max_pulls,
-                        cutoff_date=cutoff_date
+                        cutoff_date=cutoff_date,
+                        pr_lock=pr_lock,
                     )
 
                 print(f"✅ Successfully saved PR data for {repo} to {path_pr}")
             else:
                 print(f"📁 Pull request data for {repo} already exists at {path_pr}, skipping...")
-
-            path_task = os.path.join(path_tasks, f"{repo_name}-task-instances.jsonl")
+            # modify path_task based on weather auto is True
+            if auto:
+                path_task = os.path.join(path_tasks, f"auto/{repo_name}-task-instances.jsonl")
+            else:
+                path_task = os.path.join(path_tasks, f"{repo_name}-task-instances.jsonl")
             if not os.path.exists(path_task):
                 print(f"Task instance data for {repo} not found, creating...")
-                build_dataset(path_pr, path_task, token)
+                build_dataset(path_pr, path_task, token, task_lock)
                 print(f"✅ Successfully saved task instance data for {repo} to {path_task}")
             else:
-                build_dataset(path_pr, path_task, token)
+                build_dataset(path_pr, path_task, token, task_lock)
                 print(f"📁 Task instance data for {repo} already exists at {path_task}, countinue...")
         except Exception as e:
             print("-"*80)
@@ -110,6 +141,7 @@ def main(
         pull_numbers: list,
         max_pulls: int = None,
         cutoff_date: str = None,
+        auto: bool = False,
     ):
     """
     Spawns multiple threads given multiple GitHub tokens for collecting fine tuning data
@@ -121,6 +153,8 @@ def main(
         cutoff_date (str): Cutoff date for PRs to consider in format YYYYMMDD
     """
     path_prs, path_tasks = os.path.abspath(path_prs), os.path.abspath(path_tasks)
+
+
     print(f"Will save PR data to {path_prs}")
     print(f"Will save task instance data to {path_tasks}")
     print(f"Received following repos to create task instances for: {repos}")
@@ -131,6 +165,9 @@ def main(
     
 
     data_task_lists = split_instances(repos, len(tokens))
+    pr_lock = None
+    task_lock = None
+
 
     data_pooled = [
         {
@@ -145,8 +182,19 @@ def main(
         for repos, token in zip(data_task_lists, tokens)
     ]
 
+
+
+    if auto:
+        pr_lock = multiprocessing.Manager().Lock()
+        task_lock = multiprocessing.Manager().Lock()
+        log_path = os.path.join(os.getcwd(),"logs/pr_log")
+        with open(log_path, "a") as pr_log:
+            with pr_lock:
+                pr_log.write('-' * 20 + time.ctime() + '-' * 20 + '\n')
+                pr_log.flush()
+
     with Pool(len(tokens)) as p:
-        p.map(construct_data_files, data_pooled)
+        p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
 
 
 if __name__ == "__main__":
@@ -179,6 +227,12 @@ if __name__ == "__main__":
         nargs='+', 
         type=int, 
         help="List of specific pull request numbers to log"
+    )
+    parser.add_argument(
+        "--auto",
+        help="get repo from local json file, make sure repo.json is in the same directory",
+        default=False,
+        action="store_true",
     )
 
     args = parser.parse_args()
