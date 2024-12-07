@@ -31,6 +31,8 @@ RUN apt-get update
 RUN apt-get install python3-pip -y
 RUN apt-get install cmake -y
 RUN apt-get install protobuf-compiler -y
+ENV HTTPS_PROXY=http://10.35.255.254:7899
+ENV HTTP_PROXY=http://10.35.255.254:7899
 """
 
 _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
@@ -38,7 +40,6 @@ _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
-
 WORKDIR /testbed/
 
 # Automatically activate the testbed environment
@@ -48,10 +49,11 @@ WORKDIR /testbed/
 _DOCKERFILE_ENV_asterinas = r"""
 FROM --platform={platform} asterinas/asterinas:{tag}
 
+RUN git config --global user.name "riverLaugh" \
+    && git config --global user.email "2314398305@qq.com"
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
-
 """
 
 _DOCKERFILE_INSTANCE = r"""FROM --platform={platform} {env_image_name}

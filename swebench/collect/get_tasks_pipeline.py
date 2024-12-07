@@ -80,6 +80,7 @@ def construct_data_files(data: dict,pr_lock,task_lock):
         repo_name = repo.split("/")[1]
         try:
             path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
+            print(f"Processing {path_pr}...")
             if cutoff_date:
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
             do_pull = True
