@@ -1,0 +1,401 @@
+Instance_id,Test detected,File Path
+asterinas__asterinas-1279,true,"diff --git a/ostd/src/sync/mutex.rs b/ostd/src/sync/mutex.rs
+--- a/ostd/src/sync/mutex.rs
++++ b/ostd/src/sync/mutex.rs
+@@ -138,3 +150,27 @@ impl<'a, T: ?Sized> MutexGuard<'a, T> {
+         guard.mutex
+     }
+ }
++
++#[cfg(ktest)]
++mod test {
++    use super::*;
++    use crate::prelude::*;
++
++    // A regression test for a bug fixed in [#1279](https://github.com/asterinas/asterinas/pull/1279).
++    #[ktest]
++    fn test_mutex_try_lock_does_not_unlock() {
++        let lock = Mutex::new(0);
++        assert!(!lock.lock.load(Ordering::Relaxed));
++
++        // A successful lock
++        let guard1 = lock.lock();
++        assert!(lock.lock.load(Ordering::Relaxed));
++
++        // A failed `try_lock` won't drop the lock
++        assert!(lock.try_lock().is_none());
++        assert!(lock.lock.load(Ordering::Relaxed));
++
++        // Ensure the lock is held until here
++        drop(guard1);
++    }
++}
+"
+asterinas__asterinas-928,true,"diff --git a/framework/aster-frame/src/mm/page_table/boot_pt.rs b/framework/aster-frame/src/mm/page_table/boot_pt.rs
+--- a/framework/aster-frame/src/mm/page_table/boot_pt.rs
++++ b/framework/aster-frame/src/mm/page_table/boot_pt.rs
+@@ -85,43 +151,19 @@ impl<E: PageTableEntryTrait, C: PagingConstsTrait> BootPageTable<E, C> {
+         unsafe { core::ptr::write_bytes(vaddr, 0, PAGE_SIZE) };
+         frame
+     }
+-
+-    /// Retires this boot-stage page table.
+-    ///
+-    /// Do not drop a boot-stage page table. Instead, retire it.
+-    ///
+-    /// # Safety
+-    ///
+-    /// This method can only be called when this boot-stage page table is no longer in use,
+-    /// e.g., after the permanent kernel page table has been activated.
+-    pub unsafe fn retire(mut self) {
+-        // Manually free all heap and frame memory allocated.
+-        let frames = core::mem::take(&mut self.frames);
+-        for frame in frames {
+-            FRAME_ALLOCATOR.get().unwrap().lock().dealloc(frame, 1);
+-        }
+-        // We do not want or need to trigger drop.
+-        core::mem::forget(self);
+-        // FIXME: an empty `Vec` is leaked on the heap here since the drop is not called
+-        // and we have no ways to free it.
+-        // The best solution to recycle the boot-phase page table is to initialize all
+-        // page table page metadata of the boot page table by page walk after the metadata
+-        // pages are mapped. Therefore the boot page table can be recycled or dropped by
+-        // the routines in the [`super::node`] module. There's even without a need of
+-        // `first_activate` concept if the boot page table can be managed by page table
+-        // pages.
+-    }
+ }
+ 
+ impl<E: PageTableEntryTrait, C: PagingConstsTrait> Drop for BootPageTable<E, C> {
+     fn drop(&mut self) {
+-        panic!(""the boot page table is dropped rather than retired."");
++        for frame in &self.frames {
++            FRAME_ALLOCATOR.get().unwrap().lock().dealloc(*frame, 1);
++        }
+     }
+ }
+ 
+ #[cfg(ktest)]
+ #[ktest]
+-fn test_boot_pt() {
++fn test_boot_pt_map_protect() {
+     use super::page_walk;
+     use crate::{
+         arch::mm::{PageTableEntry, PagingConsts},
+
+diff --git a/framework/aster-frame/src/mm/page_table/boot_pt.rs b/framework/aster-frame/src/mm/page_table/boot_pt.rs
+--- a/framework/aster-frame/src/mm/page_table/boot_pt.rs
++++ b/framework/aster-frame/src/mm/page_table/boot_pt.rs
+@@ -140,20 +182,34 @@ fn test_boot_pt() {
+     let from1 = 0x1000;
+     let to1 = 0x2;
+     let prop1 = PageProperty::new(PageFlags::RW, CachePolicy::Writeback);
+-    boot_pt.map_base_page(from1, to1, prop1);
++    unsafe { boot_pt.map_base_page(from1, to1, prop1) };
+     assert_eq!(
+         unsafe { page_walk::<PageTableEntry, PagingConsts>(root_paddr, from1 + 1) },
+         Some((to1 * PAGE_SIZE + 1, prop1))
+     );
++    unsafe { boot_pt.protect_base_page(from1, |prop| prop.flags = PageFlags::RX) };
++    assert_eq!(
++        unsafe { page_walk::<PageTableEntry, PagingConsts>(root_paddr, from1 + 1) },
++        Some((
++            to1 * PAGE_SIZE + 1,
++            PageProperty::new(PageFlags::RX, CachePolicy::Writeback)
++        ))
++    );
+ 
+     let from2 = 0x2000;
+     let to2 = 0x3;
+     let prop2 = PageProperty::new(PageFlags::RX, CachePolicy::Uncacheable);
+-    boot_pt.map_base_page(from2, to2, prop2);
++    unsafe { boot_pt.map_base_page(from2, to2, prop2) };
+     assert_eq!(
+         unsafe { page_walk::<PageTableEntry, PagingConsts>(root_paddr, from2 + 2) },
+         Some((to2 * PAGE_SIZE + 2, prop2))
+     );
+-
+-    unsafe { boot_pt.retire() }
++    unsafe { boot_pt.protect_base_page(from2, |prop| prop.flags = PageFlags::RW) };
++    assert_eq!(
++        unsafe { page_walk::<PageTableEntry, PagingConsts>(root_paddr, from2 + 2) },
++        Some((
++            to2 * PAGE_SIZE + 2,
++            PageProperty::new(PageFlags::RW, CachePolicy::Uncacheable)
++        ))
++    );
+ }
+"
+asterinas__asterinas-1159,true,"diff --git a/kernel/libs/aster-util/src/coeff.rs b/kernel/libs/aster-util/src/coeff.rs
+--- a/kernel/libs/aster-util/src/coeff.rs
++++ b/kernel/libs/aster-util/src/coeff.rs
+@@ -134,8 +134,8 @@ mod test {
+     #[ktest]
+     fn calculation() {
+         let coeff = Coeff::new(23456, 56789, 1_000_000_000);
+-        assert!(coeff * 0 as u64 == 0);
+-        assert!(coeff * 100 as u64 == 100 * 23456 / 56789);
+-        assert!(coeff * 1_000_000_000 as u64 == 1_000_000_000 * 23456 / 56789);
++        assert!(coeff * 0_u64 == 0);
++        assert!(coeff * 100_u64 == 100 * 23456 / 56789);
++        assert!(coeff * 1_000_000_000_u64 == 1_000_000_000 * 23456 / 56789);
+     }
+ }
+
+diff --git a/kernel/aster-nix/src/fs/exfat/mod.rs b/kernel/src/fs/exfat/mod.rs
+--- a/kernel/aster-nix/src/fs/exfat/mod.rs
++++ b/kernel/src/fs/exfat/mod.rs
+@@ -107,7 +107,7 @@ mod test {
+         }
+     }
+     /// Exfat disk image
+-    static EXFAT_IMAGE: &[u8] = include_bytes!(""../../../../../test/build/exfat.img"");
++    static EXFAT_IMAGE: &[u8] = include_bytes!(""../../../../test/build/exfat.img"");
+ 
+     /// Read exfat disk image
+     fn new_vm_segment_from_image() -> Segment {
+
+diff --git a/kernel/aster-nix/src/fs/exfat/mod.rs b/kernel/src/fs/exfat/mod.rs
+--- a/kernel/aster-nix/src/fs/exfat/mod.rs
++++ b/kernel/src/fs/exfat/mod.rs
+@@ -484,7 +484,7 @@ mod test {
+         let mut read = vec![0u8; BUF_SIZE];
+         let read_after_rename = a_inode_new.read_bytes_at(0, &mut read);
+         assert!(
+-            read_after_rename.is_ok() && read_after_rename.clone().unwrap() == BUF_SIZE,
++            read_after_rename.is_ok() && read_after_rename.unwrap() == BUF_SIZE,
+             ""Fail to read after rename: {:?}"",
+             read_after_rename.unwrap_err()
+         );
+
+diff --git a/kernel/aster-nix/src/fs/exfat/mod.rs b/kernel/src/fs/exfat/mod.rs
+--- a/kernel/aster-nix/src/fs/exfat/mod.rs
++++ b/kernel/src/fs/exfat/mod.rs
+@@ -495,8 +495,7 @@ mod test {
+         let new_buf = vec![7u8; NEW_BUF_SIZE];
+         let new_write_after_rename = a_inode_new.write_bytes_at(0, &new_buf);
+         assert!(
+-            new_write_after_rename.is_ok()
+-                && new_write_after_rename.clone().unwrap() == NEW_BUF_SIZE,
++            new_write_after_rename.is_ok() && new_write_after_rename.unwrap() == NEW_BUF_SIZE,
+             ""Fail to write file after rename: {:?}"",
+             new_write_after_rename.unwrap_err()
+         );
+
+diff --git a/kernel/aster-nix/src/fs/exfat/mod.rs b/kernel/src/fs/exfat/mod.rs
+--- a/kernel/aster-nix/src/fs/exfat/mod.rs
++++ b/kernel/src/fs/exfat/mod.rs
+@@ -984,7 +983,7 @@ mod test {
+         let mut file_names: Vec<String> = (0..file_num).map(|x| x.to_string()).collect();
+         file_names.sort();
+         let mut file_inodes: Vec<Arc<dyn Inode>> = Vec::new();
+-        for (_file_id, file_name) in file_names.iter().enumerate() {
++        for file_name in file_names.iter() {
+             let inode = create_file(root.clone(), file_name);
+             file_inodes.push(inode);
+         }
+
+diff --git a/kernel/aster-nix/src/fs/exfat/utils.rs b/kernel/src/fs/exfat/utils.rs
+--- a/kernel/aster-nix/src/fs/exfat/utils.rs
++++ b/kernel/src/fs/exfat/utils.rs
+@@ -68,9 +67,9 @@ impl DosTimestamp {
+         #[cfg(ktest)]
+         {
+             use crate::time::SystemTime;
+-            return DosTimestamp::from_duration(
++            DosTimestamp::from_duration(
+                 SystemTime::UNIX_EPOCH.duration_since(&SystemTime::UNIX_EPOCH)?,
+-            );
++            )
+         }
+     }
+ 
+
+diff --git a/kernel/aster-nix/src/fs/pipe.rs b/kernel/src/fs/pipe.rs
+--- a/kernel/aster-nix/src/fs/pipe.rs
++++ b/kernel/src/fs/pipe.rs
+@@ -331,7 +331,7 @@ mod test {
+     #[ktest]
+     fn test_read_closed() {
+         test_blocking(
+-            |writer| drop(writer),
++            drop,
+             |reader| {
+                 let mut buf = [0; 1];
+                 assert_eq!(reader.read(&mut writer_from(&mut buf)).unwrap(), 0);
+
+diff --git a/kernel/aster-nix/src/fs/pipe.rs b/kernel/src/fs/pipe.rs
+--- a/kernel/aster-nix/src/fs/pipe.rs
++++ b/kernel/src/fs/pipe.rs
+@@ -350,7 +350,7 @@ mod test {
+                     Errno::EPIPE
+                 );
+             },
+-            |reader| drop(reader),
++            drop,
+             Ordering::WriteThenRead,
+         );
+     }
+
+diff --git a/kernel/aster-nix/src/process/sync/condvar.rs b/kernel/src/process/sync/condvar.rs
+--- a/kernel/aster-nix/src/process/sync/condvar.rs
++++ b/kernel/src/process/sync/condvar.rs
+@@ -291,7 +291,7 @@ mod test {
+             while !*started {
+                 started = cvar.wait(started).unwrap_or_else(|err| err.into_guard());
+             }
+-            assert_eq!(*started, true);
++            assert!(*started);
+         }
+     }
+ 
+
+diff --git a/kernel/aster-nix/src/process/sync/condvar.rs b/kernel/src/process/sync/condvar.rs
+--- a/kernel/aster-nix/src/process/sync/condvar.rs
++++ b/kernel/src/process/sync/condvar.rs
+@@ -316,7 +316,7 @@ mod test {
+                     .wait_timeout(started, Duration::from_secs(1))
+                     .unwrap_or_else(|err| err.into_guard());
+             }
+-            assert_eq!(*started, true);
++            assert!(*started);
+         }
+     }
+ 
+
+diff --git a/kernel/aster-nix/src/process/sync/condvar.rs b/kernel/src/process/sync/condvar.rs
+--- a/kernel/aster-nix/src/process/sync/condvar.rs
++++ b/kernel/src/process/sync/condvar.rs
+@@ -338,7 +338,7 @@ mod test {
+             let started = cvar
+                 .wait_while(lock.lock(), |started| *started)
+                 .unwrap_or_else(|err| err.into_guard());
+-            assert_eq!(*started, false);
++            assert!(!*started);
+         }
+     }
+ 
+
+diff --git a/kernel/aster-nix/src/process/sync/condvar.rs b/kernel/src/process/sync/condvar.rs
+--- a/kernel/aster-nix/src/process/sync/condvar.rs
++++ b/kernel/src/process/sync/condvar.rs
+@@ -360,7 +360,7 @@ mod test {
+             let (started, _) = cvar
+                 .wait_timeout_while(lock.lock(), Duration::from_secs(1), |started| *started)
+                 .unwrap_or_else(|err| err.into_guard());
+-            assert_eq!(*started, false);
++            assert!(!*started);
+         }
+     }
+ }
+
+diff --git a/kernel/aster-nix/src/taskless.rs b/kernel/src/taskless.rs
+--- a/kernel/aster-nix/src/taskless.rs
++++ b/kernel/src/taskless.rs
+@@ -216,7 +216,7 @@ mod test {
+         let mut counter = 0;
+ 
+         // Schedule this taskless for `SCHEDULE_TIMES`.
+-        while taskless.is_scheduled.load(Ordering::Acquire) == false {
++        while !taskless.is_scheduled.load(Ordering::Acquire) {
+             taskless.schedule();
+             counter += 1;
+             if counter == SCHEDULE_TIMES {
+
+diff --git a/kernel/aster-nix/src/taskless.rs b/kernel/src/taskless.rs
+--- a/kernel/aster-nix/src/taskless.rs
++++ b/kernel/src/taskless.rs
+@@ -227,7 +227,9 @@ mod test {
+         // Wait for all taskless having finished.
+         while taskless.is_running.load(Ordering::Acquire)
+             || taskless.is_scheduled.load(Ordering::Acquire)
+-        {}
++        {
++            core::hint::spin_loop()
++        }
+ 
+         assert_eq!(counter, COUNTER.load(Ordering::Relaxed));
+     }
+
+diff --git a/kernel/aster-nix/src/vm/vmar/options.rs b/kernel/src/vm/vmar/options.rs
+--- a/kernel/aster-nix/src/vm/vmar/options.rs
++++ b/kernel/src/vm/vmar/options.rs
+@@ -136,7 +136,7 @@ impl<R> VmarChildOptions<R> {
+ #[cfg(ktest)]
+ mod test {
+     use aster_rights::Full;
+-    use ostd::{mm::VmIo, prelude::*};
++    use ostd::prelude::*;
+ 
+     use super::*;
+     use crate::vm::{
+
+diff --git a/ostd/src/mm/dma/dma_stream.rs b/ostd/src/mm/dma/dma_stream.rs
+--- a/ostd/src/mm/dma/dma_stream.rs
++++ b/ostd/src/mm/dma/dma_stream.rs
+@@ -334,9 +334,10 @@ mod test {
+             .alloc_contiguous()
+             .unwrap();
+         let vm_segment_child = vm_segment_parent.range(0..1);
+-        let _dma_stream_parent =
++        let dma_stream_parent =
+             DmaStream::map(vm_segment_parent, DmaDirection::Bidirectional, false);
+         let dma_stream_child = DmaStream::map(vm_segment_child, DmaDirection::Bidirectional, false);
++        assert!(dma_stream_parent.is_ok());
+         assert!(dma_stream_child.is_err());
+     }
+ 
+
+diff --git a/ostd/src/sync/atomic_bits.rs b/ostd/src/sync/atomic_bits.rs
+--- a/ostd/src/sync/atomic_bits.rs
++++ b/ostd/src/sync/atomic_bits.rs
+@@ -389,9 +389,9 @@ mod test {
+     #[ktest]
+     fn iter() {
+         let bits = AtomicBits::new_zeroes(7);
+-        assert!(bits.iter().all(|bit| bit == false));
++        assert!(bits.iter().all(|bit| !bit));
+ 
+         let bits = AtomicBits::new_ones(128);
+-        assert!(bits.iter().all(|bit| bit == true));
++        assert!(bits.iter().all(|bit| bit));
+     }
+ }
+
+diff --git a/ostd/src/sync/wait.rs b/ostd/src/sync/wait.rs
+--- a/ostd/src/sync/wait.rs
++++ b/ostd/src/sync/wait.rs
+@@ -293,7 +293,7 @@ mod test {
+             Task::yield_now();
+ 
+             cond_cloned.store(true, Ordering::Relaxed);
+-            wake(&*queue_cloned);
++            wake(&queue_cloned);
+         })
+         .data(())
+         .spawn()
+
+diff --git a/ostd/src/task/task/mod.rs b/ostd/src/task/task/mod.rs
+--- a/ostd/src/task/task/mod.rs
++++ b/ostd/src/task/task/mod.rs
+@@ -383,6 +383,7 @@ mod test {
+ 
+     #[ktest]
+     fn create_task() {
++        #[allow(clippy::eq_op)]
+         let task = || {
+             assert_eq!(1, 1);
+         };
+
+diff --git a/ostd/src/task/task/mod.rs b/ostd/src/task/task/mod.rs
+--- a/ostd/src/task/task/mod.rs
++++ b/ostd/src/task/task/mod.rs
+@@ -395,6 +396,7 @@ mod test {
+ 
+     #[ktest]
+     fn spawn_task() {
++        #[allow(clippy::eq_op)]
+         let task = || {
+             assert_eq!(1, 1);
+         };
+"
