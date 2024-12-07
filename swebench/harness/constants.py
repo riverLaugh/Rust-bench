@@ -379,6 +379,17 @@ SPECS_ASTERINAS.update(
     }
 )
 
+SPECS_TOKIO = {
+    k: {
+        "rustc": "1.81.0",
+        "pre_install": [
+            "sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+        ]
+    }
+    for k in ["1.9"]
+}
+
+
 # Constants - Repo Test Features
 FEATURES_ARROW = {
     # instance id
@@ -456,6 +467,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "bitflags/bitflags": "Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
+    "tokio-rs/tokio": "Cargo.toml",
 }
 
 
