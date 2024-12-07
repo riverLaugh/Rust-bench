@@ -1,4 +1,7 @@
 #!/bin/bash
 
 python get_run_validation_sh.py \
-    --repo 'processed_instances_versions'
+    --org 'r1v3r' \
+    --repo 'tokio' \
+    --max_workers 1 \
+    --cache_level env
