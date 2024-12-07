@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import multiprocessing
 import os
 
 from datetime import datetime
@@ -25,6 +26,8 @@ def log_all_pulls(
         output: str,
         max_pulls: int = None,
         cutoff_date: str = None,
+        pr_lock: multiprocessing.Lock = None,
+        repo_name: str = None,
     ) -> None:
     """
     Iterate over all pull requests in a repository and log them to a file
@@ -37,19 +40,35 @@ def log_all_pulls(
         .strftime("%Y-%m-%dT%H:%M:%SZ") \
         if cutoff_date is not None else None
 
+    auto = pr_lock is not None
+    log = os.path.join(os.getcwd(),'logs/pr_log')
     with open(output, "w") as file:
+        log_file = open(log, "a")
         for i_pull, pull in enumerate(repo.get_all_pulls()):
             setattr(pull, "resolved_issues", repo.extract_resolved_issues(pull))
             print(json.dumps(obj2dict(pull)), end="\n", flush=True, file=file)
+            if auto:
+                # record the log
+                if i_pull % 100 == 0:
+                    if i_pull != 0:
+                        with pr_lock:
+                            log_file.write("{}: {} pull requests\n".format(repo_name, i_pull))
+                            log_file.flush()
             if max_pulls is not None and i_pull >= max_pulls:
                 break
             if cutoff_date is not None and pull.created_at < cutoff_date:
                 break
+        if auto:
+            with pr_lock:
+                log_file.write("Done:{}\n".format(repo_name))
+                log_file.close()
+
 
 def log_specific_pulls(
         repo: Repo,
         pull_numbers: list[int],
         output: str,
+        pr_lock: multiprocessing.Lock,
     ) -> None:
     """
     Log specific pull requests to a file
@@ -76,6 +95,7 @@ def main(
         pull_numbers: list[int] = None,
         max_pulls: int = None,
         cutoff_date: str = None,
+        pr_lock: multiprocessing.Lock = None,
     ):
     print("list:",pull_numbers)
     """
@@ -94,9 +114,9 @@ def main(
 
     # 如果指定了 pull_numbers，则调用 log_specific_pulls，否则调用 log_all_pulls
     if pull_numbers:
-        log_specific_pulls(repo, pull_numbers, output)
+        log_specific_pulls(repo, pull_numbers, output, pr_lock, repo_name)
     else:
-        log_all_pulls(repo, output, max_pulls, cutoff_date)
+        log_all_pulls(repo, output, max_pulls, cutoff_date, pr_lock, repo_name)
 
 
 if __name__ == "__main__":
