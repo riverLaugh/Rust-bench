@@ -1,13 +1,12 @@
-import os
 import argparse
+import os
+
 from swebench.harness.constants import KEY_INSTANCE_ID
 from swebench.harness.utils import load_swebench_dataset
 
-ORG = "r1v3r"
 
-def main(dataset_name: str):
-
-    run_id = dataset_name.split("/")[1]
+def main(args):
+    org, repo, dataset_name, run_id, max_workers, cache_level = args.org, args.repo, f"{args.org}/{args.repo}", args.repo, args.max_workers, args.cache_level
 
     results = {}
     for data in load_swebench_dataset(dataset_name, "train"):
@@ -22,7 +21,7 @@ def main(dataset_name: str):
         for t in sorted(results.items(), key=lambda x: float(x[0]), reverse=True)
     }
 
-    with open(os.path.join(os.path.dirname(__file__), "run_validation.sh"), "w") as fd:
+    with open(os.path.join(os.path.dirname(__file__), f"{repo}_run_validation.sh"), "w") as fd:
         fd.write(f"#!/bin/bash\n\n")
         fd.write(f"# {dataset_name}\n\n")
         for version, ids in results.items():
@@ -30,8 +29,8 @@ def main(dataset_name: str):
             fd.write(f"# python run_validation.py \\\n")
             fd.write(f"#     --dataset_name {dataset_name} \\\n")
             fd.write(f"#     --run_id {run_id} \\\n")
-            fd.write(f"#     --max_workers 4 \\\n")
-            fd.write(f"#     --cache_level instance \\\n")
+            fd.write(f"#     --max_workers {max_workers} \\\n")
+            fd.write(f"#     --cache_level {cache_level} \\\n")
             fd.write(f'#     --instance_ids {" ".join(ids)}\n')
             fd.write(f"\n")
 
@@ -39,5 +38,12 @@ def main(dataset_name: str):
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
     args.add_argument("--repo", type=str, required=True)
-    args = args.parse_args()
-    main(f"{ORG}/{args.repo}")
+    args.add_argument("--org", type=str, default="r1v3r")
+    args.add_argument(
+        "--cache_level",
+        type=str,
+        choices=["none", "base", "env", "instance"],
+        default="env",
+    )
+    args.add_argument("--max_workers", type=int, default=1)
+    main(args.parse_args())
