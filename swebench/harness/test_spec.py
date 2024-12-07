@@ -181,6 +181,7 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
         reqs_commands = [
         "pwd",
         "ls -la .",
+        "curl google.com",
         f"git clone -o origin https://github.com/{repo} {repo_directory}",
         f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",

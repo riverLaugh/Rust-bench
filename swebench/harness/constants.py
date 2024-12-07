@@ -223,6 +223,9 @@ SPECS_ARROW.update(
     }
 )
 
+
+
+
 SPECS_ASTERINAS = {
     k: {
         "rustc": "1.81.0",
@@ -244,6 +247,30 @@ SPECS_ASTERINAS = {
     }
     for k in ["0.8"]
 }
+
+SPECS_ASTERINAS.update(
+    {
+        "0.9":{
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.9.4",
+            "env_setup":[
+                "git fetch origin pull/1666/head:pr-1666",
+                "git checkout main",
+                "git cherry-pick pr-1666",
+                "git branch -D pr-1666",
+                
+            ],
+            "pre_install":[
+                # "git fetch origin pull/1666/head:pr-1666",
+                # "git checkout main",
+                # "git cherry-pick pr-1666",
+                # "git branch -D pr-1666"
+            ]
+        }
+    }
+)
+
 SPECS_ASTERINAS.update(
     {
         k: {
@@ -335,7 +362,7 @@ SPECS_ASTERINAS.update(
             #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
             # ]
         }
-        for k in ["0.3"]
+        for k in ["0.3","0.4"]
     }
 )
 SPECS_ASTERINAS.update(

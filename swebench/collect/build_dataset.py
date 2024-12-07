@@ -34,6 +34,7 @@ def create_instance(repo: Repo, pull: dict) -> dict:
     }
     """
     patch, test_patch = extract_patches(pull, repo)
+    # patch =  extract_patches(pull,repo)
     problem_statement, hints = extract_problem_statement_and_hints(pull, repo)
     return {
         "repo": repo.repo.full_name,
