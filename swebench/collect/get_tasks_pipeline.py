@@ -43,7 +43,7 @@ def check_log():
     with open(path_log, "r") as f:
         lines = f.read().splitlines()
         for line in lines:
-            if line.startswith("#"):
+            if line.startswith("Done"):
                 repo_name = line.split(':')[1].strip()
                 pr_done.append(repo_name)
     return pr_done
