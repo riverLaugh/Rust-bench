@@ -177,3 +177,5 @@ swebench/harness/log/*
 swebench/versioning/results/*
 swebench/collect/scripts/*
 swebench/collect/tasks/*
+swebench/collect/tokens
+
