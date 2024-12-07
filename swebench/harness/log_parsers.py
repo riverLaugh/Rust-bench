@@ -320,4 +320,5 @@ MAP_REPO_TO_PARSER = {
     "bitflags/bitflags": parse_log_cargo,
     "apache/arrow-rs": parse_log_cargo,
     "asterinas/asterinas": parse_log_cargo,
+    "tokio-rs/tokio": parse_log_cargo
 }
