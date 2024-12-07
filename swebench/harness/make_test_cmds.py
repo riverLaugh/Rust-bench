@@ -19,7 +19,7 @@ def get_test_features(repo_name, instance_id, test_name):
 
 
 def make_arrow_rs_test_cmds(
-    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
     # get instance basic info
     repo, instance_id = instance["repo"], instance["instance_id"]
@@ -36,7 +36,7 @@ def make_arrow_rs_test_cmds(
         dirs = dir.split("/")
         cmds.append(f"cd ./{'/'.join(dirs)}")
         cmds.append(f"cargo test --no-fail-fast --doc")
-        cmds.append(f"cd ./{'../'*len(dirs)}")
+        cmds.append(f"cd ./{'../' * len(dirs)}")
     # run unit test
     for test_path in tests_changed:
         if not test_path.endswith("src/lib.rs"):
@@ -44,7 +44,7 @@ def make_arrow_rs_test_cmds(
         dirs = [dir for dir in test_path.replace("src/lib.rs", "").split("/") if dir]
         cmds.append(f"cd ./{'/'.join(dirs)}")
         cmds.append(f"cargo test --no-fail-fast --lib")
-        cmds.append(f"cd ./{'../'*len(dirs)}")
+        cmds.append(f"cd ./{'../' * len(dirs)}")
     # run integration test
     for test_path in tests_changed:
         paths = test_path.split("/")
@@ -59,7 +59,7 @@ def make_arrow_rs_test_cmds(
             )
         else:
             cmds.append(f"cargo test --no-fail-fast --test {name}")
-        cmds.append(f"cd ./{'../'*len(dirs)}")
+        cmds.append(f"cd ./{'../' * len(dirs)}")
     # run bin test
     for test_path in tests_changed:
         if "src/bin/" not in test_path:
@@ -72,20 +72,21 @@ def make_arrow_rs_test_cmds(
         name = file.replace(".rs", "")
         cmds.append(f"cd ./{'/'.join(dirs)}")
         cmds.append(f"cargo test --no-fail-fast --bin {name}")
-        cmds.append(f"cd ./{'../'*len(dirs)}")
+        cmds.append(f"cd ./{'../' * len(dirs)}")
     return cmds
 
 
 def make_asterinas_test_cmds(
-    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
-) :
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+):
     DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
     test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
     cmds = []
     test_crates = findCrate(test_files)
     if instance["instance_id"] == "asterinas__asterinas-1073":
         cmds.append("make run AUTO_TEST=syscall ENABLE_KVM=1 BOOT_PROTOCOL=linux-efi-handover64 RELEASE=0")
-        cmds.append("make run AUTO_TEST=syscall SYSCALL_TEST_DIR=/exfat  ENABLE_KVM=0 BOOT_PROTOCOL=multiboot2 RELEASE=1")
+        cmds.append(
+            "make run AUTO_TEST=syscall SYSCALL_TEST_DIR=/exfat  ENABLE_KVM=0 BOOT_PROTOCOL=multiboot2 RELEASE=1")
         return cmds
     for test_crate in test_crates:
         if test_crate in NON_OSDK_CRATES:
@@ -99,14 +100,40 @@ def make_asterinas_test_cmds(
     return cmds
 
 
+def make_tokio_test_cmds(
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+):
+    cmds = [
+        'export RUSTFLAGS="-Awarnings"',
+    ]
+    for test_dir in {
+        path
+        for paths in tests_changed for path in paths.split('/')
+        if path in {
+            "tokio",
+            "tokio-util",
+            "tokio-test",
+            "tokio-stream",
+            "tokio-macros",
+            "tests-integration",
+            "tests-build"
+        }
+    }:
+        cmds.append(f"cd ./{test_dir}")
+        cmds.append('cargo test --no-fail-fast --all-features')
+        cmds.append(f"cd ../")
+    return cmds
+
+
 MAP_REPO_TO_TESTS = {
     "apache/arrow-rs": make_arrow_rs_test_cmds,
     "asterinas/asterinas": make_asterinas_test_cmds,
+    "tokio-rs/tokio": make_tokio_test_cmds,
 }
 
 
 def make_test_cmds(
-    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
     repo = instance["repo"]
     if repo not in MAP_REPO_TO_TESTS:
