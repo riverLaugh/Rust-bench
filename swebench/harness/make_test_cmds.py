@@ -103,24 +103,30 @@ def make_asterinas_test_cmds(
 def make_tokio_test_cmds(
         instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
-    cmds = [
-        'export RUSTFLAGS="-Awarnings"',
+    # iterate all test files
+    submodule_tests: dict[str, list | None] = {}
+    for test_path in tests_changed:
+        match = re.match(r"(\w+)/tests/(\w+)\.rs", test_path)
+        # integration test
+        if match:
+            submodule, test_name = match.group(1), match.group(2)
+            if submodule not in submodule_tests:
+                submodule_tests[submodule] = [test_name]
+            elif isinstance(submodule_tests[submodule], list):
+                submodule_tests[submodule].append(test_name)
+        # other test
+        else:
+            submodule_tests[test_path.split("/")[0]] = None
+    # generate cmds
+    cmds: list[str] = [
+        'export RUSTFLAGS="-Awarnings -Aunused_must_use -Aundropped_manually_drops -Ainvalid_doc_attributes"',
     ]
-    for test_dir in {
-        path
-        for paths in tests_changed for path in paths.split('/')
-        if path in {
-            "tokio",
-            "tokio-util",
-            "tokio-test",
-            "tokio-stream",
-            "tokio-macros",
-            "tests-integration",
-            "tests-build"
-        }
-    }:
-        cmds.append(f"cd ./{test_dir}")
-        cmds.append('cargo test --no-fail-fast --all-features')
+    for submodule, test_names in submodule_tests.items():
+        cmds.append(f"cd ./{submodule}")
+        if isinstance(test_names, list):
+            cmds.extend(f"cargo test --no-fail-fast --all-features --test {test_name}" for test_name in test_names)
+        else:
+            cmds.append("cargo test --no-fail-fast --all-features")
         cmds.append(f"cd ../")
     return cmds
 
