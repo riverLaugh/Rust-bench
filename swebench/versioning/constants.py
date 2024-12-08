@@ -36,7 +36,6 @@ MAP_REPO_TO_VERSION_PATTERNS={
         "bitflags/bitflags",
         "apache/arrow-rs",
         "asterinas/asterinas",
-        "tokio-rs/tokio",
     ]
 }
 
@@ -46,6 +45,14 @@ MAP_REPO_TO_VERSION_PATTERNS.update({
         "asterinas/asterinas"
     ]
 })
+
+MAP_REPO_TO_VERSION_PATTERNS.update({
+    k: [r'version\s*=\s*"(.*)"']
+    for k in [
+        "tokio-rs/tokio"
+    ]
+})
+
 
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
