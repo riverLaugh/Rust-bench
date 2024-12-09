@@ -106,7 +106,7 @@ def make_tokio_test_cmds(
     # iterate all test files
     submodule_tests: dict[str, list | None] = {}
     for test_path in tests_changed:
-        match = re.match(r"(\w+)/tests/(\w+)\.rs", test_path)
+        match = re.match(r"([\w\-]+)/tests/([\w\-]+)\.rs", test_path)
         # integration test
         if match:
             submodule, test_name = match.group(1), match.group(2)
@@ -117,9 +117,26 @@ def make_tokio_test_cmds(
         # other test
         else:
             submodule_tests[test_path.split("/")[0]] = None
+    # add allow lint deny
+    lints = [
+        'warnings',
+        'unused_must_use',
+        'undropped_manually_drops',
+        'invalid_doc_attributes',
+        'useless_deprecated',
+        'intra_doc_link_resolution_failure',
+        'let_underscore_lock',
+        'renamed_and_removed_lints',
+        'broken_intra_doc_links'
+    ]
+    # generate rust flags
+    rust_flags = "export RUSTFLAGS=\""
+    for lint in lints:
+        rust_flags += f"-A{lint} "
+    rust_flags = rust_flags[:-1] + "\""
     # generate cmds
     cmds: list[str] = [
-        'export RUSTFLAGS="-Awarnings -Aunused_must_use -Aundropped_manually_drops -Ainvalid_doc_attributes"',
+        rust_flags
     ]
     for submodule, test_names in submodule_tests.items():
         cmds.append(f"cd ./{submodule}")
