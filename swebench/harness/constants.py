@@ -379,6 +379,35 @@ SPECS_ASTERINAS.update(
     }
 )
 
+SPECS_TOKIO = {
+    k: {
+        "rustc": "1.81.0",
+        "pre_install": [
+            r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+        ]
+    }
+    for k in
+    ["1.9", "1.8", "1.7", "1.6", "1.5", "1.41", "1.40", "1.4", "1.39", "1.38", "1.37", "1.36", "1.35", "1.34", "1.33",
+     "1.32", "1.31", "1.3", "1.29", "1.28", "1.26", "1.25", "1.24", "1.23", "1.22", "1.21", "1.20", "1.17", "1.16",
+     "1.15", "1.14", "1.12", "1.11", "1.1", "1.0", "0.3"]
+}
+
+SPECS_TOKIO.update({
+    k: {
+        "rustc": "1.81.0",
+        "pre_install": [
+            r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+            "set +e",
+            r"sed -E -i 's/nightly-2019[a-zA-Z0-9_\-]+/1.81.0/' ./rust-toolchain",
+            "sed -i 's/security-framework = \"0.2\"/security-framework = \"3.0.0-beta.2\"/' ./tokio-tls/Cargo.toml",
+            "set -e",
+        ]
+    }
+    for k in
+    ["0.2"]
+})
+
+
 # Constants - Repo Test Features
 FEATURES_ARROW = {
     # instance id
@@ -456,6 +485,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "bitflags/bitflags": "Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
+    "tokio-rs/tokio": "Cargo.toml",
 }
 
 
