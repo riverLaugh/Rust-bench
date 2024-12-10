@@ -34,19 +34,19 @@ def _find_version_in_text(text: str, instance: dict) -> str:
     """
     # Remove comments
     pattern = r'""".*?"""'
-    text = re.sub(pattern, '', text, flags=re.DOTALL)
+    text = re.sub(pattern, "", text, flags=re.DOTALL)
     # Search through all patterns
     for pattern in MAP_REPO_TO_VERSION_PATTERNS[instance["repo"]]:
         matches = re.search(pattern, text)
         if matches is not None:
-            print(instance['repo'])
+            print(instance["repo"])
             print(matches)
-            if instance['repo'] == 'pyvista/pyvista':
+            if instance["repo"] == "pyvista/pyvista":
                 text = matches.group(0)
-                text = text.split('=')[-1].strip() if '=' in text else text.strip()
-                text = '.'.join(text.split(','))
+                text = text.split("=")[-1].strip() if "=" in text else text.strip()
+                text = ".".join(text.split(","))
                 return text
-            if instance['repo'] == 'asterinas/asterinas':
+            if instance["repo"] == "asterinas/asterinas":
                 if matches.group(0) == None:
                     return "0.1.0"
                 return matches.group(0)
@@ -89,7 +89,12 @@ def get_version(instance, is_build=False, path_repo=None):
                 instance["base_commit"],
                 path_to_version,
             )
-            init_text = requests.get(url).text
+            while True:
+                try:
+                    init_text = requests.get(url,timeout=5).text
+                except:
+                    print(f"Fetch from URL: {url} failed, retrying...")
+                    continue
         version = _find_version_in_text(init_text, instance)
         if version is not None:
             if "." in version:
@@ -238,10 +243,13 @@ def merge_results(instances_path: str, repo_prefix: str, output_dir: str = None)
     old_path_file = instances_path.split("/")[-1]
     instances_path_new = f"{old_path_file.split('.')[0]}_versions.json"
     if output_dir is not None:
-        instances_path_new = os.path.join(output_dir, instances_path_new)
+        os.makedirs(output_dir, exist_ok=True)
+        instances_path_new = os.path.join(output_dir, instances_path_new) 
     with open(f"{instances_path_new}", "w") as f:
-        json.dump(merged, fp=f,indent=4)
-    logger.info(f"Saved merged results to {instances_path_new} ({len(merged)} instances)")
+        json.dump(merged, fp=f, indent=4)
+    logger.info(
+        f"Saved merged results to {instances_path_new} ({len(merged)} instances)"
+    )
     return len(merged)
 
 
@@ -271,12 +279,14 @@ def main(args):
             [
                 {
                     "data_tasks": data_task_list,
-                    "save_path": f"{repo_prefix}_versions_{i}.json"
-                    if args.retrieval_method == "github"
-                    else f"{repo_prefix}_versions_{i}_web.json",
-                    "not_found_list": shared_result_list
-                    if args.retrieval_method == "mix"
-                    else None,
+                    "save_path": (
+                        f"{repo_prefix}_versions_{i}.json"
+                        if args.retrieval_method == "github"
+                        else f"{repo_prefix}_versions_{i}_web.json"
+                    ),
+                    "not_found_list": (
+                        shared_result_list if args.retrieval_method == "mix" else None
+                    ),
                 }
                 for i, data_task_list in enumerate(data_task_lists)
             ],
@@ -360,7 +370,8 @@ def main(args):
     if args.retrieval_method == "mix":
         assert (
             len(data_tasks)
-            == merge_results(args.instances_path, repo_prefix, args.output_dir) + total_web
+            == merge_results(args.instances_path, repo_prefix, args.output_dir)
+            + total_web
         )
     elif args.retrieval_method == "build":
         assert len(data_tasks) == merge_results(
@@ -386,13 +397,37 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--instances_path", required=True, type=str, default=None, help="Path to task instances")
-    parser.add_argument("--retrieval_method", required=True, choices=["build", "mix", "github"], default="github", help="Method to retrieve versions")
-    parser.add_argument("--cleanup", action="store_true", help="Remove testbed repo and conda environments")
-    parser.add_argument("--conda_env", type=str, default=None, help="Conda environment to use")
+    parser.add_argument(
+        "--instances_path",
+        required=True,
+        type=str,
+        default=None,
+        help="Path to task instances",
+    )
+    parser.add_argument(
+        "--retrieval_method",
+        required=True,
+        choices=["build", "mix", "github"],
+        default="github",
+        help="Method to retrieve versions",
+    )
+    parser.add_argument(
+        "--cleanup",
+        action="store_true",
+        help="Remove testbed repo and conda environments",
+    )
+    parser.add_argument(
+        "--conda_env", type=str, default=None, help="Conda environment to use"
+    )
     parser.add_argument("--path_conda", type=str, default=None, help="Path to conda")
-    parser.add_argument("--num_workers", type=int, default=1, help="Number of threads to use")
-    parser.add_argument("--output_dir", type=str, default=None, help="Path to save results")
-    parser.add_argument("--testbed", type=str, default=None, help="Path to testbed repo")
+    parser.add_argument(
+        "--num_workers", type=int, default=1, help="Number of threads to use"
+    )
+    parser.add_argument(
+        "--output_dir", type=str, default=None, help="Path to save results"
+    )
+    parser.add_argument(
+        "--testbed", type=str, default=None, help="Path to testbed repo"
+    )
     args = parser.parse_args()
     main(args)
