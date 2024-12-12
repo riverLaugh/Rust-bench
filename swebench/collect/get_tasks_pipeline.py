@@ -11,9 +11,7 @@ from multiprocessing import Pool
 from swebench.collect.build_dataset import main as build_dataset
 from swebench.collect.print_pulls import main as print_pulls
 
-
 load_dotenv()
-
 
 def split_instances(input_list: list, n: int) -> list:
     """
@@ -43,7 +41,7 @@ def check_log():
     with open(path_log, "r") as f:
         lines = f.read().splitlines()
         for line in lines:
-            if line.startswith("#"):
+            if line.startswith("Done"):
                 repo_name = line.split(':')[1].strip()
                 pr_done.append(repo_name)
     return pr_done
@@ -70,19 +68,33 @@ def construct_data_files(data: dict,pr_lock,task_lock):
         data.get("pull_numbers")
     )
 
+    # repos, path_prs, path_tasks, max_pulls, cutoff_date, pull_numbers = (
+    #     data["repos"],
+    #     data["path_prs"],
+    #     data["path_tasks"],
+    #     data["max_pulls"],
+    #     data["cutoff_date"],
+    #     data.get("pull_numbers")
+    # )
+
     auto = pr_lock is not None
     pr_done = []
     if auto:
-        pr_done = check_log()
+        pr_done = check_log() 
 
+    
     for repo in repos:
         repo = repo.strip(",").strip()
         repo_name = repo.split("/")[1]
         try:
-            path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
+            if auto:
+                path_pr = os.path.join(path_prs, f"auto/{repo_name}-prs.jsonl")
+            else:
+                path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
             if cutoff_date:
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
             do_pull = True
+            
             if auto:
                 do_pull = repo not in pr_done
             else:
@@ -114,11 +126,14 @@ def construct_data_files(data: dict,pr_lock,task_lock):
                 print(f"✅ Successfully saved PR data for {repo} to {path_pr}")
             else:
                 print(f"📁 Pull request data for {repo} already exists at {path_pr}, skipping...")
+
             # modify path_task based on weather auto is True
             if auto:
                 path_task = os.path.join(path_tasks, f"auto/{repo_name}-task-instances.jsonl")
             else:
                 path_task = os.path.join(path_tasks, f"{repo_name}-task-instances.jsonl")
+
+
             if not os.path.exists(path_task):
                 print(f"Task instance data for {repo} not found, creating...")
                 build_dataset(path_pr, path_task, token, task_lock)
@@ -165,9 +180,6 @@ def main(
     
 
     data_task_lists = split_instances(repos, len(tokens))
-    pr_lock = None
-    task_lock = None
-
 
     data_pooled = [
         {
@@ -182,19 +194,23 @@ def main(
         for repos, token in zip(data_task_lists, tokens)
     ]
 
+    with multiprocessing.Manager() as manager:
+        pr_lock, task_lock = None, None
+        if auto:
+            pr_lock = manager.Lock()
+            task_lock = manager.Lock()
+            log_path = os.path.join(os.getcwd(),"logs/pr_log")
+            with open(log_path, "a") as pr_log:
+                with pr_lock:
+                    pr_log.write('-' * 20 + time.ctime() + '-' * 20 + '\n')
+                    pr_log.flush()
 
+        # token_queue = manager.Queue()
+        # for token in tokens:
+        #     token_queue.put(token)
 
-    if auto:
-        pr_lock = multiprocessing.Manager().Lock()
-        task_lock = multiprocessing.Manager().Lock()
-        log_path = os.path.join(os.getcwd(),"logs/pr_log")
-        with open(log_path, "a") as pr_log:
-            with pr_lock:
-                pr_log.write('-' * 20 + time.ctime() + '-' * 20 + '\n')
-                pr_log.flush()
-
-    with Pool(len(tokens)) as p:
-        p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
+        with Pool(len(tokens)) as p:
+            p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
 
 
 if __name__ == "__main__":

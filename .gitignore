@@ -178,4 +178,8 @@ swebench/versioning/results/*
 swebench/collect/scripts/*
 swebench/collect/tasks/*
 swebench/collect/tokens
-
+.idea/
+swebench/collect/temp
+swebench/collect/count.py
+swebench/collect/test.py
+swebench/collect/test.json

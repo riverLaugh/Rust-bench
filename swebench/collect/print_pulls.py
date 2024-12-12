@@ -9,6 +9,7 @@ import json
 import logging
 import multiprocessing
 import os
+import pysnooper
 
 from datetime import datetime
 from fastcore.xtras import obj2dict
@@ -20,7 +21,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
+# @pysnooper.snoop()
 def log_all_pulls(
         repo: Repo,
         output: str,
@@ -41,13 +42,16 @@ def log_all_pulls(
         if cutoff_date is not None else None
 
     auto = pr_lock is not None
+    cnt = 0
     log = os.path.join(os.getcwd(),'logs/pr_log')
     with open(output, "w") as file:
-        log_file = open(log, "a")
+        log_file = open(log, "a") if auto else None
         for i_pull, pull in enumerate(repo.get_all_pulls()):
             setattr(pull, "resolved_issues", repo.extract_resolved_issues(pull))
             print(json.dumps(obj2dict(pull)), end="\n", flush=True, file=file)
             if auto:
+                #count total number of PRs
+                cnt += 1
                 # record the log
                 if i_pull % 100 == 0:
                     if i_pull != 0:
@@ -60,6 +64,7 @@ def log_all_pulls(
                 break
         if auto:
             with pr_lock:
+                log_file.write("{}: {} pull requests\n".format(repo_name, cnt))
                 log_file.write("Done:{}\n".format(repo_name))
                 log_file.close()
 
