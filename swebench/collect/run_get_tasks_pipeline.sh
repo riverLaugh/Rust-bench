@@ -5,6 +5,6 @@
 # * Declare GITHUB_TOKENS=token1,token2,token3...
 
 python get_tasks_pipeline.py \
-    --repos 'bitflags/bitflags' \
-    --path_prs '/home/riv3r/SWE-bench/swebench/collect/prs' \
-    --path_tasks '/home/riv3r/SWE-bench/swebench/collect/tasks'\
+    --repos 'asterinas/asterinas' \
+    --path_prs '/Users/yjzhou/myworkspace/SWE-bench/swebench/collect/prs' \
+    --path_tasks '/Users/yjzhou/myworkspace/SWE-bench/swebench/collect/tasks'\
