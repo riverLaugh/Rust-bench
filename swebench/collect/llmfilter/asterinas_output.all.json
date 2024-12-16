@@ -1,0 +1,646 @@
+[
+    {
+        "test": true,
+        "hunks": [
+            0,
+            1
+        ],
+        "explain": "Hunk 0 modifies test functions in the `mod test` module by changing assertions and test logic. Hunk 1 introduces a new test function `test_write_atomicity`, which is clearly related to testing.",
+        "instance_id": "asterinas__asterinas-1559"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. It primarily involves the removal of the 'lazy_static' dependency and its replacement with 'spin::Once' for static initialization. There are no modifications or additions to test functions, test files, or assertions. Therefore, this PR does not appear to be related to bug fixing with test-related changes.",
+        "instance_id": "asterinas__asterinas-1657"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff modifies synchronization primitives in the TLB module, but there are no changes related to testing. No test functions, test files, or assertions are introduced or modified.",
+        "instance_id": "asterinas__asterinas-1643"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not contain any test-related changes. It modifies the implementation of the `poll_read` function in `line_discipline.rs` by changing the lock acquisition order, which is a bug fix but not related to testing. There are no additions or modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1646"
+    },
+    {
+        "test": true,
+        "hunks": [
+            1
+        ],
+        "explain": "Hunk 1 introduces a new test file 'pthread_signal_test.c' which is a regression test for the futex lost wakeup bug. This indicates that the PR includes test-related changes.",
+        "instance_id": "asterinas__asterinas-1642"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff only removes debug assertions from a function in a non-test file. There are no changes related to test functions, test files, or test utilities.",
+        "instance_id": "asterinas__asterinas-1664"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff provided modifies an assembly file related to x86 trap handling, which is not related to testing. There are no changes that introduce or modify test functions, test files, or test utilities. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1637"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not involve any test-related changes. All changes are in implementation files and focus on modifying existing logic, such as adjusting the handling of memory and socket states. There are no new test functions, modifications to test files, or changes to assertions or test utilities.",
+        "instance_id": "asterinas__asterinas-1567"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies the logic for calculating padding in the `InitStack::new` function. There are no changes related to test functions, test files, or assertions. The changes focus on adding a fixed padding to the stack and renaming variables for clarity, which are not test-related.",
+        "instance_id": "asterinas__asterinas-1596"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies the implementation of functions in the task and scheduler modules, changing their return types to `!` and adding a `drop` call and `unreachable!()` macro. There are no changes related to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1513"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies the implementation of a function in the `range_lock` module, specifically changing how locks are managed with the introduction of a `Waiter`. There are no changes related to test functions, test files, or assertions. The changes are purely implementation details and do not involve any test-related modifications.",
+        "instance_id": "asterinas__asterinas-1466"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. Both hunks modify the behavior of memory protection functions (`mmap` and `mprotect`) by ensuring `PROT_WRITE` implies `PROT_READ` on x86 architectures. There are no modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1461"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff provided does not involve any test-related changes. It only modifies the order of enum variants in the 'osdk/src/arch.rs' file, which is not related to testing.",
+        "instance_id": "asterinas__asterinas-1508"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies error handling in the `do_exit` function within a kernel module, but it does not introduce or modify any test functions, test files, or assertions. Therefore, it does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1433"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves updates to dependencies in Cargo.lock and Cargo.toml files, modifications in build scripts, and code refactoring in source files. There are no additions or modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-1447"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to test functions, test files, or test utilities. It primarily involves refactoring and moving code related to kernel oops handling, with no indication of test-related modifications.",
+        "instance_id": "asterinas__asterinas-1478"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies a calculation in the `vm_mapping.rs` file by using `saturating_sub` to prevent underflow. There are no changes related to tests, such as modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1336"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff provided shows changes in a function related to system call handling, specifically adding additional checks for time validity. There are no changes related to test functions, test files, or test utilities, indicating that this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1359"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies error handling in the `fs_resolver.rs` file, but there are no changes related to testing. There are no additions or modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1380"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any test-related changes. It modifies the implementation of the `futex_wait_bitset` function and the `load_val` method in `futex.rs`, but there are no changes to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1337"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff only contains a change in the logic of the `drop` method in `rwmutex.rs`, which is not related to testing. There are no modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1309"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff contains changes to the logic of the `pending_const_count` and `pending_alter_count` methods in the `SemaphoreSet` implementation, adjusting the initial count from 1 to 0. There are no changes related to test functions, test files, or assertions. Therefore, the PR does not include test-related changes.",
+        "instance_id": "asterinas__asterinas-1333"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies a function in a source file related to page table cursor creation by adding an additional check for an empty virtual address range. There are no changes related to test functions, test files, or assertions. Thus, the PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1323"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies synchronization mechanisms in the file locking utility, replacing RwMutex with Mutex and changing how waiters are handled. There are no changes related to test functions, test files, or assertions, indicating no test-related changes.",
+        "instance_id": "asterinas__asterinas-1486"
+    },
+    {
+        "test": true,
+        "hunks": [
+            8
+        ],
+        "explain": "Hunk 8 in the file `ostd/src/mm/page_table/test.rs` modifies a test function `test_user_copy_on_write`, which is indicated by the `#[ktest]` annotation and the presence of test-related logic. This confirms the presence of test-related changes in the PR.",
+        "instance_id": "asterinas__asterinas-1369"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies the implementation of the `do_epoll_wait` function in `kernel/src/syscall/epoll.rs` by changing how the `epoll_file` is obtained. There are no changes related to tests, such as modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1302"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies syscall and time handling logic in the kernel module, but there are no changes related to testing. No test functions, test files, or assertions are added or modified.",
+        "instance_id": "asterinas__asterinas-1351"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies the function 'print_stack_trace' in 'ostd/src/panicking.rs' by adding a condition to check if 'pc' is greater than 0 before proceeding with certain operations. There are no changes related to test functions, test files, or assertions. The diff does not involve any test-related changes.",
+        "instance_id": "asterinas__asterinas-1229"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR contains changes related to bug fixing by adding checks for integer overflow in various syscall functions. However, there are no changes related to testing, such as modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1241"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff modifies a function in the kernel module related to semaphore creation by adding a check for an ID limit. There are no changes related to tests, such as modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1292"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies the implementation of permission handling in the mmap syscall and removes an unused function. There are no changes related to tests, such as modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1275"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not involve any test-related changes. It primarily focuses on refactoring and modifying the configuration handling code, such as removing the eval module and refactoring path canonicalization and evaluation logic. There are no changes to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1256"
+    },
+    {
+        "test": true,
+        "hunks": [
+            3
+        ],
+        "explain": "Hunk 3 introduces a new test module with a regression test function `test_mutex_try_lock_does_not_unlock`, which is related to testing the bug fix.",
+        "instance_id": "asterinas__asterinas-1279"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. Both hunks modify existing functions to improve error handling by returning Result types instead of panicking. There are no additions or modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1215"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies error handling in syscall functions by replacing `unwrap()` with the `?` operator, which is not directly related to testing. There are no changes to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1181"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies syscall functions to add error handling for zero length and unaligned addresses. There are no changes related to testing, such as modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1180"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies a single line in a Rust source file related to system calls, changing an unwrap to a question mark operator for error handling. There are no indications of test-related changes such as modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1174"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff modifies the implementation of functions in the file 'timer_manager.rs', which is part of the main codebase, not a test file. There are no changes related to test functions, test files, or assertions. The changes are focused on adding bounds checking to prevent out-of-bounds access, which is a bug fix, but there are no test-related changes in this diff.",
+        "instance_id": "asterinas__asterinas-1211"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        ],
+        "explain": "All hunks modify files located in a 'test' directory, indicating they are related to testing. The changes involve updating configuration and script files for benchmarks, which are part of the testing setup.",
+        "instance_id": "asterinas__asterinas-1187"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves refactoring and renaming functions and variables related to thread and task management, without any modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1328"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies documentation comments and refactors code in the `clocksource.rs` file, but does not introduce or modify any test functions, test files, or assertions. Therefore, it does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-1183"
+    },
+    {
+        "test": true,
+        "hunks": [
+            2
+        ],
+        "explain": "Hunk 2 modifies a module named 'test' by removing a call to 'enable_local', which is related to test setup. This indicates a test-related change.",
+        "instance_id": "asterinas__asterinas-1154"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves version updates in Cargo.toml files and refactoring code related to TDX guest handling. There are no additions or modifications of test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1081"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not include any changes related to testing. All changes are focused on modifying the syscall implementations and utility functions, as well as documentation and configuration adjustments. There are no additions or modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1103"
+    },
+    {
+        "test": true,
+        "hunks": [
+            1
+        ],
+        "explain": "Hunk 1 modifies a file in the 'tests' directory and introduces a new test function 'cli_new_crate_with_hyphen', which is test-related.",
+        "instance_id": "asterinas__asterinas-1138"
+    },
+    {
+        "test": true,
+        "hunks": [
+            10,
+            11,
+            12,
+            13
+        ],
+        "explain": "Hunks 10, 11, 12, and 13 are related to testing as they modify files located in the 'test/apps/network' directory, which is associated with testing. These hunks adjust test parameters and uncomment a previously commented-out test, indicating changes to test cases.",
+        "instance_id": "asterinas__asterinas-1098"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not involve any test-related changes. The changes are primarily related to modifying workflow configurations, linker scripts, and CPU-local storage management. There are no modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-1073"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. All changes are focused on modifying existing code logic, such as removing unnecessary type casts and optimizing code paths. There are no additions or modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1158"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0,
+            1
+        ],
+        "explain": "Hunk 0 modifies a test blocklist file by adding a comment and a new test case, indicating a change in test configuration. Hunk 1 modifies a script related to running syscall tests, specifically changing how blocklists are processed, which is part of the test setup.",
+        "instance_id": "asterinas__asterinas-1035"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves modifications to the `VirtQueue` implementation, adding new methods and traits for non-tearing memory operations, and updating dependencies. There are no new test functions, modifications to test files, or changes to assertions or test utilities.",
+        "instance_id": "asterinas__asterinas-1112"
+    },
+    {
+        "test": true,
+        "hunks": [
+            9
+        ],
+        "explain": "Hunk 9 modifies a test function `test_boot_pt` by renaming it to `test_boot_pt_map_protect` and adding additional assertions, indicating it is related to testing.",
+        "instance_id": "asterinas__asterinas-928"
+    },
+    {
+        "test": true,
+        "hunks": [
+            3,
+            5,
+            6,
+            7,
+            8
+        ],
+        "explain": "The PR includes test-related changes in several hunks. Hunk 3 modifies a test utility by changing the current directory in test commands. Hunk 5 introduces a new test file `write_a_kernel_in_100_lines.rs` with a test function. Hunk 6 adds a new assembly file `hello.S` used in testing. Hunk 7 adds a new Rust file `lib.rs` used in testing. Hunk 8 includes a new template file `lib.rs` used in testing.",
+        "instance_id": "asterinas__asterinas-954"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff only includes changes to dependency versions in Cargo.lock and Cargo.toml files, which are not related to testing. There are no modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-955"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR only contains changes to documentation files, correcting typos and adding guidelines. There are no changes related to tests, such as modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-884"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not involve any test-related changes. It modifies Makefiles and adds a .gitignore file, but there are no changes to test functions, test directories, or test assertions. The changes are related to build configuration and file management, not testing.",
+        "instance_id": "asterinas__asterinas-812"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies the synchronization mechanism in the RamFS implementation by replacing RwLock with RwMutex. There are no changes related to tests, such as modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-796"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0
+        ],
+        "explain": "Hunk 0 in the Makefile adds a check for test completion in the `ktest` target, indicating it is related to testing.",
+        "instance_id": "asterinas__asterinas-1372"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. It primarily involves modifications to the scheduling and task management system, such as changes in the scheduler implementation and task handling logic. There are no additions or modifications to test functions, test files, or assertions that would indicate test-related changes.",
+        "instance_id": "asterinas__asterinas-990"
+    },
+    {
+        "test": true,
+        "hunks": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+        ],
+        "explain": "The PR includes changes to the 'regression/apps/Makefile' and adds a new test application 'alarm' in the 'regression/apps/alarm/' directory. These changes are related to testing as they introduce a new test application, which is indicated by the presence of a Makefile and a C source file for the test app.",
+        "instance_id": "asterinas__asterinas-782"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to tests. It primarily involves modifications to the Makefile, documentation, and Cargo files, as well as the addition of a new profiling command. There are no changes to test functions, test directories, or assertions that would indicate test-related changes.",
+        "instance_id": "asterinas__asterinas-1362"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies the implementation of the `discard_range` function and related logic in the page cache management, but there are no changes related to testing. No test functions, test files, or assertions are introduced or modified.",
+        "instance_id": "asterinas__asterinas-731"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. It modifies the import statements and comments in the `processor.rs` file, which is not related to testing.",
+        "instance_id": "asterinas__asterinas-701"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not contain any test-related changes. It modifies the logic for handling VMOs in the ELF loader, but there are no changes to test functions, test files, or assertions. All changes are within the main source file, not in any test directories or files.",
+        "instance_id": "asterinas__asterinas-677"
+    },
+    {
+        "test": true,
+        "hunks": [
+            1
+        ],
+        "explain": "Hunk 1 in the diff modifies a script to enable a previously commented-out test case './send_buf_full', indicating a test-related change.",
+        "instance_id": "asterinas__asterinas-650"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff primarily involves renaming and restructuring of files and dependencies, specifically changing references from 'aster-std' to 'aster-nix'. There are no changes related to test functions, test directories, or assertions that would indicate test-related changes.",
+        "instance_id": "asterinas__asterinas-637"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. It modifies existing functions and error messages but does not introduce or modify test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-623"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff provided modifies the logic in the sys_fstatat function to handle empty filenames differently, which is a bug fix. However, there are no changes related to testing, such as modifications to test functions, test files, or assertions. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-608"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. All changes are related to refactoring or modifying existing code, such as replacing constants and removing a configuration file. There are no additions or modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-679"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. The changes are in configuration files and linker scripts, which are not related to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-729"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not contain any changes related to testing. All modifications are focused on refactoring and reorganizing code within the kernel module, such as renaming files, changing function implementations, and updating module imports. There are no new test functions, modifications to test files, or changes to assertions or test utilities.",
+        "instance_id": "asterinas__asterinas-621"
+    },
+    {
+        "test": true,
+        "hunks": [
+            4
+        ],
+        "explain": "Hunk 4 modifies a script in the 'regression/apps/scripts' directory, which is likely related to testing, as it comments out a test execution line in a network test script.",
+        "instance_id": "asterinas__asterinas-630"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. It modifies the implementation of memory mapping functions in a Rust module, but there are no new test functions, modifications to test files, or changes to assertions or test utilities.",
+        "instance_id": "asterinas__asterinas-598"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not involve any test-related changes. It primarily includes changes to documentation comments, Makefile adjustments, and refactoring of command execution in the CLI. There are no additions or modifications to test functions, test files, or test utilities.",
+        "instance_id": "asterinas__asterinas-665"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff provided does not include any changes related to testing. It modifies assembly code in a boot file, which is not related to test functions, test files, or assertions. Therefore, there are no test-related hunks.",
+        "instance_id": "asterinas__asterinas-437"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not include any changes related to testing. It primarily involves modifications to the main codebase, such as refactoring, renaming, and logic changes in the timer and synchronization mechanisms. There are no additions or modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-423"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves refactoring and modifying the allocation logic within the virtual memory management system, such as replacing `VmFrameVec::allocate` with `VmAllocOptions::alloc_single` and `VmAllocOptions::alloc`. There are no additions or modifications to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-465"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not contain any test-related changes. It modifies the implementation of socket connection and acceptance logic, but there are no new test functions, modifications to test files, or changes to assertions or test utilities. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-359"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies the behavior of socket handling in the network interface code, but it does not introduce or modify any test functions, test files, or assertions. The changes are focused on fixing potential issues in the socket management logic, specifically ensuring safe upgrades of socket references and additional polling during socket drop. There are no indications of test-related changes in the provided diff.",
+        "instance_id": "asterinas__asterinas-394"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0
+        ],
+        "explain": "Hunk 0 modifies a file located in a directory path containing 'test', indicating it is related to testing.",
+        "instance_id": "asterinas__asterinas-395"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR modifies function signatures and variable assignments related to program loading and execution, but there are no changes related to testing. No test functions, test files, or assertions are introduced or modified.",
+        "instance_id": "asterinas__asterinas-304"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not include any changes related to testing. All changes are focused on modifying the implementation of various filesystem components, such as inode handling and filesystem flags, without any additions or modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-426"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0,
+            1,
+            2
+        ],
+        "explain": "The PR involves changes to the Makefile in the 'regression/syscall_test' directory, which is related to testing. Hunk 0 modifies the Makefile to handle test binaries, hunk 1 adds a .gitignore file in a directory related to Docker, and hunk 2 modifies a Dockerfile to include the setup for syscall tests. These changes are related to setting up and running tests, indicating test-related modifications.",
+        "instance_id": "asterinas__asterinas-327"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any test-related changes. It modifies the implementation of the WaitQueue and Waiter structures, but there are no changes to test functions, test files, or assertions. The changes focus on refactoring the wait queue logic by removing the 'finished' state management and replacing it with a dequeue operation.",
+        "instance_id": "asterinas__asterinas-300"
+    },
+    {
+        "test": true,
+        "hunks": [
+            0,
+            1,
+            3,
+            4
+        ],
+        "explain": "The PR involves test-related changes. Hunk 0 modifies the Makefile to include a new test application 'pty'. Hunk 1 adds a Makefile for the 'pty' test application. Hunk 3 updates the 'run_tests.sh' script to include the 'pty/open_pty' test. Hunk 4 modifies the 'syscall_test/Makefile' to add 'pty_test', and hunk 5 introduces a blocklist for 'pty_test', indicating new test cases.",
+        "instance_id": "asterinas__asterinas-334"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff only includes changes to dependency sources in Cargo.lock and Cargo.toml files. There are no changes related to test functions, test directories, or test utilities. Therefore, this PR does not involve test-related changes.",
+        "instance_id": "asterinas__asterinas-247"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not involve any test-related changes. It primarily modifies the implementation of a procedural macro by introducing a new module and refactoring existing code. There are no changes to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-206"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not include any test-related changes. All hunks are related to modifying the implementation of synchronization primitives and heap allocator, as well as refactoring code in a line discipline module. There are no changes to test functions, test files, or test utilities.",
+        "instance_id": "asterinas__asterinas-261"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. All modifications are focused on adding new methods and refactoring existing code related to file handling and status flags. There are no new test functions, modifications to test files, or changes to assertions or test utilities.",
+        "instance_id": "asterinas__asterinas-224"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. There are no new test functions, modifications to test files, or changes to assertions, mocks, or test utilities. The changes are primarily focused on adding new features and refactoring existing code.",
+        "instance_id": "asterinas__asterinas-193"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The diff does not contain any changes related to testing. It primarily involves restructuring and adding new device-related functionality, such as adding new device modules and modifying existing file system handling. There are no additions or modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-225"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR is primarily focused on adding SPDX license identifiers to various files. There are no changes related to test functions, test directories, or test assertions. The changes are not related to bug fixing or testing.",
+        "instance_id": "asterinas__asterinas-567"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The PR does not include any test-related changes. All changes are related to renaming and refactoring the project from 'Jinux' to 'Asterinas', including updates to configuration files, documentation, and source code paths. There are no modifications to test functions, test directories, or assertions.",
+        "instance_id": "asterinas__asterinas-561"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "'NoneType' object is not subscriptable",
+        "instance_id": "asterinas__asterinas-1026"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "Error code: 524 - {'error': {'message': ' (request id: 2024121011464238602479629jIuJDp) (request id: 202412101146421369996311e5ueTdz)', 'type': 'upstream_error', 'param': '524', 'code': 'bad_response_status_code'}}",
+        "instance_id": "asterinas__asterinas-1159"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "Error code: 524 - {'error': {'message': ' (request id: 20241210114900307866094UmCzmwft) (request id: 20241210114900131686050DXOLpslO)', 'type': 'upstream_error', 'param': '524', 'code': 'bad_response_status_code'}}",
+        "instance_id": "asterinas__asterinas-1125"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "Error code: 524 - {'error': {'message': ' (request id: 20241210114713497150772nGGgOVBx)', 'type': 'upstream_error', 'param': '524', 'code': 'bad_response_status_code'}}",
+        "instance_id": "asterinas__asterinas-183"
+    },
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "Error code: 524 - {'error': {'message': ' (request id: 202412101159245355084695yyRVQHi) (request id: 20241210115924368889164mUjREGi9)', 'type': 'upstream_error', 'param': '524', 'code': 'bad_response_status_code'}}",
+        "instance_id": "asterinas__asterinas-1018"
+    }
+]
