@@ -85,7 +85,7 @@ class TestStatus(Enum):
 # TEST_PYTEST = "pytest --no-header -rA --tb=no -p no:cacheprovider"
 # TEST_PYTEST_VERBOSE = "pytest -rA --tb=long -p no:cacheprovider"
 
-TEST_CARGO = "cargo test --no-fail-fast"
+TEST_CARGO = "cargo test --no-fail-fast --all-features"
 
 # Constants - Installation Specifications
 SPECS_RUSTLINGS = {}
@@ -223,6 +223,9 @@ SPECS_ARROW.update(
     }
 )
 
+
+
+
 SPECS_ASTERINAS = {
     k: {
         "rustc": "1.81.0",
@@ -230,20 +233,53 @@ SPECS_ASTERINAS = {
         "image_tag": "0.8.3",
         "pre_install": [
             r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
         ],
         # env level
         "env_setup": [
             r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
             """
         ],
     }
     for k in ["0.8"]
 }
+
+SPECS_ASTERINAS.update(
+    {
+        k:{
+            "rustc": "1.81.0",
+            "test_cmd": TEST_CARGO,
+            "image_tag": "0.9.4",
+            "env_setup":[
+                "git fetch origin pull/1666/head:pr-1666",
+                "git checkout main",
+                "git cherry-pick -X theirs pr-1666",
+                # "git cherry-pick pr-1666",
+                "git branch -D pr-1666",
+                
+            ],
+            "pre_install":[
+                # r"""sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
+                # "git fetch origin pull/1666/head:pr-1666",
+                # "git checkout main",
+                # "git cherry-pick pr-1666",
+                # "git branch -D pr-1666"
+            ]
+        }
+        for k in ["0.9"]
+    }
+)
+
+
 SPECS_ASTERINAS.update(
     {
         k: {
@@ -260,6 +296,7 @@ SPECS_ASTERINAS.update(
             "env_setup": [
                 r"""
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+
             """
             ],
         }
@@ -275,7 +312,11 @@ SPECS_ASTERINAS.update(
             # repo level
             "pre_install": [
                 r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
             cargo update -p unwinding
@@ -285,7 +326,11 @@ SPECS_ASTERINAS.update(
             # env level
             "env_setup": [
                 r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
+            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             sed -i 's/target_arch == "x86_64-unknown-none"/target_arch == "x86_64-unknown-linux-gnu"/' ostd/libs/linux-bzimage/setup/build.rs
             cargo update -p unwinding
@@ -303,15 +348,18 @@ SPECS_ASTERINAS.update(
             "image_tag": "0.5.1",
             "pre_install": [
                 r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            # sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
+            # sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+            # cargo update -p unwinding
+
             """
             ],
             # env level
             "env_setup": [
                 r"""
-            sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
+export CFLAGS="-DSECOMP FILTER FLAG WAIT KILLABLE RECV=32 -DMFD NOEXEC SEAL=8 -DMFD EXEC=16 -DNF NETDEV EGRESS=1"
+echo $CFLAGS
+
             """
             ],
         }
@@ -323,19 +371,38 @@ SPECS_ASTERINAS.update(
         k: {
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
-            "image_tag": "0.3.0",
+            "image_tag": "0.4.2",
             # #repo level
-            # "pre_install":[
-            #     r"""
-            #     sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml
-            #     """
-            # ],
-            # #env level
-            # "env_setup":[
-            #     r"""sed -i 's/channel = "nightly-2024-06-20"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
-            # ]
+            "pre_install":[
+                r"""
+                # git fetch origin pull/1666/head:pr-1666
+                # git checkout main
+                # git cherry-pick -X theirs pr-1666
+                # git branch -D pr-1666
+                sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
+                sed -i 's/multiboot2 = "[0-9]*\.[0-9]*\.[0-9]*"/multiboot2 = "0.23.1"/' framework/aster-frame/Cargo.toml
+                sed -i 's/x86_64 = "[0-9]*\.[0-9]*\.[0-9]*"/x86_64 = "0.14.13"/' kernel/Cargo.toml
+                cargo update -p unwinding
+        
+                """
+            ],
+            #env level
+            "env_setup":[
+                r"""
+                # git fetch origin pull/1666/head:pr-1666
+                # git checkout main
+                # git cherry-pick -X theirs pr-1666
+                # git branch -D pr-1666
+                # sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
+                # sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-11-29"/' rust-toolchain.toml
+                sed -i 's/multiboot2 = "[0-9]*\.[0-9]*\.[0-9]*"/multiboot2 = "0.23.1"/' framework/aster-frame/Cargo.toml
+                # sed -i 's/x86_64 = "[0-9]*\.[0-9]*\.[0-9]*"/x86_64 = "0.14.13"/' kernel/Cargo.toml
+                # sed -i 's#multiboot2 = "[0-9]*\.[0-9]*\.[0-9]*"#multiboot2 = {path="multiboot2-multiboot2-v0.16.0/multiboot2-multiboot2-v0.16.0/multiboot2"}#' framework/aster-frame/Cargo.toml
+
+                """
+            ]
         }
-        for k in ["0.3"]
+        for k in ["0.4"]
     }
 )
 SPECS_ASTERINAS.update(
@@ -378,6 +445,35 @@ SPECS_ASTERINAS.update(
         for k in ["0.1"]
     }
 )
+
+SPECS_TOKIO = {
+    k: {
+        "rustc": "1.81.0",
+        "pre_install": [
+            r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+        ]
+    }
+    for k in
+    ["1.9", "1.8", "1.7", "1.6", "1.5", "1.41", "1.40", "1.4", "1.39", "1.38", "1.37", "1.36", "1.35", "1.34", "1.33",
+     "1.32", "1.31", "1.3", "1.29", "1.28", "1.26", "1.25", "1.24", "1.23", "1.22", "1.21", "1.20", "1.17", "1.16",
+     "1.15", "1.14", "1.12", "1.11", "1.1", "1.0", "0.3"]
+}
+
+SPECS_TOKIO.update({
+    k: {
+        "rustc": "1.81.0",
+        "pre_install": [
+            r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+            "set +e",
+            r"sed -E -i 's/nightly-2019[a-zA-Z0-9_\-]+/1.81.0/' ./rust-toolchain",
+            "sed -i 's/security-framework = \"0.2\"/security-framework = \"3.0.0-beta.2\"/' ./tokio-tls/Cargo.toml",
+            "set -e",
+        ]
+    }
+    for k in
+    ["0.2"]
+})
+
 
 # Constants - Repo Test Features
 FEATURES_ARROW = {
@@ -456,6 +552,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "bitflags/bitflags": "Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
+    "tokio-rs/tokio": "Cargo.toml",
 }
 
 
