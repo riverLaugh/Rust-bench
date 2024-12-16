@@ -9,8 +9,8 @@
 
 # Example call for getting versions from github web interface
 python get_versions.py \
-    --instances_path /home/riv3r/SWE-bench/swebench/collect/llmfilter/asterinas_llm_output.json \
+    --instances_path /home/riv3r/SWE-bench/swebench/collect/tasks/spin-task-instances.jsonl \
     --retrieval_method github \
-    --num_workers 1 \
+    --num_workers 4 \
     --output_dir "/home/riv3r/SWE-bench/swebench/versioning/results"\
     --cleanup
