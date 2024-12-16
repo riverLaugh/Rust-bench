@@ -474,6 +474,16 @@ SPECS_TOKIO.update({
     ["0.2"]
 })
 
+SPECS_SPIN = {
+    k:{
+        "rustc":"1.81.0",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            "apt install pkg-config"
+        ]
+    }
+    for k in["3.2"]
+}
 
 # Constants - Repo Test Features
 FEATURES_ARROW = {
@@ -531,6 +541,7 @@ FEATURES_ARROW = {
     },
 }
 
+
 # Constants - Task Instance Test Features
 MAP_REPO_ID_TO_FEATURES = {"apache/arrow-rs": FEATURES_ARROW}
 
@@ -541,6 +552,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "bitflags/bitflags": SPECS_BITFLAGS,
     "apache/arrow-rs": SPECS_ARROW,
     "asterinas/asterinas": SPECS_ASTERINAS,
+    "fermyon/spin": SPECS_SPIN
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -553,6 +565,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
     "tokio-rs/tokio": "Cargo.toml",
+    "fermyon/spin":"Cargo.toml"
 }
 
 
