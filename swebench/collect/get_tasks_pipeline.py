@@ -215,7 +215,7 @@ def main(
         #     token_queue.put(token)
 
         with Pool(len(tokens)) as p:
-            p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
+            p.starmap(construct_data_files, [(data, pr_lock, task_lock,mode) for data in data_pooled])
 
 
 

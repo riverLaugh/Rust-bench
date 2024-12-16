@@ -2,7 +2,7 @@
 
 import subprocess
 
-repos = ["asterinas/asterinas"]
+repos = ["GuillaumeGomez/sysinfo"]
 
 for repo in repos:
     print(f"Making mirror repo for {repo}")
