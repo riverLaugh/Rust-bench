@@ -92,6 +92,7 @@ def get_version(instance, is_build=False, path_repo=None):
             while True:
                 try:
                     init_text = requests.get(url,timeout=5).text
+                    break
                 except:
                     print(f"Fetch from URL: {url} failed, retrying...")
                     continue
