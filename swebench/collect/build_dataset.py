@@ -21,7 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def create_instance(repo: Repo, pull: dict) -> dict:
+def create_instance(repo: Repo, pull: dict , mode:str) -> dict:
     """
     Create a single task instance from a pull request, where task instance is:
 
@@ -33,7 +33,8 @@ def create_instance(repo: Repo, pull: dict) -> dict:
         test_patch (str): test suite as .patch (apply to base commit),
     }
     """
-    patch, test_patch = extract_patches(pull, repo)
+    patch, test_patch = extract_patches(pull, repo,mode=mode)
+    # patch =  extract_patches(pull,repo)
     problem_statement, hints = extract_problem_statement_and_hints(pull, repo)
     return {
         "repo": repo.repo.full_name,
@@ -105,7 +106,7 @@ def extract_repo_name(file_path):
         return None
 
 
-def main(pr_file: str, output: str, token: Optional[str] = None, task_lock: multiprocessing.Lock = None):
+def main(pr_file: str, output: str, mode:str, token: Optional[str] = None, task_lock: multiprocessing.Lock = None):
     """
     Main thread for creating task instances from pull requests
 
@@ -190,7 +191,7 @@ def main(pr_file: str, output: str, token: Optional[str] = None, task_lock: mult
                 if repo_name not in repos:
                     repos[repo_name] = load_repo(repo_name)
                 repo = repos[repo_name]
-                instance = create_instance(repo, pull)
+                instance = create_instance(repo, pull,mode)
                 if is_valid_instance(instance):
                     # If valid, write to .all output file
                     print(
@@ -221,6 +222,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("pr_file", type=str, help="Path to pull request JSONL file")
     parser.add_argument("output", type=str, help="Output file name")
+    parser.add_argument("--mode", type=str, help="Mode of operation")
+
     parser.add_argument("--token", type=str, help="GitHub token")
     args = parser.parse_args()
     main(**vars(args))

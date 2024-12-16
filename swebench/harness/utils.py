@@ -433,7 +433,7 @@ def get_test_directives(instance: SWEbenchInstance) -> list:
 
     # Get test directives from test patch and remove non-test files
     diff_pat = r"diff --git a/.* b/(.*)"
-    add_file_pat = r"^--- /dev/null\n\+\+\+ b/(.*)"
+    add_file_pat = r"diff --git /dev/null b/(.*)"
     
     test_patch = instance["test_patch"]
     directives = re.findall(diff_pat, test_patch)

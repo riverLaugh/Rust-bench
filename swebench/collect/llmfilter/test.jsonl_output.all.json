@@ -1,0 +1,8 @@
+[
+    {
+        "test": false,
+        "hunks": [],
+        "explain": "The provided diff does not include any changes related to testing. Both hunks modify the `futex.rs` file, focusing on the logic of the `wake` function and its usage, but there are no changes to test functions, test files, or assertions.",
+        "instance_id": "asterinas__asterinas-1642"
+    }
+]
