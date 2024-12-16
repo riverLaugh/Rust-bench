@@ -1,4 +1,4 @@
-import argparse, glob, json, logging, os, re, requests, subprocess, sys
+import argparse, glob, json, logging, os, re, requests, subprocess, sys , pysnooper
 
 from multiprocessing import Pool, Manager
 
@@ -52,7 +52,7 @@ def _find_version_in_text(text: str, instance: dict) -> str:
                 return matches.group(0)
             return str(matches.group(1)).replace(" ", "")
 
-
+@pysnooper.snoop()
 def get_version(instance, is_build=False, path_repo=None):
     """
     Function for looking up the version of a task instance.
@@ -92,6 +92,7 @@ def get_version(instance, is_build=False, path_repo=None):
             while True:
                 try:
                     init_text = requests.get(url,timeout=5).text
+                    break
                 except:
                     print(f"Fetch from URL: {url} failed, retrying...")
                     continue

@@ -357,8 +357,8 @@ SPECS_ASTERINAS.update(
             # env level
             "env_setup": [
                 r"""
-export CFLAGS="-DSECOMP FILTER FLAG WAIT KILLABLE RECV=32 -DMFD NOEXEC SEAL=8 -DMFD EXEC=16 -DNF NETDEV EGRESS=1"
-echo $CFLAGS
+# export CFLAGS="-DSECOMP FILTER FLAG WAIT KILLABLE RECV=32 -DMFD NOEXEC SEAL=8 -DMFD EXEC=16 -DNF NETDEV EGRESS=1"
+# echo $CFLAGS
 
             """
             ],
