@@ -169,7 +169,7 @@ cython_debug/
 *.DS_Store
 data/repos/copies
 notebooks/
-*logs/
+logs/*
 temp/*
 swebench/harness/reports/*
 swebench/harness/results/*
@@ -179,3 +179,5 @@ swebench/collect/scripts/*
 swebench/collect/tasks/*
 swebench/collect/tokens
 
+*asterinas
+swebench/harness/logs/*
