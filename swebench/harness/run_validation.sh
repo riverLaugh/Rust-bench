@@ -3,12 +3,14 @@
 # r1v3r/asterinas_new-task-instances_versions
 
 # 0.9
-python run_validation.py \
-    --dataset_name r1v3r/asterinas_new-task-instances_versions \
-    --run_id asterinas_new-task-instances_versions \
-    --max_workers 4 \
-    --cache_level instance \
-    --instance_ids asterinas__asterinas-1642 asterinas__asterinas-1559 asterinas__asterinas-1447 asterinas__asterinas-1372
+# python run_validation.py \
+#     --dataset_name r1v3r/asterinas_new-task-instances_versions \
+#     --run_id asterinas_new-task-instances_versions \
+#     --max_workers 4 \
+#     --cache_level instance \
+#     --instance_ids asterinas__asterinas-1642 asterinas__asterinas-1559 asterinas__asterinas-1447 asterinas__asterinas-1372
+
+
 
 # 0.8
 # python run_validation.py \
@@ -32,15 +34,16 @@ python run_validation.py \
 #     --run_id asterinas_new-task-instances_versions \
 #     --max_workers 4 \
 #     --cache_level instance \
-#     --instance_ids asterinas__asterinas-1215 asterinas__asterinas-1187 asterinas__asterinas-1154 asterinas__asterinas-1138 asterinas__asterinas-1125 asterinas__asterinas-1112 asterinas__asterinas-1103 asterinas__asterinas-1098 asterinas__asterinas-1073 asterinas__asterinas-1035 asterinas__asterinas-1026 asterinas__asterinas-1018 asterinas__asterinas-990
+#     --instance_ids asterinas__asterinas-1215 asterinas__asterinas-1187 asterinas__asterinas-1154 asterinas__asterinas-1138 asterinas__asterinas-1125 asterinas__asterinas-1112 asterinas__asterinas-1103\
+#      asterinas__asterinas-1098 asterinas__asterinas-1073 asterinas__asterinas-1035 asterinas__asterinas-1026 asterinas__asterinas-1018 asterinas__asterinas-990
 
 # 0.5
-# python run_validation.py \
-#     --dataset_name r1v3r/asterinas_new-task-instances_versions \
-#     --run_id asterinas_new-task-instances_versions \
-#     --max_workers 4 \
-#     --cache_level instance \
-#     --instance_ids asterinas__asterinas-954
+python run_validation.py \
+    --dataset_name r1v3r/asterinas_new-task-instances_versions \
+    --run_id asterinas_new-task-instances_versions \
+    --max_workers 4 \
+    --cache_level instance \
+    --instance_ids asterinas__asterinas-954
 
 # 0.4
 # python run_validation.py \

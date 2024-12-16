@@ -181,7 +181,7 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
         reqs_commands = [
         "pwd",
         "ls -la .",
-        "curl google.com",
+        # "curl google.com",
         f"git clone -o origin https://github.com/{repo} {repo_directory}",
         f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
@@ -221,6 +221,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
     )
     diff_cmd = "git diff"
+    git_status_cmd = "git status"
     test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
     test_commands = test_commands if test_commands else [f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "]
     
@@ -230,16 +231,16 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     eval_commands += [
         f"git config --global --add safe.directory {repo_directory}",  # for nonroot user
         f"cd {repo_directory}",
-        # f"git status",
-        # f"git show",
     ]
     if "install" in specs:
         eval_commands.append(specs["install"])
     eval_commands += [
         # reset_tests_command,
         apply_test_patch_command,
+        git_status_cmd,
         diff_cmd,
         *(test_commands),
+        git_status_cmd,
         reset_tests_command
     ]
     return eval_commands
