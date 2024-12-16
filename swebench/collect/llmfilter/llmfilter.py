@@ -50,11 +50,11 @@ def resolve_conflicts(responses):
 
 
 def process_instance(instance, model_name, input_cost_per_1000, output_cost_per_1000):
-    patch = instance["patch"] + instance["test_patch"]
-    # patch_hunk = PatchManager(patch).hunks
-    # patch_str = ""
-    # for i, hunk in enumerate(patch_hunk):
-    #     patch_str += str(i) + "\n" + hunk + "\n"
+    patch = instance["patch"]
+    patch_hunk = PatchManager(patch).hunks
+    patch_str = ""
+    for i, hunk in enumerate(patch_hunk):
+        patch_str += str(i) + "\n" + hunk + "\n"
 
     prompt = f"""
 Analyze the following Rust diff from a GitHub Pull Request (PR) to determine if it involves test-related changes in the context of bug fixing. 
@@ -124,6 +124,7 @@ Respond with **only** a JSON object adhering to the following structure:
     responses = []
     total_output_tokens = 0
     total_cost = 0.0
+    final_response = None
     try:
 
         # 进行三次采样
@@ -153,7 +154,7 @@ Respond with **only** a JSON object adhering to the following structure:
             # 获取 response 内容
             content = response.choices[0].message.content.strip()
             responses.append(content)
-            # print(content)
+            print(content)
             # 估算 response 的 token 数量
             response_tokens = count_tokens(content, model=model_name)
 
@@ -203,9 +204,11 @@ Respond with **only** a JSON object adhering to the following structure:
             instance["test_patch"] = ""
     except Exception as e:
         print(f"Error processing instance {instance['instance_id']}: {e}")
+        if final_response is None:
+            final_response = json.dumps({"test": False, "hunks": [], "explain": str(e)})
         print(responses)
     
-    return instance, total_cost, total_output_tokens,final_response
+    return instance, total_cost, total_output_tokens, final_response
 
 def main(args):
     start_time = time.time()
@@ -232,7 +235,7 @@ def main(args):
 
     with open(output_file, "w", newline="") as output_json, open(output_file_all, "w", newline="") as all_json, open(input_file, "r") as file:
         instances = [json.loads(line.strip()) for line in file]
-
+        complete = 0
         # 使用 ThreadPoolExecutor 实现多线程
         with ThreadPoolExecutor(max_workers=10) as executor:  # 你可以调整 max_workers 的数量
             futures = {executor.submit(process_instance, instance, model_name, input_cost_per_1000, output_cost_per_1000): instance for instance in instances}
@@ -240,11 +243,12 @@ def main(args):
                 instance_result, cost, output_tokens,final_response = future.result()
                 if instance_result["test_patch"] != "":
                     processed_instances.append(instance_result)
-                response_json = json.loads(final_response)
-                response_json["instance_id"] = instance_result["instance_id"]
-                response_json_list.append(response_json)
-
-
+                if final_response  is not None:
+                    response_json = json.loads(final_response)
+                    response_json["instance_id"] = instance_result["instance_id"]
+                    response_json_list.append(response_json)
+                complete += 1
+                print(f"Processed instances:{len(processed_instances)}, completed:{complete}")
                 total_output_tokens += output_tokens
                 total_cost += cost
 

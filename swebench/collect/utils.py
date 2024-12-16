@@ -376,7 +376,7 @@ class PatchManager:
 
 
 
-def extract_patches(pull: dict, repo: Repo) -> tuple[str, str]:
+def extract_patches(pull: dict, repo: Repo, mode:str) -> tuple[str, str]:
     """
     Get patch and test patch from PR
 
@@ -391,15 +391,31 @@ def extract_patches(pull: dict, repo: Repo) -> tuple[str, str]:
     patch_test = ""
     patch_fix  = ""
     patchManager = PatchManager(patch)
-    for hunk in patchManager.hunks:
-        if any(
-            test_word in hunk for test_word in
-            ['test', 'tests', 'e2e', 'testing']
-        ):
-            patch_test += str(hunk)
-        else:
+    if mode == "llm":
+        for hunk in PatchSet(patch):
             patch_fix += str(hunk)
-    return patch_fix, patch_test
+        return patch_fix, patch_test
+    elif mode == "new":
+        for hunk in patchManager.hunks:
+            if any(
+                test_word in hunk for test_word in
+                ['test', 'tests', 'e2e', 'testing']
+            ):
+                patch_test += str(hunk)
+            else:
+                patch_fix += str(hunk)
+        return patch_fix, patch_test
+    else:
+        for hunk in PatchSet(patch):
+            if any(
+                test_word in hunk.path for test_word in
+                ['test', 'tests', 'e2e', 'testing']
+            ):
+                patch_test += str(hunk)
+            else:
+                patch_fix += str(hunk)
+            # patch_fix += str(hunk)
+        return patch_fix, patch_test
     # return patch_fix
 
 
