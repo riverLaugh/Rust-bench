@@ -69,7 +69,8 @@ def run_instance(
     # Set up logging directory
     instance_id = test_spec.instance_id
     model_name_or_path = pred.get("model_name_or_path", "None").replace("/", "__")
-    log_dir = RUN_EVALUATION_LOG_DIR / run_id / model_name_or_path / instance_id
+    version_dir = f"{test_spec.repo.replace('/','_')}.{test_spec.version.replace('.','_')}"
+    log_dir = RUN_EVALUATION_LOG_DIR / run_id  / model_name_or_path/ version_dir  / instance_id
     log_dir.mkdir(parents=True, exist_ok=True)
 
     # Link the image build dir in the log dir
