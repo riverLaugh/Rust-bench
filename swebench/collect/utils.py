@@ -5,6 +5,7 @@ import logging
 import re
 import requests
 import time
+import urllib
 
 from bs4 import BeautifulSoup
 from ghapi.core import GhApi
@@ -125,6 +126,7 @@ class Repo:
             quiet (bool): whether to print progress
             **kwargs: keyword arguments to pass to API function
         """
+        delay = 10
         page = 1
         args = {
             "owner": self.owner,
@@ -137,6 +139,7 @@ class Repo:
                 # Get values from API call
                 values = func(**args, page=page)
                 yield from values
+                # all prs done
                 if len(values) == 0:
                     break
                 if not quiet:
@@ -148,12 +151,21 @@ class Repo:
                 if num_pages is not None and page >= num_pages:
                     break
                 page += 1
+            # except urllib.error.URLError as e:
+            #     # logger.error(
+            #     #     f"[{self.owner}/{self.name}] Error processing page {page} "
+            #     #     f"w/ token {self.token[:10]} - {e.reason}"
+            #     # )
+            #     logger.error(f"URLError caught, {e.reason}")
+            #     logger.error(f"Retrying in {delay} seconds...")
+            #     time.sleep(delay)
             except Exception as e:
                 # Rate limit handling
                 logger.error(
                     f"[{self.owner}/{self.name}] Error processing page {page} "
                     f"w/ token {self.token[:10]} - {e}"
                 )
+                # waiting for api rate limit reset
                 while True:
                     rl = self.api.rate_limit.get()
                     if rl.resources.core.remaining > 0:
