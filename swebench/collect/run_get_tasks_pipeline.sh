@@ -8,3 +8,4 @@ python get_tasks_pipeline.py \
     --repos 'bitflags/bitflags' \
     --path_prs '/home/riv3r/SWE-bench/swebench/collect/prs' \
     --path_tasks '/home/riv3r/SWE-bench/swebench/collect/tasks'\
+    --mode new

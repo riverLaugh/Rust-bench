@@ -1,0 +1,5466 @@
+Instance_id,Test detected,File Path
+bitflags__bitflags-324,true,"diff --git /dev/null b/src/external/arbitrary_support.rs
+new file mode 100644
+--- /dev/null
++++ b/src/external/arbitrary_support.rs
+@@ -0,0 +1,19 @@
++#[cfg(test)]
++mod tests {
++    use arbitrary::Arbitrary;
++
++    bitflags! {
++        #[derive(Arbitrary)]
++        struct Color: u32 {
++            const RED = 0x1;
++            const GREEN = 0x2;
++            const BLUE = 0x4;
++        }
++    }
++
++    #[test]
++    fn test_arbitrary() {
++        let mut unstructured = arbitrary::Unstructured::new(&[0_u8; 256]);
++        let _color = Color::arbitrary(&mut unstructured);
++    }
++}
+"
+bitflags__bitflags-336,true,"diff --git /dev/null b/src/external/bytemuck_support.rs
+new file mode 100644
+--- /dev/null
++++ b/src/external/bytemuck_support.rs
+@@ -0,0 +1,19 @@
++#[cfg(test)]
++mod tests {
++    use bytemuck::{Pod, Zeroable};
++    
++    bitflags! {
++        #[derive(Pod, Zeroable, Clone, Copy)]
++        #[repr(transparent)]
++        struct Color: u32 {
++            const RED = 0x1;
++            const GREEN = 0x2;
++            const BLUE = 0x4;
++        }
++    }
++
++    #[test]
++    fn test_bytemuck() {
++        assert_eq!(0x1, bytemuck::cast::<Color, u32>(Color::RED));
++    }
++}
+"
+bitflags__bitflags-321,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1548,4 +1548,57 @@ mod tests {
+ 
+         assert_eq!(flags, rebuilt);
+     }
++
++    #[test]
++    fn bits_types() {
++        bitflags! {
++            pub struct I8: i8 {
++                const A = 1;
++            }
++
++            pub struct I16: i16 {
++                const A = 1;
++            }
++
++            pub struct I32: i32 {
++                const A = 1;
++            }
++
++            pub struct I64: i64 {
++                const A = 1;
++            }
++
++            pub struct I128: i128 {
++                const A = 1;
++            }
++
++            pub struct Isize: isize {
++                const A = 1;
++            }
++
++            pub struct U8: u8 {
++                const A = 1;
++            }
++
++            pub struct U16: u16 {
++                const A = 1;
++            }
++
++            pub struct U32: u32 {
++                const A = 1;
++            }
++
++            pub struct U64: u64 {
++                const A = 1;
++            }
++
++            pub struct U128: u128 {
++                const A = 1;
++            }
++
++            pub struct Usize: usize {
++                const A = 1;
++            }
++        }
++    }
+ }
+"
+bitflags__bitflags-316,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1154,17 +1154,39 @@ mod tests {
+ 
+     #[test]
+     fn test_display_from_str_roundtrip() {
+-        fn format_parse_case(flags: FmtFlags) {
++        fn format_parse_case<T: fmt::Debug + fmt::Display + str::FromStr + PartialEq>(flags: T) where <T as str::FromStr>::Err: fmt::Display {
+             assert_eq!(flags, {
+-                match flags.to_string().parse::<FmtFlags>() {
++                match flags.to_string().parse::<T>() {
+                     Ok(flags) => flags,
+                     Err(e) => panic!(""failed to parse `{}`: {}"", flags, e),
+                 }
+             });
+         }
+ 
+-        fn parse_case(expected: FmtFlags, flags: &str) {
+-            assert_eq!(expected, flags.parse::<FmtFlags>().unwrap());
++        fn parse_case<T: fmt::Debug + str::FromStr + PartialEq>(expected: T, flags: &str) where <T as str::FromStr>::Err: fmt::Display + fmt::Debug {
++            assert_eq!(expected, flags.parse::<T>().unwrap());
++        }
++
++        bitflags! {
++            #[derive(Debug, Eq, PartialEq)]
++            pub struct MultiBitFmtFlags: u8 {
++                const A = 0b0000_0001u8;
++                const B = 0b0001_1110u8;
++            }
++        }
++
++        impl fmt::Display for MultiBitFmtFlags {
++            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
++                fmt::Display::fmt(&self.0, f)
++            }
++        }
++
++        impl str::FromStr for MultiBitFmtFlags {
++            type Err = crate::parser::ParseError;
++
++            fn from_str(s: &str) -> Result<Self, Self::Err> {
++                Ok(MultiBitFmtFlags(s.parse()?))
++            }
+         }
+ 
+         format_parse_case(FmtFlags::empty());
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1174,6 +1196,7 @@ mod tests {
+         format_parse_case(FmtFlags::물고기_고양이);
+         format_parse_case(FmtFlags::from_bits_retain(0xb8));
+         format_parse_case(FmtFlags::from_bits_retain(0x20));
++        format_parse_case(MultiBitFmtFlags::from_bits_retain(3));
+ 
+         parse_case(FmtFlags::empty(), """");
+         parse_case(FmtFlags::empty(), "" \r\n\t"");
+"
+bitflags__bitflags-341,true,"diff --git /dev/null b/tests/compile-pass/doc_alias.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/doc_alias.rs
+@@ -0,0 +1,14 @@
++#[macro_use]
++extern crate bitflags;
++
++bitflags! {
++    #[doc(alias = ""FLAG"")]
++    pub struct Flags: u8 {
++        #[doc(alias = ""FLAG_A"")]
++        const A = 1;
++    }
++}
++
++fn main() {
++    
++}
+"
+bitflags__bitflags-355,true,"diff --git a/tests/compile-fail/bitflags_custom_bits.rs b/tests/compile-fail/bitflags_custom_bits.rs
+--- a/tests/compile-fail/bitflags_custom_bits.rs
++++ b/tests/compile-fail/bitflags_custom_bits.rs
+@@ -19,7 +19,7 @@ use std::{
+     },
+ };
+ 
+-use bitflags::{bitflags, Bits, parser::{ParseError, FromHex}};
++use bitflags::{bitflags, Bits, parser::{ParseError, WriteHex, ParseHex}};
+ 
+ // Ideally we'd actually want this to work, but currently need something like `num`'s `Zero`
+ // With some design work it could be made possible
+
+diff --git a/tests/compile-fail/bitflags_custom_bits.rs b/tests/compile-fail/bitflags_custom_bits.rs
+--- a/tests/compile-fail/bitflags_custom_bits.rs
++++ b/tests/compile-fail/bitflags_custom_bits.rs
+@@ -117,12 +117,18 @@ impl Binary for MyInt {
+     }
+ }
+ 
+-impl FromHex for MyInt {
+-    fn from_hex(input: &str) -> Result<Self, ParseError> {
++impl ParseHex for MyInt {
++    fn parse_hex(input: &str) -> Result<Self, ParseError> {
+         Ok(MyInt(u8::from_str_radix(input, 16).map_err(|_| ParseError::invalid_hex_flag(input))?))
+     }
+ }
+ 
++impl WriteHex for MyInt {
++    fn write_hex<W: fmt::Write>(&self, writer: W) -> fmt::Result {
++        LowerHex::fmt(&self.0, writer)
++    }
++}
++
+ bitflags! {
+     struct Flags128: MyInt {
+         const A = MyInt(0b0000_0001u8);
+
+diff --git a/tests/compile-fail/bitflags_custom_bits.stderr b/tests/compile-fail/bitflags_custom_bits.stderr
+--- a/tests/compile-fail/bitflags_custom_bits.stderr
++++ b/tests/compile-fail/bitflags_custom_bits.stderr
+@@ -1,7 +1,7 @@
+ error[E0277]: the trait bound `MyInt: bitflags::traits::Primitive` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:127:22
++   --> tests/compile-fail/bitflags_custom_bits.rs:133:22
+     |
+-127 |     struct Flags128: MyInt {
++133 |     struct Flags128: MyInt {
+     |                      ^^^^^ the trait `bitflags::traits::Primitive` is not implemented for `MyInt`
+     |
+     = help: the following other types implement trait `bitflags::traits::Primitive`:
+
+diff --git a/tests/compile-fail/bitflags_custom_bits.stderr b/tests/compile-fail/bitflags_custom_bits.stderr
+--- a/tests/compile-fail/bitflags_custom_bits.stderr
++++ b/tests/compile-fail/bitflags_custom_bits.stderr
+@@ -20,442 +20,457 @@ note: required by a bound in `PublicFlags::Primitive`
+     |     type Primitive: Primitive;
+     |                     ^^^^^^^^^ required by this bound in `PublicFlags::Primitive`
+ 
++error[E0308]: mismatched types
++   --> tests/compile-fail/bitflags_custom_bits.rs:128:32
++    |
++127 |     fn write_hex<W: fmt::Write>(&self, writer: W) -> fmt::Result {
++    |                  - this type parameter
++128 |         LowerHex::fmt(&self.0, writer)
++    |         -------------          ^^^^^^ expected `&mut Formatter<'_>`, found type parameter `W`
++    |         |
++    |         arguments to this function are incorrect
++    |
++    = note: expected mutable reference `&mut Formatter<'_>`
++                  found type parameter `W`
++note: method defined here
++   --> $RUST/core/src/fmt/mod.rs
++
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitAnd` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt & MyInt`
+     |
+     = help: the trait `~const BitAnd` is not implemented for `MyInt`
+ note: the trait `BitAnd` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitOr` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt | MyInt`
+     |
+     = help: the trait `~const BitOr` is not implemented for `MyInt`
+ note: the trait `BitOr` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitOr` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt | MyInt`
+     |
+     = help: the trait `~const BitOr` is not implemented for `MyInt`
+ note: the trait `BitOr` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitAnd` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt & MyInt`
+     |
+     = help: the trait `~const BitAnd` is not implemented for `MyInt`
+ note: the trait `BitAnd` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitAnd` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt & MyInt`
+     |
+     = help: the trait `~const BitAnd` is not implemented for `MyInt`
+ note: the trait `BitAnd` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: can't compare `MyInt` with `_` in const contexts
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt == _`
+     |
+     = help: the trait `~const PartialEq<_>` is not implemented for `MyInt`
+ note: the trait `PartialEq<_>` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitAnd` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt & MyInt`
+     |
+     = help: the trait `~const BitAnd` is not implemented for `MyInt`
+ note: the trait `BitAnd` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitOr` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt | MyInt`
+     |
+     = help: the trait `~const BitOr` is not implemented for `MyInt`
+ note: the trait `BitOr` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitAnd` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt & MyInt`
+     |
+     = help: the trait `~const BitAnd` is not implemented for `MyInt`
+ note: the trait `BitAnd` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: Not` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ the trait `~const Not` is not implemented for `MyInt`
+     |
+ note: the trait `Not` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: BitXor` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ no implementation for `MyInt ^ MyInt`
+     |
+     = help: the trait `~const BitXor` is not implemented for `MyInt`
+ note: the trait `BitXor` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ 
+ error[E0277]: the trait bound `MyInt: Not` is not satisfied
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^ the trait `~const Not` is not implemented for `MyInt`
+     |
+ note: the trait `Not` is implemented for `MyInt`, but that implementation is not `const`
+-   --> tests/compile-fail/bitflags_custom_bits.rs:126:1
+-    |
+-126 | / bitflags! {
+-127 | |     struct Flags128: MyInt {
+-128 | |         const A = MyInt(0b0000_0001u8);
+-129 | |         const B = MyInt(0b0000_0010u8);
+-130 | |         const C = MyInt(0b0000_0100u8);
+-131 | |     }
+-132 | | }
++   --> tests/compile-fail/bitflags_custom_bits.rs:132:1
++    |
++132 | / bitflags! {
++133 | |     struct Flags128: MyInt {
++134 | |         const A = MyInt(0b0000_0001u8);
++135 | |         const B = MyInt(0b0000_0010u8);
++136 | |         const C = MyInt(0b0000_0100u8);
++137 | |     }
++138 | | }
+     | |_^
+     = note: this error originates in the macro `__impl_public_bitflags` which comes from the expansion of the macro `bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+diff --git /dev/null b/tests/compile-pass/bitflags_self_in_value.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/bitflags_self_in_value.rs
+@@ -0,0 +1,15 @@
++use bitflags::bitflags;
++
++bitflags! {
++    pub struct Flags: u32 {
++        const SOME_FLAG = 1 << Self::SOME_FLAG_SHIFT;
++    }
++}
++
++impl Flags {
++    const SOME_FLAG_SHIFT: u32 = 5;
++}
++
++fn main() {
++    
++}
+
+diff --git a/tests/smoke-test/src/main.rs b/tests/smoke-test/src/main.rs
+--- a/tests/smoke-test/src/main.rs
++++ b/tests/smoke-test/src/main.rs
+@@ -1,3 +1,5 @@
++#![deny(warnings)]
++
+ use bitflags::bitflags;
+ 
+ bitflags! {
+"
+bitflags__bitflags-268,true,"diff --git a/tests/compile-fail/trait/custom_impl.rs b/tests/compile-fail/trait/custom_impl.rs
+--- a/tests/compile-fail/trait/custom_impl.rs
++++ b/tests/compile-fail/trait/custom_impl.rs
+@@ -62,4 +62,4 @@ impl BitFlags for BootlegFlags {
+     }
+ }
+ 
+-fn main() { }
++fn main() {}
+
+diff --git a/tests/compile-pass/impls/convert.rs b/tests/compile-pass/impls/convert.rs
+--- a/tests/compile-pass/impls/convert.rs
++++ b/tests/compile-pass/impls/convert.rs
+@@ -12,6 +12,4 @@ impl From<u32> for Flags {
+     }
+ }
+ 
+-fn main() {
+-
+-}
++fn main() {}
+
+diff --git /dev/null b/tests/compile-pass/impls/fmt.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/impls/fmt.rs
+@@ -0,0 +1,14 @@
++use bitflags::bitflags;
++
++bitflags! {
++    struct Flags: u8 {
++        const TWO = 0x2;
++    }
++}
++
++fn main() {
++    // bug #267 (https://github.com/bitflags/bitflags/issues/267)
++    let flags = unsafe { Flags::from_bits_unchecked(0b11) };
++    assert_eq!(format!(""{:?}"", flags), ""TWO | 0x1"");
++    assert_eq!(format!(""{:#?}"", flags), ""TWO | 0x1"");
++}
+
+diff --git a/tests/compile-pass/redefinition/stringify.rs b/tests/compile-pass/redefinition/macros.rs
+--- a/tests/compile-pass/redefinition/stringify.rs
++++ b/tests/compile-pass/redefinition/macros.rs
+@@ -7,6 +7,11 @@ macro_rules! stringify {
+     ($($t:tt)*) => { ""..."" };
+ }
+ 
++#[allow(unused_macros)]
++macro_rules! write {
++    ($($t:tt)*) => { ""..."" };
++}
++
+ bitflags! {
+     struct Test: u8 {
+         const A = 1;
+
+diff --git a/tests/compile-pass/redefinition/stringify.rs b/tests/compile-pass/redefinition/macros.rs
+--- a/tests/compile-pass/redefinition/stringify.rs
++++ b/tests/compile-pass/redefinition/macros.rs
+@@ -14,6 +19,6 @@ bitflags! {
+ }
+ 
+ fn main() {
+-    // Just make sure we don't call the redefined `stringify` macro
+-    assert_eq!(format!(""{:?}"", Test::A), ""A"");
++    // Just make sure we don't call the redefined `stringify` or `write` macro
++    assert_eq!(format!(""{:?}"", unsafe { Test::from_bits_unchecked(0b11) }), ""A | 0x2"");
+ }
+"
+bitflags__bitflags-266,true,"diff --git /dev/null b/tests/compile-pass/redefinition/result.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/redefinition/result.rs
+@@ -0,0 +1,15 @@
++use bitflags::bitflags;
++
++// Checks for possible errors caused by overriding names used by `bitflags!` internally.
++
++// bug #265 (https://github.com/bitflags/bitflags/issues/265)
++
++pub struct Ok<T>(T);
++
++bitflags! {
++    pub struct Flags: u16{
++        const FOO = 0x0001;
++    }
++}
++
++fn main() {}
+"
+bitflags__bitflags-380,true,"diff --git a/src/tests/iter.rs b/src/tests/iter.rs
+--- a/src/tests/iter.rs
++++ b/src/tests/iter.rs
+@@ -3,6 +3,7 @@ use super::*;
+ use crate::Flags;
+ 
+ #[test]
++#[cfg(not(miri))] // Very slow in miri
+ fn roundtrip() {
+     for a in 0u8..=255 {
+         for b in 0u8..=255 {
+
+diff --git a/src/tests/parser.rs b/src/tests/parser.rs
+--- a/src/tests/parser.rs
++++ b/src/tests/parser.rs
+@@ -6,6 +6,7 @@ use crate::{
+ };
+ 
+ #[test]
++#[cfg(not(miri))] // Very slow in miri
+ fn roundtrip() {
+     let mut s = String::new();
+ 
+
+diff --git a/tests/compile-pass/item_positions.rs b/tests/compile-pass/item_positions.rs
+--- a/tests/compile-pass/item_positions.rs
++++ b/tests/compile-pass/item_positions.rs
+@@ -1,3 +1,5 @@
++#![allow(clippy::let_unit_value)]
++
+ #[macro_use]
+ extern crate bitflags;
+ 
+
+diff --git /dev/null b/tests/compile-pass/missing_docs.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/missing_docs.rs
+@@ -0,0 +1,19 @@
++/*!
++Crate-level doc
++*/
++
++#![deny(missing_docs)]
++
++use bitflags::bitflags;
++
++bitflags! {
++    #[allow(missing_docs)]
++    pub struct MyFlags: u32 {
++        #[allow(missing_docs)]
++        const A = 1;
++        #[allow(missing_docs)]
++        const B = 2;
++    }
++}
++
++fn main() {}
+
+diff --git a/tests/compile.rs b/tests/compile.rs
+--- a/tests/compile.rs
++++ b/tests/compile.rs
+@@ -2,6 +2,7 @@
+ // an impossible build between error messages emitted on various channels.
+ // Since https://github.com/dtolnay/trybuild/pull/170 we always need to have a
+ // `stderr` file for each test so we can't simply ignore the output on different channels.
++#[cfg(not(miri))]
+ #[rustversion::attr(beta, test)]
+ #[allow(dead_code)]
+ fn fail() {
+
+diff --git a/tests/compile.rs b/tests/compile.rs
+--- a/tests/compile.rs
++++ b/tests/compile.rs
+@@ -9,6 +10,7 @@ fn fail() {
+     t.compile_fail(""tests/compile-fail/**/*.rs"");
+ }
+ 
++#[cfg(not(miri))]
+ #[test]
+ fn pass() {
+     let t = trybuild::TestCases::new();
+"
+bitflags__bitflags-225,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -992,6 +1026,11 @@ mod tests {
+         }
+     }
+ 
++    bitflags! {
++        struct EmptyFlags: u32 {
++        }
++    }
++
+     #[test]
+     fn test_bits() {
+         assert_eq!(Flags::empty().bits(), 0b00000000);
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1000,6 +1039,8 @@ mod tests {
+ 
+         assert_eq!(AnotherSetOfFlags::empty().bits(), 0b00);
+         assert_eq!(AnotherSetOfFlags::ANOTHER_FLAG.bits(), !0_i8);
++
++        assert_eq!(EmptyFlags::empty().bits(), 0b00000000);
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1014,6 +1055,9 @@ mod tests {
+             AnotherSetOfFlags::from_bits(!0_i8),
+             Some(AnotherSetOfFlags::ANOTHER_FLAG)
+         );
++
++        assert_eq!(EmptyFlags::from_bits(0), Some(EmptyFlags::empty()));
++        assert_eq!(EmptyFlags::from_bits(0b1), None);
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1029,6 +1073,9 @@ mod tests {
+             AnotherSetOfFlags::from_bits_truncate(0_i8),
+             AnotherSetOfFlags::empty()
+         );
++
++        assert_eq!(EmptyFlags::from_bits_truncate(0), EmptyFlags::empty());
++        assert_eq!(EmptyFlags::from_bits_truncate(0b1), EmptyFlags::empty());
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1037,6 +1084,7 @@ mod tests {
+         assert_eq!(unsafe { Flags::from_bits_unchecked(0) }, Flags::empty());
+         assert_eq!(unsafe { Flags::from_bits_unchecked(0b1) }, Flags::A);
+         assert_eq!(unsafe { Flags::from_bits_unchecked(0b10) }, Flags::B);
++
+         assert_eq!(
+             unsafe { Flags::from_bits_unchecked(0b11) },
+             (Flags::A | Flags::B)
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1049,6 +1097,12 @@ mod tests {
+             unsafe { Flags::from_bits_unchecked(0b1001) },
+             (extra | Flags::A)
+         );
++      
++        let extra = unsafe { EmptyFlags::from_bits_unchecked(0b1000) };
++        assert_eq!(
++          unsafe { EmptyFlags::from_bits_unchecked(0b1000) },
++          (extra | EmptyFlags::empty())
++      );
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1058,6 +1112,9 @@ mod tests {
+         assert!(!Flags::ABC.is_empty());
+ 
+         assert!(!AnotherSetOfFlags::ANOTHER_FLAG.is_empty());
++
++        assert!(EmptyFlags::empty().is_empty());
++        assert!(EmptyFlags::all().is_empty());
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1067,6 +1124,9 @@ mod tests {
+         assert!(Flags::ABC.is_all());
+ 
+         assert!(AnotherSetOfFlags::ANOTHER_FLAG.is_all());
++
++        assert!(EmptyFlags::all().is_all());
++        assert!(EmptyFlags::empty().is_all());
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1108,6 +1168,8 @@ mod tests {
+         assert!(Flags::ABC.contains(e2));
+ 
+         assert!(AnotherSetOfFlags::ANOTHER_FLAG.contains(AnotherSetOfFlags::ANOTHER_FLAG));
++
++        assert!(EmptyFlags::empty().contains(EmptyFlags::empty()));
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1293,10 +1355,16 @@ mod tests {
+         let extra = unsafe { Flags::from_bits_unchecked(0xb8) };
+         assert_eq!(format!(""{:?}"", extra), ""0xb8"");
+         assert_eq!(format!(""{:?}"", Flags::A | extra), ""A | 0xb8"");
++
+         assert_eq!(
+             format!(""{:?}"", Flags::ABC | extra),
+             ""A | B | C | ABC | 0xb8""
+         );
++
++        assert_eq!(
++          format!(""{:?}"", EmptyFlags::empty()),
++          ""(empty)""
++      );
+     }
+ 
+     #[test]
+"
+bitflags__bitflags-276,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1891,6 +1907,37 @@ mod tests {
+         }
+     }
+ 
++    #[test]
++    fn test_from_bits_edge_cases() {
++        bitflags! {
++            struct Flags: u8 {
++                const A = 0b00000001;
++                const BC = 0b00000110;
++            }
++        }
++
++
++        let flags = Flags::from_bits(0b00000100);
++        assert_eq!(flags, None);
++        let flags = Flags::from_bits(0b00000101);
++        assert_eq!(flags, None);
++    }
++
++    #[test]
++    fn test_from_bits_truncate_edge_cases() {
++        bitflags! {
++            struct Flags: u8 {
++                const A = 0b00000001;
++                const BC = 0b00000110;
++            }
++        }
++
++        let flags = Flags::from_bits_truncate(0b00000100);
++        assert_eq!(flags, Flags::empty());
++        let flags = Flags::from_bits_truncate(0b00000101);
++        assert_eq!(flags, Flags::A);
++    }
++  
+     #[test]
+     fn test_iter() {
+         bitflags! {
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1924,22 +1971,4 @@ mod tests {
+         assert_eq!(iter.next().unwrap(), Flags::THREE);
+         assert_eq!(iter.next(), None);
+     }
+-
+-    #[test]
+-    fn test_iter_edge_cases() {
+-        bitflags! {
+-            struct Flags: u8 {
+-                const A = 0b00000001;
+-                const BC = 0b00000110;
+-            }
+-        }
+-
+-
+-        let flags = Flags::all();
+-        assert_eq!(flags.iter().count(), 2);
+-        let mut iter = flags.iter();
+-        assert_eq!(iter.next().unwrap(), Flags::A);
+-        assert_eq!(iter.next().unwrap(), Flags::BC);
+-        assert_eq!(iter.next(), None);
+-    }
+ }
+
+diff --git a/tests/compile-fail/non_integer_base/all_defined.stderr.beta b/tests/compile-fail/non_integer_base/all_defined.stderr.beta
+--- a/tests/compile-fail/non_integer_base/all_defined.stderr.beta
++++ b/tests/compile-fail/non_integer_base/all_defined.stderr.beta
+@@ -49,8 +49,41 @@ error[E0308]: mismatched types
+     = note: this error originates in the macro `__impl_bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
+ help: try wrapping the expression in `MyInt`
+     |
+-562 |                 if (bits & !Self::all().bits()) == MyInt(0) {
+-    |                                                    ++++++ +
++574 |                 if bits == MyInt(0) {
++    |                            ++++++ +
++
++error[E0277]: no implementation for `{integer} |= MyInt`
++   --> $DIR/all_defined.rs:115:1
++    |
++115 | / bitflags! {
++116 | |     struct Flags128: MyInt {
++117 | |         const A = MyInt(0b0000_0001u8);
++118 | |         const B = MyInt(0b0000_0010u8);
++119 | |         const C = MyInt(0b0000_0100u8);
++120 | |     }
++121 | | }
++    | |_^ no implementation for `{integer} |= MyInt`
++    |
++    = help: the trait `BitOrAssign<MyInt>` is not implemented for `{integer}`
++    = note: this error originates in the macro `__impl_bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
++
++error[E0308]: mismatched types
++   --> $DIR/all_defined.rs:115:1
++    |
++115 | / bitflags! {
++116 | |     struct Flags128: MyInt {
++117 | |         const A = MyInt(0b0000_0001u8);
++118 | |         const B = MyInt(0b0000_0010u8);
++119 | |         const C = MyInt(0b0000_0100u8);
++120 | |     }
++121 | | }
++    | |_^ expected struct `MyInt`, found integer
++    |
++    = note: this error originates in the macro `__impl_bitflags` (in Nightly builds, run with -Z macro-backtrace for more info)
++help: try wrapping the expression in `MyInt`
++    |
++589 |                 Self { bits: MyInt(truncated) }
++    |                              ++++++         +
+ 
+ error[E0308]: mismatched types
+    --> $DIR/all_defined.rs:115:1
+"
+bitflags__bitflags-186,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1111,7 +1111,7 @@ mod tests {
+     #[cfg(bitflags_const_fn)]
+     #[test]
+     fn test_const_fn() {
+-        const M1: Flags = Flags::empty();
++        const _M1: Flags = Flags::empty();
+ 
+         const M2: Flags = Flags::A;
+         assert_eq!(M2, Flags::A);
+"
+bitflags__bitflags-157,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1157,4 +1191,22 @@ mod tests {
+ 
+         assert_eq!(module::value(), 1)
+     }
++
++    #[test]
++    fn test_zero_value_flags() {
++        bitflags! {
++            struct Flags: u32 {
++                const NONE = 0b0;
++                const SOME = 0b1;
++            }
++        }
++        
++
++        assert!(Flags::empty().contains(Flags::NONE));
++        assert!(Flags::SOME.contains(Flags::NONE));
++        assert!(Flags::NONE.is_empty());
++
++        assert_eq!(format!(""{:?}"", Flags::empty()), ""NONE"");
++        assert_eq!(format!(""{:?}"", Flags::SOME), ""SOME"");
++    }
+ }
+"
+bitflags__bitflags-135,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1092,4 +1111,46 @@ mod tests {
+             }
+         }
+     }
++
++    #[test]
++    fn test_pub_crate() {
++        mod module {
++            bitflags! {
++                pub (crate) struct Test: u8 {
++                    const FOO = 1;
++                }
++            }
++        }
++
++        assert_eq!(module::Test::FOO.bits(), 1);
++    }
++
++    #[test]
++    fn test_pub_in_module() {
++        mod module {
++            mod submodule {
++                bitflags! {
++                    // `pub (in super)` means only the module `module` will
++                    // be able to access this.
++                    pub (in super) struct Test: u8 {
++                        const FOO = 1;
++                    }
++                }
++            }
++
++            mod test {
++                // Note: due to `pub (in super)`,
++                // this cannot be accessed directly by the testing code.
++                pub (in super) fn value() -> u8 {
++                    super::submodule::Test::FOO.bits()
++                }
++            }
++
++            pub fn value() -> u8 {
++                test::value()
++            }
++        }
++
++        assert_eq!(module::value(), 1)
++    }
+ }
+"
+bitflags__bitflags-345,true,"diff --git /dev/null b/tests/compile-pass/large.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/compile-pass/large.rs
+@@ -0,0 +1,311 @@
++/*
++Copyright (c) 2016 Anatoly Ikorsky
++
++Permission is hereby granted, free of charge, to any
++person obtaining a copy of this software and associated
++documentation files (the ""Software""), to deal in the
++Software without restriction, including without
++limitation the rights to use, copy, modify, merge,
++publish, distribute, sublicense, and/or sell copies of
++the Software, and to permit persons to whom the Software
++is furnished to do so, subject to the following
++conditions:
++
++The above copyright notice and this permission notice
++shall be included in all copies or substantial portions
++of the Software.
++
++THE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF
++ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
++TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
++PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
++SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
++CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
++IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++DEALINGS IN THE SOFTWARE.
++*/
++
++#[macro_use]
++extern crate bitflags;
++
++bitflags! {
++    /// Client capability flags
++    #[derive(PartialEq, Eq, Hash, Debug, Clone, Copy)]
++    pub struct CapabilityFlags: u32 {
++        /// Use the improved version of Old Password Authentication. Assumed to be set since 4.1.1.
++        const CLIENT_LONG_PASSWORD                  = 0x0000_0001;
++    
++        /// Send found rows instead of affected rows in EOF_Packet.
++        const CLIENT_FOUND_ROWS                     = 0x0000_0002;
++    
++        /// Get all column flags.
++        /// Longer flags in Protocol::ColumnDefinition320.
++        ///
++        /// ### Server
++        /// Supports longer flags.
++        ///
++        /// ### Client
++        /// Expects longer flags.
++        const CLIENT_LONG_FLAG                      = 0x0000_0004;
++    
++        /// Database (schema) name can be specified on connect in Handshake Response Packet.
++        /// ### Server
++        /// Supports schema-name in Handshake Response Packet.
++        ///
++        /// ### Client
++        /// Handshake Response Packet contains a schema-name.
++        const CLIENT_CONNECT_WITH_DB                = 0x0000_0008;
++    
++        /// Don't allow database.table.column.
++        const CLIENT_NO_SCHEMA                      = 0x0000_0010;
++    
++        /// Compression protocol supported.
++        ///
++        /// ### Server
++        /// Supports compression.
++        ///
++        /// ### Client
++        /// Switches to Compression compressed protocol after successful authentication.
++        const CLIENT_COMPRESS                       = 0x0000_0020;
++    
++        /// Special handling of ODBC behavior.
++        const CLIENT_ODBC                           = 0x0000_0040;
++    
++        /// Can use LOAD DATA LOCAL.
++        ///
++        /// ### Server
++        /// Enables the LOCAL INFILE request of LOAD DATA|XML.
++        ///
++        /// ### Client
++        /// Will handle LOCAL INFILE request.
++        const CLIENT_LOCAL_FILES                    = 0x0000_0080;
++    
++        /// Ignore spaces before '('.
++        ///
++        /// ### Server
++        /// Parser can ignore spaces before '('.
++        ///
++        /// ### Client
++        /// Let the parser ignore spaces before '('.
++        const CLIENT_IGNORE_SPACE                   = 0x0000_0100;
++    
++        const CLIENT_PROTOCOL_41                    = 0x0000_0200;
++    
++        /// This is an interactive client.
++        /// Use System_variables::net_wait_timeout versus System_variables::net_interactive_timeout.
++        ///
++        /// ### Server
++        /// Supports interactive and noninteractive clients.
++        ///
++        /// ### Client
++        /// Client is interactive.
++        const CLIENT_INTERACTIVE                    = 0x0000_0400;
++    
++        /// Use SSL encryption for the session.
++        ///
++        /// ### Server
++        /// Supports SSL
++        ///
++        /// ### Client
++        /// Switch to SSL after sending the capability-flags.
++        const CLIENT_SSL                            = 0x0000_0800;
++    
++        /// Client only flag. Not used.
++        ///
++        /// ### Client
++        /// Do not issue SIGPIPE if network failures occur (libmysqlclient only).
++        const CLIENT_IGNORE_SIGPIPE                 = 0x0000_1000;
++    
++        /// Client knows about transactions.
++        ///
++        /// ### Server
++        /// Can send status flags in OK_Packet / EOF_Packet.
++        ///
++        /// ### Client
++        /// Expects status flags in OK_Packet / EOF_Packet.
++        ///
++        /// ### Note
++        /// This flag is optional in 3.23, but always set by the server since 4.0.
++        const CLIENT_TRANSACTIONS                   = 0x0000_2000;
++    
++        const CLIENT_RESERVED                       = 0x0000_4000;
++    
++        const CLIENT_SECURE_CONNECTION              = 0x0000_8000;
++    
++        /// Enable/disable multi-stmt support.
++        /// Also sets CLIENT_MULTI_RESULTS. Currently not checked anywhere.
++        ///
++        /// ### Server
++        /// Can handle multiple statements per COM_QUERY and COM_STMT_PREPARE.
++        ///
++        /// ### Client
++        /// May send multiple statements per COM_QUERY and COM_STMT_PREPARE.
++        const CLIENT_MULTI_STATEMENTS               = 0x0001_0000;
++    
++        /// Enable/disable multi-results.
++        ///
++        /// ### Server
++        /// Can send multiple resultsets for COM_QUERY. Error if the server needs to send
++        /// them and client does not support them.
++        ///
++        /// ### Client
++        /// Can handle multiple resultsets for COM_QUERY.
++        ///
++        /// ### Requires
++        /// `CLIENT_PROTOCOL_41`
++        const CLIENT_MULTI_RESULTS                  = 0x0002_0000;
++    
++        /// Multi-results and OUT parameters in PS-protocol.
++        ///
++        /// ### Server
++        /// Can send multiple resultsets for COM_STMT_EXECUTE.
++        ///
++        /// ### Client
++        /// Can handle multiple resultsets for COM_STMT_EXECUTE.
++        ///
++        /// ### Requires
++        /// `CLIENT_PROTOCOL_41`
++        const CLIENT_PS_MULTI_RESULTS               = 0x0004_0000;
++    
++        /// Client supports plugin authentication.
++        ///
++        /// ### Server
++        /// Sends extra data in Initial Handshake Packet and supports the pluggable
++        /// authentication protocol.
++        ///
++        /// ### Client
++        /// Supports authentication plugins.
++        ///
++        /// ### Requires
++        /// `CLIENT_PROTOCOL_41`
++        const CLIENT_PLUGIN_AUTH                    = 0x0008_0000;
++    
++        /// Client supports connection attributes.
++        ///
++        /// ### Server
++        /// Permits connection attributes in Protocol::HandshakeResponse41.
++        ///
++        /// ### Client
++        /// Sends connection attributes in Protocol::HandshakeResponse41.
++        const CLIENT_CONNECT_ATTRS                  = 0x0010_0000;
++    
++        /// Enable authentication response packet to be larger than 255 bytes.
++        /// When the ability to change default plugin require that the initial password
++        /// field in the Protocol::HandshakeResponse41 paclet can be of arbitrary size.
++        /// However, the 4.1 client-server protocol limits the length of the auth-data-field
++        /// sent from client to server to 255 bytes. The solution is to change the type of
++        /// the field to a true length encoded string and indicate the protocol change with
++        /// this client capability flag.
++        ///
++        /// ### Server
++        /// Understands length-encoded integer for auth response data in
++        /// Protocol::HandshakeResponse41.
++        ///
++        /// ### Client
++        /// Length of auth response data in Protocol::HandshakeResponse41 is a
++        /// length-encoded integer.
++        ///
++        /// ### Note
++        /// The flag was introduced in 5.6.6, but had the wrong value.
++        const CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA = 0x0020_0000;
++    
++        /// Don't close the connection for a user account with expired password.
++        ///
++        /// ### Server
++        /// Announces support for expired password extension.
++        ///
++        /// ### Client
++        /// Can handle expired passwords.
++        const CLIENT_CAN_HANDLE_EXPIRED_PASSWORDS   = 0x0040_0000;
++    
++        /// Capable of handling server state change information.
++        /// Its a hint to the server to include the state change information in OK_Packet.
++        ///
++        /// ### Server
++        /// Can set SERVER_SESSION_STATE_CHANGED in the SERVER_STATUS_flags_enum and send
++        /// Session State Information in a OK_Packet.
++        ///
++        /// ### Client
++        /// Expects the server to send Session State Information in a OK_Packet.
++        const CLIENT_SESSION_TRACK                  = 0x0080_0000;
++    
++        /// Client no longer needs EOF_Packet and will use OK_Packet instead.
++        ///
++        /// ### Server
++        /// Can send OK after a Text Resultset.
++        ///
++        /// ### Client
++        /// Expects an OK_Packet (instead of EOF_Packet) after the resultset
++        /// rows of a Text Resultset.
++        ///
++        /// ### Background
++        /// To support CLIENT_SESSION_TRACK, additional information must be sent after all
++        /// successful commands. Although the OK_Packet is extensible, the EOF_Packet is
++        /// not due to the overlap of its bytes with the content of the Text Resultset Row.
++        ///
++        /// Therefore, the EOF_Packet in the Text Resultset is replaced with an OK_Packet.
++        /// EOF_Packet is deprecated as of MySQL 5.7.5.
++        const CLIENT_DEPRECATE_EOF                  = 0x0100_0000;
++    
++        /// The client can handle optional metadata information in the resultset.
++        const CLIENT_OPTIONAL_RESULTSET_METADATA    = 0x0200_0000;
++    
++        /// Compression protocol extended to support zstd compression method.
++        ///
++        /// This capability flag is used to send zstd compression level between client and server
++        /// provided both client and server are enabled with this flag.
++        ///
++        /// # Server
++        ///
++        /// Server sets this flag when global variable protocol-compression-algorithms has zstd
++        /// in its list of supported values.
++        ///
++        /// # Client
++        ///
++        /// Client sets this flag when it is configured to use zstd compression method.
++        const CLIENT_ZSTD_COMPRESSION_ALGORITHM     = 0x0400_0000;
++    
++        /// Support optional extension for query parameters into the COM_QUERY
++        /// and COM_STMT_EXECUTE packets.
++        ///
++        /// # Server
++        ///
++        /// Expects an optional part containing the query parameter set(s).
++        /// Executes the query for each set of parameters or returns an error if more than 1 set
++        /// of parameters is sent and the server can't execute it.
++        ///
++        /// # Client
++        ///
++        /// Can send the optional part containing the query parameter set(s).
++        const CLIENT_QUERY_ATTRIBUTES               = 0x0800_0000;
++    
++        /// Support Multi factor authentication.
++        ///
++        /// # Server
++        ///
++        /// Server sends AuthNextFactor packet after every nth factor
++        /// authentication method succeeds, except the last factor authentication.
++        ///
++        /// # Client
++        ///
++        /// Client reads AuthNextFactor packet sent by server
++        /// and initiates next factor authentication method.
++        const MULTI_FACTOR_AUTHENTICATION           = 0x1000_0000;
++    
++        /// Client or server supports progress reports within error packet.
++        const CLIENT_PROGRESS_OBSOLETE              = 0x2000_0000;
++    
++        /// Verify server certificate. Client only flag.
++        ///
++        /// Deprecated in favor of –ssl-mode.
++        const CLIENT_SSL_VERIFY_SERVER_CERT         = 0x4000_0000;
++    
++        /// Don't reset the options after an unsuccessful connect. Client only flag.
++        const CLIENT_REMEMBER_OPTIONS               = 0x8000_0000;
++    }
++}
++
++fn main() {
++
++}
+"
+bitflags__bitflags-125,true,"diff --git /dev/null b/tests/serde.rs
+new file mode 100644
+--- /dev/null
++++ b/tests/serde.rs
+@@ -0,0 +1,35 @@
++#[macro_use]
++extern crate bitflags;
++
++#[macro_use]
++extern crate serde_derive;
++extern crate serde;
++extern crate serde_json;
++
++bitflags! {
++    #[derive(Serialize, Deserialize)]
++    struct Flags: u32 {
++        const A = 1;
++        const B = 2;
++        const C = 4;
++        const D = 8;
++    }
++}
++
++#[test]
++fn serialize() {
++    let flags = Flags::A | Flags::B;
++
++    let serialized = serde_json::to_string(&flags).unwrap();
++
++    assert_eq!(serialized, r#""{""bits"":3}""#);
++}
++
++#[test]
++fn deserialize() {
++    let deserialized: Flags = serde_json::from_str(r#""{""bits"":12}""#).unwrap();
++
++    let expected = Flags::C | Flags::D;
++
++    assert_eq!(deserialized.bits, expected.bits);
++}
+"
+bitflags__bitflags-211,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1048,6 +1048,11 @@ mod tests {
+         assert!(!Flags::A.is_all());
+         assert!(Flags::ABC.is_all());
+ 
++        let extra = unsafe { Flags::from_bits_unchecked(0b1000) };
++        assert!(!extra.is_all());
++        assert!(!(Flags::A | extra).is_all());
++        assert!((Flags::ABC | extra).is_all());
++
+         assert!(AnotherSetOfFlags::ANOTHER_FLAG.is_all());
+     }
+ 
+"
+bitflags__bitflags-127,true,"diff --git a/.travis.yml b/.travis.yml
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -9,23 +10,14 @@ rust:
+   - beta
+   - nightly
+ sudo: false
+-before_script:
+-  - pip install -v 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
+-  - if [[ -e ~/Library/Python/2.7/bin ]]; then export PATH=~/Library/Python/2.7/bin:$PATH; fi
+ script:
+-  - travis-cargo build
+-  - travis-cargo test
+-  - travis-cargo --only nightly test -- --all
+-  - travis-cargo --only stable doc
+-after_success:
+-  - travis-cargo --only nightly doc-upload
++  - cargo test
++  - if [ ""$TRAVIS_RUST_VERSION"" = nightly ]; then (cd ./test_suite && cargo test --features unstable); fi
+ env:
+   global:
+-    - TRAVIS_CARGO_NIGHTLY_FEATURE=unstable_testing
+     - secure: ""DoZ8g8iPs+X3xEEucke0Ae02JbkQ1qd1SSv/L2aQqxULmREtRcbzRauhiT+ToQO5Ft1Lul8uck14nPfs4gMr/O3jFFBhEBVpSlbkJx7eNL3kwUdp95UNroA8I43xPN/nccJaHDN6TMTD3+uajTQTje2SyzOQP+1gvdKg17kguvE=""
+ 
+ 
+-
+ notifications:
+   email:
+     on_success: never
+
+diff --git a/compiletest/tests/tests.rs /dev/null
+--- a/compiletest/tests/tests.rs
++++ /dev/null
+@@ -1,30 +0,0 @@
+-extern crate compiletest_rs as compiletest;
+-
+-use std::fs;
+-use std::path::PathBuf;
+-use compiletest::common::Mode;
+-
+-fn run_mode(mode: Mode) {
+-    let config = compiletest::Config {
+-        mode: mode,
+-        src_base: PathBuf::from(format!(""tests/{}"", mode)),
+-        target_rustcflags: fs::read_dir(""../target/debug/deps"").unwrap().filter_map(|entry| {
+-            let path = entry.unwrap().path();
+-            path.file_name().map(|file_name| file_name.to_string_lossy()).and_then(|file_name| {
+-                if file_name.starts_with(""libbitflags-"") && file_name.ends_with("".rlib"") {
+-                    Some(format!(""--extern bitflags={}"", path.to_string_lossy()))
+-                } else {
+-                    None
+-                }
+-            })
+-        }).next(),
+-        ..Default::default()
+-    };
+-
+-    compiletest::run_tests(&config);
+-}
+-
+-#[test]
+-fn compile_test() {
+-    run_mode(Mode::CompileFail);
+-}
+
+diff --git /dev/null b/test_suite/Cargo.toml
+new file mode 100644
+--- /dev/null
++++ b/test_suite/Cargo.toml
+@@ -0,0 +1,13 @@
++[project]
++name = ""test_suite""
++version = ""0.0.0""
++
++[features]
++unstable = [""compiletest_rs""]
++
++[dependencies]
++bitflags = { path = ""../"" }
++compiletest_rs = { version = ""*"", optional = true }
++serde = ""1.0""
++serde_derive = ""1.0""
++serde_json = ""1.0""
+
+diff --git /dev/null b/test_suite/tests/compiletest.rs
+new file mode 100644
+--- /dev/null
++++ b/test_suite/tests/compiletest.rs
+@@ -0,0 +1,32 @@
++#![cfg(feature = ""unstable"")]
++
++extern crate compiletest_rs as compiletest;
++
++use std::result::Result;
++use std::fs;
++
++use compiletest::common::Mode;
++
++fn run_mode(mode: Mode) {
++    let config = compiletest::Config {
++        mode: mode,
++        src_base: format!(""tests/{}"", mode).into(),
++        target_rustcflags: fs::read_dir(""target/debug/deps"").unwrap().map(Result::unwrap).filter(|entry| {
++	    let file_name = entry.file_name();
++	    let file_name = file_name.to_string_lossy();
++	    file_name.starts_with(""libbitflags-"") && file_name.ends_with("".rlib"")
++        }).max_by_key(|entry| {
++            entry.metadata().unwrap().modified().unwrap()
++        }).map(|entry| {
++            format!(""--extern bitflags={}"", entry.path().to_string_lossy())
++        }),
++        ..Default::default()
++    };
++
++    compiletest::run_tests(&config);
++}
++
++#[test]
++fn compile_test() {
++    run_mode(Mode::CompileFail);
++}
+
+diff --git a/tests/i128_bitflags.rs b/test_suite/tests/i128_bitflags.rs
+--- a/tests/i128_bitflags.rs
++++ b/test_suite/tests/i128_bitflags.rs
+@@ -1,4 +1,4 @@
+-#![cfg(feature = ""unstable_testing"")]
++#![cfg(feature = ""unstable"")]
+ 
+ #![feature(i128_type)]
+ 
+"
+bitflags__bitflags-281,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1353,7 +1321,10 @@ mod tests {
+         assert_eq!(UNION, Flags::A | Flags::C);
+         assert_eq!(DIFFERENCE, Flags::all() - Flags::A);
+         assert_eq!(COMPLEMENT, !Flags::C);
+-        assert_eq!(SYM_DIFFERENCE, (Flags::A | Flags::C) ^ (Flags::all() - Flags::A));
++        assert_eq!(
++            SYM_DIFFERENCE,
++            (Flags::A | Flags::C) ^ (Flags::all() - Flags::A)
++        );
+     }
+ 
+     #[test]
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1609,13 +1580,15 @@ mod tests {
+         assert_eq!(format!(""{:?}"", Flags::A | Flags::B), ""A | B"");
+         assert_eq!(format!(""{:?}"", Flags::empty()), ""(empty)"");
+         assert_eq!(format!(""{:?}"", Flags::ABC), ""A | B | C"");
++
+         let extra = unsafe { Flags::from_bits_unchecked(0xb8) };
++
+         assert_eq!(format!(""{:?}"", extra), ""0xb8"");
+         assert_eq!(format!(""{:?}"", Flags::A | extra), ""A | 0xb8"");
+ 
+         assert_eq!(
+             format!(""{:?}"", Flags::ABC | extra),
+-            ""A | B | C | 0xb8""
++            ""A | B | C | ABC | 0xb8""
+         );
+ 
+         assert_eq!(format!(""{:?}"", EmptyFlags::empty()), ""(empty)"");
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1830,7 +1803,8 @@ mod tests {
+     fn test_serde_bitflags_roundtrip() {
+         let flags = SerdeFlags::A | SerdeFlags::B;
+ 
+-        let deserialized: SerdeFlags = serde_json::from_str(&serde_json::to_string(&flags).unwrap()).unwrap();
++        let deserialized: SerdeFlags =
++            serde_json::from_str(&serde_json::to_string(&flags).unwrap()).unwrap();
+ 
+         assert_eq!(deserialized.bits, flags.bits);
+     }
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1875,7 +1848,7 @@ mod tests {
+         let flags = Flags::from_bits_truncate(0b00000101);
+         assert_eq!(flags, Flags::A);
+     }
+-  
++
+     #[test]
+     fn test_iter() {
+         bitflags! {
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1887,24 +1860,31 @@ mod tests {
+                 const FOUR_WIN = 0b1000;
+                 #[cfg(unix)]
+                 const FOUR_UNIX = 0b10000;
++                const FIVE = 0b01000100;
+             }
+         }
+ 
+         let count = {
+             #[cfg(any(unix, windows))]
+             {
+-                4
++                5
+             }
+ 
+             #[cfg(not(any(unix, windows)))]
+             {
+-                3
++                4
+             }
+         };
+ 
+         let flags = Flags::all();
+         assert_eq!(flags.iter().count(), count);
++
++        for (_, flag) in flags.iter() {
++            assert!(flags.contains(flag));
++        }
++
+         let mut iter = flags.iter();
++
+         assert_eq!(iter.next().unwrap(), (""ONE"", Flags::ONE));
+         assert_eq!(iter.next().unwrap(), (""TWO"", Flags::TWO));
+         assert_eq!(iter.next().unwrap(), (""THREE"", Flags::THREE));
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1918,6 +1898,8 @@ mod tests {
+             assert_eq!(iter.next().unwrap(), (""FOUR_WIN"", Flags::FOUR_WIN));
+         }
+ 
++        assert_eq!(iter.next().unwrap(), (""FIVE"", Flags::FIVE));
++
+         assert_eq!(iter.next(), None);
+ 
+         let flags = Flags::empty();
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1925,7 +1907,9 @@ mod tests {
+ 
+         let flags = Flags::ONE | Flags::THREE;
+         assert_eq!(flags.iter().count(), 2);
++
+         let mut iter = flags.iter();
++
+         assert_eq!(iter.next().unwrap(), (""ONE"", Flags::ONE));
+         assert_eq!(iter.next().unwrap(), (""THREE"", Flags::THREE));
+         assert_eq!(iter.next(), None);
+"
+bitflags__bitflags-85,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -765,6 +764,7 @@ mod tests {
+     #[test]
+     fn test_debug() {
+         assert_eq!(format!(""{:?}"", FlagA | FlagB), ""FlagA | FlagB"");
++        assert_eq!(format!(""{:?}"", Flags::empty()), ""(empty)"");
+         assert_eq!(format!(""{:?}"", FlagABC), ""FlagA | FlagB | FlagC | FlagABC"");
+     }
+ 
+"
+bitflags__bitflags-38,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -661,4 +745,27 @@ mod tests {
+         assert_eq!(format!(""{:?}"", FlagA | FlagB), ""FlagA | FlagB"");
+         assert_eq!(format!(""{:?}"", FlagABC), ""FlagA | FlagB | FlagC | FlagABC"");
+     }
++
++    mod submodule {
++        bitflags! {
++            pub flags PublicFlags: i8 {
++                const FlagX = 0,
++            }
++        }
++        bitflags! {
++            flags PrivateFlags: i8 {
++                const FlagY = 0,
++            }
++        }
++
++        #[test]
++        fn test_private() {
++            let _ = FlagY;
++        }
++    }
++
++    #[test]
++    fn test_public() {
++        let _ = submodule::FlagX;
++    }
+ }
+"
+bitflags__bitflags-74,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -837,4 +807,17 @@ mod tests {
+             }
+         }
+     }
++
++    #[test]
++    fn test_in_function() {
++        bitflags! {
++            flags Flags: u8 {
++                const A = 1,
++                #[cfg(any())] // false
++                const B = 2,
++            }
++        }
++        assert_eq!(Flags::all(), A);
++        assert_eq!(format!(""{:?}"", A), ""A"");
++    }
+ }
+"
+bitflags__bitflags-112,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -988,4 +1075,14 @@ mod tests {
+         assert_eq!(Flags::all(), A);
+         assert_eq!(format!(""{:?}"", A), ""A"");
+     }
++
++    #[test]
++    fn test_deprecated() {
++        bitflags! {
++            pub struct TestFlags: u32 {
++                #[deprecated(note = ""Use something else."")]
++                const FLAG_ONE = 1;
++            }
++        }
++    }
+ }
+"
+bitflags__bitflags-282,true,"diff --git a/.github/workflows/rust.yml b/.github/workflows/rust.yml
+--- a/.github/workflows/rust.yml
++++ b/.github/workflows/rust.yml
+@@ -46,8 +46,17 @@ jobs:
+         profile: minimal
+         toolchain: ${{ matrix.channel }}-${{ matrix.rust_target }}
+ 
+-    - name: Tests
+-      run: cargo test --features example_generated
++    - name: Install cargo-hack
++      run: cargo install cargo-hack
++
++    - name: Powerset
++      run: cargo hack test --feature-powerset --lib --optional-deps ""serde"" --depth 3 --skip rustc-dep-of-std
++
++    - name: Docs
++      run: cargo doc --features example_generated
++
++    - name: Smoke test
++      run: cargo run --manifest-path tests/smoke-test/Cargo.toml
+ 
+   embedded:
+     name: Build (embedded)
+
+diff --git a/tests/basic.rs b/tests/basic.rs
+--- a/tests/basic.rs
++++ b/tests/basic.rs
+@@ -4,13 +4,14 @@ use bitflags::bitflags;
+ 
+ bitflags! {
+     /// baz
++    #[derive(Debug, PartialEq, Eq)]
+     struct Flags: u32 {
+         const A = 0b00000001;
+         #[doc = ""bar""]
+         const B = 0b00000010;
+         const C = 0b00000100;
+         #[doc = ""foo""]
+-        const ABC = Flags::A.bits | Flags::B.bits | Flags::C.bits;
++        const ABC = Flags::A.bits() | Flags::B.bits() | Flags::C.bits();
+     }
+ }
+ 
+
+diff --git /dev/null b/tests/smoke-test/Cargo.toml
+new file mode 100644
+--- /dev/null
++++ b/tests/smoke-test/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = ""bitflags-smoke-test""
++version = ""0.0.0""
++edition = ""2021""
++publish = false
++
++[dependencies.bitflags]
++path = ""../../""
+"
+bitflags__bitflags-86,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -529,6 +549,12 @@ mod tests {
+         }
+     }
+ 
++    bitflags! {
++        flags LongFlags: u32 {
++            const LongFlagA = 0b1111111111111111,
++        }
++    }
++
+     #[test]
+     fn test_bits(){
+         assert_eq!(Flags::empty().bits(), 0b00000000);
+
+diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -768,6 +794,30 @@ mod tests {
+         assert_eq!(format!(""{:?}"", FlagABC), ""FlagA | FlagB | FlagC | FlagABC"");
+     }
+ 
++    #[test]
++    fn test_binary() {
++        assert_eq!(format!(""{:b}"", FlagABC), ""111"");
++        assert_eq!(format!(""{:#b}"", FlagABC), ""0b111"");
++    }
++
++    #[test]
++    fn test_octal() {
++        assert_eq!(format!(""{:o}"", LongFlagA), ""177777"");
++        assert_eq!(format!(""{:#o}"", LongFlagA), ""0o177777"");
++    }
++
++    #[test]
++    fn test_lowerhex() {
++        assert_eq!(format!(""{:x}"", LongFlagA), ""ffff"");
++        assert_eq!(format!(""{:#x}"", LongFlagA), ""0xffff"");
++    }
++
++    #[test]
++    fn test_upperhex() {
++        assert_eq!(format!(""{:X}"", LongFlagA), ""FFFF"");
++        assert_eq!(format!(""{:#X}"", LongFlagA), ""0xFFFF"");
++    }
++
+     mod submodule {
+         bitflags! {
+             pub flags PublicFlags: i8 {
+"
+bitflags__bitflags-24,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -723,71 +717,71 @@ mod tests {
+         #[doc = ""> ""]
+         #[doc = ""> - Richard Feynman""]
+         struct Flags: u32 {
+-            const FlagA       = 0b00000001;
++            const FLAG_A       = 0b00000001;
+             #[doc = ""<pcwalton> macros are way better at generating code than trans is""]
+-            const FlagB       = 0b00000010;
+-            const FlagC       = 0b00000100;
++            const FLAG_B       = 0b00000010;
++            const FLAG_C       = 0b00000100;
+             #[doc = ""* cmr bed""]
+             #[doc = ""* strcat table""]
+             #[doc = ""<strcat> wait what?""]
+-            const FlagABC     = FlagA.bits
+-                               | FlagB.bits
+-                               | FlagC.bits;
++            const FLAG_ABC     = Self::FLAG_A.bits
++                               | Self::FLAG_B.bits
++                               | Self::FLAG_C.bits;
+         }
+     }
+ 
+     bitflags! {
+         struct _CfgFlags: u32 {
+             #[cfg(windows)]
+-            const _CfgA = 0b01;
++            const _CFG_A = 0b01;
+             #[cfg(unix)]
+-            const _CfgB = 0b01;
++            const _CFG_B = 0b01;
+             #[cfg(windows)]
+-            const _CfgC = _CfgA.bits | 0b10;
++            const _CFG_C = _CFG_A.bits | 0b10;
+         }
+     }
+ 
+     bitflags! {
+         struct AnotherSetOfFlags: i8 {
+-            const AnotherFlag = -1_i8;
++            const ANOTHER_FLAG = -1_i8;
+         }
+     }
+ 
+     bitflags! {
+         struct LongFlags: u32 {
+-            const LongFlagA = 0b1111111111111111;
++            const LONG_FLAG_A = 0b1111111111111111;
+         }
+     }
+ 
+     #[test]
+     fn test_bits(){
+         assert_eq!(Flags::empty().bits(), 0b00000000);
+-        assert_eq!(FlagA.bits(), 0b00000001);
+-        assert_eq!(FlagABC.bits(), 0b00000111);
++        assert_eq!(Flags::FLAG_A.bits(), 0b00000001);
++        assert_eq!(Flags::FLAG_ABC.bits(), 0b00000111);
+ 
+         assert_eq!(AnotherSetOfFlags::empty().bits(), 0b00);
+-        assert_eq!(AnotherFlag.bits(), !0_i8);
++        assert_eq!(AnotherSetOfFlags::ANOTHER_FLAG.bits(), !0_i8);
+     }
+ 
+     #[test]
+     fn test_from_bits() {
+         assert_eq!(Flags::from_bits(0), Some(Flags::empty()));
+-        assert_eq!(Flags::from_bits(0b1), Some(FlagA));
+-        assert_eq!(Flags::from_bits(0b10), Some(FlagB));
+-        assert_eq!(Flags::from_bits(0b11), Some(FlagA | FlagB));
++        assert_eq!(Flags::from_bits(0b1), Some(Flags::FLAG_A));
++        assert_eq!(Flags::from_bits(0b10), Some(Flags::FLAG_B));
++        assert_eq!(Flags::from_bits(0b11), Some(Flags::FLAG_A | Flags::FLAG_B));
+         assert_eq!(Flags::from_bits(0b1000), None);
+ 
+-        assert_eq!(AnotherSetOfFlags::from_bits(!0_i8), Some(AnotherFlag));
++        assert_eq!(AnotherSetOfFlags::from_bits(!0_i8), Some(AnotherSetOfFlags::ANOTHER_FLAG));
+     }
+ 
+     #[test]
+     fn test_from_bits_truncate() {
+         assert_eq!(Flags::from_bits_truncate(0), Flags::empty());
+-        assert_eq!(Flags::from_bits_truncate(0b1), FlagA);
+-        assert_eq!(Flags::from_bits_truncate(0b10), FlagB);
+-        assert_eq!(Flags::from_bits_truncate(0b11), (FlagA | FlagB));
++        assert_eq!(Flags::from_bits_truncate(0b1), Flags::FLAG_A);
++        assert_eq!(Flags::from_bits_truncate(0b10), Flags::FLAG_B);
++        assert_eq!(Flags::from_bits_truncate(0b11), (Flags::FLAG_A | Flags::FLAG_B));
+         assert_eq!(Flags::from_bits_truncate(0b1000), Flags::empty());
+-        assert_eq!(Flags::from_bits_truncate(0b1001), FlagA);
++        assert_eq!(Flags::from_bits_truncate(0b1001), Flags::FLAG_A);
+ 
+         assert_eq!(AnotherSetOfFlags::from_bits_truncate(0_i8), AnotherSetOfFlags::empty());
+     }
+
+diff --git a/tests/conflicting_trait_impls.rs b/tests/conflicting_trait_impls.rs
+--- a/tests/conflicting_trait_impls.rs
++++ b/tests/conflicting_trait_impls.rs
+@@ -1,4 +1,3 @@
+-#![allow(dead_code)]
+ #![no_std]
+ 
+ #[macro_use]
+
+diff --git a/tests/external.rs b/tests/external.rs
+--- a/tests/external.rs
++++ b/tests/external.rs
+@@ -1,5 +1,3 @@
+-#![allow(dead_code)]
+-
+ #[macro_use]
+ extern crate bitflags;
+ 
+
+diff --git a/tests/external.rs b/tests/external.rs
+--- a/tests/external.rs
++++ b/tests/external.rs
+@@ -11,11 +9,11 @@ bitflags! {
+         const B       = 0b00000010;
+         const C       = 0b00000100;
+         #[doc = ""foo""]
+-        const ABC     = A.bits | B.bits | C.bits;
++        const ABC     = Flags::A.bits | Flags::B.bits | Flags::C.bits;
+     }
+ }
+ 
+ #[test]
+ fn smoke() {
+-    assert_eq!(ABC, A | B | C);
++    assert_eq!(Flags::ABC, Flags::A | Flags::B | Flags::C);
+ }
+
+diff --git a/tests/external_no_std.rs b/tests/external_no_std.rs
+--- a/tests/external_no_std.rs
++++ b/tests/external_no_std.rs
+@@ -1,4 +1,3 @@
+-#![allow(dead_code)]
+ #![no_std]
+ 
+ #[macro_use]
+
+diff --git a/tests/external_no_std.rs b/tests/external_no_std.rs
+--- a/tests/external_no_std.rs
++++ b/tests/external_no_std.rs
+@@ -12,11 +11,11 @@ bitflags! {
+         const B       = 0b00000010;
+         const C       = 0b00000100;
+         #[doc = ""foo""]
+-        const ABC     = A.bits | B.bits | C.bits;
++        const ABC     = Flags::A.bits | Flags::B.bits | Flags::C.bits;
+     }
+ }
+ 
+ #[test]
+ fn smoke() {
+-    assert_eq!(ABC, A | B | C);
++    assert_eq!(Flags::ABC, Flags::A | Flags::B | Flags::C);
+ }
+
+diff --git a/tests/i128_bitflags.rs b/tests/i128_bitflags.rs
+--- a/tests/i128_bitflags.rs
++++ b/tests/i128_bitflags.rs
+@@ -1,6 +1,5 @@
+ #![cfg(feature = ""unstable_testing"")]
+ 
+-#![allow(dead_code, unused_imports)]
+ #![feature(i128_type)]
+ 
+ #[macro_use]
+
+diff --git a/tests/i128_bitflags.rs b/tests/i128_bitflags.rs
+--- a/tests/i128_bitflags.rs
++++ b/tests/i128_bitflags.rs
+@@ -12,19 +11,19 @@ bitflags! {
+         const A       = 0x0000_0000_0000_0000_0000_0000_0000_0001;
+         const B       = 0x0000_0000_0000_1000_0000_0000_0000_0000;
+         const C       = 0x8000_0000_0000_0000_0000_0000_0000_0000;
+-        const ABC     = A.bits | B.bits | C.bits;
++        const ABC     = Self::A.bits | Self::B.bits | Self::C.bits;
+     }
+ }
+ 
+ #[test]
+ fn test_i128_bitflags() {
+-    assert_eq!(ABC, A | B | C);
+-    assert_eq!(A.bits, 0x0000_0000_0000_0000_0000_0000_0000_0001);
+-    assert_eq!(B.bits, 0x0000_0000_0000_1000_0000_0000_0000_0000);
+-    assert_eq!(C.bits, 0x8000_0000_0000_0000_0000_0000_0000_0000);
+-    assert_eq!(ABC.bits, 0x8000_0000_0000_1000_0000_0000_0000_0001);
+-    assert_eq!(format!(""{:?}"", A), ""A"");
+-    assert_eq!(format!(""{:?}"", B), ""B"");
+-    assert_eq!(format!(""{:?}"", C), ""C"");
+-    assert_eq!(format!(""{:?}"", ABC), ""A | B | C | ABC"");
++    assert_eq!(Flags128::ABC, Flags128::A | Flags128::B | Flags128::C);
++    assert_eq!(Flags128::A.bits, 0x0000_0000_0000_0000_0000_0000_0000_0001);
++    assert_eq!(Flags128::B.bits, 0x0000_0000_0000_1000_0000_0000_0000_0000);
++    assert_eq!(Flags128::C.bits, 0x8000_0000_0000_0000_0000_0000_0000_0000);
++    assert_eq!(Flags128::ABC.bits, 0x8000_0000_0000_1000_0000_0000_0000_0001);
++    assert_eq!(format!(""{:?}"", Flags128::A), ""A"");
++    assert_eq!(format!(""{:?}"", Flags128::B), ""B"");
++    assert_eq!(format!(""{:?}"", Flags128::C), ""C"");
++    assert_eq!(format!(""{:?}"", Flags128::ABC), ""A | B | C | ABC"");
+ }
+"
+bitflags__bitflags-366,true,"diff --git a/src/lib.rs b/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -1045,1105 +1024,4 @@ mod external;
+ pub mod example_generated;
+ 
+ #[cfg(test)]
+-mod tests {
+-    use std::{
+-        collections::hash_map::DefaultHasher,
+-        fmt,
+-        hash::{Hash, Hasher},
+-        str,
+-    };
+-
+-    #[derive(Debug, PartialEq, Eq)]
+-    pub struct ManualFlags(u32);
+-
+-    bitflags! {
+-        #[doc = ""> The first principle is that you must not fool yourself — and""]
+-        #[doc = ""> you are the easiest person to fool.""]
+-        #[doc = ""> ""]
+-        #[doc = ""> - Richard Feynman""]
+-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+-        struct Flags: u32 {
+-            const A = 0b00000001;
+-            #[doc = ""<pcwalton> macros are way better at generating code than trans is""]
+-            const B = 0b00000010;
+-            const C = 0b00000100;
+-            #[doc = ""* cmr bed""]
+-            #[doc = ""* strcat table""]
+-            #[doc = ""<strcat> wait what?""]
+-            const ABC = Self::A.bits() | Self::B.bits() | Self::C.bits();
+-        }
+-
+-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+-        struct _CfgFlags: u32 {
+-            #[cfg(unix)]
+-            const _CFG_A = 0b01;
+-            #[cfg(windows)]
+-            const _CFG_B = 0b01;
+-            #[cfg(unix)]
+-            const _CFG_C = Self::_CFG_A.bits() | 0b10;
+-        }
+-
+-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+-        struct AnotherSetOfFlags: i8 {
+-            const ANOTHER_FLAG = -1_i8;
+-        }
+-
+-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+-        struct LongFlags: u32 {
+-            const LONG_A = 0b1111111111111111;
+-        }
+-
+-        impl ManualFlags: u32 {
+-            const A = 0b00000001;
+-            #[doc = ""<pcwalton> macros are way better at generating code than trans is""]
+-            const B = 0b00000010;
+-            const C = 0b00000100;
+-            #[doc = ""* cmr bed""]
+-            #[doc = ""* strcat table""]
+-            #[doc = ""<strcat> wait what?""]
+-            const ABC = Self::A.bits() | Self::B.bits() | Self::C.bits();
+-        }
+-    }
+-
+-    bitflags! {
+-        #[derive(Debug, PartialEq, Eq)]
+-        struct FmtFlags: u16 {
+-            const 고양이 = 0b0000_0001;
+-            const 개 = 0b0000_0010;
+-            const 물고기 = 0b0000_0100;
+-            const 물고기_고양이 = Self::고양이.bits() | Self::물고기.bits();
+-        }
+-    }
+-
+-    impl str::FromStr for FmtFlags {
+-        type Err = crate::parser::ParseError;
+-
+-        fn from_str(flags: &str) -> Result<Self, Self::Err> {
+-            Ok(Self(flags.parse()?))
+-        }
+-    }
+-
+-    impl fmt::Display for FmtFlags {
+-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+-            fmt::Display::fmt(&self.0, f)
+-        }
+-    }
+-
+-    bitflags! {
+-        #[derive(Clone, Copy, Default, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+-        struct EmptyFlags: u32 {
+-        }
+-    }
+-
+-    #[test]
+-    fn test_bits() {
+-        assert_eq!(Flags::empty().bits(), 0b00000000);
+-        assert_eq!(Flags::A.bits(), 0b00000001);
+-        assert_eq!(Flags::ABC.bits(), 0b00000111);
+-
+-        assert_eq!(<Flags as crate::Flags>::bits(&Flags::ABC), 0b00000111);
+-
+-        assert_eq!(AnotherSetOfFlags::empty().bits(), 0b00);
+-        assert_eq!(AnotherSetOfFlags::ANOTHER_FLAG.bits(), !0_i8);
+-
+-        assert_eq!(EmptyFlags::empty().bits(), 0b00000000);
+-    }
+-
+-    #[test]
+-    fn test_from_bits() {
+-        assert_eq!(Flags::from_bits(0), Some(Flags::empty()));
+-        assert_eq!(Flags::from_bits(0b1), Some(Flags::A));
+-        assert_eq!(Flags::from_bits(0b10), Some(Flags::B));
+-        assert_eq!(Flags::from_bits(0b11), Some(Flags::A | Flags::B));
+-        assert_eq!(Flags::from_bits(0b1000), None);
+-
+-        assert_eq!(<Flags as crate::Flags>::from_bits(0b11), Some(Flags::A | Flags::B));
+-
+-        assert_eq!(
+-            AnotherSetOfFlags::from_bits(!0_i8),
+-            Some(AnotherSetOfFlags::ANOTHER_FLAG)
+-        );
+-
+-        assert_eq!(EmptyFlags::from_bits(0), Some(EmptyFlags::empty()));
+-        assert_eq!(EmptyFlags::from_bits(0b1), None);
+-    }
+-
+-    #[test]
+-    fn test_from_bits_truncate() {
+-        assert_eq!(Flags::from_bits_truncate(0), Flags::empty());
+-        assert_eq!(Flags::from_bits_truncate(0b1), Flags::A);
+-        assert_eq!(Flags::from_bits_truncate(0b10), Flags::B);
+-        assert_eq!(Flags::from_bits_truncate(0b11), (Flags::A | Flags::B));
+-        assert_eq!(Flags::from_bits_truncate(0b1000), Flags::empty());
+-        assert_eq!(Flags::from_bits_truncate(0b1001), Flags::A);
+-
+-        assert_eq!(<Flags as crate::Flags>::from_bits_truncate(0b11), (Flags::A | Flags::B));
+-
+-        assert_eq!(
+-            AnotherSetOfFlags::from_bits_truncate(0_i8),
+-            AnotherSetOfFlags::empty()
+-        );
+-
+-        assert_eq!(EmptyFlags::from_bits_truncate(0), EmptyFlags::empty());
+-        assert_eq!(EmptyFlags::from_bits_truncate(0b1), EmptyFlags::empty());
+-    }
+-
+-    #[test]
+-    fn test_from_bits_retain() {
+-        let extra = Flags::from_bits_retain(0b1000);
+-        assert_eq!(Flags::from_bits_retain(0), Flags::empty());
+-        assert_eq!(Flags::from_bits_retain(0b1), Flags::A);
+-        assert_eq!(Flags::from_bits_retain(0b10), Flags::B);
+-
+-        assert_eq!(Flags::from_bits_retain(0b11), (Flags::A | Flags::B));
+-        assert_eq!(Flags::from_bits_retain(0b1000), (extra | Flags::empty()));
+-        assert_eq!(Flags::from_bits_retain(0b1001), (extra | Flags::A));
+-
+-        assert_eq!(<Flags as crate::Flags>::from_bits_retain(0b11), (Flags::A | Flags::B));
+-
+-        let extra = EmptyFlags::from_bits_retain(0b1000);
+-        assert_eq!(
+-            EmptyFlags::from_bits_retain(0b1000),
+-            (extra | EmptyFlags::empty())
+-        );
+-    }
+-
+-    #[test]
+-    fn test_is_empty() {
+-        assert!(Flags::empty().is_empty());
+-        assert!(!Flags::A.is_empty());
+-        assert!(!Flags::ABC.is_empty());
+-
+-        assert!(!<Flags as crate::Flags>::is_empty(&Flags::ABC));
+-
+-        assert!(!AnotherSetOfFlags::ANOTHER_FLAG.is_empty());
+-
+-        assert!(EmptyFlags::empty().is_empty());
+-        assert!(EmptyFlags::all().is_empty());
+-    }
+-
+-    #[test]
+-    fn test_is_all() {
+-        assert!(Flags::all().is_all());
+-        assert!(!Flags::A.is_all());
+-        assert!(Flags::ABC.is_all());
+-
+-        let extra = Flags::from_bits_retain(0b1000);
+-        assert!(!extra.is_all());
+-        assert!(!(Flags::A | extra).is_all());
+-        assert!((Flags::ABC | extra).is_all());
+-
+-        assert!(<Flags as crate::Flags>::is_all(&Flags::all()));
+-
+-        assert!(AnotherSetOfFlags::ANOTHER_FLAG.is_all());
+-
+-        assert!(EmptyFlags::all().is_all());
+-        assert!(EmptyFlags::empty().is_all());
+-    }
+-
+-    #[test]
+-    fn test_two_empties_do_not_intersect() {
+-        let e1 = Flags::empty();
+-        let e2 = Flags::empty();
+-        assert!(!e1.intersects(e2));
+-
+-        assert!(!<Flags as crate::Flags>::intersects(&e1, e2));
+-
+-        assert!(AnotherSetOfFlags::ANOTHER_FLAG.intersects(AnotherSetOfFlags::ANOTHER_FLAG));
+-    }
+-
+-    #[test]
+-    fn test_empty_does_not_intersect_with_full() {
+-        let e1 = Flags::empty();
+-        let e2 = Flags::ABC;
+-        assert!(!e1.intersects(e2));
+-
+-        assert!(!<Flags as crate::Flags>::intersects(&e1, e2));
+-    }
+-
+-    #[test]
+-    fn test_disjoint_intersects() {
+-        let e1 = Flags::A;
+-        let e2 = Flags::B;
+-        assert!(!e1.intersects(e2));
+-
+-        assert!(!<Flags as crate::Flags>::intersects(&e1, e2));
+-    }
+-
+-    #[test]
+-    fn test_overlapping_intersects() {
+-        let e1 = Flags::A;
+-        let e2 = Flags::A | Flags::B;
+-        assert!(e1.intersects(e2));
+-
+-        assert!(<Flags as crate::Flags>::intersects(&e1, e2));
+-    }
+-
+-    #[test]
+-    fn test_contains() {
+-        let e1 = Flags::A;
+-        let e2 = Flags::A | Flags::B;
+-        assert!(!e1.contains(e2));
+-        assert!(e2.contains(e1));
+-        assert!(Flags::ABC.contains(e2));
+-
+-        assert!(<Flags as crate::Flags>::contains(&Flags::ABC, e2));
+-
+-        assert!(AnotherSetOfFlags::ANOTHER_FLAG.contains(AnotherSetOfFlags::ANOTHER_FLAG));
+-
+-        assert!(EmptyFlags::empty().contains(EmptyFlags::empty()));
+-    }
+-
+-    #[test]
+-    fn test_insert() {
+-        let mut e1 = Flags::A;
+-        let e2 = Flags::A | Flags::B;
+-        e1.insert(e2);
+-        assert_eq!(e1, e2);
+-
+-        let mut e1 = Flags::A;
+-        let e2 = Flags::A | Flags::B;
+-        <Flags as crate::Flags>::insert(&mut e1, e2);
+-        assert_eq!(e1, e2);
+-
+-        let mut e3 = AnotherSetOfFlags::empty();
+-        e3.insert(AnotherSetOfFlags::ANOTHER_FLAG);
+-        assert_eq!(e3, AnotherSetOfFlags::ANOTHER_FLAG);
+-    }
+-
+-    #[test]
+-    fn test_remove() {
+-        let mut e1 = Flags::A | Flags::B;
+-        let e2 = Flags::A | Flags::C;
+-        e1.remove(e2);
+-        assert_eq!(e1, Flags::B);
+-
+-        let mut e1 = Flags::A | Flags::B;
+-        let e2 = Flags::A | Flags::C;
+-        <Flags as crate::Flags>::remove(&mut e1, e2);
+-        assert_eq!(e1, Flags::B);
+-
+-        let mut e3 = AnotherSetOfFlags::ANOTHER_FLAG;
+-        e3.remove(AnotherSetOfFlags::ANOTHER_FLAG);
+-        assert_eq!(e3, AnotherSetOfFlags::empty());
+-    }
+-
+-    #[test]
+-    fn test_operators() {
+-        let e1 = Flags::A | Flags::C;
+-        let e2 = Flags::B | Flags::C;
+-        assert_eq!((e1 | e2), Flags::ABC); // union
+-        assert_eq!((e1 & e2), Flags::C); // intersection
+-        assert_eq!((e1 - e2), Flags::A); // set difference
+-        assert_eq!(!e2, Flags::A); // set complement
+-        assert_eq!(e1 ^ e2, Flags::A | Flags::B); // toggle
+-        let mut e3 = e1;
+-        e3.toggle(e2);
+-        assert_eq!(e3, Flags::A | Flags::B);
+-
+-        let mut m4 = AnotherSetOfFlags::empty();
+-        m4.toggle(AnotherSetOfFlags::empty());
+-        assert_eq!(m4, AnotherSetOfFlags::empty());
+-    }
+-
+-    #[test]
+-    fn test_operators_unchecked() {
+-        let extra = Flags::from_bits_retain(0b1000);
+-        let e1 = Flags::A | Flags::C | extra;
+-        let e2 = Flags::B | Flags::C;
+-        assert_eq!((e1 | e2), (Flags::ABC | extra)); // union
+-        assert_eq!((e1 & e2), Flags::C); // intersection
+-        assert_eq!((e1 - e2), (Flags::A | extra)); // set difference
+-        assert_eq!(!e2, Flags::A); // set complement
+-        assert_eq!(!e1, Flags::B); // set complement
+-        assert_eq!(e1 ^ e2, Flags::A | Flags::B | extra); // toggle
+-        let mut e3 = e1;
+-        e3.toggle(e2);
+-        assert_eq!(e3, Flags::A | Flags::B | extra);
+-    }
+-
+-    #[test]
+-    fn test_set_ops_basic() {
+-        let ab = Flags::A.union(Flags::B);
+-        let ac = Flags::A.union(Flags::C);
+-        let bc = Flags::B.union(Flags::C);
+-        assert_eq!(ab.bits(), 0b011);
+-        assert_eq!(bc.bits(), 0b110);
+-        assert_eq!(ac.bits(), 0b101);
+-
+-        assert_eq!(ab, Flags::B.union(Flags::A));
+-        assert_eq!(ac, Flags::C.union(Flags::A));
+-        assert_eq!(bc, Flags::C.union(Flags::B));
+-
+-        assert_eq!(ac, <Flags as crate::Flags>::union(Flags::A, Flags::C));
+-
+-        assert_eq!(ac, Flags::A | Flags::C);
+-        assert_eq!(bc, Flags::B | Flags::C);
+-        assert_eq!(ab.union(bc), Flags::ABC);
+-
+-        assert_eq!(ac, Flags::A | Flags::C);
+-        assert_eq!(bc, Flags::B | Flags::C);
+-
+-        assert_eq!(ac.union(bc), ac | bc);
+-        assert_eq!(ac.union(bc), Flags::ABC);
+-        assert_eq!(bc.union(ac), Flags::ABC);
+-
+-        assert_eq!(ac.intersection(bc), ac & bc);
+-        assert_eq!(ac.intersection(bc), Flags::C);
+-        assert_eq!(bc.intersection(ac), Flags::C);
+-
+-        assert_eq!(Flags::C, <Flags as crate::Flags>::intersection(ac, bc));
+-
+-        assert_eq!(ac.difference(bc), ac - bc);
+-        assert_eq!(bc.difference(ac), bc - ac);
+-        assert_eq!(ac.difference(bc), Flags::A);
+-        assert_eq!(bc.difference(ac), Flags::B);
+-
+-        assert_eq!(bc, <Flags as crate::Flags>::difference(bc, Flags::A));
+-
+-        assert_eq!(bc.complement(), !bc);
+-        assert_eq!(bc.complement(), Flags::A);
+-
+-        assert_eq!(Flags::A, <Flags as crate::Flags>::complement(bc));
+-
+-        assert_eq!(ac.symmetric_difference(bc), Flags::A.union(Flags::B));
+-        assert_eq!(bc.symmetric_difference(ac), Flags::A.union(Flags::B));
+-
+-        assert_eq!(ab, <Flags as crate::Flags>::symmetric_difference(ac, bc));
+-    }
+-
+-    #[test]
+-    fn test_set_ops_const() {
+-        // These just test that these compile and don't cause use-site panics
+-        // (would be possible if we had some sort of UB)
+-        const INTERSECT: Flags = Flags::all().intersection(Flags::C);
+-        const UNION: Flags = Flags::A.union(Flags::C);
+-        const DIFFERENCE: Flags = Flags::all().difference(Flags::A);
+-        const COMPLEMENT: Flags = Flags::C.complement();
+-        const SYM_DIFFERENCE: Flags = UNION.symmetric_difference(DIFFERENCE);
+-        assert_eq!(INTERSECT, Flags::C);
+-        assert_eq!(UNION, Flags::A | Flags::C);
+-        assert_eq!(DIFFERENCE, Flags::all() - Flags::A);
+-        assert_eq!(COMPLEMENT, !Flags::C);
+-        assert_eq!(
+-            SYM_DIFFERENCE,
+-            (Flags::A | Flags::C) ^ (Flags::all() - Flags::A)
+-        );
+-    }
+-
+-    #[test]
+-    fn test_set_ops_unchecked() {
+-        let extra = Flags::from_bits_retain(0b1000);
+-        let e1 = Flags::A.union(Flags::C).union(extra);
+-        let e2 = Flags::B.union(Flags::C);
+-        assert_eq!(e1.bits(), 0b1101);
+-        assert_eq!(e1.union(e2), (Flags::ABC | extra));
+-        assert_eq!(e1.intersection(e2), Flags::C);
+-        assert_eq!(e1.difference(e2), Flags::A | extra);
+-        assert_eq!(e2.difference(e1), Flags::B);
+-        assert_eq!(e2.complement(), Flags::A);
+-        assert_eq!(e1.complement(), Flags::B);
+-        assert_eq!(e1.symmetric_difference(e2), Flags::A | Flags::B | extra); // toggle
+-    }
+-
+-    #[test]
+-    fn test_set_ops_exhaustive() {
+-        // Define a flag that contains gaps to help exercise edge-cases,
+-        // especially around ""unknown"" flags (e.g. ones outside of `all()`
+-        // `from_bits_retain`).
+-        // - when lhs and rhs both have different sets of unknown flags.
+-        // - unknown flags at both ends, and in the middle
+-        // - cases with ""gaps"".
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Test: u16 {
+-                // Intentionally no `A`
+-                const B = 0b000000010;
+-                // Intentionally no `C`
+-                const D = 0b000001000;
+-                const E = 0b000010000;
+-                const F = 0b000100000;
+-                const G = 0b001000000;
+-                // Intentionally no `H`
+-                const I = 0b100000000;
+-            }
+-        }
+-        let iter_test_flags = || (0..=0b111_1111_1111).map(|bits| Test::from_bits_retain(bits));
+-
+-        for a in iter_test_flags() {
+-            assert_eq!(
+-                a.complement(),
+-                Test::from_bits_truncate(!a.bits()),
+-                ""wrong result: !({:?})"",
+-                a,
+-            );
+-            assert_eq!(a.complement(), !a, ""named != op: !({:?})"", a);
+-            for b in iter_test_flags() {
+-                // Check that the named operations produce the expected bitwise
+-                // values.
+-                assert_eq!(
+-                    a.union(b).bits(),
+-                    a.bits() | b.bits(),
+-                    ""wrong result: `{:?}` | `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(
+-                    a.intersection(b).bits(),
+-                    a.bits() & b.bits(),
+-                    ""wrong result: `{:?}` & `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(
+-                    a.symmetric_difference(b).bits(),
+-                    a.bits() ^ b.bits(),
+-                    ""wrong result: `{:?}` ^ `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(
+-                    a.difference(b).bits(),
+-                    a.bits() & !b.bits(),
+-                    ""wrong result: `{:?}` - `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                // Note: Difference is checked as both `a - b` and `b - a`
+-                assert_eq!(
+-                    b.difference(a).bits(),
+-                    b.bits() & !a.bits(),
+-                    ""wrong result: `{:?}` - `{:?}`"",
+-                    b,
+-                    a,
+-                );
+-                // Check that the named set operations are equivalent to the
+-                // bitwise equivalents
+-                assert_eq!(a.union(b), a | b, ""named != op: `{:?}` | `{:?}`"", a, b,);
+-                assert_eq!(
+-                    a.intersection(b),
+-                    a & b,
+-                    ""named != op: `{:?}` & `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(
+-                    a.symmetric_difference(b),
+-                    a ^ b,
+-                    ""named != op: `{:?}` ^ `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(a.difference(b), a - b, ""named != op: `{:?}` - `{:?}`"", a, b,);
+-                // Note: Difference is checked as both `a - b` and `b - a`
+-                assert_eq!(b.difference(a), b - a, ""named != op: `{:?}` - `{:?}`"", b, a,);
+-                // Verify that the operations which should be symmetric are
+-                // actually symmetric.
+-                assert_eq!(a.union(b), b.union(a), ""asymmetry: `{:?}` | `{:?}`"", a, b,);
+-                assert_eq!(
+-                    a.intersection(b),
+-                    b.intersection(a),
+-                    ""asymmetry: `{:?}` & `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-                assert_eq!(
+-                    a.symmetric_difference(b),
+-                    b.symmetric_difference(a),
+-                    ""asymmetry: `{:?}` ^ `{:?}`"",
+-                    a,
+-                    b,
+-                );
+-            }
+-        }
+-    }
+-
+-    #[test]
+-    fn test_set() {
+-        let mut e1 = Flags::A | Flags::C;
+-        e1.set(Flags::B, true);
+-        e1.set(Flags::C, false);
+-
+-        assert_eq!(e1, Flags::A | Flags::B);
+-    }
+-
+-    #[test]
+-    fn test_assignment_operators() {
+-        let mut m1 = Flags::empty();
+-        let e1 = Flags::A | Flags::C;
+-        // union
+-        m1 |= Flags::A;
+-        assert_eq!(m1, Flags::A);
+-        // intersection
+-        m1 &= e1;
+-        assert_eq!(m1, Flags::A);
+-        // set difference
+-        m1 -= m1;
+-        assert_eq!(m1, Flags::empty());
+-        // toggle
+-        m1 ^= e1;
+-        assert_eq!(m1, e1);
+-    }
+-
+-    #[test]
+-    fn test_const_fn() {
+-        const _M1: Flags = Flags::empty();
+-
+-        const M2: Flags = Flags::A;
+-        assert_eq!(M2, Flags::A);
+-
+-        const M3: Flags = Flags::C;
+-        assert_eq!(M3, Flags::C);
+-    }
+-
+-    #[test]
+-    fn test_extend() {
+-        let mut flags;
+-
+-        flags = Flags::empty();
+-        flags.extend([].iter().cloned());
+-        assert_eq!(flags, Flags::empty());
+-
+-        flags = Flags::empty();
+-        flags.extend([Flags::A, Flags::B].iter().cloned());
+-        assert_eq!(flags, Flags::A | Flags::B);
+-
+-        flags = Flags::A;
+-        flags.extend([Flags::A, Flags::B].iter().cloned());
+-        assert_eq!(flags, Flags::A | Flags::B);
+-
+-        flags = Flags::B;
+-        flags.extend([Flags::A, Flags::ABC].iter().cloned());
+-        assert_eq!(flags, Flags::ABC);
+-    }
+-
+-    #[test]
+-    fn test_from_iterator() {
+-        assert_eq!([].iter().cloned().collect::<Flags>(), Flags::empty());
+-        assert_eq!(
+-            [Flags::A, Flags::B].iter().cloned().collect::<Flags>(),
+-            Flags::A | Flags::B
+-        );
+-        assert_eq!(
+-            [Flags::A, Flags::ABC].iter().cloned().collect::<Flags>(),
+-            Flags::ABC
+-        );
+-    }
+-
+-    #[test]
+-    fn test_lt() {
+-        let mut a = Flags::empty();
+-        let mut b = Flags::empty();
+-
+-        assert!(!(a < b) && !(b < a));
+-        b = Flags::B;
+-        assert!(a < b);
+-        a = Flags::C;
+-        assert!(!(a < b) && b < a);
+-        b = Flags::C | Flags::B;
+-        assert!(a < b);
+-    }
+-
+-    #[test]
+-    fn test_ord() {
+-        let mut a = Flags::empty();
+-        let mut b = Flags::empty();
+-
+-        assert!(a <= b && a >= b);
+-        a = Flags::A;
+-        assert!(a > b && a >= b);
+-        assert!(b < a && b <= a);
+-        b = Flags::B;
+-        assert!(b > a && b >= a);
+-        assert!(a < b && a <= b);
+-    }
+-
+-    fn hash<T: Hash>(t: &T) -> u64 {
+-        let mut s = DefaultHasher::new();
+-        t.hash(&mut s);
+-        s.finish()
+-    }
+-
+-    #[test]
+-    fn test_hash() {
+-        let mut x = Flags::empty();
+-        let mut y = Flags::empty();
+-        assert_eq!(hash(&x), hash(&y));
+-        x = Flags::all();
+-        y = Flags::ABC;
+-        assert_eq!(hash(&x), hash(&y));
+-    }
+-
+-    #[test]
+-    fn test_default() {
+-        assert_eq!(Flags::empty(), Flags::default());
+-    }
+-
+-    #[test]
+-    fn test_debug() {
+-        assert_eq!(format!(""{:?}"", Flags::A | Flags::B), ""Flags(A | B)"");
+-        assert_eq!(format!(""{:?}"", Flags::empty()), ""Flags(0x0)"");
+-        assert_eq!(format!(""{:?}"", Flags::ABC), ""Flags(A | B | C)"");
+-
+-        let extra = Flags::from_bits_retain(0xb8);
+-
+-        assert_eq!(format!(""{:?}"", extra), ""Flags(0xb8)"");
+-        assert_eq!(format!(""{:?}"", Flags::A | extra), ""Flags(A | 0xb8)"");
+-
+-        assert_eq!(
+-            format!(""{:?}"", Flags::ABC | extra),
+-            ""Flags(A | B | C | ABC | 0xb8)""
+-        );
+-
+-        assert_eq!(format!(""{:?}"", EmptyFlags::empty()), ""EmptyFlags(0x0)"");
+-    }
+-
+-    #[test]
+-    fn test_display_from_str_roundtrip() {
+-        fn format_parse_case<T: fmt::Debug + fmt::Display + str::FromStr + PartialEq>(flags: T) where <T as str::FromStr>::Err: fmt::Display {
+-            assert_eq!(flags, {
+-                match flags.to_string().parse::<T>() {
+-                    Ok(flags) => flags,
+-                    Err(e) => panic!(""failed to parse `{}`: {}"", flags, e),
+-                }
+-            });
+-        }
+-
+-        fn parse_case<T: fmt::Debug + str::FromStr + PartialEq>(expected: T, flags: &str) where <T as str::FromStr>::Err: fmt::Display + fmt::Debug {
+-            assert_eq!(expected, flags.parse::<T>().unwrap());
+-        }
+-
+-        bitflags! {
+-            #[derive(Debug, Eq, PartialEq)]
+-            pub struct MultiBitFmtFlags: u8 {
+-                const A = 0b0000_0001u8;
+-                const B = 0b0001_1110u8;
+-            }
+-        }
+-
+-        impl fmt::Display for MultiBitFmtFlags {
+-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+-                fmt::Display::fmt(&self.0, f)
+-            }
+-        }
+-
+-        impl str::FromStr for MultiBitFmtFlags {
+-            type Err = crate::parser::ParseError;
+-
+-            fn from_str(s: &str) -> Result<Self, Self::Err> {
+-                Ok(MultiBitFmtFlags(s.parse()?))
+-            }
+-        }
+-
+-        format_parse_case(FmtFlags::empty());
+-        format_parse_case(FmtFlags::all());
+-        format_parse_case(FmtFlags::고양이);
+-        format_parse_case(FmtFlags::고양이 | FmtFlags::개);
+-        format_parse_case(FmtFlags::물고기_고양이);
+-        format_parse_case(FmtFlags::from_bits_retain(0xb8));
+-        format_parse_case(FmtFlags::from_bits_retain(0x20));
+-        format_parse_case(MultiBitFmtFlags::from_bits_retain(3));
+-
+-        parse_case(FmtFlags::empty(), """");
+-        parse_case(FmtFlags::empty(), "" \r\n\t"");
+-        parse_case(FmtFlags::empty(), ""0x0"");
+-
+-        parse_case(FmtFlags::고양이, ""고양이"");
+-        parse_case(FmtFlags::고양이, ""  고양이  "");
+-        parse_case(FmtFlags::고양이, ""고양이 | 고양이 | 고양이"");
+-        parse_case(FmtFlags::고양이, ""0x01"");
+-
+-        parse_case(FmtFlags::고양이 | FmtFlags::개, ""고양이 | 개"");
+-        parse_case(FmtFlags::고양이 | FmtFlags::개, ""고양이|개"");
+-        parse_case(FmtFlags::고양이 | FmtFlags::개, ""\n고양이|개 "");
+-
+-        parse_case(FmtFlags::고양이 | FmtFlags::물고기, ""물고기_고양이"");
+-    }
+-
+-    #[test]
+-    fn test_from_str_err() {
+-        fn parse_case(pat: &str, flags: &str) {
+-            let err = flags.parse::<FmtFlags>().unwrap_err().to_string();
+-            assert!(err.contains(pat), ""`{}` not found in error `{}`"", pat, err);
+-        }
+-
+-        parse_case(""empty flag"", ""|"");
+-        parse_case(""empty flag"", ""|||"");
+-        parse_case(""empty flag"", ""고양이 |"");
+-        parse_case(""unrecognized named flag"", ""NOT_A_FLAG"");
+-        parse_case(""unrecognized named flag"", ""고양이 개"");
+-        parse_case(""unrecognized named flag"", ""고양이 | NOT_A_FLAG"");
+-        parse_case(""invalid hex flag"", ""0xhi"");
+-        parse_case(""invalid hex flag"", ""고양이 | 0xhi"");
+-    }
+-
+-    #[test]
+-    fn test_binary() {
+-        assert_eq!(format!(""{:b}"", Flags::ABC), ""111"");
+-        assert_eq!(format!(""{:#b}"", Flags::ABC), ""0b111"");
+-        let extra = Flags::from_bits_retain(0b1010000);
+-        assert_eq!(format!(""{:b}"", Flags::ABC | extra), ""1010111"");
+-        assert_eq!(format!(""{:#b}"", Flags::ABC | extra), ""0b1010111"");
+-    }
+-
+-    #[test]
+-    fn test_octal() {
+-        assert_eq!(format!(""{:o}"", LongFlags::LONG_A), ""177777"");
+-        assert_eq!(format!(""{:#o}"", LongFlags::LONG_A), ""0o177777"");
+-        let extra = LongFlags::from_bits_retain(0o5000000);
+-        assert_eq!(format!(""{:o}"", LongFlags::LONG_A | extra), ""5177777"");
+-        assert_eq!(format!(""{:#o}"", LongFlags::LONG_A | extra), ""0o5177777"");
+-    }
+-
+-    #[test]
+-    fn test_lowerhex() {
+-        assert_eq!(format!(""{:x}"", LongFlags::LONG_A), ""ffff"");
+-        assert_eq!(format!(""{:#x}"", LongFlags::LONG_A), ""0xffff"");
+-        let extra = LongFlags::from_bits_retain(0xe00000);
+-        assert_eq!(format!(""{:x}"", LongFlags::LONG_A | extra), ""e0ffff"");
+-        assert_eq!(format!(""{:#x}"", LongFlags::LONG_A | extra), ""0xe0ffff"");
+-    }
+-
+-    #[test]
+-    fn test_upperhex() {
+-        assert_eq!(format!(""{:X}"", LongFlags::LONG_A), ""FFFF"");
+-        assert_eq!(format!(""{:#X}"", LongFlags::LONG_A), ""0xFFFF"");
+-        let extra = LongFlags::from_bits_retain(0xe00000);
+-        assert_eq!(format!(""{:X}"", LongFlags::LONG_A | extra), ""E0FFFF"");
+-        assert_eq!(format!(""{:#X}"", LongFlags::LONG_A | extra), ""0xE0FFFF"");
+-    }
+-
+-    mod submodule {
+-        bitflags! {
+-            #[derive(Clone, Copy)]
+-            pub struct PublicFlags: i8 {
+-                const X = 0;
+-            }
+-
+-            #[derive(Clone, Copy)]
+-            struct PrivateFlags: i8 {
+-                const Y = 0;
+-            }
+-        }
+-
+-        #[test]
+-        fn test_private() {
+-            let _ = PrivateFlags::Y;
+-        }
+-    }
+-
+-    #[test]
+-    fn test_public() {
+-        let _ = submodule::PublicFlags::X;
+-    }
+-
+-    mod t1 {
+-        mod foo {
+-            pub type Bar = i32;
+-        }
+-
+-        bitflags! {
+-            /// baz
+-            #[derive(Clone, Copy)]
+-            struct Flags: foo::Bar {
+-                const A = 0b00000001;
+-                #[cfg(foo)]
+-                const B = 0b00000010;
+-                #[cfg(foo)]
+-                const C = 0b00000010;
+-            }
+-        }
+-    }
+-
+-    #[test]
+-    fn test_in_function() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u8 {
+-                const A = 1;
+-                #[cfg(any())] // false
+-                const B = 2;
+-            }
+-        }
+-        assert_eq!(Flags::all(), Flags::A);
+-        assert_eq!(format!(""{:?}"", Flags::A), ""Flags(A)"");
+-    }
+-
+-    #[test]
+-    fn test_deprecated() {
+-        bitflags! {
+-            #[derive(Clone, Copy)]
+-            pub struct TestFlags: u32 {
+-                #[deprecated(note = ""Use something else."")]
+-                const ONE = 1;
+-            }
+-        }
+-    }
+-
+-    #[test]
+-    fn test_pub_crate() {
+-        mod module {
+-            bitflags! {
+-                #[derive(Clone, Copy)]
+-                pub (crate) struct Test: u8 {
+-                    const FOO = 1;
+-                }
+-            }
+-        }
+-
+-        assert_eq!(module::Test::FOO.bits(), 1);
+-    }
+-
+-    #[test]
+-    fn test_pub_in_module() {
+-        mod module {
+-            mod submodule {
+-                bitflags! {
+-                    // `pub (in super)` means only the module `module` will
+-                    // be able to access this.
+-                    #[derive(Clone, Copy)]
+-                    pub (in super) struct Test: u8 {
+-                        const FOO = 1;
+-                    }
+-                }
+-            }
+-
+-            mod test {
+-                // Note: due to `pub (in super)`,
+-                // this cannot be accessed directly by the testing code.
+-                pub(super) fn value() -> u8 {
+-                    super::submodule::Test::FOO.bits()
+-                }
+-            }
+-
+-            pub fn value() -> u8 {
+-                test::value()
+-            }
+-        }
+-
+-        assert_eq!(module::value(), 1)
+-    }
+-
+-    #[test]
+-    fn test_zero_value_flags() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u32 {
+-                const NONE = 0b0;
+-                const SOME = 0b1;
+-            }
+-        }
+-
+-        assert!(Flags::empty().contains(Flags::NONE));
+-        assert!(Flags::SOME.contains(Flags::NONE));
+-        assert!(Flags::NONE.is_empty());
+-
+-        assert_eq!(format!(""{:?}"", Flags::SOME), ""Flags(NONE | SOME)"");
+-    }
+-
+-    #[test]
+-    fn test_empty_bitflags() {
+-        bitflags! {}
+-    }
+-
+-    #[test]
+-    fn test_u128_bitflags() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u128 {
+-                const A = 0x0000_0000_0000_0000_0000_0000_0000_0001;
+-                const B = 0x0000_0000_0000_1000_0000_0000_0000_0000;
+-                const C = 0x8000_0000_0000_0000_0000_0000_0000_0000;
+-                const ABC = Self::A.bits() | Self::B.bits() | Self::C.bits();
+-            }
+-        }
+-
+-        assert_eq!(Flags::ABC, Flags::A | Flags::B | Flags::C);
+-        assert_eq!(Flags::A.bits(), 0x0000_0000_0000_0000_0000_0000_0000_0001);
+-        assert_eq!(Flags::B.bits(), 0x0000_0000_0000_1000_0000_0000_0000_0000);
+-        assert_eq!(Flags::C.bits(), 0x8000_0000_0000_0000_0000_0000_0000_0000);
+-        assert_eq!(Flags::ABC.bits(), 0x8000_0000_0000_1000_0000_0000_0000_0001);
+-        assert_eq!(format!(""{:?}"", Flags::A), ""Flags(A)"");
+-        assert_eq!(format!(""{:?}"", Flags::B), ""Flags(B)"");
+-        assert_eq!(format!(""{:?}"", Flags::C), ""Flags(C)"");
+-        assert_eq!(format!(""{:?}"", Flags::ABC), ""Flags(A | B | C)"");
+-    }
+-
+-    #[test]
+-    fn test_from_bits_edge_cases() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u8 {
+-                const A = 0b00000001;
+-                const BC = 0b00000110;
+-            }
+-        }
+-
+-        let flags = Flags::from_bits(0b00000100);
+-        assert_eq!(flags, None);
+-        let flags = Flags::from_bits(0b00000101);
+-        assert_eq!(flags, None);
+-    }
+-
+-    #[test]
+-    fn test_from_bits_truncate_edge_cases() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u8 {
+-                const A = 0b00000001;
+-                const BC = 0b00000110;
+-            }
+-        }
+-
+-        let flags = Flags::from_bits_truncate(0b00000100);
+-        assert_eq!(flags, Flags::empty());
+-        let flags = Flags::from_bits_truncate(0b00000101);
+-        assert_eq!(flags, Flags::A);
+-    }
+-
+-    #[test]
+-    fn test_iter() {
+-        bitflags! {
+-            #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+-            struct Flags: u32 {
+-                const ONE  = 0b001;
+-                const TWO  = 0b010;
+-                const THREE = 0b100;
+-                #[cfg(windows)]
+-                const FOUR_WIN = 0b1000;
+-                #[cfg(unix)]
+-                const FOUR_UNIX = 0b10000;
+-                const FIVE = 0b01000100;
+-            }
+-        }
+-
+-        let count = {
+-            #[cfg(any(unix, windows))]
+-            {
+-                5
+-            }
+-
+-            #[cfg(not(any(unix, windows)))]
+-            {
+-                4
+-            }
+-        };
+-
+-        let flags = Flags::all();
+-        assert_eq!(flags.into_iter().count(), count);
+-
+-        for flag in flags.into_iter() {
+-            assert!(flags.contains(flag));
+-        }
+-
+-        let mut iter = flags.iter_names();
+-
+-        assert_eq!(iter.next().unwrap(), (""ONE"", Flags::ONE));
+-        assert_eq!(iter.next().unwrap(), (""TWO"", Flags::TWO));
+-        assert_eq!(iter.next().unwrap(), (""THREE"", Flags::THREE));
+-
+-        #[cfg(unix)]
+-        {
+-            assert_eq!(iter.next().unwrap(), (""FOUR_UNIX"", Flags::FOUR_UNIX));
+-        }
+-        #[cfg(windows)]
+-        {
+-            assert_eq!(iter.next().unwrap(), (""FOUR_WIN"", Flags::FOUR_WIN));
+-        }
+-
+-        assert_eq!(iter.next().unwrap(), (""FIVE"", Flags::FIVE));
+-
+-        assert_eq!(iter.next(), None);
+-
+-        let flags = Flags::empty();
+-        assert_eq!(flags.into_iter().count(), 0);
+-
+-        let flags = Flags::ONE | Flags::THREE;
+-        assert_eq!(flags.into_iter().count(), 2);
+-
+-        let mut iter = flags.iter_names();
+-
+-        assert_eq!(iter.next().unwrap(), (""ONE"", Flags::ONE));
+-        assert_eq!(iter.next().unwrap(), (""THREE"", Flags::THREE));
+-        assert_eq!(iter.next(), None);
+-
+-        let flags = Flags::from_bits_retain(0b1000_0000);
+-        assert_eq!(flags.into_iter().count(), 1);
+-        assert_eq!(flags.iter_names().count(), 0);
+-    }
+-
+-    #[test]
+-    fn into_iter_from_iter_roundtrip() {
+-        let flags = Flags::ABC | Flags::from_bits_retain(0b1000_0000);
+-
+-        assert_eq!(flags, flags.into_iter().collect::<Flags>());
+-    }
+-
+-    #[test]
+-    fn test_from_name() {
+-        let flags = Flags::all();
+-
+-        let mut rebuilt = Flags::empty();
+-
+-        for (name, value) in flags.iter_names() {
+-            assert_eq!(value, Flags::from_name(name).unwrap());
+-
+-            rebuilt |= Flags::from_name(name).unwrap();
+-        }
+-
+-        assert_eq!(flags, rebuilt);
+-    }
+-
+-    #[test]
+-    fn bits_types() {
+-        bitflags! {
+-            pub struct I8: i8 {
+-                const A = 1;
+-            }
+-
+-            pub struct I16: i16 {
+-                const A = 1;
+-            }
+-
+-            pub struct I32: i32 {
+-                const A = 1;
+-            }
+-
+-            pub struct I64: i64 {
+-                const A = 1;
+-            }
+-
+-            pub struct I128: i128 {
+-                const A = 1;
+-            }
+-
+-            pub struct Isize: isize {
+-                const A = 1;
+-            }
+-
+-            pub struct U8: u8 {
+-                const A = 1;
+-            }
+-
+-            pub struct U16: u16 {
+-                const A = 1;
+-            }
+-
+-            pub struct U32: u32 {
+-                const A = 1;
+-            }
+-
+-            pub struct U64: u64 {
+-                const A = 1;
+-            }
+-
+-            pub struct U128: u128 {
+-                const A = 1;
+-            }
+-
+-            pub struct Usize: usize {
+-                const A = 1;
+-            }
+-        }
+-    }
+-}
++mod tests;
+
+diff --git /dev/null b/src/tests.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests.rs
+@@ -0,0 +1,107 @@
++mod all;
++mod bits;
++mod complement;
++mod contains;
++mod difference;
++mod empty;
++mod eq;
++mod extend;
++mod flags;
++mod fmt;
++mod from_bits;
++mod from_bits_retain;
++mod from_bits_truncate;
++mod from_name;
++mod insert;
++mod intersection;
++mod intersects;
++mod is_all;
++mod is_empty;
++mod iter;
++mod parser;
++mod remove;
++mod symmetric_difference;
++mod union;
++
++bitflags! {
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestFlags: u8 {
++        /// 1
++        const A = 1;
++
++        /// 1 << 1
++        const B = 1 << 1;
++
++        /// 1 << 2
++        const C = 1 << 2;
++
++        /// 1 | (1 << 1) | (1 << 2)
++        const ABC = Self::A.bits() | Self::B.bits() | Self::C.bits();
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestFlagsInvert: u8 {
++        /// 1 | (1 << 1) | (1 << 2)
++        const ABC = Self::A.bits() | Self::B.bits() | Self::C.bits();
++
++        /// 1
++        const A = 1;
++
++        /// 1 << 1
++        const B = 1 << 1;
++
++        /// 1 << 2
++        const C = 1 << 2;
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestZero: u8 {
++        /// 0
++        const ZERO = 0;
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestZeroOne: u8 {
++        /// 0
++        const ZERO = 0;
++
++        /// 1
++        const ONE = 1;
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestUnicode: u8 {
++        /// 1
++        const 一 = 1;
++
++        /// 2
++        const 二 = 1 << 1;
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestEmpty: u8 {}
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestOverlapping: u8 {
++        /// 1 | (1 << 1)
++        const AB = 1 | (1 << 1);
++
++        /// (1 << 1) | (1 << 2)
++        const BC = (1 << 1) | (1 << 2);
++    }
++
++    #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
++    pub struct TestOverlappingFull: u8 {
++        /// 1
++        const A = 1;
++
++        /// 1
++        const B = 1;
++
++        /// 1
++        const C = 1;
++
++        /// 2
++        const D = 1 << 1;
++    }
++}
+
+diff --git /dev/null b/src/tests/all.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/all.rs
+@@ -0,0 +1,21 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(1 | 1 << 1 | 1 << 2, TestFlags::all);
++
++    case(0, TestZero::all);
++
++    case(0, TestEmpty::all);
++}
++
++#[track_caller]
++fn case<T: Flags>(expected: T::Bits, inherent: impl FnOnce() -> T)
++where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(expected, inherent().bits(), ""T::all()"");
++    assert_eq!(expected, T::all().bits(), ""Flags::all()"");
++}
+
+diff --git /dev/null b/src/tests/bits.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/bits.rs
+@@ -0,0 +1,30 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(0, TestFlags::empty(), TestFlags::bits);
++
++    case(1, TestFlags::A, TestFlags::bits);
++    case(1 | 1 << 1 | 1 << 2, TestFlags::ABC, TestFlags::bits);
++
++    case(!0, TestFlags::from_bits_retain(u8::MAX), TestFlags::bits);
++    case(1 << 3, TestFlags::from_bits_retain(1 << 3), TestFlags::bits);
++
++    case(1 << 3, TestZero::from_bits_retain(1 << 3), TestZero::bits);
++
++    case(1 << 3, TestEmpty::from_bits_retain(1 << 3), TestEmpty::bits);
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug>(
++    expected: T::Bits,
++    value: T,
++    inherent: impl FnOnce(&T) -> T::Bits,
++) where
++    T::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(expected, inherent(&value), ""{:?}.bits()"", value);
++    assert_eq!(expected, Flags::bits(&value), ""Flags::bits({:?})"", value);
++}
+
+diff --git /dev/null b/src/tests/complement.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/complement.rs
+@@ -0,0 +1,52 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(0, TestFlags::all(), TestFlags::complement);
++    case(0, TestFlags::from_bits_retain(!0), TestFlags::complement);
++
++    case(1 | 1 << 1, TestFlags::C, TestFlags::complement);
++    case(
++        1 | 1 << 1,
++        TestFlags::C | TestFlags::from_bits_retain(1 << 3),
++        TestFlags::complement,
++    );
++
++    case(
++        1 | 1 << 1 | 1 << 2,
++        TestFlags::empty(),
++        TestFlags::complement,
++    );
++    case(
++        1 | 1 << 1 | 1 << 2,
++        TestFlags::from_bits_retain(1 << 3),
++        TestFlags::complement,
++    );
++
++    case(0, TestZero::empty(), TestZero::complement);
++
++    case(0, TestEmpty::empty(), TestEmpty::complement);
++
++    // Complement doesn't detect overlapping bits in multi-bit flags
++    case(0, TestOverlapping::AB, TestOverlapping::complement);
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + std::ops::Not<Output = T> + Copy>(
++    expected: T::Bits,
++    value: T,
++    inherent: impl FnOnce(T) -> T,
++) where
++    T::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(expected, inherent(value).bits(), ""{:?}.complement()"", value);
++    assert_eq!(
++        expected,
++        Flags::complement(value).bits(),
++        ""Flags::complement({:?})"",
++        value
++    );
++    assert_eq!(expected, (!value).bits(), ""!{:?}"", value);
++}
+
+diff --git /dev/null b/src/tests/contains.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/contains.rs
+@@ -0,0 +1,97 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::empty(), true),
++            (TestFlags::A, false),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::from_bits_retain(1 << 3), false),
++        ],
++        TestFlags::contains,
++    );
++
++    case(
++        TestFlags::A,
++        &[
++            (TestFlags::empty(), true),
++            (TestFlags::A, true),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::ABC, false),
++            (TestFlags::from_bits_retain(1 << 3), false),
++            (TestFlags::from_bits_retain(1 | (1 << 3)), false),
++        ],
++        TestFlags::contains,
++    );
++
++    case(
++        TestFlags::ABC,
++        &[
++            (TestFlags::empty(), true),
++            (TestFlags::A, true),
++            (TestFlags::B, true),
++            (TestFlags::C, true),
++            (TestFlags::ABC, true),
++            (TestFlags::from_bits_retain(1 << 3), false),
++        ],
++        TestFlags::contains,
++    );
++
++    case(
++        TestFlags::from_bits_retain(1 << 3),
++        &[
++            (TestFlags::empty(), true),
++            (TestFlags::A, false),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::from_bits_retain(1 << 3), true),
++        ],
++        TestFlags::contains,
++    );
++
++    case(
++        TestZero::ZERO,
++        &[(TestZero::ZERO, true)],
++        TestZero::contains,
++    );
++
++    case(
++        TestOverlapping::AB,
++        &[
++            (TestOverlapping::AB, true),
++            (TestOverlapping::BC, false),
++            (TestOverlapping::from_bits_retain(1 << 1), true),
++        ],
++        TestOverlapping::contains,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + Copy>(
++    value: T,
++    inputs: &[(T, bool)],
++    mut inherent: impl FnMut(&T, T) -> bool,
++) {
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent(&value, *input),
++            ""{:?}.contains({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::contains(&value, *input),
++            ""Flags::contains({:?}, {:?})"",
++            value,
++            input
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/difference.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/difference.rs
+@@ -0,0 +1,81 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::A | TestFlags::B,
++        &[
++            (TestFlags::A, 1 << 1),
++            (TestFlags::B, 1),
++            (TestFlags::from_bits_retain(1 << 3), 1 | 1 << 1),
++        ],
++        TestFlags::difference,
++    );
++
++    case(
++        TestFlags::from_bits_retain(1 | 1 << 3),
++        &[
++            (TestFlags::A, 1 << 3),
++            (TestFlags::from_bits_retain(1 << 3), 1),
++        ],
++        TestFlags::difference,
++    );
++
++    assert_eq!(
++        0b1111_1110,
++        (TestFlags::from_bits_retain(!0).difference(TestFlags::A)).bits()
++    );
++
++    // The `!` operator unsets bits that don't correspond to known flags
++    assert_eq!(
++        1 << 1 | 1 << 2,
++        (TestFlags::from_bits_retain(!0) & !TestFlags::A).bits()
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + std::ops::Sub<Output = T> + std::ops::SubAssign + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent: impl FnMut(T, T) -> T,
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent(value, *input).bits(),
++            ""{:?}.difference({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::difference(value, *input).bits(),
++            ""Flags::difference({:?}, {:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            (value - *input).bits(),
++            ""{:?} - {:?}"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                value -= *input;
++                value
++            }
++            .bits(),
++            ""{:?} -= {:?}"",
++            value,
++            input,
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/empty.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/empty.rs
+@@ -0,0 +1,21 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(0, TestFlags::empty);
++
++    case(0, TestZero::empty);
++
++    case(0, TestEmpty::empty);
++}
++
++#[track_caller]
++fn case<T: Flags>(expected: T::Bits, inherent: impl FnOnce() -> T)
++where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(expected, inherent().bits(), ""T::empty()"");
++    assert_eq!(expected, T::empty().bits(), ""Flags::empty()"");
++}
+
+diff --git /dev/null b/src/tests/eq.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/eq.rs
+@@ -0,0 +1,10 @@
++use super::*;
++
++#[test]
++fn cases() {
++    assert_eq!(TestFlags::empty(), TestFlags::empty());
++    assert_eq!(TestFlags::all(), TestFlags::all());
++
++    assert!(TestFlags::from_bits_retain(1) < TestFlags::from_bits_retain(2));
++    assert!(TestFlags::from_bits_retain(2) > TestFlags::from_bits_retain(1));
++}
+
+diff --git /dev/null b/src/tests/extend.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/extend.rs
+@@ -0,0 +1,18 @@
++use super::*;
++
++#[test]
++fn cases() {
++    let mut flags = TestFlags::empty();
++
++    flags.extend(TestFlags::A);
++
++    assert_eq!(TestFlags::A, flags);
++
++    flags.extend(TestFlags::A | TestFlags::B | TestFlags::C);
++
++    assert_eq!(TestFlags::ABC, flags);
++
++    flags.extend(TestFlags::from_bits_retain(1 << 5));
++
++    assert_eq!(TestFlags::ABC | TestFlags::from_bits_retain(1 << 5), flags);
++}
+
+diff --git /dev/null b/src/tests/flags.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/flags.rs
+@@ -0,0 +1,23 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    let flags = TestFlags::FLAGS
++        .iter()
++        .map(|flag| (flag.name(), flag.value().bits()))
++        .collect::<Vec<_>>();
++
++    assert_eq!(
++        vec![
++            (""A"", 1u8),
++            (""B"", 1 << 1),
++            (""C"", 1 << 2),
++            (""ABC"", 1 | 1 << 1 | 1 << 2),
++        ],
++        flags,
++    );
++
++    assert_eq!(0, TestEmpty::FLAGS.iter().count());
++}
+
+diff --git /dev/null b/src/tests/fmt.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/fmt.rs
+@@ -0,0 +1,70 @@
++use super::*;
++
++#[test]
++fn cases() {
++    case(TestFlags::empty(), ""TestFlags(0x0)"", ""0"", ""0"", ""0"", ""0"");
++    case(TestFlags::A, ""TestFlags(A)"", ""1"", ""1"", ""1"", ""1"");
++    case(
++        TestFlags::all(),
++        ""TestFlags(A | B | C)"",
++        ""7"",
++        ""7"",
++        ""7"",
++        ""111"",
++    );
++    case(
++        TestFlags::from_bits_retain(1 << 3),
++        ""TestFlags(0x8)"",
++        ""8"",
++        ""8"",
++        ""10"",
++        ""1000"",
++    );
++    case(
++        TestFlags::A | TestFlags::from_bits_retain(1 << 3),
++        ""TestFlags(A | 0x8)"",
++        ""9"",
++        ""9"",
++        ""11"",
++        ""1001"",
++    );
++
++    case(TestZero::ZERO, ""TestZero(0x0)"", ""0"", ""0"", ""0"", ""0"");
++    case(
++        TestZero::ZERO | TestZero::from_bits_retain(1),
++        ""TestZero(0x1)"",
++        ""1"",
++        ""1"",
++        ""1"",
++        ""1"",
++    );
++
++    case(TestZeroOne::ONE, ""TestZeroOne(ONE)"", ""1"", ""1"", ""1"", ""1"");
++
++    case(
++        TestOverlapping::from_bits_retain(1 << 1),
++        ""TestOverlapping(0x2)"",
++        ""2"",
++        ""2"",
++        ""2"",
++        ""10"",
++    );
++}
++
++#[track_caller]
++fn case<
++    T: std::fmt::Debug + std::fmt::UpperHex + std::fmt::LowerHex + std::fmt::Octal + std::fmt::Binary,
++>(
++    value: T,
++    debug: &str,
++    uhex: &str,
++    lhex: &str,
++    oct: &str,
++    bin: &str,
++) {
++    assert_eq!(debug, format!(""{:?}"", value));
++    assert_eq!(uhex, format!(""{:X}"", value));
++    assert_eq!(lhex, format!(""{:x}"", value));
++    assert_eq!(oct, format!(""{:o}"", value));
++    assert_eq!(bin, format!(""{:b}"", value));
++}
+
+diff --git /dev/null b/src/tests/from_bits.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/from_bits.rs
+@@ -0,0 +1,43 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(Some(0), 0, TestFlags::from_bits);
++    case(Some(1), 1, TestFlags::from_bits);
++    case(
++        Some(1 | 1 << 1 | 1 << 2),
++        1 | 1 << 1 | 1 << 2,
++        TestFlags::from_bits,
++    );
++
++    case(None, 1 << 3, TestFlags::from_bits);
++    case(None, 1 | 1 << 3, TestFlags::from_bits);
++
++    case(Some(1 | 1 << 1), 1 | 1 << 1, TestOverlapping::from_bits);
++
++    case(None, 1 << 1, TestOverlapping::from_bits);
++}
++
++#[track_caller]
++fn case<T: Flags>(
++    expected: Option<T::Bits>,
++    input: T::Bits,
++    inherent: impl FnOnce(T::Bits) -> Option<T>,
++) where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(
++        expected,
++        inherent(input).map(|f| f.bits()),
++        ""T::from_bits({:?})"",
++        input
++    );
++    assert_eq!(
++        expected,
++        T::from_bits(input).map(|f| f.bits()),
++        ""Flags::from_bits({:?})"",
++        input
++    );
++}
+
+diff --git /dev/null b/src/tests/from_bits_retain.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/from_bits_retain.rs
+@@ -0,0 +1,36 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(0, TestFlags::from_bits_retain);
++    case(1, TestFlags::from_bits_retain);
++    case(1 | 1 << 1 | 1 << 2, TestFlags::from_bits_retain);
++
++    case(1 << 3, TestFlags::from_bits_retain);
++    case(1 | 1 << 3, TestFlags::from_bits_retain);
++
++    case(1 | 1 << 1, TestOverlapping::from_bits_retain);
++
++    case(1 << 1, TestOverlapping::from_bits_retain);
++}
++
++#[track_caller]
++fn case<T: Flags>(input: T::Bits, inherent: impl FnOnce(T::Bits) -> T)
++where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(
++        input,
++        inherent(input).bits(),
++        ""T::from_bits_retain({:?})"",
++        input
++    );
++    assert_eq!(
++        input,
++        T::from_bits_retain(input).bits(),
++        ""Flags::from_bits_retain({:?})"",
++        input
++    );
++}
+
+diff --git /dev/null b/src/tests/from_bits_truncate.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/from_bits_truncate.rs
+@@ -0,0 +1,40 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(0, 0, TestFlags::from_bits_truncate);
++    case(1, 1, TestFlags::from_bits_truncate);
++    case(
++        1 | 1 << 1 | 1 << 2,
++        1 | 1 << 1 | 1 << 2,
++        TestFlags::from_bits_truncate,
++    );
++
++    case(0, 1 << 3, TestFlags::from_bits_truncate);
++    case(1, 1 | 1 << 3, TestFlags::from_bits_truncate);
++
++    case(1 | 1 << 1, 1 | 1 << 1, TestOverlapping::from_bits_truncate);
++
++    case(0, 1 << 1, TestOverlapping::from_bits_truncate);
++}
++
++#[track_caller]
++fn case<T: Flags>(expected: T::Bits, input: T::Bits, inherent: impl FnOnce(T::Bits) -> T)
++where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(
++        expected,
++        inherent(input).bits(),
++        ""T::from_bits_truncate({:?})"",
++        input
++    );
++    assert_eq!(
++        expected,
++        T::from_bits_truncate(input).bits(),
++        ""Flags::from_bits_truncate({:?})"",
++        input
++    );
++}
+
+diff --git /dev/null b/src/tests/from_name.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/from_name.rs
+@@ -0,0 +1,38 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(Some(1), ""A"", TestFlags::from_name);
++    case(Some(1 << 1), ""B"", TestFlags::from_name);
++    case(Some(1 | 1 << 1 | 1 << 2), ""ABC"", TestFlags::from_name);
++
++    case(None, """", TestFlags::from_name);
++    case(None, ""a"", TestFlags::from_name);
++    case(None, ""0x1"", TestFlags::from_name);
++    case(None, ""A | B"", TestFlags::from_name);
++
++    case(Some(0), ""ZERO"", TestZero::from_name);
++
++    case(Some(2), ""二"", TestUnicode::from_name);
++}
++
++#[track_caller]
++fn case<T: Flags>(expected: Option<T::Bits>, input: &str, inherent: impl FnOnce(&str) -> Option<T>)
++where
++    <T as Flags>::Bits: std::fmt::Debug + PartialEq,
++{
++    assert_eq!(
++        expected,
++        inherent(input).map(|f| f.bits()),
++        ""T::from_name({:?})"",
++        input
++    );
++    assert_eq!(
++        expected,
++        T::from_name(input).map(|f| f.bits()),
++        ""Flags::from_name({:?})"",
++        input
++    );
++}
+
+diff --git /dev/null b/src/tests/insert.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/insert.rs
+@@ -0,0 +1,91 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::A, 1),
++            (TestFlags::A | TestFlags::B, 1 | 1 << 1),
++            (TestFlags::empty(), 0),
++            (TestFlags::from_bits_retain(1 << 3), 1 << 3),
++        ],
++        TestFlags::insert,
++        TestFlags::set,
++    );
++
++    case(
++        TestFlags::A,
++        &[
++            (TestFlags::A, 1),
++            (TestFlags::empty(), 1),
++            (TestFlags::B, 1 | 1 << 1),
++        ],
++        TestFlags::insert,
++        TestFlags::set,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent_insert: impl FnMut(&mut T, T),
++    mut inherent_set: impl FnMut(&mut T, T, bool),
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                inherent_insert(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""{:?}.insert({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                Flags::insert(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""Flags::insert({:?}, {:?})"",
++            value,
++            input
++        );
++
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                inherent_set(&mut value, *input, true);
++                value
++            }
++            .bits(),
++            ""{:?}.set({:?}, true)"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                Flags::set(&mut value, *input, true);
++                value
++            }
++            .bits(),
++            ""Flags::set({:?}, {:?}, true)"",
++            value,
++            input
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/intersection.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/intersection.rs
+@@ -0,0 +1,79 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[(TestFlags::empty(), 0), (TestFlags::all(), 0)],
++        TestFlags::intersection,
++    );
++
++    case(
++        TestFlags::all(),
++        &[
++            (TestFlags::all(), 1 | 1 << 1 | 1 << 2),
++            (TestFlags::A, 1),
++            (TestFlags::from_bits_retain(1 << 3), 0),
++        ],
++        TestFlags::intersection,
++    );
++
++    case(
++        TestFlags::from_bits_retain(1 << 3),
++        &[(TestFlags::from_bits_retain(1 << 3), 1 << 3)],
++        TestFlags::intersection,
++    );
++
++    case(
++        TestOverlapping::AB,
++        &[(TestOverlapping::BC, 1 << 1)],
++        TestOverlapping::intersection,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + std::ops::BitAnd<Output = T> + std::ops::BitAndAssign + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent: impl FnMut(T, T) -> T,
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent(value, *input).bits(),
++            ""{:?}.intersection({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::intersection(value, *input).bits(),
++            ""Flags::intersection({:?}, {:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            (value & *input).bits(),
++            ""{:?} & {:?}"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                value &= *input;
++                value
++            }
++            .bits(),
++            ""{:?} &= {:?}"",
++            value,
++            input,
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/intersects.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/intersects.rs
+@@ -0,0 +1,91 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::empty(), false),
++            (TestFlags::A, false),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::from_bits_retain(1 << 3), false),
++        ],
++        TestFlags::intersects,
++    );
++
++    case(
++        TestFlags::A,
++        &[
++            (TestFlags::empty(), false),
++            (TestFlags::A, true),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::ABC, true),
++            (TestFlags::from_bits_retain(1 << 3), false),
++            (TestFlags::from_bits_retain(1 | (1 << 3)), true),
++        ],
++        TestFlags::intersects,
++    );
++
++    case(
++        TestFlags::ABC,
++        &[
++            (TestFlags::empty(), false),
++            (TestFlags::A, true),
++            (TestFlags::B, true),
++            (TestFlags::C, true),
++            (TestFlags::ABC, true),
++            (TestFlags::from_bits_retain(1 << 3), false),
++        ],
++        TestFlags::intersects,
++    );
++
++    case(
++        TestFlags::from_bits_retain(1 << 3),
++        &[
++            (TestFlags::empty(), false),
++            (TestFlags::A, false),
++            (TestFlags::B, false),
++            (TestFlags::C, false),
++            (TestFlags::from_bits_retain(1 << 3), true),
++        ],
++        TestFlags::intersects,
++    );
++
++    case(
++        TestOverlapping::AB,
++        &[
++            (TestOverlapping::AB, true),
++            (TestOverlapping::BC, true),
++            (TestOverlapping::from_bits_retain(1 << 1), true),
++        ],
++        TestOverlapping::intersects,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + Copy>(
++    value: T,
++    inputs: &[(T, bool)],
++    mut inherent: impl FnMut(&T, T) -> bool,
++) {
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent(&value, *input),
++            ""{:?}.intersects({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::intersects(&value, *input),
++            ""Flags::intersects({:?}, {:?})"",
++            value,
++            input
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/is_all.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/is_all.rs
+@@ -0,0 +1,32 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(false, TestFlags::empty(), TestFlags::is_all);
++    case(false, TestFlags::A, TestFlags::is_all);
++
++    case(true, TestFlags::ABC, TestFlags::is_all);
++
++    case(
++        true,
++        TestFlags::ABC | TestFlags::from_bits_retain(1 << 3),
++        TestFlags::is_all,
++    );
++
++    case(true, TestZero::empty(), TestZero::is_all);
++
++    case(true, TestEmpty::empty(), TestEmpty::is_all);
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug>(expected: bool, value: T, inherent: impl FnOnce(&T) -> bool) {
++    assert_eq!(expected, inherent(&value), ""{:?}.is_all()"", value);
++    assert_eq!(
++        expected,
++        Flags::is_all(&value),
++        ""Flags::is_all({:?})"",
++        value
++    );
++}
+
+diff --git /dev/null b/src/tests/is_empty.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/is_empty.rs
+@@ -0,0 +1,31 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(true, TestFlags::empty(), TestFlags::is_empty);
++
++    case(false, TestFlags::A, TestFlags::is_empty);
++    case(false, TestFlags::ABC, TestFlags::is_empty);
++    case(
++        false,
++        TestFlags::from_bits_retain(1 << 3),
++        TestFlags::is_empty,
++    );
++
++    case(true, TestZero::empty(), TestZero::is_empty);
++
++    case(true, TestEmpty::empty(), TestEmpty::is_empty);
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug>(expected: bool, value: T, inherent: impl FnOnce(&T) -> bool) {
++    assert_eq!(expected, inherent(&value), ""{:?}.is_empty()"", value);
++    assert_eq!(
++        expected,
++        Flags::is_empty(&value),
++        ""Flags::is_empty({:?})"",
++        value
++    );
++}
+
+diff --git /dev/null b/src/tests/iter.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/iter.rs
+@@ -0,0 +1,186 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn roundtrip() {
++    for a in 0u8..=255 {
++        for b in 0u8..=255 {
++            let f = TestFlags::from_bits_retain(a | b);
++
++            assert_eq!(f, f.iter().collect::<TestFlags>());
++            assert_eq!(
++                TestFlags::from_bits_truncate(f.bits()),
++                f.iter_names().map(|(_, f)| f).collect::<TestFlags>()
++            );
++        }
++    }
++}
++
++mod collect {
++    use super::*;
++
++    #[test]
++    fn cases() {
++        assert_eq!(0, [].into_iter().collect::<TestFlags>().bits());
++
++        assert_eq!(1, [TestFlags::A,].into_iter().collect::<TestFlags>().bits());
++
++        assert_eq!(
++            1 | 1 << 1 | 1 << 2,
++            [TestFlags::A, TestFlags::B | TestFlags::C,]
++                .into_iter()
++                .collect::<TestFlags>()
++                .bits()
++        );
++
++        assert_eq!(
++            1 | 1 << 3,
++            [
++                TestFlags::from_bits_retain(1 << 3),
++                TestFlags::empty(),
++                TestFlags::A,
++            ]
++            .into_iter()
++            .collect::<TestFlags>()
++            .bits()
++        );
++    }
++}
++
++mod iter {
++    use super::*;
++
++    #[test]
++    fn cases() {
++        case(&[], TestFlags::empty(), TestFlags::iter);
++
++        case(&[1], TestFlags::A, TestFlags::iter);
++        case(&[1, 1 << 1], TestFlags::A | TestFlags::B, TestFlags::iter);
++        case(
++            &[1, 1 << 1, 1 << 3],
++            TestFlags::A | TestFlags::B | TestFlags::from_bits_retain(1 << 3),
++            TestFlags::iter,
++        );
++
++        case(&[1, 1 << 1, 1 << 2], TestFlags::ABC, TestFlags::iter);
++        case(
++            &[1, 1 << 1, 1 << 2, 1 << 3],
++            TestFlags::ABC | TestFlags::from_bits_retain(1 << 3),
++            TestFlags::iter,
++        );
++
++        case(
++            &[1 | 1 << 1 | 1 << 2],
++            TestFlagsInvert::ABC,
++            TestFlagsInvert::iter,
++        );
++
++        case(&[], TestZero::ZERO, TestZero::iter);
++    }
++
++    #[track_caller]
++    fn case<T: Flags + std::fmt::Debug + IntoIterator<Item = T> + Copy>(
++        expected: &[T::Bits],
++        value: T,
++        inherent: impl FnOnce(&T) -> crate::iter::Iter<T>,
++    ) where
++        T::Bits: std::fmt::Debug + PartialEq,
++    {
++        assert_eq!(
++            expected,
++            inherent(&value).map(|f| f.bits()).collect::<Vec<_>>(),
++            ""{:?}.iter()"",
++            value
++        );
++        assert_eq!(
++            expected,
++            Flags::iter(&value).map(|f| f.bits()).collect::<Vec<_>>(),
++            ""Flags::iter({:?})"",
++            value
++        );
++        assert_eq!(
++            expected,
++            value.into_iter().map(|f| f.bits()).collect::<Vec<_>>(),
++            ""{:?}.into_iter()"",
++            value
++        );
++    }
++}
++
++mod iter_names {
++    use super::*;
++
++    #[test]
++    fn cases() {
++        case(&[], TestFlags::empty(), TestFlags::iter_names);
++
++        case(&[(""A"", 1)], TestFlags::A, TestFlags::iter_names);
++        case(
++            &[(""A"", 1), (""B"", 1 << 1)],
++            TestFlags::A | TestFlags::B,
++            TestFlags::iter_names,
++        );
++        case(
++            &[(""A"", 1), (""B"", 1 << 1)],
++            TestFlags::A | TestFlags::B | TestFlags::from_bits_retain(1 << 3),
++            TestFlags::iter_names,
++        );
++
++        case(
++            &[(""A"", 1), (""B"", 1 << 1), (""C"", 1 << 2)],
++            TestFlags::ABC,
++            TestFlags::iter_names,
++        );
++        case(
++            &[(""A"", 1), (""B"", 1 << 1), (""C"", 1 << 2)],
++            TestFlags::ABC | TestFlags::from_bits_retain(1 << 3),
++            TestFlags::iter_names,
++        );
++
++        case(
++            &[(""ABC"", 1 | 1 << 1 | 1 << 2)],
++            TestFlagsInvert::ABC,
++            TestFlagsInvert::iter_names,
++        );
++
++        case(&[], TestZero::ZERO, TestZero::iter_names);
++
++        case(
++            &[(""A"", 1)],
++            TestOverlappingFull::A,
++            TestOverlappingFull::iter_names,
++        );
++        case(
++            &[(""A"", 1), (""D"", 1 << 1)],
++            TestOverlappingFull::A | TestOverlappingFull::D,
++            TestOverlappingFull::iter_names,
++        );
++    }
++
++    #[track_caller]
++    fn case<T: Flags + std::fmt::Debug>(
++        expected: &[(&'static str, T::Bits)],
++        value: T,
++        inherent: impl FnOnce(&T) -> crate::iter::IterNames<T>,
++    ) where
++        T::Bits: std::fmt::Debug + PartialEq,
++    {
++        assert_eq!(
++            expected,
++            inherent(&value)
++                .map(|(n, f)| (n, f.bits()))
++                .collect::<Vec<_>>(),
++            ""{:?}.iter_names()"",
++            value
++        );
++        assert_eq!(
++            expected,
++            Flags::iter_names(&value)
++                .map(|(n, f)| (n, f.bits()))
++                .collect::<Vec<_>>(),
++            ""Flags::iter_names({:?})"",
++            value
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/parser.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/parser.rs
+@@ -0,0 +1,115 @@
++use super::*;
++
++use crate::{
++    parser::{from_str, to_writer},
++    Flags,
++};
++
++#[test]
++fn roundtrip() {
++    let mut s = String::new();
++
++    for a in 0u8..=255 {
++        for b in 0u8..=255 {
++            let f = TestFlags::from_bits_retain(a | b);
++
++            s.clear();
++            to_writer(&f, &mut s).unwrap();
++
++            assert_eq!(f, from_str::<TestFlags>(&s).unwrap());
++        }
++    }
++}
++
++mod from_str {
++    use super::*;
++
++    #[test]
++    fn valid() {
++        assert_eq!(0, from_str::<TestFlags>("""").unwrap().bits());
++
++        assert_eq!(1, from_str::<TestFlags>(""A"").unwrap().bits());
++        assert_eq!(1, from_str::<TestFlags>("" A "").unwrap().bits());
++        assert_eq!(
++            1 | 1 << 1 | 1 << 2,
++            from_str::<TestFlags>(""A | B | C"").unwrap().bits()
++        );
++        assert_eq!(
++            1 | 1 << 1 | 1 << 2,
++            from_str::<TestFlags>(""A\n|\tB\r\n|   C "").unwrap().bits()
++        );
++        assert_eq!(
++            1 | 1 << 1 | 1 << 2,
++            from_str::<TestFlags>(""A|B|C"").unwrap().bits()
++        );
++
++        assert_eq!(1 << 3, from_str::<TestFlags>(""0x8"").unwrap().bits());
++        assert_eq!(1 | 1 << 3, from_str::<TestFlags>(""A | 0x8"").unwrap().bits());
++        assert_eq!(
++            1 | 1 << 1 | 1 << 3,
++            from_str::<TestFlags>(""0x1 | 0x8 | B"").unwrap().bits()
++        );
++
++        assert_eq!(
++            1 | 1 << 1,
++            from_str::<TestUnicode>(""一 | 二"").unwrap().bits()
++        );
++    }
++
++    #[test]
++    fn invalid() {
++        assert!(from_str::<TestFlags>(""a"")
++            .unwrap_err()
++            .to_string()
++            .starts_with(""unrecognized named flag""));
++        assert!(from_str::<TestFlags>(""A & B"")
++            .unwrap_err()
++            .to_string()
++            .starts_with(""unrecognized named flag""));
++
++        assert!(from_str::<TestFlags>(""0xg"")
++            .unwrap_err()
++            .to_string()
++            .starts_with(""invalid hex flag""));
++        assert!(from_str::<TestFlags>(""0xffffffffffff"")
++            .unwrap_err()
++            .to_string()
++            .starts_with(""invalid hex flag""));
++    }
++}
++
++mod to_writer {
++    use super::*;
++
++    #[test]
++    fn cases() {
++        assert_eq!("""", write(TestFlags::empty()));
++        assert_eq!(""A"", write(TestFlags::A));
++        assert_eq!(""A | B | C"", write(TestFlags::all()));
++        assert_eq!(""0x8"", write(TestFlags::from_bits_retain(1 << 3)));
++        assert_eq!(
++            ""A | 0x8"",
++            write(TestFlags::A | TestFlags::from_bits_retain(1 << 3))
++        );
++
++        assert_eq!("""", write(TestZero::ZERO));
++
++        assert_eq!(""ABC"", write(TestFlagsInvert::all()));
++
++        assert_eq!(""A"", write(TestOverlappingFull::C));
++        assert_eq!(
++            ""A | D"",
++            write(TestOverlappingFull::C | TestOverlappingFull::D)
++        );
++    }
++
++    fn write<F: Flags>(value: F) -> String
++    where
++        F::Bits: crate::parser::WriteHex,
++    {
++        let mut s = String::new();
++
++        to_writer(&value, &mut s).unwrap();
++        s
++    }
++}
+
+diff --git /dev/null b/src/tests/remove.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/remove.rs
+@@ -0,0 +1,100 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::A, 0),
++            (TestFlags::empty(), 0),
++            (TestFlags::from_bits_retain(1 << 3), 0),
++        ],
++        TestFlags::remove,
++        TestFlags::set,
++    );
++
++    case(
++        TestFlags::A,
++        &[
++            (TestFlags::A, 0),
++            (TestFlags::empty(), 1),
++            (TestFlags::B, 1),
++        ],
++        TestFlags::remove,
++        TestFlags::set,
++    );
++
++    case(
++        TestFlags::ABC,
++        &[
++            (TestFlags::A, 1 << 1 | 1 << 2),
++            (TestFlags::A | TestFlags::C, 1 << 1),
++        ],
++        TestFlags::remove,
++        TestFlags::set,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent_remove: impl FnMut(&mut T, T),
++    mut inherent_set: impl FnMut(&mut T, T, bool),
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                inherent_remove(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""{:?}.remove({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                Flags::remove(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""Flags::remove({:?}, {:?})"",
++            value,
++            input
++        );
++
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                inherent_set(&mut value, *input, false);
++                value
++            }
++            .bits(),
++            ""{:?}.set({:?}, false)"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                Flags::set(&mut value, *input, false);
++                value
++            }
++            .bits(),
++            ""Flags::set({:?}, {:?}, false)"",
++            value,
++            input
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/symmetric_difference.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/symmetric_difference.rs
+@@ -0,0 +1,110 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::empty(), 0),
++            (TestFlags::all(), 1 | 1 << 1 | 1 << 2),
++            (TestFlags::from_bits_retain(1 << 3), 1 << 3),
++        ],
++        TestFlags::symmetric_difference,
++        TestFlags::toggle,
++    );
++
++    case(
++        TestFlags::A,
++        &[
++            (TestFlags::empty(), 1),
++            (TestFlags::A, 0),
++            (TestFlags::all(), 1 << 1 | 1 << 2),
++        ],
++        TestFlags::symmetric_difference,
++        TestFlags::toggle,
++    );
++
++    case(
++        TestFlags::A | TestFlags::B | TestFlags::from_bits_retain(1 << 3),
++        &[
++            (TestFlags::ABC, 1 << 2 | 1 << 3),
++            (TestFlags::from_bits_retain(1 << 3), 1 | 1 << 1),
++        ],
++        TestFlags::symmetric_difference,
++        TestFlags::toggle,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + std::ops::BitXor<Output = T> + std::ops::BitXorAssign + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent_sym_diff: impl FnMut(T, T) -> T,
++    mut inherent_toggle: impl FnMut(&mut T, T),
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent_sym_diff(value, *input).bits(),
++            ""{:?}.symmetric_difference({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::symmetric_difference(value, *input).bits(),
++            ""Flags::symmetric_difference({:?}, {:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            (value ^ *input).bits(),
++            ""{:?} ^ {:?}"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                value ^= *input;
++                value
++            }
++            .bits(),
++            ""{:?} ^= {:?}"",
++            value,
++            input,
++        );
++
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                inherent_toggle(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""{:?}.toggle({:?})"",
++            value,
++            input,
++        );
++
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                Flags::toggle(&mut value, *input);
++                value
++            }
++            .bits(),
++            ""{:?}.toggle({:?})"",
++            value,
++            input,
++        );
++    }
++}
+
+diff --git /dev/null b/src/tests/union.rs
+new file mode 100644
+--- /dev/null
++++ b/src/tests/union.rs
+@@ -0,0 +1,71 @@
++use super::*;
++
++use crate::Flags;
++
++#[test]
++fn cases() {
++    case(
++        TestFlags::empty(),
++        &[
++            (TestFlags::A, 1),
++            (TestFlags::all(), 1 | 1 << 1 | 1 << 2),
++            (TestFlags::empty(), 0),
++            (TestFlags::from_bits_retain(1 << 3), 1 << 3),
++        ],
++        TestFlags::union,
++    );
++
++    case(
++        TestFlags::A | TestFlags::C,
++        &[
++            (TestFlags::A | TestFlags::B, 1 | 1 << 1 | 1 << 2),
++            (TestFlags::A, 1 | 1 << 2),
++        ],
++        TestFlags::union,
++    );
++}
++
++#[track_caller]
++fn case<T: Flags + std::fmt::Debug + std::ops::BitOr<Output = T> + std::ops::BitOrAssign + Copy>(
++    value: T,
++    inputs: &[(T, T::Bits)],
++    mut inherent: impl FnMut(T, T) -> T,
++) where
++    T::Bits: std::fmt::Debug + PartialEq + Copy,
++{
++    for (input, expected) in inputs {
++        assert_eq!(
++            *expected,
++            inherent(value, *input).bits(),
++            ""{:?}.union({:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            Flags::union(value, *input).bits(),
++            ""Flags::union({:?}, {:?})"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            (value | *input).bits(),
++            ""{:?} | {:?}"",
++            value,
++            input
++        );
++        assert_eq!(
++            *expected,
++            {
++                let mut value = value;
++                value |= *input;
++                value
++            }
++            .bits(),
++            ""{:?} |= {:?}"",
++            value,
++            input,
++        );
++    }
++}
+"

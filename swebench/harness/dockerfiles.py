@@ -31,6 +31,7 @@ RUN apt-get update
 RUN apt-get install python3-pip -y
 RUN apt-get install cmake -y
 RUN apt-get install protobuf-compiler -y
+
 """
 
 _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
@@ -38,7 +39,6 @@ _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
-
 WORKDIR /testbed/
 
 # Automatically activate the testbed environment
@@ -47,11 +47,41 @@ WORKDIR /testbed/
 
 _DOCKERFILE_ENV_asterinas = r"""
 FROM --platform={platform} asterinas/asterinas:{tag}
+ENV HTTPS_PROXY=http://172.24.16.1:7899
+ENV HTTP_PROXY=http://172.24.16.1:7899
 
+# ENV RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
+# ENV RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+
+ENV RUSTUP_DIST_SERVER=https://mirror.sjtu.edu.cn/rust-static
+ENV RUSTUP_UPDATE_ROOT=https://mirror.sjtu.edu.cn/rust-static/rustup
+
+RUN mkdir -p ~/.cargo && \
+    cat <<EOF > ~/.cargo/config
+[source.crates-io]
+replace-with = "sjtu"
+
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index"
+
+# 中国科学技术大学
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+# 上海交通大学
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+# rustcc社区
+[source.rustcc]
+registry = "git://crates.rustcc.cn/crates.io-index"
+EOF
+
+RUN git config --global user.name "riverLaugh" \
+    && git config --global user.email "2314398305@qq.com"
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
-
 """
 
 _DOCKERFILE_INSTANCE = r"""FROM --platform={platform} {env_image_name}

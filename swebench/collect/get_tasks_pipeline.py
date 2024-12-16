@@ -49,7 +49,7 @@ def check_log():
     return pr_done
 
 
-def construct_data_files(data: dict,pr_lock,task_lock):
+def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
     """
     Logic for combining multiple .all PR files into a single fine tuning dataset
 
@@ -80,6 +80,7 @@ def construct_data_files(data: dict,pr_lock,task_lock):
         repo_name = repo.split("/")[1]
         try:
             path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
+            print(f"Processing {path_pr}...")
             if cutoff_date:
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
             do_pull = True
@@ -116,15 +117,16 @@ def construct_data_files(data: dict,pr_lock,task_lock):
                 print(f"📁 Pull request data for {repo} already exists at {path_pr}, skipping...")
             # modify path_task based on weather auto is True
             if auto:
-                path_task = os.path.join(path_tasks, f"auto/{repo_name}-task-instances.jsonl")
+                path_task = os.path.join(path_tasks, f"auto/{repo_name}-{mode}-task-instances.jsonl")
             else:
-                path_task = os.path.join(path_tasks, f"{repo_name}-task-instances.jsonl")
+                path_task = os.path.join(path_tasks, f"{repo_name}-{mode}-task-instances.jsonl")
             if not os.path.exists(path_task):
                 print(f"Task instance data for {repo} not found, creating...")
-                build_dataset(path_pr, path_task, token, task_lock)
+                print(mode)
+                build_dataset(path_pr, path_task,mode, token, task_lock)
                 print(f"✅ Successfully saved task instance data for {repo} to {path_task}")
             else:
-                build_dataset(path_pr, path_task, token, task_lock)
+                build_dataset(path_pr, path_task,mode, token, task_lock)
                 print(f"📁 Task instance data for {repo} already exists at {path_task}, countinue...")
         except Exception as e:
             print("-"*80)
@@ -138,6 +140,7 @@ def main(
         repos: list,
         path_prs: str,
         path_tasks: str,
+        mode:str,
         pull_numbers: list,
         max_pulls: int = None,
         cutoff_date: str = None,
@@ -182,8 +185,6 @@ def main(
         for repos, token in zip(data_task_lists, tokens)
     ]
 
-
-
     if auto:
         pr_lock = multiprocessing.Manager().Lock()
         task_lock = multiprocessing.Manager().Lock()
@@ -194,7 +195,7 @@ def main(
                 pr_log.flush()
 
     with Pool(len(tokens)) as p:
-        p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
+        p.starmap(construct_data_files, [(data, pr_lock, task_lock, mode) for data in data_pooled])
 
 
 if __name__ == "__main__":
@@ -209,6 +210,12 @@ if __name__ == "__main__":
         "--path_tasks",
         type=str,
         help="Path to folder to save task instance data files to",
+    )
+    parser.add_argument(
+        "--mode",
+        type=str,
+        choices=['llm', 'new', 'swe'], 
+        help="Mode to run in",
     )
     parser.add_argument(
         "--max_pulls",

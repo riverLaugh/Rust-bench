@@ -77,12 +77,11 @@ def make_arrow_rs_test_cmds(
 
 
 def make_asterinas_test_cmds(
-        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
-):
-    DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
-    test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
+    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+) :
     cmds = []
-    test_crates = findCrate(test_files)
+    test_crates = findCrate(tests_changed)
+    print(test_crates)
     if instance["instance_id"] == "asterinas__asterinas-1073":
         cmds.append("make run AUTO_TEST=syscall ENABLE_KVM=1 BOOT_PROTOCOL=linux-efi-handover64 RELEASE=0")
         cmds.append(
@@ -91,10 +90,12 @@ def make_asterinas_test_cmds(
     for test_crate in test_crates:
         if test_crate in NON_OSDK_CRATES:
             cmds.append(f"cd /{env_name}/{test_crate} ")
-            cmds.append(f"cargo test --no-fail-fast ")
+            cmds.append(f"cargo test --no-fail-fast --all-features")
+            cmds.append(f"cd ..")
         if test_crate in OSDK_CRATES:
             cmds.append(f"cd /{env_name}/{test_crate} ")
             cmds.append("cargo osdk test ")
+            cmds.append(f"cd ..")
         if test_crate == "test/apps":
             cmds.append("make run AUTO_TEST=test")
     return cmds
