@@ -36,6 +36,31 @@ RUN apt-get install protobuf-compiler -y
 
 _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
 
+ENV RUSTUP_DIST_SERVER=https://mirror.sjtu.edu.cn/rust-static
+ENV RUSTUP_UPDATE_ROOT=https://mirror.sjtu.edu.cn/rust-static/rustup
+
+RUN mkdir -p ~/.cargo && \
+    cat <<EOF > ~/.cargo/config
+[source.crates-io]
+replace-with = "sjtu"
+
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index"
+
+# 中国科学技术大学
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+# 上海交通大学
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
+
+# rustcc社区
+[source.rustcc]
+registry = "git://crates.rustcc.cn/crates.io-index"
+EOF
+
+
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"

@@ -322,4 +322,5 @@ MAP_REPO_TO_PARSER = {
     "asterinas/asterinas": parse_log_cargo,
     "tokio-rs/tokio": parse_log_cargo,
     "fermyon/spin": parse_log_cargo,
+    "GuillaumeGomez/sysinfo" : parse_log_cargo,
 }

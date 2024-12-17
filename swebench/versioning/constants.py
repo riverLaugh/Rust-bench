@@ -26,6 +26,7 @@ MAP_REPO_TO_VERSION_PATHS = {
     "asterinas/asterinas":["VERSION","Cargo.toml"],
     "tokio-rs/tokio":["Cargo.toml","tokio/Cargo.toml"],
     "fermyon/spin":["Cargo.toml"],
+    "GuillaumeGomez/sysinfo":["Cargo.toml"]
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -36,7 +37,8 @@ MAP_REPO_TO_VERSION_PATTERNS={
         "serde-rs/serde",
         "bitflags/bitflags",
         "apache/arrow-rs",
-        "fermyon/spin"
+        "fermyon/spin",
+        "GuillaumeGomez/sysinfo"
     ]
 }
 
