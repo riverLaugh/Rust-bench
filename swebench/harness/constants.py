@@ -537,6 +537,18 @@ SPECS_SYSINFO.update({
     for k in ["0.30"]
 })
 
+SPECS_RAYON = {
+    k: {
+        "rustc": "nightly",
+        "test_cmd": "cargo test --all --no-fail-fast --all-features",
+        "env_setup": [
+            "apt-get update",
+            "apt-get install pkg-config -y",
+        ]
+    }
+    for k in ["1.8", "1.6", "1.5"]
+}
+
 # Constants - Repo Test Features
 FEATURES_ARROW = {
     # instance id
@@ -605,7 +617,8 @@ MAP_REPO_VERSION_TO_SPECS = {
     "apache/arrow-rs": SPECS_ARROW,
     "asterinas/asterinas": SPECS_ASTERINAS,
     "fermyon/spin": SPECS_SPIN,
-    "GuillaumeGomez/sysinfo":SPECS_SYSINFO
+    "GuillaumeGomez/sysinfo":SPECS_SYSINFO,
+    "rayon-rs/rayon": SPECS_RAYON,
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -619,7 +632,8 @@ MAP_REPO_TO_REQS_PATHS = {
     "asterinas/asterinas": "Cargo.toml",
     "tokio-rs/tokio": "Cargo.toml",
     "fermyon/spin":"Cargo.toml",
-    "GuillaumeGomez/sysinfo":"Cargo.toml"
+    "GuillaumeGomez/sysinfo":"Cargo.toml",
+    "rayon-rs/rayon": "Cargo.toml",
 }
 
 

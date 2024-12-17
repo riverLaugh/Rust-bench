@@ -47,7 +47,11 @@ def parse_log_pytest_options(log: str) -> dict[str, str]:
             has_option = option_pattern.search(test_case[1])
             if has_option:
                 main, option = has_option.groups()
-                if option.startswith("/") and not option.startswith("//") and "*" not in option:
+                if (
+                    option.startswith("/")
+                    and not option.startswith("//")
+                    and "*" not in option
+                ):
                     option = "/" + option.split("/")[-1]
                 test_name = f"{main}[{option}]"
             else:
@@ -74,7 +78,9 @@ def parse_log_django(log: str) -> dict[str, str]:
 
         # This isn't ideal but the test output spans multiple lines
         if "--version is equivalent to version" in line:
-            test_status_map["--version is equivalent to version"] = TestStatus.PASSED.value
+            test_status_map["--version is equivalent to version"] = (
+                TestStatus.PASSED.value
+            )
 
         # Log it in case of error
         if " ... " in line:
@@ -86,7 +92,9 @@ def parse_log_django(log: str) -> dict[str, str]:
                 # TODO: Temporary, exclusive fix for django__django-7188
                 # The proper fix should involve somehow getting the test results to
                 # print on a separate line, rather than the same line
-                if line.strip().startswith("Applying sites.0002_alter_domain_unique...test_no_migrations"):
+                if line.strip().startswith(
+                    "Applying sites.0002_alter_domain_unique...test_no_migrations"
+                ):
                     line = line.split("...", 1)[-1].strip()
                 test = line.rsplit(suffix, 1)[0]
                 test_status_map[test] = TestStatus.PASSED.value
@@ -123,7 +131,7 @@ def parse_log_django(log: str) -> dict[str, str]:
     patterns = [
         r"^(.*?)\s\.\.\.\sTesting\ against\ Django\ installed\ in\ ((?s:.*?))\ silenced\)\.\nok$",
         r"^(.*?)\s\.\.\.\sInternal\ Server\ Error:\ \/(.*)\/\nok$",
-        r"^(.*?)\s\.\.\.\sSystem check identified no issues \(0 silenced\)\nok$"
+        r"^(.*?)\s\.\.\.\sSystem check identified no issues \(0 silenced\)\nok$",
     ]
     for pattern in patterns:
         for match in re.finditer(pattern, log, re.MULTILINE):
@@ -238,17 +246,19 @@ def parse_log_matplotlib(log: str) -> dict[str, str]:
             test_status_map[test_case[1]] = test_case[0]
     return test_status_map
 
-def parse_log_serde(log:str) ->dict[str, str]:
-    
+
+def parse_log_serde(log: str) -> dict[str, str]:
+
     pass
 
-def parse_log_cargo(log:str) ->dict[str, str]:
+
+def parse_log_cargo(log: str) -> dict[str, str]:
     """
     Parses cargo test output and extracts the test case names and their statuses (PASSED or FAILED).
-    
+
     Args:
         log (str): The cargo test output log as a string.
-    
+
     Returns:
         dict: A dictionary where the keys are test case names and the values are 'PASSED' or 'FAILED'.
     """
@@ -258,8 +268,8 @@ def parse_log_cargo(log:str) ->dict[str, str]:
     lines = log.split("\n")
 
     # Regular expressions to match test results
-    passed_re = re.compile(r'test ([\s\S]+) ... ok')
-    failed_re = re.compile(r'test ([\s\S]+) ... (error|failed|FAILED)')
+    passed_re = re.compile(r"test ([\s\S]+) ... ok")
+    failed_re = re.compile(r"test ([\s\S]+) ... (error|failed|FAILED)")
 
     for line in lines:
         # Match passed tests
@@ -277,7 +287,6 @@ def parse_log_cargo(log:str) ->dict[str, str]:
     return test_status_map
 
 
-
 parse_log_astroid = parse_log_pytest
 parse_log_flask = parse_log_pytest
 parse_log_marshmallow = parse_log_pytest
@@ -293,8 +302,6 @@ parse_log_pylint = parse_log_pytest_options
 parse_log_astropy = parse_log_pytest_v2
 parse_log_scikit = parse_log_pytest_v2
 parse_log_sphinx = parse_log_pytest_v2
-
-
 
 
 MAP_REPO_TO_PARSER = {
@@ -322,5 +329,6 @@ MAP_REPO_TO_PARSER = {
     "asterinas/asterinas": parse_log_cargo,
     "tokio-rs/tokio": parse_log_cargo,
     "fermyon/spin": parse_log_cargo,
-    "GuillaumeGomez/sysinfo" : parse_log_cargo,
+    "GuillaumeGomez/sysinfo": parse_log_cargo,
+    "rayon-rs/rayon": parse_log_cargo,
 }
