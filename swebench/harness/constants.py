@@ -477,13 +477,65 @@ SPECS_TOKIO.update({
 SPECS_SPIN = {
     k:{
         "rustc":"1.81.0",
-        "test_cmd":TEST_CARGO,
+        "test_cmd":"make test-unit test-integration",
         "pre_install":[
-            "apt install pkg-config"
+            "cargo update",
+        ],
+        "env_setup":[
+            "rustup target add wasm32-wasip1 && rustup target add wasm32-unknown-unknown",
+            "rustup target add wasm32-wasi",
+            "cargo update",
+            "apt update",
+            "apt install -y pkg-config libssl-dev",
+            "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}"
         ]
     }
     for k in["3.2"]
 }
+
+SPECS_SYSINFO = {
+    k:{
+        "rustc":"1.74",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            
+        ],
+        "env_setup":[
+
+        ]
+    }
+    for k in ["0.8", "0.6", "0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24", 
+              "0.23", "0.22", "0.21", "0.2", "0.18", "0.17", "0.16", "0.15", "0.14",
+                "0.13", "0.11", "0.10"]
+
+}
+
+SPECS_SYSINFO.update({
+    k:{
+        "rustc":"1.74",
+        "test_cmd":TEST_CARGO,
+        "pre_install":[
+            r"""
+# 在第 111 行进行替换
+# sed -i '111s/\(system\.refresh_process(Pid(\)pid)/\1pid.try_into().unwrap())/' src/c_interface.rs
+
+# # 在第 355 行进行替换
+# sed -i '355s/\(!fn_pointer(\)pid\.0/\1pid.0.try_into().unwrap()/' src/c_interface.rs
+
+# # 在第 380 行进行替换
+# sed -i '380s/\(system\.process(Pid(\)pid)/\1pid.try_into().unwrap())/' src/c_interface.rs
+
+# # 在第 426 行进行替换
+# sed -i '426s/\(\*process\)\.pid().0/\1.pid().0.try_into().unwrap()/' src/c_interface.rs
+
+# # 在第 436 行进行替换
+# sed -i '436s/\(\*process\)\.parent().unwrap_or(Pid(0)).0/\1.parent().unwrap_or(Pid(0)).0.try_into().unwrap()/' src/c_interface.rs
+
+"""
+        ],
+    }
+    for k in ["0.30"]
+})
 
 # Constants - Repo Test Features
 FEATURES_ARROW = {
@@ -552,7 +604,8 @@ MAP_REPO_VERSION_TO_SPECS = {
     "bitflags/bitflags": SPECS_BITFLAGS,
     "apache/arrow-rs": SPECS_ARROW,
     "asterinas/asterinas": SPECS_ASTERINAS,
-    "fermyon/spin": SPECS_SPIN
+    "fermyon/spin": SPECS_SPIN,
+    "GuillaumeGomez/sysinfo":SPECS_SYSINFO
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -565,7 +618,8 @@ MAP_REPO_TO_REQS_PATHS = {
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
     "tokio-rs/tokio": "Cargo.toml",
-    "fermyon/spin":"Cargo.toml"
+    "fermyon/spin":"Cargo.toml",
+    "GuillaumeGomez/sysinfo":"Cargo.toml"
 }
 
 

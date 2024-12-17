@@ -95,11 +95,11 @@ class TestSpec:
         hash_object.update(str(self.env_script_list).encode("utf-8"))
         hash_value = hash_object.hexdigest()
         val = hash_value[:22]  # 22 characters is still very likely to be unique
-        return f"sweb.env.{self.arch}.{val}.{self.repo.replace('/','_')}.{self.version.replace('.','_')}:latest"
+        return f"sweb.env.{self.arch}.{val}.{self.repo.replace('/','_').lower()}.{self.version.replace('.','_')}:latest"
 
     @property
     def instance_image_key(self):
-        return f"sweb.eval.{self.arch}.{self.instance_id}:latest"
+        return f"sweb.eval.{self.arch}.{self.instance_id.lower()}:latest"
 
     def get_instance_container_name(self, run_id=None):
         if not run_id:
