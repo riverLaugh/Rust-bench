@@ -27,7 +27,7 @@ MAP_REPO_TO_VERSION_PATHS = {
     "tokio-rs/tokio": ["Cargo.toml", "tokio/Cargo.toml"],
     "fermyon/spin": ["Cargo.toml"],
     "GuillaumeGomez/sysinfo": ["Cargo.toml"],
-    "rayon-rs/rayon": ["Cargo.toml"],,
+    "rayon-rs/rayon": ["Cargo.toml"],
     "rust-lang/regex":["Cargo.toml"],
     "dtolnay/syn":["Cargo.toml"],
     "serde-rs/json":["Cargo.toml"]
