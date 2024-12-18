@@ -1,28 +1,15 @@
 import re
 
 from swebench.harness.constants import (
-    MAP_REPO_ID_TO_FEATURES,
     NON_OSDK_CRATES,
     OSDK_CRATES,
 )
 from swebench.harness.utils import findCrate
 
 
-def get_test_features(repo_name, instance_id, test_name):
-    if not repo_name in MAP_REPO_ID_TO_FEATURES:
-        return None
-    if instance_id not in MAP_REPO_ID_TO_FEATURES[repo_name]:
-        return None
-    if test_name not in MAP_REPO_ID_TO_FEATURES[repo_name][instance_id]:
-        return None
-    return MAP_REPO_ID_TO_FEATURES[repo_name][instance_id][test_name]
-
-
 def make_arrow_rs_test_cmds(
-        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
-    # get instance basic info
-    repo, instance_id = instance["repo"], instance["instance_id"]
     # ban cargo test warnning
     cmds = ['export RUSTFLAGS="-Awarnings"']
     # run doc test
@@ -35,7 +22,7 @@ def make_arrow_rs_test_cmds(
     for dir in docs:
         dirs = dir.split("/")
         cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --doc")
+        cmds.append(f"cargo test --no-fail-fast --all-features --doc")
         cmds.append(f"cd ./{'../' * len(dirs)}")
     # run unit test
     for test_path in tests_changed:
@@ -43,22 +30,15 @@ def make_arrow_rs_test_cmds(
             continue
         dirs = [dir for dir in test_path.replace("src/lib.rs", "").split("/") if dir]
         cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --lib")
+        cmds.append(f"cargo test --no-fail-fast --all-features --lib")
         cmds.append(f"cd ./{'../' * len(dirs)}")
     # run integration test
     for test_path in tests_changed:
         paths = test_path.split("/")
         dirs, file = paths[:-1], paths[-1]
         name = file.replace(".rs", "")
-        features = get_test_features(repo, instance_id, name)
         cmds.append(f"cd ./{'/'.join(dirs)}")
-        if features:
-            cmds.extend(features["install"] if "install" in features else [])
-            cmds.append(
-                f"cargo test --no-fail-fast --features=\"{' '.join(features['features'])}\" --test {name}"
-            )
-        else:
-            cmds.append(f"cargo test --no-fail-fast --test {name}")
+        cmds.append(f"cargo test --no-fail-fast --all-features --test {name}")
         cmds.append(f"cd ./{'../' * len(dirs)}")
     # run bin test
     for test_path in tests_changed:
@@ -71,21 +51,24 @@ def make_arrow_rs_test_cmds(
         file = files[0]
         name = file.replace(".rs", "")
         cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --bin {name}")
+        cmds.append(f"cargo test --no-fail-fast --all-features --bin {name}")
         cmds.append(f"cd ./{'../' * len(dirs)}")
     return cmds
 
 
 def make_asterinas_test_cmds(
     instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
-) :
+):
     cmds = []
     test_crates = findCrate(tests_changed)
     print(test_crates)
     if instance["instance_id"] == "asterinas__asterinas-1073":
-        cmds.append("make run AUTO_TEST=syscall ENABLE_KVM=1 BOOT_PROTOCOL=linux-efi-handover64 RELEASE=0")
         cmds.append(
-            "make run AUTO_TEST=syscall SYSCALL_TEST_DIR=/exfat  ENABLE_KVM=0 BOOT_PROTOCOL=multiboot2 RELEASE=1")
+            "make run AUTO_TEST=syscall ENABLE_KVM=1 BOOT_PROTOCOL=linux-efi-handover64 RELEASE=0"
+        )
+        cmds.append(
+            "make run AUTO_TEST=syscall SYSCALL_TEST_DIR=/exfat  ENABLE_KVM=0 BOOT_PROTOCOL=multiboot2 RELEASE=1"
+        )
         return cmds
     for test_crate in test_crates:
         if test_crate in NON_OSDK_CRATES:
@@ -102,7 +85,7 @@ def make_asterinas_test_cmds(
 
 
 def make_tokio_test_cmds(
-        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
     # iterate all test files
     submodule_tests: dict[str, list | None] = {}
@@ -120,29 +103,30 @@ def make_tokio_test_cmds(
             submodule_tests[test_path.split("/")[0]] = None
     # add allow lint deny
     lints = [
-        'warnings',
-        'unused_must_use',
-        'undropped_manually_drops',
-        'invalid_doc_attributes',
-        'useless_deprecated',
-        'intra_doc_link_resolution_failure',
-        'let_underscore_lock',
-        'renamed_and_removed_lints',
-        'broken_intra_doc_links'
+        "warnings",
+        "unused_must_use",
+        "undropped_manually_drops",
+        "invalid_doc_attributes",
+        "useless_deprecated",
+        "intra_doc_link_resolution_failure",
+        "let_underscore_lock",
+        "renamed_and_removed_lints",
+        "broken_intra_doc_links",
     ]
     # generate rust flags
-    rust_flags = "export RUSTFLAGS=\""
+    rust_flags = 'export RUSTFLAGS="'
     for lint in lints:
         rust_flags += f"-A{lint} "
-    rust_flags = rust_flags[:-1] + "\""
+    rust_flags = rust_flags[:-1] + '"'
     # generate cmds
-    cmds: list[str] = [
-        rust_flags
-    ]
+    cmds: list[str] = [rust_flags]
     for submodule, test_names in submodule_tests.items():
         cmds.append(f"cd ./{submodule}")
         if isinstance(test_names, list):
-            cmds.extend(f"cargo test --no-fail-fast --all-features --test {test_name}" for test_name in test_names)
+            cmds.extend(
+                f"cargo test --no-fail-fast --all-features --test {test_name}"
+                for test_name in test_names
+            )
         else:
             cmds.append("cargo test --no-fail-fast --all-features")
         cmds.append(f"cd ../")
@@ -157,7 +141,7 @@ MAP_REPO_TO_TESTS = {
 
 
 def make_test_cmds(
-        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
     repo = instance["repo"]
     if repo not in MAP_REPO_TO_TESTS:
