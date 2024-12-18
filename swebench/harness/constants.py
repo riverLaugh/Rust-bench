@@ -122,6 +122,9 @@ SPECS_ARROW = {
         "pre_install": [
             r"""git submodule update --init""",
         ],
+        "env_setup":[
+            "pip install pyarrow"
+        ]
     }
     for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
@@ -541,73 +544,9 @@ SPECS_RAYON = {
     k: {
         "rustc": "nightly",
         "test_cmd": "cargo test --all --no-fail-fast --all-features",
-        "env_setup": [
-            "apt-get update",
-            "apt-get install pkg-config -y",
-        ]
     }
-    for k in ["1.8", "1.6", "1.5"]
+    for k in ["1.6"]
 }
-
-# Constants - Repo Test Features
-FEATURES_ARROW = {
-    # instance id
-    "apache__arrow-rs-6368": {
-        # integration test file name(without extension)
-        "pyarrow": {
-            # install feature dependencies
-            "install": [
-                "pip install pyarrow",
-            ],
-            # cargo test feature names(in Cargo.toml or in error text)
-            "features": ["pyarrow"],
-        }
-    },
-    "apache__arrow-rs-5319": {"arithmetic": {"features": ["chrono-tz"]}},
-    **{
-        instance_id: {"array_cast": {"features": ["chrono-tz"]}}
-        for instance_id in [
-            "apache__arrow-rs-3673",
-            "apache__arrow-rs-3238",
-            "apache__arrow-rs-3542",
-            "apache__arrow-rs-3222",
-        ]
-    },
-    **{
-        instance_id: {"array_cast": {"features": ["chrono-tz", "prettyprint"]}}
-        for instance_id in [
-            "apache__arrow-rs-6453",
-            "apache__arrow-rs-5769",
-            "apache__arrow-rs-5065",
-            "apache__arrow-rs-4201",
-            "apache__arrow-rs-3994",
-            "apache__arrow-rs-3961",
-        ]
-    },
-    **{
-        instance_id: {
-            "flight_sql_client_cli": {
-                "features": ["cli", "flight-sql-experimental", "tls"]
-            }
-        }
-        for instance_id in [
-            "apache__arrow-rs-6332",
-            "apache__arrow-rs-5474",
-            "apache__arrow-rs-4797",
-            "apache__arrow-rs-4250",
-            "apache__arrow-rs-4055",
-            "apache__arrow-rs-3816",
-        ]
-    },
-    **{
-        instance_id: {"csv": {"features": ["csv", "chrono-tz"]}}
-        for instance_id in ["apache__arrow-rs-4909", "apache__arrow-rs-3514"]
-    },
-}
-
-
-# Constants - Task Instance Test Features
-MAP_REPO_ID_TO_FEATURES = {"apache/arrow-rs": FEATURES_ARROW}
 
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
