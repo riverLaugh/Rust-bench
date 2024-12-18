@@ -332,5 +332,6 @@ MAP_REPO_TO_PARSER = {
     "GuillaumeGomez/sysinfo": parse_log_cargo,
     "rayon-rs/rayon": parse_log_cargo,
     "rust-lang/regex":parse_log_cargo,
-    "dtolnay/syn":parse_log_cargo
+    "dtolnay/syn":parse_log_cargo,
+    "rust-random/rand": parse_log_cargo,
 }
