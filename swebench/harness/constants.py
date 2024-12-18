@@ -541,10 +541,6 @@ SPECS_RAYON = {
     k: {
         "rustc": "nightly",
         "test_cmd": "cargo test --all --no-fail-fast --all-features",
-        "env_setup": [
-            "apt-get update",
-            "apt-get install pkg-config -y",
-        ]
     }
     for k in ["1.6"]
 }

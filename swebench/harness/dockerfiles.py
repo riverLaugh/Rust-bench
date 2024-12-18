@@ -55,6 +55,7 @@ RUN adduser --disabled-password --gecos 'dog' nonroot
 
 # 安装常见软件包
 RUN apt-get update
+RUN apt-get install pkg-config -y
 RUN apt-get install python3-pip -y
 RUN apt-get install cmake -y
 RUN apt-get install protobuf-compiler -y
