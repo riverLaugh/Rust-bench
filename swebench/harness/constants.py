@@ -546,7 +546,7 @@ SPECS_RAYON = {
             "apt-get install pkg-config -y",
         ]
     }
-    for k in ["1.8", "1.6", "1.5"]
+    for k in ["1.6"]
 }
 
 # Constants - Repo Test Features
