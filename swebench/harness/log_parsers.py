@@ -1,5 +1,5 @@
 import re
-from enum import Enum
+
 from swebench.harness.constants import TestStatus
 
 
@@ -48,9 +48,9 @@ def parse_log_pytest_options(log: str) -> dict[str, str]:
             if has_option:
                 main, option = has_option.groups()
                 if (
-                    option.startswith("/")
-                    and not option.startswith("//")
-                    and "*" not in option
+                        option.startswith("/")
+                        and not option.startswith("//")
+                        and "*" not in option
                 ):
                     option = "/" + option.split("/")[-1]
                 test_name = f"{main}[{option}]"
@@ -93,7 +93,7 @@ def parse_log_django(log: str) -> dict[str, str]:
                 # The proper fix should involve somehow getting the test results to
                 # print on a separate line, rather than the same line
                 if line.strip().startswith(
-                    "Applying sites.0002_alter_domain_unique...test_no_migrations"
+                        "Applying sites.0002_alter_domain_unique...test_no_migrations"
                 ):
                     line = line.split("...", 1)[-1].strip()
                 test = line.rsplit(suffix, 1)[0]
@@ -248,7 +248,6 @@ def parse_log_matplotlib(log: str) -> dict[str, str]:
 
 
 def parse_log_serde(log: str) -> dict[str, str]:
-
     pass
 
 
@@ -303,7 +302,6 @@ parse_log_astropy = parse_log_pytest_v2
 parse_log_scikit = parse_log_pytest_v2
 parse_log_sphinx = parse_log_pytest_v2
 
-
 MAP_REPO_TO_PARSER = {
     "astropy/astropy": parse_log_astropy,
     "django/django": parse_log_django,
@@ -331,7 +329,8 @@ MAP_REPO_TO_PARSER = {
     "fermyon/spin": parse_log_cargo,
     "GuillaumeGomez/sysinfo": parse_log_cargo,
     "rayon-rs/rayon": parse_log_cargo,
-    "rust-lang/regex":parse_log_cargo,
-    "dtolnay/syn":parse_log_cargo,
+    "rust-lang/regex": parse_log_cargo,
+    "dtolnay/syn": parse_log_cargo,
     "rust-random/rand": parse_log_cargo,
+    "rust-lang/log": parse_log_cargo,
 }
