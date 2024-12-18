@@ -5,37 +5,6 @@ FROM --platform={platform} ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
-RUN apt update && apt install -y \
-wget \
-git \
-build-essential \
-libffi-dev \
-libtiff-dev \
-jq \
-curl \
-locales \
-locales-all \
-tzdata \
-&& rm -rf /var/lib/apt/lists/*
-# 安装 Rustup 和指定的 Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH=/root/.cargo/bin:$PATH
-
-# 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
-RUN rustup default 1.81.0
-
-RUN adduser --disabled-password --gecos 'dog' nonroot
-
-# 安装常见软件包
-RUN apt-get update
-RUN apt-get install python3-pip -y
-RUN apt-get install cmake -y
-RUN apt-get install protobuf-compiler -y
-
-"""
-
-_DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
-
 ENV RUSTUP_DIST_SERVER=https://mirror.sjtu.edu.cn/rust-static
 ENV RUSTUP_UPDATE_ROOT=https://mirror.sjtu.edu.cn/rust-static/rustup
 
@@ -60,6 +29,40 @@ registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
 registry = "git://crates.rustcc.cn/crates.io-index"
 EOF
 
+
+
+RUN apt update && apt install -y \
+wget \
+git \
+build-essential \
+libffi-dev \
+libtiff-dev \
+jq \
+curl \
+locales \
+locales-all \
+tzdata \
+&& rm -rf /var/lib/apt/lists/*
+# 安装 Rustup 和指定的 Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH=/root/.cargo/bin:$PATH
+
+# 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
+RUN rustup default nightly
+RUN rustup default 1.81.0
+
+RUN adduser --disabled-password --gecos 'dog' nonroot
+
+# 安装常见软件包
+RUN apt-get update
+RUN apt-get install pkg-config -y
+RUN apt-get install python3-pip -y
+RUN apt-get install cmake -y
+RUN apt-get install protobuf-compiler -y
+
+"""
+
+_DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
 
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
