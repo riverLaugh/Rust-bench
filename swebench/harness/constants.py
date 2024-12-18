@@ -580,6 +580,14 @@ SPECS_RAYON = {
     for k in ["1.6"]
 }
 
+SPECS_RAND = {
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": r"""export RUSTFLAGS="-Awarnings -Auseless_deprecated" && cargo test --all --no-fail-fast""",
+    }
+    for k in ["0.9", "0.8", "0.7", "0.6", "0.5"]
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
@@ -591,7 +599,8 @@ MAP_REPO_VERSION_TO_SPECS = {
     "GuillaumeGomez/sysinfo":SPECS_SYSINFO,
     "rayon-rs/rayon": SPECS_RAYON,
     "rust-lang/regex":SPECS_REGEX,
-    "dtolnay/syn":SPECS_SYN
+    "dtolnay/syn":SPECS_SYN,
+    "rust-random/rand":SPECS_RAND,
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -608,7 +617,8 @@ MAP_REPO_TO_REQS_PATHS = {
     "GuillaumeGomez/sysinfo":"Cargo.toml",
     "rayon-rs/rayon": "Cargo.toml",
     "rust-lang/regex":"Cargo.toml",
-    "dtolnay/syn":"Cargo.toml"
+    "dtolnay/syn":"Cargo.toml",
+    "rust-random/rand":"Cargo.toml",
 }
 
 
