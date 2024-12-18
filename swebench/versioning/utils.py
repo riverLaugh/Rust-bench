@@ -14,7 +14,13 @@ def get_instances(instance_path: str) -> list:
         task_instances = list()
         with open(instance_path) as f:
             for line in f.readlines():
-                task_instances.append(json.loads(line))
+                if not line:
+                    continue
+                try:
+                    task_instances.append(json.loads(line))
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding line: {line}.Error: {e}")
+                    continue
         return task_instances
 
     with open(instance_path) as f:
