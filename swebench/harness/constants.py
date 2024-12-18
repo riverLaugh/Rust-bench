@@ -589,7 +589,7 @@ MAP_REPO_VERSION_TO_SPECS = {
     "asterinas/asterinas": SPECS_ASTERINAS,
     "fermyon/spin": SPECS_SPIN,
     "GuillaumeGomez/sysinfo":SPECS_SYSINFO,
-    "rayon-rs/rayon": SPECS_RAYON,,
+    "rayon-rs/rayon": SPECS_RAYON,
     "rust-lang/regex":SPECS_REGEX,
     "dtolnay/syn":SPECS_SYN
 }
@@ -606,7 +606,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "tokio-rs/tokio": "Cargo.toml",
     "fermyon/spin":"Cargo.toml",
     "GuillaumeGomez/sysinfo":"Cargo.toml",
-    "rayon-rs/rayon": "Cargo.toml",,
+    "rayon-rs/rayon": "Cargo.toml",
     "rust-lang/regex":"Cargo.toml",
     "dtolnay/syn":"Cargo.toml"
 }
