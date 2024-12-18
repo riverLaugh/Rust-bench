@@ -28,9 +28,10 @@ MAP_REPO_TO_VERSION_PATHS = {
     "fermyon/spin": ["Cargo.toml"],
     "GuillaumeGomez/sysinfo": ["Cargo.toml"],
     "rayon-rs/rayon": ["Cargo.toml"],
-    "rust-lang/regex":["Cargo.toml"],
-    "dtolnay/syn":["Cargo.toml"],
-    "serde-rs/json":["Cargo.toml"]
+    "rust-lang/regex": ["Cargo.toml"],
+    "dtolnay/syn": ["Cargo.toml"],
+    "serde-rs/json": ["Cargo.toml"],
+    "rust-random/rand": ["Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -55,7 +56,7 @@ MAP_REPO_TO_VERSION_PATTERNS.update(
 )
 
 MAP_REPO_TO_VERSION_PATTERNS.update(
-    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio"]}
+    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand"]}
 )
 
 
