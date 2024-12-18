@@ -21,20 +21,21 @@ MAP_REPO_TO_VERSION_PATHS = {
     "sympy/sympy": ["sympy/release.py", "sympy/__init__.py"],
     "rust-lang/rustlings": ["Cargo.toml"],
     "serde-rs/serde": ["serde/Cargo.toml"],
-    "bitflags/bitflags":["Cargo.toml"],
-    "apache/arrow-rs":["Cargo.toml","arrow/Cargo.toml"],
-    "asterinas/asterinas":["VERSION","Cargo.toml"],
-    "tokio-rs/tokio":["Cargo.toml","tokio/Cargo.toml"],
-    "fermyon/spin":["Cargo.toml"],
-    "GuillaumeGomez/sysinfo":["Cargo.toml"],
+    "bitflags/bitflags": ["Cargo.toml"],
+    "apache/arrow-rs": ["Cargo.toml", "arrow/Cargo.toml"],
+    "asterinas/asterinas": ["VERSION", "Cargo.toml"],
+    "tokio-rs/tokio": ["Cargo.toml", "tokio/Cargo.toml"],
+    "fermyon/spin": ["Cargo.toml"],
+    "GuillaumeGomez/sysinfo": ["Cargo.toml"],
+    "rayon-rs/rayon": ["Cargo.toml"],,
     "rust-lang/regex":["Cargo.toml"],
     "dtolnay/syn":["Cargo.toml"],
     "serde-rs/json":["Cargo.toml"]
 }
 
 # Cosntants - Task Instance Version Regex Pattern
-MAP_REPO_TO_VERSION_PATTERNS={
-    k:[r'version\s*=\s*"(\d+\.\d+\.\d+)"']
+MAP_REPO_TO_VERSION_PATTERNS = {
+    k: [r'version\s*=\s*"(\d+\.\d+\.\d+)"']
     for k in [
         "rust-lang/rustlings",
         "serde-rs/serde",
@@ -44,24 +45,18 @@ MAP_REPO_TO_VERSION_PATTERNS={
         "GuillaumeGomez/sysinfo",
         "rust-lang/regex",
         "dtolnay/syn",
-        "serde-rs/json"
+        "serde-rs/json",
+        "rayon-rs/rayon",
     ]
 }
 
-MAP_REPO_TO_VERSION_PATTERNS.update({
-    k:[r'\d+\.\d+\.\d+']
-    for k in [
-        "asterinas/asterinas"
-    ]
-})
+MAP_REPO_TO_VERSION_PATTERNS.update(
+    {k: [r"\d+\.\d+\.\d+"] for k in ["asterinas/asterinas"]}
+)
 
-MAP_REPO_TO_VERSION_PATTERNS.update({
-    k: [r'version\s*=\s*"(.*)"']
-    for k in [
-        "tokio-rs/tokio"
-    ]
-})
-
+MAP_REPO_TO_VERSION_PATTERNS.update(
+    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio"]}
+)
 
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
