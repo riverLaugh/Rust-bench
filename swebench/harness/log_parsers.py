@@ -323,4 +323,6 @@ MAP_REPO_TO_PARSER = {
     "tokio-rs/tokio": parse_log_cargo,
     "fermyon/spin": parse_log_cargo,
     "GuillaumeGomez/sysinfo" : parse_log_cargo,
+    "rust-lang/regex":parse_log_cargo,
+    "dtolnay/syn":parse_log_cargo
 }
