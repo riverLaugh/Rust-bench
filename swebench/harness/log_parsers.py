@@ -332,5 +332,7 @@ MAP_REPO_TO_PARSER = {
     "GuillaumeGomez/sysinfo": parse_log_cargo,
     "rayon-rs/rayon": parse_log_cargo,
     "rust-lang/regex":parse_log_cargo,
-    "dtolnay/syn":parse_log_cargo
+    "dtolnay/syn":parse_log_cargo,
+    "indexmap-rs/indexmap":parse_log_cargo,
+    "crossbeam-rs/crossbeam":parse_log_cargo
 }
