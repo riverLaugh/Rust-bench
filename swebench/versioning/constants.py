@@ -28,11 +28,13 @@ MAP_REPO_TO_VERSION_PATHS = {
     "fermyon/spin": ["Cargo.toml"],
     "GuillaumeGomez/sysinfo": ["Cargo.toml"],
     "rayon-rs/rayon": ["Cargo.toml"],
-    "rust-lang/regex":["Cargo.toml"],
-    "dtolnay/syn":["Cargo.toml"],
-    "serde-rs/json":["Cargo.toml"],
+    "rust-lang/regex": ["Cargo.toml"],
+    "dtolnay/syn": ["Cargo.toml"],
+    "serde-rs/json": ["Cargo.toml"],
+    "rust-random/rand": ["Cargo.toml"],
+    "rust-lang/log": ["Cargo.toml"],
     "indexmap-rs/indexmap":["Cargo.toml"],
-    "crossbeam-rs/crossbeam":["Cargo.toml"]
+    "crossbeam-rs/crossbeam":["Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -49,8 +51,6 @@ MAP_REPO_TO_VERSION_PATTERNS = {
         "dtolnay/syn",
         "serde-rs/json",
         "rayon-rs/rayon",
-        "indexmap-rs/indexmap",
-        "crossbeam-rs/crossbeam"
     ]
 }
 
@@ -59,8 +59,7 @@ MAP_REPO_TO_VERSION_PATTERNS.update(
 )
 
 MAP_REPO_TO_VERSION_PATTERNS.update(
-    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio"]}
+    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand"]}
 )
-
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"

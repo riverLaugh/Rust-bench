@@ -8,7 +8,6 @@ ENV_IMAGE_BUILD_DIR = Path("logs/build_images/env")
 INSTANCE_IMAGE_BUILD_DIR = Path("logs/build_images/instances")
 RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
-
 NON_OSDK_CRATES = [
     "osdk",
     "ostd/libs/align_ext",
@@ -94,7 +93,7 @@ SPECS_SERDE = {"test_cmd": TEST_CARGO}
 
 SPECS_BITFLAGS = {
     k: {"rustc": "1.81.0", "test_cmd": TEST_CARGO}
-    for k in ["2.5", "2.4", "2.3", "2.2", "2.1","2.0","1.2"]
+    for k in ["2.5", "2.4", "2.3", "2.2", "2.1", "2.0", "1.2"]
 }
 SPECS_BITFLAGS.update(
     {
@@ -122,7 +121,7 @@ SPECS_ARROW = {
         "pre_install": [
             r"""git submodule update --init""",
         ],
-        "env_setup":[
+        "env_setup": [
             "pip install pyarrow"
         ]
     }
@@ -176,33 +175,33 @@ SPECS_ARROW.update(
             ],
         }
         for k in [
-            "34.0",
-            "33.0",
-            "32.0",
-            "31.0",
-            "30.0",
-            "29.0",
-            "28.0",
-            "27.0",
-            "26.0",
-            "25.0",
-            "24.0",
-            "21.0",
-            "20.0",
-            "19.0",
-            "18.0",
-            "17.0",
-            "16.0",
-            "15.0",
-            "14.0",
-            "13.0",
-            "11.1",
-            "11.0",
-            "10.0",
-            "9.0",
-            "8.0",
-            "7.0",
-        ]
+        "34.0",
+        "33.0",
+        "32.0",
+        "31.0",
+        "30.0",
+        "29.0",
+        "28.0",
+        "27.0",
+        "26.0",
+        "25.0",
+        "24.0",
+        "21.0",
+        "20.0",
+        "19.0",
+        "18.0",
+        "17.0",
+        "16.0",
+        "15.0",
+        "14.0",
+        "13.0",
+        "11.1",
+        "11.0",
+        "10.0",
+        "9.0",
+        "8.0",
+        "7.0",
+    ]
     }
 )
 SPECS_ARROW.update(
@@ -219,15 +218,12 @@ SPECS_ARROW.update(
             ],
         }
         for k in [
-            "0.8",
-            "0.6",
-            "0.3"
-        ]
+        "0.8",
+        "0.6",
+        "0.3"
+    ]
     }
 )
-
-
-
 
 SPECS_ASTERINAS = {
     k: {
@@ -258,19 +254,19 @@ SPECS_ASTERINAS = {
 
 SPECS_ASTERINAS.update(
     {
-        k:{
+        k: {
             "rustc": "1.81.0",
             "test_cmd": TEST_CARGO,
             "image_tag": "0.9.4",
-            "env_setup":[
+            "env_setup": [
                 "git fetch origin pull/1666/head:pr-1666",
                 "git checkout main",
                 "git cherry-pick -X theirs pr-1666",
                 # "git cherry-pick pr-1666",
                 "git branch -D pr-1666",
-                
+
             ],
-            "pre_install":[
+            "pre_install": [
                 # r"""sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
                 # "git fetch origin pull/1666/head:pr-1666",
                 # "git checkout main",
@@ -281,7 +277,6 @@ SPECS_ASTERINAS.update(
         for k in ["0.9"]
     }
 )
-
 
 SPECS_ASTERINAS.update(
     {
@@ -376,7 +371,7 @@ SPECS_ASTERINAS.update(
             "test_cmd": TEST_CARGO,
             "image_tag": "0.4.2",
             # #repo level
-            "pre_install":[
+            "pre_install": [
                 r"""
                 # git fetch origin pull/1666/head:pr-1666
                 # git checkout main
@@ -389,8 +384,8 @@ SPECS_ASTERINAS.update(
         
                 """
             ],
-            #env level
-            "env_setup":[
+            # env level
+            "env_setup": [
                 r"""
                 # git fetch origin pull/1666/head:pr-1666
                 # git checkout main
@@ -478,13 +473,13 @@ SPECS_TOKIO.update({
 })
 
 SPECS_SPIN = {
-    k:{
-        "rustc":"1.81.0",
-        "test_cmd":"make test-unit test-integration",
-        "pre_install":[
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": "make test-unit test-integration",
+        "pre_install": [
             "cargo update",
         ],
-        "env_setup":[
+        "env_setup": [
             "rustup target add wasm32-wasip1 && rustup target add wasm32-unknown-unknown",
             "rustup target add wasm32-wasi",
             "cargo update",
@@ -493,7 +488,7 @@ SPECS_SPIN = {
             "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}"
         ]
     }
-    for k in["3.2"]
+    for k in ["3.2"]
 }
 
 SPECS_SYSINFO = {
@@ -503,22 +498,22 @@ SPECS_SYSINFO = {
         "pre_install":[
             
         ],
-        "env_setup":[
+        "env_setup": [
 
         ]
     }
-    for k in ["0.8", "0.6","0.30" ,"0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24", 
+    for k in ["0.8", "0.6","0.30" ,"0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24",
               "0.23", "0.22", "0.21", "0.2", "0.18", "0.17", "0.16", "0.15", "0.14",
-                "0.13", "0.11", "0.10"]
+              "0.13", "0.11", "0.10"]
 
 }
 
 
 
 SPECS_REGEX = {
-    k:{
-        "rustc":"1.81.0",
-        "test_cmd":"./test",
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": "./test",
     }
     for k in [ "1.2", "1.3", "1.4", "1.5","1.6", "1.7", "1.8", "1.9","1.10"]
 }
@@ -533,18 +528,17 @@ SPECS_REGEX.update({
 })
 
 SPECS_SYN = {
-    k:{
-        "rustc":"1.81.0",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": TEST_CARGO,
+        "pre_install": [
             "apt update",
             "apt install -y pkg-config libssl-dev",
             "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}"
         ]
     }
-    for k in ["1.0","2.0"]
+    for k in ["1.0", "2.0"]
 }
-
 
 SPECS_RAYON = {
     k: {
@@ -571,6 +565,22 @@ SPECS_CROSSBEAM = {
 }
 
 
+SPECS_RAND = {
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": r"""export RUSTFLAGS="-Awarnings -Auseless_deprecated" && cargo test --all --no-fail-fast""",
+    }
+    for k in ["0.9", "0.8", "0.7", "0.6", "0.5"]
+}
+
+SPECS_LOG = {
+    k: {
+        "rustc": "1.81.0",
+        "test_cmd": r"""export RUSTFLAGS="-Awarnings" && cargo test --all --no-fail-fast --all-features""",
+    }
+    for k in ["0.4", "0.3"]
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
@@ -579,10 +589,12 @@ MAP_REPO_VERSION_TO_SPECS = {
     "apache/arrow-rs": SPECS_ARROW,
     "asterinas/asterinas": SPECS_ASTERINAS,
     "fermyon/spin": SPECS_SPIN,
-    "GuillaumeGomez/sysinfo":SPECS_SYSINFO,
+    "GuillaumeGomez/sysinfo": SPECS_SYSINFO,
     "rayon-rs/rayon": SPECS_RAYON,
-    "rust-lang/regex":SPECS_REGEX,
-    "dtolnay/syn":SPECS_SYN,
+    "rust-lang/regex": SPECS_REGEX,
+    "dtolnay/syn": SPECS_SYN,
+    "rust-random/rand": SPECS_RAND,
+    "rust-lang/log": SPECS_LOG,
     "tokio-rs/tokio": SPECS_TOKIO,
     "indexmap-rs/indexmap":SPECS_INDEXMAP,
     "crossbeam-rs/crossbeam":SPECS_CROSSBEAM
@@ -591,22 +603,22 @@ MAP_REPO_VERSION_TO_SPECS = {
 # Constants - Repository Specific Installation Instructions
 MAP_REPO_TO_INSTALL = {}
 
-
 # Constants - Task Instance Requirements File Paths
 MAP_REPO_TO_REQS_PATHS = {
     "bitflags/bitflags": "Cargo.toml",
     "apache/arrow-rs": "Cargo.toml",
     "asterinas/asterinas": "Cargo.toml",
     "tokio-rs/tokio": "Cargo.toml",
-    "fermyon/spin":"Cargo.toml",
-    "GuillaumeGomez/sysinfo":"Cargo.toml",
+    "fermyon/spin": "Cargo.toml",
+    "GuillaumeGomez/sysinfo": "Cargo.toml",
     "rayon-rs/rayon": "Cargo.toml",
-    "rust-lang/regex":"Cargo.toml",
-    "dtolnay/syn":"Cargo.toml",
+    "rust-lang/regex": "Cargo.toml",
+    "dtolnay/syn": "Cargo.toml",
+    "rust-random/rand": "Cargo.toml",
+    "rust-lang/log": "Cargo.toml",
     "indexmap-rs/indexmap":"Cargo.toml",
-    "crossbeam-rs/crossbeam":"Cargo.toml"
+    "crossbeam-rs/crossbeam":"Cargo.toml",
 }
-
 
 # Constants - Task Instance environment.yml File Paths
 MAP_REPO_TO_ENV_YML_PATHS = {
@@ -618,7 +630,6 @@ MAP_REPO_TO_ENV_YML_PATHS = {
 KEY_INSTANCE_ID = "instance_id"
 KEY_MODEL = "model_name_or_path"
 KEY_PREDICTION = "model_patch"
-
 
 # Constants - Logging
 APPLY_PATCH_FAIL = ">>>>> Patch Apply Failed"
