@@ -1,10 +1,53 @@
 import re
+from typing import Optional
 
 from swebench.harness.constants import (
     NON_OSDK_CRATES,
     OSDK_CRATES,
 )
 from swebench.harness.utils import findCrate
+
+
+def _default_test_commands(
+    tests_changed: list[str],
+    rust_flags: Optional[str],
+    features: list[str] = None,
+    use_all_features: bool = False,
+    **kwargs,
+):
+    submodule_tests: dict[str, list | None] = {}
+    for test_path in tests_changed:
+        match = re.match(r"([\w\-]+)/tests/([\w\-]+)\.rs", test_path)
+        # integration test
+        if match:
+            submodule, test_name = match.group(1), match.group(2)
+            if submodule not in submodule_tests:
+                submodule_tests[submodule] = [test_name]
+            elif isinstance(submodule_tests[submodule], list):
+                submodule_tests[submodule].append(test_name)
+        # other test
+        else:
+            submodule_tests[test_path.split("/")[0]] = None
+    # generate specific str
+    features_str = f'--features="{" ".join(features)}"' if features else ""
+    use_all_features_str = "--all-features" if use_all_features else ""
+    # generate cmds
+    cmds: list[str] = (
+        [f'export RUSTFLAGS="{rust_flags}"'] if rust_flags is not None else []
+    )
+    for submodule, test_names in submodule_tests.items():
+        cmds.append(f"cd ./{submodule}")
+        if isinstance(test_names, list):
+            cmds.extend(
+                f"cargo test --no-fail-fast {features_str}{use_all_features_str}--test {test_name}"
+                for test_name in test_names
+            )
+        else:
+            cmds.append(
+                f"cargo test --no-fail-fast {features_str}{use_all_features_str}"
+            )
+        cmds.append(f"cd ../")
+    return cmds
 
 
 def make_arrow_rs_test_cmds(
@@ -87,86 +130,37 @@ def make_asterinas_test_cmds(
 def make_tokio_test_cmds(
     instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
-    # iterate all test files
-    submodule_tests: dict[str, list | None] = {}
-    for test_path in tests_changed:
-        match = re.match(r"([\w\-]+)/tests/([\w\-]+)\.rs", test_path)
-        # integration test
-        if match:
-            submodule, test_name = match.group(1), match.group(2)
-            if submodule not in submodule_tests:
-                submodule_tests[submodule] = [test_name]
-            elif isinstance(submodule_tests[submodule], list):
-                submodule_tests[submodule].append(test_name)
-        # other test
-        else:
-            submodule_tests[test_path.split("/")[0]] = None
     # add allow lint deny
-    lints = [
-        "warnings",
-        "unused_must_use",
-        "undropped_manually_drops",
-        "invalid_doc_attributes",
-        "useless_deprecated",
-        "intra_doc_link_resolution_failure",
-        "let_underscore_lock",
-        "renamed_and_removed_lints",
-        "broken_intra_doc_links",
+    options = [
+        "-Awarnings",
+        "-Aunused_must_use",
+        "-Aundropped_manually_drops",
+        "-Ainvalid_doc_attributes",
+        "-Auseless_deprecated",
+        "-Aintra_doc_link_resolution_failure",
+        "-Alet_underscore_lock",
+        "-Arenamed_and_removed_lints",
+        "-Abroken_intra_doc_links",
     ]
-    # generate rust flags
-    rust_flags = 'export RUSTFLAGS="'
-    for lint in lints:
-        rust_flags += f"-A{lint} "
-    rust_flags = rust_flags[:-1] + '"'
-    # generate cmds
-    cmds: list[str] = [rust_flags]
-    for submodule, test_names in submodule_tests.items():
-        cmds.append(f"cd ./{submodule}")
-        if isinstance(test_names, list):
-            cmds.extend(
-                f"cargo test --no-fail-fast --all-features --test {test_name}"
-                for test_name in test_names
-            )
-        else:
-            cmds.append("cargo test --no-fail-fast --all-features")
-        cmds.append(f"cd ../")
-    return cmds
+    return _default_test_commands(
+        tests_changed=tests_changed, rust_flags=" ".join(options), use_all_features=True
+    )
+
 
 def make_crossbeam_test_cmds(
     instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
-    # iterate all test files
-    submodule_tests: dict[str, list | None] = {}
-    for test_path in tests_changed:
-        match = re.match(r"([\w\-]+)/tests/([\w\-]+)\.rs", test_path)
-        # integration test
-        if match:
-            submodule, test_name = match.group(1), match.group(2)
-            if submodule not in submodule_tests:
-                submodule_tests[submodule] = [test_name]
-            elif isinstance(submodule_tests[submodule], list):
-                submodule_tests[submodule].append(test_name)
-        # other test
-        else:
-            submodule_tests[test_path.split("/")[0]] = None
-    cmds: list[str] = []
-    for submodule, test_names in submodule_tests.items():
-        cmds.append(f"cd ./{submodule}")
-        if isinstance(test_names, list):
-            cmds.extend(
-                f"cargo test --no-fail-fast --all-features --test {test_name}"
-                for test_name in test_names
-            )
-        else:
-            cmds.append("cargo test --no-fail-fast --all-features")
-        cmds.append(f"cd ../")
-    return cmds
+    return _default_test_commands(
+        tests_changed=tests_changed,
+        rust_flags="-Awarnings",
+    )
+
 
 MAP_REPO_TO_TESTS = {
     "apache/arrow-rs": make_arrow_rs_test_cmds,
     "asterinas/asterinas": make_asterinas_test_cmds,
     "tokio-rs/tokio": make_tokio_test_cmds,
-    "crossbeam-rs/crossbeam": make_crossbeam_test_cmds
+    "crossbeam-rs/crossbeam": make_crossbeam_test_cmds,
 }
 
 
