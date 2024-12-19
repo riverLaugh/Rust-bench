@@ -559,7 +559,6 @@ SPECS_INDEXMAP = {
 SPECS_CROSSBEAM = {
     k : {
         "rustc":"nightly",
-        "test_cmd":TEST_CARGO
     }
     for k in ["0.8","0.7","0.6","0.5","0.4","0.3","0.2","0.1"]
 }
