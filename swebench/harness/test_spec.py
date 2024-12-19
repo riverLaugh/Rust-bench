@@ -286,11 +286,12 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         arch = "x86_64"
 
     # get cargo.toml
-    req_path = MAP_REPO_TO_REQS_PATHS[repo]
-    reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
-    reqs = requests.get(reqs_url)
-    cargo_toml = reqs.text
-    tests_changed = get_test_directives(instance)
+    # req_path = MAP_REPO_TO_REQS_PATHS[repo]
+    # reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
+    # reqs = requests.get(reqs_url)
+    # cargo_toml = reqs.text
+    cargo_toml = ""
+    tests_changed = list(dict.fromkeys(get_test_directives(instance)))
     image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version].get("image_tag", None)
 
     # get eval script list

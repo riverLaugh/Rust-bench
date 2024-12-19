@@ -132,11 +132,41 @@ def make_tokio_test_cmds(
         cmds.append(f"cd ../")
     return cmds
 
+def make_crossbeam_test_cmds(
+    instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+):
+    # iterate all test files
+    submodule_tests: dict[str, list | None] = {}
+    for test_path in tests_changed:
+        match = re.match(r"([\w\-]+)/tests/([\w\-]+)\.rs", test_path)
+        # integration test
+        if match:
+            submodule, test_name = match.group(1), match.group(2)
+            if submodule not in submodule_tests:
+                submodule_tests[submodule] = [test_name]
+            elif isinstance(submodule_tests[submodule], list):
+                submodule_tests[submodule].append(test_name)
+        # other test
+        else:
+            submodule_tests[test_path.split("/")[0]] = None
+    cmds: list[str] = []
+    for submodule, test_names in submodule_tests.items():
+        cmds.append(f"cd ./{submodule}")
+        if isinstance(test_names, list):
+            cmds.extend(
+                f"cargo test --no-fail-fast --all-features --test {test_name}"
+                for test_name in test_names
+            )
+        else:
+            cmds.append("cargo test --no-fail-fast --all-features")
+        cmds.append(f"cd ../")
+    return cmds
 
 MAP_REPO_TO_TESTS = {
     "apache/arrow-rs": make_arrow_rs_test_cmds,
     "asterinas/asterinas": make_asterinas_test_cmds,
     "tokio-rs/tokio": make_tokio_test_cmds,
+    "crossbeam-rs/crossbeam": make_crossbeam_test_cmds
 }
 
 

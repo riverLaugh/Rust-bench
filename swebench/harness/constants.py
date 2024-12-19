@@ -499,7 +499,7 @@ SPECS_SPIN = {
 SPECS_SYSINFO = {
     k:{
         "rustc":"1.74",
-        "test_cmd":TEST_CARGO,
+        "test_cmd":"cargo test --no-fail-fast",
         "pre_install":[
             
         ],
@@ -507,38 +507,12 @@ SPECS_SYSINFO = {
 
         ]
     }
-    for k in ["0.8", "0.6", "0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24", 
+    for k in ["0.8", "0.6","0.30" ,"0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24", 
               "0.23", "0.22", "0.21", "0.2", "0.18", "0.17", "0.16", "0.15", "0.14",
                 "0.13", "0.11", "0.10"]
 
 }
 
-SPECS_SYSINFO.update({
-    k:{
-        "rustc":"1.74",
-        "test_cmd":TEST_CARGO,
-        "pre_install":[
-            r"""
-# 在第 111 行进行替换
-# sed -i '111s/\(system\.refresh_process(Pid(\)pid)/\1pid.try_into().unwrap())/' src/c_interface.rs
-
-# # 在第 355 行进行替换
-# sed -i '355s/\(!fn_pointer(\)pid\.0/\1pid.0.try_into().unwrap()/' src/c_interface.rs
-
-# # 在第 380 行进行替换
-# sed -i '380s/\(system\.process(Pid(\)pid)/\1pid.try_into().unwrap())/' src/c_interface.rs
-
-# # 在第 426 行进行替换
-# sed -i '426s/\(\*process\)\.pid().0/\1.pid().0.try_into().unwrap()/' src/c_interface.rs
-
-# # 在第 436 行进行替换
-# sed -i '436s/\(\*process\)\.parent().unwrap_or(Pid(0)).0/\1.parent().unwrap_or(Pid(0)).0.try_into().unwrap()/' src/c_interface.rs
-
-"""
-        ],
-    }
-    for k in ["0.30"]
-})
 
 
 SPECS_REGEX = {
@@ -546,13 +520,13 @@ SPECS_REGEX = {
         "rustc":"1.81.0",
         "test_cmd":"./test",
     }
-    for k in [ "1.2", "1.3", "1.4", "1.5", "1.7", "1.8", "1.9","1.10"]
+    for k in [ "1.2", "1.3", "1.4", "1.5","1.6", "1.7", "1.8", "1.9","1.10"]
 }
 
 SPECS_REGEX.update({
 
     k:{
-        "rustc":"1.50.0",
+        "rustc":"1.24.1",
         "test_cmd":TEST_CARGO
     }
     for k in ["0.1", "0.2", "1.0", "1.1"]
@@ -580,6 +554,23 @@ SPECS_RAYON = {
     for k in ["1.6"]
 }
 
+SPECS_INDEXMAP = {
+    k : {
+        "rustc":"1.81.0",
+        "test_cmd":TEST_CARGO
+    }
+    for k in ["2.2","1.8","1.6","1.4","1.2","1.1","0.4","0.3","0.2"]
+}
+
+SPECS_CROSSBEAM = {
+    k : {
+        "rustc":"nightly",
+        "test_cmd":TEST_CARGO
+    }
+    for k in ["0.8","0.7","0.6","0.5","0.4","0.3","0.2","0.1"]
+}
+
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
@@ -591,7 +582,10 @@ MAP_REPO_VERSION_TO_SPECS = {
     "GuillaumeGomez/sysinfo":SPECS_SYSINFO,
     "rayon-rs/rayon": SPECS_RAYON,
     "rust-lang/regex":SPECS_REGEX,
-    "dtolnay/syn":SPECS_SYN
+    "dtolnay/syn":SPECS_SYN,
+    "tokio-rs/tokio": SPECS_TOKIO,
+    "indexmap-rs/indexmap":SPECS_INDEXMAP,
+    "crossbeam-rs/crossbeam":SPECS_CROSSBEAM
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -608,7 +602,9 @@ MAP_REPO_TO_REQS_PATHS = {
     "GuillaumeGomez/sysinfo":"Cargo.toml",
     "rayon-rs/rayon": "Cargo.toml",
     "rust-lang/regex":"Cargo.toml",
-    "dtolnay/syn":"Cargo.toml"
+    "dtolnay/syn":"Cargo.toml",
+    "indexmap-rs/indexmap":"Cargo.toml",
+    "crossbeam-rs/crossbeam":"Cargo.toml"
 }
 
 

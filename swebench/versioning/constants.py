@@ -30,7 +30,9 @@ MAP_REPO_TO_VERSION_PATHS = {
     "rayon-rs/rayon": ["Cargo.toml"],
     "rust-lang/regex":["Cargo.toml"],
     "dtolnay/syn":["Cargo.toml"],
-    "serde-rs/json":["Cargo.toml"]
+    "serde-rs/json":["Cargo.toml"],
+    "indexmap-rs/indexmap":["Cargo.toml"],
+    "crossbeam-rs/crossbeam":["Cargo.toml"]
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -47,6 +49,8 @@ MAP_REPO_TO_VERSION_PATTERNS = {
         "dtolnay/syn",
         "serde-rs/json",
         "rayon-rs/rayon",
+        "indexmap-rs/indexmap",
+        "crossbeam-rs/crossbeam"
     ]
 }
 
