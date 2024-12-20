@@ -82,7 +82,7 @@ def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
     if auto:
         pr_done = check_log() 
 
-    
+    # print(str(auto) + "----------------------------------------------------------")
     for repo in repos:
         repo = repo.strip(",").strip()
         repo_name = repo.split("/")[1]
@@ -95,8 +95,8 @@ def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
 
             if cutoff_date:
                 path_pr = path_pr.replace(".jsonl", f"-{cutoff_date}.jsonl")
-            do_pull = True
             
+            do_pull = True
             if auto:
                 do_pull = repo not in pr_done
             else:
@@ -133,7 +133,6 @@ def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
             if auto:
                 path_task = os.path.join(path_tasks, f"auto/{repo_name}-{mode}-task-instances.jsonl")
             else:
-
                 path_task = os.path.join(path_tasks, f"{repo_name}-{mode}-task-instances.jsonl")
 
             if not os.path.exists(path_task):
@@ -215,7 +214,7 @@ def main(
         #     token_queue.put(token)
 
         with Pool(len(tokens)) as p:
-            p.starmap(construct_data_files, [(data, pr_lock, task_lock) for data in data_pooled])
+            p.starmap(construct_data_files, [(data, pr_lock, task_lock,mode) for data in data_pooled])
 
 
 
