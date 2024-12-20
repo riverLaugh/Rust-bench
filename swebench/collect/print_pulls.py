@@ -9,7 +9,7 @@ import json
 import logging
 import multiprocessing
 import os
-import pysnooper
+# import pysnooper
 
 from datetime import datetime
 from fastcore.xtras import obj2dict
@@ -37,9 +37,8 @@ def log_all_pulls(
         repo (Repo): repository object
         output (str): output file name
     """
-    cutoff_date = datetime.strptime(cutoff_date, "%Y%m%d") \
-        .strftime("%Y-%m-%dT%H:%M:%SZ") \
-        if cutoff_date is not None else None
+    if cutoff_date is not None:
+        cutoff_date = datetime.strptime(cutoff_date, "%Y%m%d").strftime("%Y-%m-%dT%H:%M:%SZ") 
 
     auto = pr_lock is not None
     cnt = 0
