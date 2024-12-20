@@ -1,0 +1,255 @@
+--------------------Mon Dec 16 19:10:17 2024--------------------
+BurntSushi/walkdir: 82 pull requests
+Done:BurntSushi/walkdir
+heim-rs/heim: 100 pull requests
+retep998/winapi-rs: 100 pull requests
+async-rs/async-std: 100 pull requests
+crossbeam-rs/crossbeam: 100 pull requests
+fermyon/spin: 100 pull requests
+rust-osdev/x86_64: 100 pull requests
+heim-rs/heim: 117 pull requests
+Done:heim-rs/heim
+retep998/winapi-rs: 200 pull requests
+crossbeam-rs/crossbeam: 200 pull requests
+async-rs/async-std: 200 pull requests
+rust-osdev/x86_64: 200 pull requests
+fermyon/spin: 200 pull requests
+Stebalien/tempfile: 100 pull requests
+tokio-rs/mio: 100 pull requests
+retep998/winapi-rs: 300 pull requests
+crossbeam-rs/crossbeam: 300 pull requests
+async-rs/async-std: 300 pull requests
+rust-osdev/x86_64: 300 pull requests
+fermyon/spin: 300 pull requests
+Stebalien/tempfile: 190 pull requests
+Done:Stebalien/tempfile
+tokio-rs/mio: 200 pull requests
+rust-osdev/x86_64: 376 pull requests
+Done:rust-osdev/x86_64
+retep998/winapi-rs: 400 pull requests
+crossbeam-rs/crossbeam: 400 pull requests
+async-rs/async-std: 400 pull requests
+fermyon/spin: 400 pull requests
+tokio-rs/mio: 300 pull requests
+retep998/winapi-rs: 500 pull requests
+crossbeam-rs/crossbeam: 500 pull requests
+retep998/winapi-rs: 519 pull requests
+Done:retep998/winapi-rs
+async-rs/async-std: 500 pull requests
+fermyon/spin: 500 pull requests
+tokio-rs/mio: 400 pull requests
+crossbeam-rs/crossbeam: 600 pull requests
+async-rs/async-std: 600 pull requests
+fermyon/spin: 600 pull requests
+async-rs/async-std: 636 pull requests
+Done:async-rs/async-std
+rust-osdev/bootloader: 100 pull requests
+tokio-rs/mio: 500 pull requests
+crossbeam-rs/crossbeam: 674 pull requests
+Done:crossbeam-rs/crossbeam
+GuillaumeGomez/sysinfo: 100 pull requests
+fermyon/spin: 700 pull requests
+rust-osdev/bootloader: 200 pull requests
+tokio-rs/mio: 600 pull requests
+GuillaumeGomez/sysinfo: 200 pull requests
+rust-osdev/bootloader: 239 pull requests
+Done:rust-osdev/bootloader
+fermyon/spin: 800 pull requests
+tokio-rs/mio: 700 pull requests
+GuillaumeGomez/sysinfo: 300 pull requests
+fermyon/spin: 900 pull requests
+tokio-rs/mio: 800 pull requests
+GuillaumeGomez/sysinfo: 400 pull requests
+Amanieu/parking_lot: 100 pull requests
+fermyon/spin: 1000 pull requests
+tokio-rs/mio: 900 pull requests
+GuillaumeGomez/sysinfo: 500 pull requests
+rust-osdev/uefi-rs: 100 pull requests
+Amanieu/parking_lot: 200 pull requests
+fermyon/spin: 1100 pull requests
+Amanieu/parking_lot: 234 pull requests
+Done:Amanieu/parking_lot
+tokio-rs/mio: 1000 pull requests
+GuillaumeGomez/sysinfo: 600 pull requests
+rust-osdev/uefi-rs: 200 pull requests
+rust-vmm/vm-virtio: 100 pull requests
+fermyon/spin: 1200 pull requests
+tokio-rs/mio: 1100 pull requests
+GuillaumeGomez/sysinfo: 700 pull requests
+tokio-rs/mio: 1114 pull requests
+Done:tokio-rs/mio
+rust-osdev/uefi-rs: 300 pull requests
+rust-vmm/vm-virtio: 200 pull requests
+fermyon/spin: 1300 pull requests
+rust-vmm/vm-virtio: 244 pull requests
+Done:rust-vmm/vm-virtio
+GuillaumeGomez/sysinfo: 800 pull requests
+rust-osdev/uefi-rs: 400 pull requests
+fermyon/spin: 1400 pull requests
+GuillaumeGomez/sysinfo: 900 pull requests
+rust-osdev/uefi-rs: 500 pull requests
+GuillaumeGomez/sysinfo: 940 pull requests
+Done:GuillaumeGomez/sysinfo
+fermyon/spin: 1500 pull requests
+rust-osdev/uefi-rs: 600 pull requests
+fermyon/spin: 1600 pull requests
+rust-osdev/uefi-rs: 700 pull requests
+fermyon/spin: 1700 pull requests
+rust-osdev/uefi-rs: 800 pull requests
+fermyon/spin: 1800 pull requests
+rust-osdev/uefi-rs: 900 pull requests
+fermyon/spin: 1883 pull requests
+Done:fermyon/spin
+rust-osdev/uefi-rs: 1000 pull requests
+rust-osdev/uefi-rs: 1100 pull requests
+rust-osdev/uefi-rs: 1200 pull requests
+rust-osdev/uefi-rs: 1206 pull requests
+Done:rust-osdev/uefi-rs
+nix-rust/nix: 100 pull requests
+nix-rust/nix: 200 pull requests
+nix-rust/nix: 300 pull requests
+nix-rust/nix: 400 pull requests
+nix-rust/nix: 500 pull requests
+nix-rust/nix: 600 pull requests
+nix-rust/nix: 700 pull requests
+nix-rust/nix: 800 pull requests
+nix-rust/nix: 900 pull requests
+nix-rust/nix: 1000 pull requests
+nix-rust/nix: 1100 pull requests
+nix-rust/nix: 1200 pull requests
+nix-rust/nix: 1300 pull requests
+nix-rust/nix: 1400 pull requests
+nix-rust/nix: 1500 pull requests
+nix-rust/nix: 1600 pull requests
+nix-rust/nix: 1700 pull requests
+nix-rust/nix: 1738 pull requests
+Done:nix-rust/nix
+--------------------Tue Dec 17 13:40:14 2024--------------------
+cuviper/autocfg: 38 pull requests
+Done:cuviper/autocfg
+alexcrichton/cfg-if: 45 pull requests
+Done:alexcrichton/cfg-if
+BurntSushi/memchr: 92 pull requests
+Done:BurntSushi/memchr
+dtolnay/itoa: 35 pull requests
+Done:dtolnay/itoa
+dtolnay/syn: 100 pull requests
+indexmap-rs/indexmap: 100 pull requests
+rust-lang/log: 100 pull requests
+rust-lang/hashbrown: 100 pull requests
+dtolnay/syn: 200 pull requests
+indexmap-rs/indexmap: 200 pull requests
+rust-random/rand: 100 pull requests
+rust-lang/log: 200 pull requests
+indexmap-rs/indexmap: 231 pull requests
+Done:indexmap-rs/indexmap
+rust-random/getrandom: 100 pull requests
+rust-lang/hashbrown: 200 pull requests
+dtolnay/syn: 300 pull requests
+rust-random/rand: 200 pull requests
+rust-lang/log: 300 pull requests
+rust-random/getrandom: 200 pull requests
+rust-lang/hashbrown: 300 pull requests
+rust-lang/log: 370 pull requests
+Done:rust-lang/log
+dtolnay/syn: 400 pull requests
+rust-random/rand: 300 pull requests
+rust-random/getrandom: 300 pull requests
+serde-rs/json: 100 pull requests
+rust-lang/hashbrown: 379 pull requests
+Done:rust-lang/hashbrown
+dtolnay/syn: 500 pull requests
+rust-random/rand: 400 pull requests
+rust-random/getrandom: 400 pull requests
+serde-rs/json: 200 pull requests
+rust-random/getrandom: 407 pull requests
+Done:rust-random/getrandom
+dtolnay/syn: 600 pull requests
+rust-random/rand: 500 pull requests
+serde-rs/json: 300 pull requests
+dtolnay/syn: 700 pull requests
+rust-lang/regex: 100 pull requests
+rust-random/rand: 600 pull requests
+marshallpierce/rust-base64: 100 pull requests
+serde-rs/json: 400 pull requests
+dtolnay/syn: 800 pull requests
+marshallpierce/rust-base64: 153 pull requests
+Done:marshallpierce/rust-base64
+rust-lang/regex: 200 pull requests
+dtolnay/syn: 840 pull requests
+Done:dtolnay/syn
+serde-rs/json: 454 pull requests
+Done:serde-rs/json
+rust-random/rand: 700 pull requests
+rust-lang/regex: 300 pull requests
+rust-random/rand: 800 pull requests
+rust-lang/regex: 100 pull requests
+rust-lang/regex: 400 pull requests
+rust-random/rand: 900 pull requests
+rust-lang/regex: 200 pull requests
+dtolnay/proc-macro2: 100 pull requests
+rust-random/rand: 935 pull requests
+Done:rust-random/rand
+rust-lang/regex: 475 pull requests
+Done:rust-lang/regex
+rust-lang/regex: 300 pull requests
+dtolnay/proc-macro2: 200 pull requests
+dtolnay/proc-macro2: 277 pull requests
+Done:dtolnay/proc-macro2
+rust-lang/regex: 400 pull requests
+rust-lang/regex: 475 pull requests
+Done:rust-lang/regex
+serde-rs/serde: 100 pull requests
+serde-rs/serde: 200 pull requests
+serde-rs/serde: 300 pull requests
+serde-rs/serde: 400 pull requests
+serde-rs/serde: 500 pull requests
+serde-rs/serde: 600 pull requests
+serde-rs/serde: 700 pull requests
+serde-rs/serde: 800 pull requests
+serde-rs/serde: 900 pull requests
+serde-rs/serde: 939 pull requests
+Done:serde-rs/serde
+dtolnay/quote: 100 pull requests
+dtolnay/quote: 125 pull requests
+Done:dtolnay/quote
+--------------------Tue Dec 17 21:02:07 2024--------------------
+--------------------Tue Dec 17 21:05:14 2024--------------------
+--------------------Tue Dec 17 21:10:23 2024--------------------
+--------------------Tue Dec 17 21:10:31 2024--------------------
+--------------------Tue Dec 17 21:22:06 2024--------------------
+--------------------Tue Dec 17 21:22:12 2024--------------------
+--------------------Tue Dec 17 21:23:03 2024--------------------
+--------------------Tue Dec 17 21:24:39 2024--------------------
+--------------------Wed Dec 18 13:11:35 2024--------------------
+--------------------Wed Dec 18 19:28:58 2024--------------------
+hyperium/hyper: 100 pull requests
+hyperium/hyper: 200 pull requests
+hyperium/hyper: 300 pull requests
+hyperium/hyper: 400 pull requests
+hyperium/hyper: 500 pull requests
+--------------------Wed Dec 18 19:51:09 2024--------------------
+--------------------Wed Dec 18 19:51:16 2024--------------------
+--------------------Wed Dec 18 19:52:00 2024--------------------
+hyperium/hyper: 100 pull requests
+hyperium/hyper: 200 pull requests
+hyperium/hyper: 300 pull requests
+hyperium/hyper: 400 pull requests
+hyperium/hyper: 500 pull requests
+hyperium/hyper: 600 pull requests
+hyperium/hyper: 700 pull requests
+hyperium/hyper: 800 pull requests
+hyperium/hyper: 900 pull requests
+hyperium/hyper: 1000 pull requests
+hyperium/hyper: 1100 pull requests
+hyperium/hyper: 1200 pull requests
+hyperium/hyper: 1300 pull requests
+hyperium/hyper: 1400 pull requests
+hyperium/hyper: 1500 pull requests
+hyperium/hyper: 1600 pull requests
+hyperium/hyper: 1700 pull requests
+hyperium/hyper: 1800 pull requests
+hyperium/hyper: 1803 pull requests
+Done:hyperium/hyper
+--------------------Wed Dec 18 21:00:47 2024--------------------
+--------------------Wed Dec 18 21:00:52 2024--------------------
