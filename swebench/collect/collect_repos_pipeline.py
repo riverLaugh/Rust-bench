@@ -16,12 +16,20 @@ def set_tokens():
         os.environ['GITHUB_TOKENS'] = github_tokens
 
 if __name__ == '__main__':
-    file_path = 'test.json'
-    path_prs = '/Users/yjzhou/myworkspace/SWE-bench/swebench/collect/prs'
-    path_tasks = '/Users/yjzhou/myworkspace/SWE-bench/swebench/collect/tasks'
+    file_path = 'temp.json'
+    path_prs = '/home/zhouyujie/SWE-bench/swebench/collect/prs'
+    path_tasks = '/home/zhouyujie/SWE-bench/swebench/collect/tasks'
     set_tokens()
 
     data_list = load_json_to_list(file_path)
-    get_tasks_pipeline(data_list,path_prs,path_tasks,None,None,None,True)
+    get_tasks_pipeline(repos=data_list,path_prs=path_prs,pull_numbers=None,path_tasks=path_tasks,mode="new",auto=True)
 
+# repos: list,
+#         path_prs: str,
+#         path_tasks: str,
+#         mode:str,
+#         pull_numbers: list,
+#         max_pulls: int = None,
+#         cutoff_date: str = None,
+#         auto: bool = False,
 
