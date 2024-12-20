@@ -35,6 +35,7 @@ MAP_REPO_TO_VERSION_PATHS = {
     "rust-lang/log": ["Cargo.toml"],
     "indexmap-rs/indexmap":["Cargo.toml"],
     "crossbeam-rs/crossbeam":["Cargo.toml"],
+    "hyperium/hyper":["Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -59,7 +60,7 @@ MAP_REPO_TO_VERSION_PATTERNS.update(
 )
 
 MAP_REPO_TO_VERSION_PATTERNS.update(
-    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand"]}
+    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand", "hyperium/hyper"]}
 )
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
