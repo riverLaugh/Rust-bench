@@ -121,9 +121,7 @@ SPECS_ARROW = {
         "pre_install": [
             r"""git submodule update --init""",
         ],
-        "env_setup": [
-            "pip install pyarrow"
-        ]
+        "env_setup": ["pip install pyarrow"],
     }
     for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
@@ -175,33 +173,33 @@ SPECS_ARROW.update(
             ],
         }
         for k in [
-        "34.0",
-        "33.0",
-        "32.0",
-        "31.0",
-        "30.0",
-        "29.0",
-        "28.0",
-        "27.0",
-        "26.0",
-        "25.0",
-        "24.0",
-        "21.0",
-        "20.0",
-        "19.0",
-        "18.0",
-        "17.0",
-        "16.0",
-        "15.0",
-        "14.0",
-        "13.0",
-        "11.1",
-        "11.0",
-        "10.0",
-        "9.0",
-        "8.0",
-        "7.0",
-    ]
+            "34.0",
+            "33.0",
+            "32.0",
+            "31.0",
+            "30.0",
+            "29.0",
+            "28.0",
+            "27.0",
+            "26.0",
+            "25.0",
+            "24.0",
+            "21.0",
+            "20.0",
+            "19.0",
+            "18.0",
+            "17.0",
+            "16.0",
+            "15.0",
+            "14.0",
+            "13.0",
+            "11.1",
+            "11.0",
+            "10.0",
+            "9.0",
+            "8.0",
+            "7.0",
+        ]
     }
 )
 SPECS_ARROW.update(
@@ -217,11 +215,7 @@ SPECS_ARROW.update(
                 r"""git submodule update --init""",
             ],
         }
-        for k in [
-        "0.8",
-        "0.6",
-        "0.3"
-    ]
+        for k in ["0.8", "0.6", "0.3"]
     }
 )
 
@@ -264,7 +258,6 @@ SPECS_ASTERINAS.update(
                 "git cherry-pick -X theirs pr-1666",
                 # "git cherry-pick pr-1666",
                 "git branch -D pr-1666",
-
             ],
             "pre_install": [
                 # r"""sed -i 's/channel = "nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}"/channel = "nightly-2024-10-12"/' rust-toolchain.toml"""
@@ -272,7 +265,7 @@ SPECS_ASTERINAS.update(
                 # "git checkout main",
                 # "git cherry-pick pr-1666",
                 # "git branch -D pr-1666"
-            ]
+            ],
         }
         for k in ["0.9"]
     }
@@ -406,7 +399,7 @@ SPECS_ASTERINAS.update(
                 # sed -i 's#multiboot2 = "[0-9]*\.[0-9]*\.[0-9]*"#multiboot2 = {path="multiboot2-multiboot2-v0.16.0/multiboot2-multiboot2-v0.16.0/multiboot2"}#' framework/aster-frame/Cargo.toml
 
                 """
-            ]
+            ],
         }
         for k in ["0.4"]
     }
@@ -457,28 +450,63 @@ SPECS_TOKIO = {
         "rustc": "1.81.0",
         "pre_install": [
             r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
-        ]
+        ],
     }
-    for k in
-    ["1.9", "1.8", "1.7", "1.6", "1.5", "1.41", "1.40", "1.4", "1.39", "1.38", "1.37", "1.36", "1.35", "1.34", "1.33",
-     "1.32", "1.31", "1.3", "1.29", "1.28", "1.26", "1.25", "1.24", "1.23", "1.22", "1.21", "1.20", "1.17", "1.16",
-     "1.15", "1.14", "1.12", "1.11", "1.1", "1.0", "0.3"]
+    for k in [
+        "1.9",
+        "1.8",
+        "1.7",
+        "1.6",
+        "1.5",
+        "1.41",
+        "1.40",
+        "1.4",
+        "1.39",
+        "1.38",
+        "1.37",
+        "1.36",
+        "1.35",
+        "1.34",
+        "1.33",
+        "1.32",
+        "1.31",
+        "1.3",
+        "1.29",
+        "1.28",
+        "1.26",
+        "1.25",
+        "1.24",
+        "1.23",
+        "1.22",
+        "1.21",
+        "1.20",
+        "1.17",
+        "1.16",
+        "1.15",
+        "1.14",
+        "1.12",
+        "1.11",
+        "1.1",
+        "1.0",
+        "0.3",
+    ]
 }
 
-SPECS_TOKIO.update({
-    k: {
-        "rustc": "1.81.0",
-        "pre_install": [
-            r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
-            "set +e",
-            r"sed -E -i 's/nightly-2019[a-zA-Z0-9_\-]+/1.81.0/' ./rust-toolchain",
-            "sed -i 's/security-framework = \"0.2\"/security-framework = \"3.0.0-beta.2\"/' ./tokio-tls/Cargo.toml",
-            "set -e",
-        ]
+SPECS_TOKIO.update(
+    {
+        k: {
+            "rustc": "1.81.0",
+            "pre_install": [
+                r"sed -i 's/#!\[deny(unused_must_use)\]/#![warn(unused_must_use)]/' ./tokio/src/lib.rs",
+                "set +e",
+                r"sed -E -i 's/nightly-2019[a-zA-Z0-9_\-]+/1.81.0/' ./rust-toolchain",
+                'sed -i \'s/security-framework = "0.2"/security-framework = "3.0.0-beta.2"/\' ./tokio-tls/Cargo.toml',
+                "set -e",
+            ],
+        }
+        for k in ["0.2"]
     }
-    for k in
-    ["0.2"]
-})
+)
 
 SPECS_SPIN = {
     k: {
@@ -493,29 +521,44 @@ SPECS_SPIN = {
             "cargo update",
             "apt update",
             "apt install -y pkg-config libssl-dev",
-            "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}"
-        ]
+            "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}",
+        ],
     }
     for k in ["3.2"]
 }
 
 SPECS_SYSINFO = {
-    k:{
-        "rustc":"1.74",
-        "test_cmd":"cargo test --no-fail-fast",
-        "pre_install":[
-            
-        ],
-        "env_setup": [
-
-        ]
+    k: {
+        "rustc": "1.74",
+        "test_cmd": "cargo test --no-fail-fast",
+        "pre_install": [],
+        "env_setup": [],
     }
-    for k in ["0.8", "0.6","0.30" ,"0.32", "0.31", "0.29", "0.28", "0.27", "0.26", "0.24",
-              "0.23", "0.22", "0.21", "0.2", "0.18", "0.17", "0.16", "0.15", "0.14",
-              "0.13", "0.11", "0.10"]
-
+    for k in [
+        "0.8",
+        "0.6",
+        "0.30",
+        "0.32",
+        "0.31",
+        "0.29",
+        "0.28",
+        "0.27",
+        "0.26",
+        "0.24",
+        "0.23",
+        "0.22",
+        "0.21",
+        "0.2",
+        "0.18",
+        "0.17",
+        "0.16",
+        "0.15",
+        "0.14",
+        "0.13",
+        "0.11",
+        "0.10",
+    ]
 }
-
 
 
 SPECS_REGEX = {
@@ -523,17 +566,15 @@ SPECS_REGEX = {
         "rustc": "1.81.0",
         "test_cmd": "./test",
     }
-    for k in [ "1.2", "1.3", "1.4", "1.5","1.6", "1.7", "1.8", "1.9","1.10"]
+    for k in ["1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10"]
 }
 
-SPECS_REGEX.update({
-
-    k:{
-        "rustc":"1.24.1",
-        "test_cmd":TEST_CARGO
+SPECS_REGEX.update(
+    {
+        k: {"rustc": "1.24.1", "test_cmd": TEST_CARGO}
+        for k in ["0.1", "0.2", "1.0", "1.1"]
     }
-    for k in ["0.1", "0.2", "1.0", "1.1"]
-})
+)
 
 SPECS_SYN = {
     k: {
@@ -542,8 +583,8 @@ SPECS_SYN = {
         "pre_install": [
             "apt update",
             "apt install -y pkg-config libssl-dev",
-            "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}"
-        ]
+            "export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH:-}",
+        ],
     }
     for k in ["1.0", "2.0"]
 }
@@ -557,18 +598,15 @@ SPECS_RAYON = {
 }
 
 SPECS_INDEXMAP = {
-    k : {
-        "rustc":"1.81.0",
-        "test_cmd":TEST_CARGO
-    }
-    for k in ["2.2","1.8","1.6","1.4","1.2","1.1","0.4","0.3","0.2"]
+    k: {"rustc": "1.81.0", "test_cmd": TEST_CARGO}
+    for k in ["2.2", "1.8", "1.6", "1.4", "1.2", "1.1", "0.4", "0.3", "0.2"]
 }
 
 SPECS_CROSSBEAM = {
-    k : {
-        "rustc":"nightly",
+    k: {
+        "rustc": "nightly",
     }
-    for k in ["0.8","0.7","0.6","0.5","0.4","0.3","0.2","0.1"]
+    for k in ["0.8", "0.7", "0.6", "0.5", "0.4", "0.3", "0.2", "0.1"]
 }
 
 
@@ -588,6 +626,13 @@ SPECS_LOG = {
     for k in ["0.4", "0.3"]
 }
 
+SPECS_HYPER = {
+    k: {
+        "rustc": "1.81.0",
+    }
+    for k in ["1.5", "1.4", "1.3", "1.2", "1.1", "1.0"]
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
@@ -603,8 +648,9 @@ MAP_REPO_VERSION_TO_SPECS = {
     "rust-random/rand": SPECS_RAND,
     "rust-lang/log": SPECS_LOG,
     "tokio-rs/tokio": SPECS_TOKIO,
-    "indexmap-rs/indexmap":SPECS_INDEXMAP,
-    "crossbeam-rs/crossbeam":SPECS_CROSSBEAM
+    "indexmap-rs/indexmap": SPECS_INDEXMAP,
+    "crossbeam-rs/crossbeam": SPECS_CROSSBEAM,
+    "hyperium/hyper": SPECS_HYPER,
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -623,8 +669,9 @@ MAP_REPO_TO_REQS_PATHS = {
     "dtolnay/syn": "Cargo.toml",
     "rust-random/rand": "Cargo.toml",
     "rust-lang/log": "Cargo.toml",
-    "indexmap-rs/indexmap":"Cargo.toml",
-    "crossbeam-rs/crossbeam":"Cargo.toml",
+    "indexmap-rs/indexmap": "Cargo.toml",
+    "crossbeam-rs/crossbeam": "Cargo.toml",
+    "hyperium/hyper": "Cargo.toml",
 }
 
 # Constants - Task Instance environment.yml File Paths
@@ -679,6 +726,4 @@ NON_TEST_EXTS = [
     ".toml",
 ]
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
-USE_X86 = {
-
-}
+USE_X86 = {}

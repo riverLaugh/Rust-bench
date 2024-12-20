@@ -60,7 +60,7 @@ MAP_REPO_TO_VERSION_PATTERNS.update(
 )
 
 MAP_REPO_TO_VERSION_PATTERNS.update(
-    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand", "hyperium/hyper",]}
+    {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand", "hyperium/hyper"]}
 )
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"
