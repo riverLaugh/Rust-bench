@@ -17,8 +17,8 @@ def set_tokens():
 
 if __name__ == '__main__':
     file_path = 'temp.json'
-    path_prs = '/home/zhouyujie/SWE-bench/swebench/collect/prs'
-    path_tasks = '/home/zhouyujie/SWE-bench/swebench/collect/tasks'
+    path_prs = '/home/riv3r/SWE-bench/swebench/collect/prs'
+    path_tasks = '/home/riv3r/SWE-bench/swebench/collect/tasks'
     set_tokens()
 
     data_list = load_json_to_list(file_path)

@@ -287,12 +287,20 @@ SPECS_ASTERINAS.update(
             # repo level
             "pre_install": [
                 r"""
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
             """
             ],
             # env level
             "env_setup": [
                 r"""
+            git fetch origin pull/1666/head:pr-1666
+            git checkout main
+            git cherry-pick -X theirs pr-1666
+            git branch -D pr-1666
             sed -i 's/multiboot2 = "0.20.2"/multiboot2 = "0.23.1"/' ostd/Cargo.toml
 
             """

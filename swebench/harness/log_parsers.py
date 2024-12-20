@@ -269,6 +269,8 @@ def parse_log_cargo(log: str) -> dict[str, str]:
     # Regular expressions to match test results
     passed_re = re.compile(r"test ([\s\S]+) ... ok")
     failed_re = re.compile(r"test ([\s\S]+) ... (error|failed|FAILED)")
+    panic_re = re.compile(r"test ([\s\S]+) ...An uncaught panic occurred:")
+
 
     for line in lines:
         # Match passed tests
@@ -281,6 +283,12 @@ def parse_log_cargo(log: str) -> dict[str, str]:
         failed_match = failed_re.match(line)
         if failed_match:
             test_status_map[failed_match.group(1)] = "FAILED"
+            continue
+
+        # Match panics
+        panic_match = panic_re.match(line)
+        if panic_match:
+            test_status_map[panic_match.group(1)] = "FAILED"
             continue
 
     return test_status_map
