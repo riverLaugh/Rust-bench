@@ -12,6 +12,10 @@ def main(args):
     for data in load_swebench_dataset(dataset_name, "train"):
         id = data[KEY_INSTANCE_ID]
         version = data["version"]
+        # 如果 version 为 None，则忽略该条数据
+        if version is None:
+            continue
+
         if version not in results:
             results[version] = [id]
         else:

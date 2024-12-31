@@ -1,0 +1,117 @@
+{
+  "builder_name": "parquet",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "validated_12_18",
+  "dataset_size": 2652973,
+  "description": "",
+  "download_checksums": {
+    "hf://datasets/r1v3r/validated_12_18@7335ace0a0a059b281f750172429b224e824e765/data/train-00000-of-00001.parquet": {
+      "num_bytes": 763298,
+      "checksum": null
+    }
+  },
+  "download_size": 763298,
+  "features": {
+    "repo": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "pull_number": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "instance_id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "issue_numbers": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "base_commit": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "patch": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "test_patch": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "problem_statement": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "hints_text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "created_at": {
+      "dtype": "timestamp[ns, tz=UTC]",
+      "_type": "Value"
+    },
+    "version": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "environment_setup_commit": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "FAIL_TO_PASS": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "PASS_TO_PASS": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "FAIL_TO_FAIL": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "PASS_TO_FAIL": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "Sequence"
+    },
+    "r_number": {
+      "dtype": "int64",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 3416271,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 2652973,
+      "num_examples": 100,
+      "dataset_name": "validated_12_18"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

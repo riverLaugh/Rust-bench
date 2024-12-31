@@ -50,6 +50,8 @@ def _find_version_in_text(text: str, instance: dict) -> str:
                 if matches.group(0) == None:
                     return "0.1.0"
                 return matches.group(0)
+            if instance["repo"] == "denoland/deno":
+                return matches.group(0)
             return str(matches.group(1)).replace(" ", "")
 
 def get_version(instance, is_build=False, path_repo=None):
@@ -97,10 +99,25 @@ def get_version(instance, is_build=False, path_repo=None):
                     continue
         version = _find_version_in_text(init_text, instance)
         if version is not None:
-            if "." in version:
-                version = keep_major_minor(version, ".")
-            if "," in version:
-                version = keep_major_minor(version, ",")
+            if instance["repo"] == "serde-rs/serde":
+                # 仅处理以 '1.0.' 开头的版本号
+                    # 提取最后一部分 xxx
+                last_part = version.split(".")[-1]
+                if len(last_part) == 3 and last_part.isdigit():
+                    # 百位数提到主版本的次版本号
+                    hundredth = int(last_part[0])  # 获取百位数
+                    version = f"1.{hundredth}{int(last_part[1])}"
+                elif len(last_part) <= 2:
+                    # 如果只是两位数则直接保留前两部分
+                    if "." in version:
+                        version = keep_major_minor(version, ".")
+                    if "," in version:
+                        version = keep_major_minor(version, ",")
+            else:
+                if "." in version:
+                    version = keep_major_minor(version, ".")
+                if "," in version:
+                    version = keep_major_minor(version, ",")
             version = re.sub(r"[^0-9\.]", "", version)
             return version
     return version

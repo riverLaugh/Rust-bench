@@ -36,6 +36,8 @@ MAP_REPO_TO_VERSION_PATHS = {
     "indexmap-rs/indexmap":["Cargo.toml"],
     "crossbeam-rs/crossbeam":["Cargo.toml"],
     "hyperium/hyper":["Cargo.toml"],
+    "denoland/deno":["Releases.md"],
+    "dtolnay/proc-macro2":["Cargo.toml"],
 }
 
 # Cosntants - Task Instance Version Regex Pattern
@@ -52,6 +54,7 @@ MAP_REPO_TO_VERSION_PATTERNS = {
         "dtolnay/syn",
         "serde-rs/json",
         "rayon-rs/rayon",
+        "dtolnay/proc-macro2"
     ]
 }
 
@@ -62,5 +65,10 @@ MAP_REPO_TO_VERSION_PATTERNS.update(
 MAP_REPO_TO_VERSION_PATTERNS.update(
     {k: [r'version\s*=\s*"(.*)"'] for k in ["tokio-rs/tokio", "rust-random/rand", "hyperium/hyper"]}
 )
+
+MAP_REPO_TO_VERSION_PATTERNS.update(
+    {k: [r'(\d+\.\d+\.\d+)'] for k in ["denoland/deno"]}
+)
+
 
 SWE_BENCH_URL_RAW = "https://raw.githubusercontent.com/"

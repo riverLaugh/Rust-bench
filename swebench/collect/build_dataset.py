@@ -43,7 +43,7 @@ def create_instance(repo: Repo, pull: dict , mode:str) -> dict:
             "/", "__"
         ),
         "issue_numbers": pull["resolved_issues"],
-        "base_commit": pull["base"]["sha"],
+        "base_commit": pull["base"]["sha"], #这里为什么会有问题？
         "patch": patch,
         "test_patch": test_patch,
         "problem_statement": problem_statement,
