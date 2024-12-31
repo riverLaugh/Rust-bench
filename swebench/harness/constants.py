@@ -89,7 +89,35 @@ TEST_CARGO = "cargo test --no-fail-fast --all-features"
 # Constants - Installation Specifications
 SPECS_RUSTLINGS = {}
 
-SPECS_SERDE = {"test_cmd": TEST_CARGO}
+SPECS_SERDE = {
+    k:{
+        "rustc": "nightly",
+        "test_cmd": TEST_CARGO,
+    }
+    for k in ["1.21","1.20","1.19",]
+    
+    }
+
+SPECS_SERDE.update({
+    k: {
+        "rustc": "nightly",
+        "test_cmd": "cd test_suite && cargo test --features unstable",
+        # "pre_install": [
+        #     "cargo clean"
+        # ]
+    }
+    for k in ["1.18","1.17","1.16"]
+    }
+)
+
+SPECS_PROC_MACRO2 = {
+    k:{
+        "rustc": "1.81.0",
+        "test_cmd": TEST_CARGO,
+    }
+    for k in ["1.0","0.4","0.3","0.2","0.1"]
+
+}
 
 SPECS_BITFLAGS = {
     k: {"rustc": "1.81.0", "test_cmd": TEST_CARGO}
@@ -123,7 +151,7 @@ SPECS_ARROW = {
         ],
         "env_setup": ["pip install pyarrow"],
     }
-    for k in ["53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
+    for k in ["53.3","53.2", "53.0", "52.2", "52.1", "52.0", "51.0", "50.0"]
 }
 SPECS_ARROW.update(
     {
@@ -633,6 +661,31 @@ SPECS_HYPER = {
     for k in ["1.5", "1.4", "1.3", "1.2", "1.1", "1.0"]
 }
 
+SPECS_DENO = {
+    k: {
+        "rustc": "1.83.0",
+        "pre_install": [
+            r"""
+apt install -y lsb-release wget software-properties-common gnupg
+git submodule update --init --recursive
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+./llvm.sh 17
+apt install --install-recommends -y cmake libglib2.0-dev
+apt install -y protobuf-compiler
+apt-get update
+apt-get install -y python3
+ln -sf "$(which python3)" /usr/bin/python
+            """
+        ],
+        "test_cmd": r"""
+cargo test -vv
+target/debug/deno test -A --unstable --lock=tools/deno.lock.json --config tests/config/deno.json tests/unit
+"""
+    }
+    for k in ["2.1"]
+}
+
 # Constants - Task Instance Instllation Environment
 MAP_REPO_VERSION_TO_SPECS = {
     "rust-lang/rustlings": SPECS_RUSTLINGS,
@@ -651,6 +704,8 @@ MAP_REPO_VERSION_TO_SPECS = {
     "indexmap-rs/indexmap": SPECS_INDEXMAP,
     "crossbeam-rs/crossbeam": SPECS_CROSSBEAM,
     "hyperium/hyper": SPECS_HYPER,
+    "denoland/deno": SPECS_DENO,
+    "dtolnay/proc-macro2": SPECS_PROC_MACRO2,
 }
 
 # Constants - Repository Specific Installation Instructions
@@ -672,6 +727,7 @@ MAP_REPO_TO_REQS_PATHS = {
     "indexmap-rs/indexmap": "Cargo.toml",
     "crossbeam-rs/crossbeam": "Cargo.toml",
     "hyperium/hyper": "Cargo.toml",
+    "dtoinay/proc-macro2": "Cargo.toml",
 }
 
 # Constants - Task Instance environment.yml File Paths

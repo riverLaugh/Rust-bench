@@ -35,10 +35,10 @@
 #     --instance_ids dtolnay__proc-macro2-63 dtolnay__proc-macro2-58
 
 # 0.1
-python run_validation.py \
-    --dataset_name r1v3r/proc-macro2-None-task-instances_versions \
-    --run_id proc-macro2-None-task-instances_versions \
-    --max_workers 4 \
-    --cache_level env \
-    --instance_ids dtolnay__proc-macro2-44 dtolnay__proc-macro2-38 dtolnay__proc-macro2-25
+# python run_validation.py \
+#     --dataset_name r1v3r/proc-macro2-None-task-instances_versions \
+#     --run_id proc-macro2-None-task-instances_versions \
+#     --max_workers 4 \
+#     --cache_level env \
+#     --instance_ids dtolnay__proc-macro2-44 dtolnay__proc-macro2-38 dtolnay__proc-macro2-25
 

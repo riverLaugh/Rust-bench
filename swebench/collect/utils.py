@@ -227,8 +227,6 @@ class Repo:
             Iterator: Iterator of pull request objects
         """
         pulls = []
-        
-        
         for pull_number in pull_numbers:
             if not quiet:
                 print(f"Fetching PR #{pull_number}...")

@@ -344,4 +344,6 @@ MAP_REPO_TO_PARSER = {
     "indexmap-rs/indexmap": parse_log_cargo,
     "crossbeam-rs/crossbeam": parse_log_cargo,
     "hyperium/hyper": parse_log_cargo,
+    "denoland/deno": parse_log_cargo,
+    "dtolnay/proc-macro2": parse_log_cargo,
 }

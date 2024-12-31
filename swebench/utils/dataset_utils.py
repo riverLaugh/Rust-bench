@@ -2,11 +2,31 @@ from datasets import Dataset, DatasetDict,load_dataset,concatenate_datasets
 from huggingface_hub import HfApi, HfFolder, Repository
 import json
 import os
+from datasets import Dataset, Features, Value, Sequence
 
 # dataset: list of json objects
 # mutlti Json : each line is a json object
 # json : a list of json objects
 # List : a list of json objects
+
+features = Features({
+    "pull_number": Value("int64"),
+    "test_patch": Value("string"),
+    "issue_numbers": Sequence(Value("string")),
+    "instance_id": Value("string"),
+    "problem_statement": Value("string"),
+    "version": Value("string"),
+    "base_commit": Value("string"),
+    "patch": Value("string"),
+    "repo": Value("string"),
+    "created_at": Value("string"),
+    "hints_text": Value("string"),
+    "environment_setup_commit": Value("string"),
+    "FAIL_TO_PASS": Sequence(Value("string")),
+    "PASS_TO_PASS": Sequence(Value("string")),
+    "FAIL_TO_FAIL": Sequence(Value("string")),  # 显式定义为字符串数组
+    "PASS_TO_FAIL": Sequence(Value("string")),  # 显式定义为字符串数组
+})
 
 def multiJson2dataset(json_file_path):
     dataset = []
@@ -114,9 +134,12 @@ def upload_version(json_file_path:str , dataset_name):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/swebench/harness/results/processed_instances_versions_validated.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/swebench/harness/results/proc-macro2-None-task-instances_versions_validated.json"  # 替换为你的 JSON 文件路径
     
-    upload_version(json_file_path,"bitflags-filterbyLLM-verified")
+    dataset = Dataset.from_json(json_file_path,features=features)
+
+    upload_to_huggingface(dataset,"r1v3r/proc-macro2_validated")
+    # upload_version(json_file_path,"r1v3r/proc-macro2_validated")
     # dataset = load_dataset('csv', data_files="/home/riv3r/SWE-bench/swebench/utils/analysis_results.csv")
 
     # upload_to_huggingface(dataset,"r1v3r/data_classification")
