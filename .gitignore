@@ -188,6 +188,5 @@ swebench/collect/test.json
 swebench/harness/logs/*
 repos/*
 
-swebench/versioning/auto/dataset/*
-swebench/versioning/auto/version/*
 
+swebench/versioning/auto
