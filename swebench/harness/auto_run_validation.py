@@ -15,7 +15,7 @@ num_workers = 16  # 并行线程数量
 log_file = os.path.join(versioning_log_folder, 'process.log')
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.FileHandler(log_file), logging.StreamHandler()])
+                    handlers=[logging.FileHandler(log_file,mode="w"), logging.StreamHandler()])
 
 # 遍历文件夹，找到所有 .jsonl 文件
 for root, dirs, files in os.walk(input_folder):
@@ -43,8 +43,8 @@ for root, dirs, files in os.walk(input_folder):
             except subprocess.CalledProcessError as e:
                 logging.error(f"Error running get_versions.py for {file}: {e}")
                 continue
-
-            version_path = version_folder + f"/{base_name}_versions.json"
+            #split 是为了解决仓库名字中有.rs的问题
+            version_path = version_folder + f"/{base_name.split('.')[0]}_versions.json"
             # Step 2: 运行 environment_setup_commit.py
             environment_setup_command = [
                 "python", "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py",
@@ -55,13 +55,14 @@ for root, dirs, files in os.walk(input_folder):
             try:
                 subprocess.run(environment_setup_command, check=True)
             except subprocess.CalledProcessError as e:
+                os.remove(version_path)
                 logging.error(f"Error running environment_setup_commit.py for {file}: {e}")
                 continue
 
             # Step 3: 运行 run_validation.py（如果需要）
             run_validation_command = [
                 "python", "run_validation.py",
-                "--dataset_name", f"r1v3r/{base_name}_versions",
+                "--dataset_name", f"/home/riv3r/SWE-bench/swebench/versioning/auto/dataset/{base_name}_versions.json",
                 "--run_id", f"{base_name}_versions",
                 "--max_workers", str(num_workers),
                 "--cache_level", "base",

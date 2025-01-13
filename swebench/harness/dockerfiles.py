@@ -42,6 +42,7 @@ curl \
 locales \
 locales-all \
 tzdata \
+libssl-dev\
 && rm -rf /var/lib/apt/lists/*
 # 安装 Rustup 和指定的 Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
