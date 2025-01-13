@@ -223,7 +223,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     diff_cmd = "git diff"
     git_status_cmd = "git status"
     test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
-    test_commands = test_commands if test_commands else [f"{MAP_REPO_VERSION_TO_SPECS[instance["repo"]][instance["version"]]["test_cmd"]} "]
+    test_commands = test_commands if test_commands else [f"{specs["test_cmd"]} "]
     
     eval_commands = []
     if "eval_commands" in specs:
@@ -270,7 +270,10 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     env_name = "testbed"
     repo_directory = f"/{env_name}"
-    specs = MAP_REPO_VERSION_TO_SPECS[repo][version]
+    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {
+        "rustc": "1.81.0",
+        "test_cmd": "cargo test --no-fail-fast --all-features",
+    })
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
     try:
@@ -292,8 +295,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     # cargo_toml = reqs.text
     cargo_toml = ""
     tests_changed = list(dict.fromkeys(get_test_directives(instance)))
-    image_tag = MAP_REPO_VERSION_TO_SPECS[repo][version].get("image_tag", None)
-
+    image_tag = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {}).get("image_tag", None)
     # get eval script list
     eval_script_list = make_eval_script_list(
         instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed

@@ -14,6 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# auto_logger = logging.getLogger("auto_run_validation")
 
 INSTALL_CMD = {
     "pytest-dev/pytest": "pip install -e .",
@@ -36,7 +37,8 @@ def _find_version_in_text(text: str, instance: dict) -> str:
     pattern = r'""".*?"""'
     text = re.sub(pattern, "", text, flags=re.DOTALL)
     # Search through all patterns
-    for pattern in MAP_REPO_TO_VERSION_PATTERNS[instance["repo"]]:
+
+    for pattern in MAP_REPO_TO_VERSION_PATTERNS.get(instance["repo"], [r'version\s*=\s*"(\d+\.\d+\.\d+)"']):
         matches = re.search(pattern, text)
         if matches is not None:
             print(instance["repo"])
@@ -73,7 +75,8 @@ def get_version(instance, is_build=False, path_repo=None):
         str: Version text, if found
     """
     keep_major_minor = lambda x, sep: ".".join(x.strip().split(sep)[:2])
-    paths_to_version = MAP_REPO_TO_VERSION_PATHS[instance["repo"]]
+    paths_to_version = MAP_REPO_TO_VERSION_PATHS.get(instance["repo"], ["Cargo.toml"])
+    print(f"paths_to_version: {paths_to_version}")
     version = None
     for path_to_version in paths_to_version:
         init_text = None
