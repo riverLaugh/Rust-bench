@@ -519,8 +519,10 @@ def build_container(
     container = None
     try:
         # Get configurations for how container should be created
+        config = MAP_REPO_VERSION_TO_SPECS.get(test_spec.repo, {}).get(test_spec.version, {
+        })
         # config = MAP_REPO_VERSION_TO_SPECS[test_spec.repo][test_spec.version]
-        config = MAP_REPO_VERSION_TO_SPECS[test_spec.repo]
+        # config = MAP_REPO_VERSION_TO_SPECS[test_spec.repo]
         user = "root" if not config.get("execute_test_as_nonroot", False) else "nonroot"
         nano_cpus = config.get("nano_cpus")
 

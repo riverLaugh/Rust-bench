@@ -342,6 +342,7 @@ def main(
         open_file_limit: int,
         run_id: str,
         timeout: int,
+        auto: bool,
     ):
     """
     Run evaluation harness for the given dataset and predictions.
@@ -383,22 +384,27 @@ def main(
             # assert not any(k in instance for k in results[instance_id]), f"Duplicate keys in {instance_id}"
             instance.update(results[instance_id])
 
-    update_json_file(dataset_name,dataset)
+    update_json_file(dataset_name,dataset,auto)
 
 
 
-def update_json_file(dataset_name, dataset):
-    if not os.path.exists('./results'):
-        os.makedirs('./results')
-    if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
-        last_dot_idx = dataset_name.rfind(".")
-        dataset_name_w_results_all = "./results/"+ dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
-        dataset_name_w_results ="./results/"+ dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
+def update_json_file(dataset_name, dataset, auto):
+    if not os.path.exists('./results/auto'):
+        os.makedirs('./results/auto')
+
+    if auto :
+        dataset_name_w_results_all = "./results/auto/defaultconfig_validated.all.json"
+        dataset_name_w_results = "./results/auto/defaultconfig_validated.json"
     else:
-        last_dot_idx = dataset_name.rfind("/")
-        dataset_name_w_results_all = "./results/" + dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
-        dataset_name_w_results = "./results/" + dataset_name[last_dot_idx+1:] + "_validated" + ".json"
-
+        if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
+            dataset_name = dataset_name.split("/")[-1]
+            last_dot_idx = dataset_name.rfind(".")
+            dataset_name_w_results_all = "./results/"+ dataset_name[:last_dot_idx] + "_validated.all" + dataset_name[last_dot_idx:]
+            dataset_name_w_results ="./results/"+ dataset_name[:last_dot_idx] + "_validated" + dataset_name[last_dot_idx:]
+        else:
+            last_dot_idx = dataset_name.rfind("/")
+            dataset_name_w_results_all = "./results/" + dataset_name[last_dot_idx+1:] + "_validated.all" + ".json"
+            dataset_name_w_results = "./results/" + dataset_name[last_dot_idx+1:] + "_validated" + ".json"
     # Helper function to update a file with new data
     def update_file(file_path, dataset):
         # Load existing data if file exists
@@ -456,6 +462,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--clean", type=str2bool, default=False, help="Clean images above cache level"
     )
+    parser.add_argument("--auto", type=str2bool, default=False, help="Run in auto mode")
     parser.add_argument("--run_id", type=str, required=True, help="Run ID - identifies the run")
     args = parser.parse_args()
 

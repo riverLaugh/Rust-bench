@@ -9,7 +9,7 @@
 
 # Example call for getting versions from github web interface
 python get_versions.py \
-    --instances_path /home/riv3r/SWE-bench/swebench/collect/tasks/proc-macro2-None-task-instances.jsonl\
+    --instances_path /home/riv3r/SWE-bench/swebench/collect/tasks/auto/ast-grep-new-task-instances.jsonl\
     --retrieval_method github \
     --num_workers 4 \
     --output_dir "/home/riv3r/SWE-bench/swebench/versioning/results"\

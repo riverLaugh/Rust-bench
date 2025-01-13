@@ -1,9 +1,10 @@
+from pathlib import Path
 from datasets import load_dataset
 from datetime import datetime
 from swebench.utils.dataset_utils import upload_to_huggingface
 from datasets import load_dataset
 import argparse
-
+import os
 
 def main(args):
 # 加载数据集
@@ -56,8 +57,18 @@ def main(args):
     # 应用函数添加新列
     dataset = dataset.map(add_environment_setup_commit)
     dataset = dataset.remove_columns(['created_at_parsed'])
-    
-    upload_to_huggingface(dataset,dataset_name)
+    if args.output_dir:
+        file_name = args.dataset_name.split('/')[-1]
+        file_path = Path(args.output_dir + '/' + file_name)
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        print(args.output_dir)
+        print(file_name)
+        dataset.to_json(file_path)
+        # with file_path.open('w') as f:
+        #     f.write(dataset.to_json(orient='records', lines=True))
+        # dataset.save_to_disk(args.output_dir)
+    else:
+        upload_to_huggingface(dataset,dataset_name)
     # 查看添加新列后的列名和第一条记录
     # print("Columns after adding new column:", dataset.column_names)
     # print("First record after adding new column:", dataset[0])
@@ -65,5 +76,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_name", required=True, type=str, default=None, help="Path to task instances")
+    parser.add_argument("--output_dir", required=False, type=str, default=None, help="Path to save the output file")
     args = parser.parse_args()
     main(args)

@@ -30,7 +30,7 @@ def merge_json_files(entry_file, response_file, output_file):
                         "problem_type": matching_response["problem_type"],
                         "location": entry["issue_detail"]["location"],
                         "level": matching_response["severity_level"],
-                        "description": entry["issue_detail"]["description"],
+                        "description": matching_response["description"],
                         "level_reason": matching_response["reason"]
                     },
                     "repo": entry["repo"],
@@ -44,7 +44,7 @@ def merge_json_files(entry_file, response_file, output_file):
 
 # 示例用法
 entry_file_path = '/home/riv3r/SWE-bench/swebench/utils/delivery/entries.json'  # 第一个 JSON 文件路径
-response_file_path = '/home/riv3r/SWE-bench/swebench/utils/delivery/classification_results.json'  # 第二个 JSON 文件路径
+response_file_path = '/home/riv3r/SWE-bench/swebench/utils/delivery/classification_results_cn.json'  # 第二个 JSON 文件路径
 output_file_path = '/home/riv3r/SWE-bench/swebench/utils/delivery/siada_edu_case.jsonl'  # 输出 JSONL 文件路径
 
 merge_json_files(entry_file_path, response_file_path, output_file_path)
