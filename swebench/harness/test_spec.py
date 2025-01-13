@@ -249,7 +249,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
 def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     if isinstance(instance, TestSpec):
         return instance
-    if "version" not in instance:
+    if "version" not in instance or instance["version"] is None:
         logger.warning(f"Instance {instance['instance_id']} does not have a version field, skipping")
         return None
     instance_id = instance[KEY_INSTANCE_ID]

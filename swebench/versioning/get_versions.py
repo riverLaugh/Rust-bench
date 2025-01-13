@@ -74,8 +74,9 @@ def get_version(instance, is_build=False, path_repo=None):
     Returns:
         str: Version text, if found
     """
+    repo = instance["repo"].split("/")[1]
     keep_major_minor = lambda x, sep: ".".join(x.strip().split(sep)[:2])
-    paths_to_version = MAP_REPO_TO_VERSION_PATHS.get(instance["repo"], ["Cargo.toml"])
+    paths_to_version = MAP_REPO_TO_VERSION_PATHS.get(instance["repo"], ["Cargo.toml",f"{repo}/Cargo.toml"])
     print(f"paths_to_version: {paths_to_version}")
     version = None
     for path_to_version in paths_to_version:
