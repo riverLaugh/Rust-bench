@@ -2,13 +2,17 @@ import os
 import subprocess
 import logging
 
+# 根路径
+root_path = "/home/riv3r/SWE-bench/swebench"
+
 # 配置路径
-input_folder = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto"  # 存放 .jsonl 文件的文件夹
-output_folder = "/home/riv3r/SWE-bench/swebench/versioning/results"  # 存放结果文件的文件夹
-version_folder = "/home/riv3r/SWE-bench/swebench/versioning/auto/version"  # 存放版本信息的文件夹
-env_commit_folder = "/home/riv3r/SWE-bench/swebench/versioning/auto/env_commit"  # 存放环境设置 commit 的文件夹
-versioning_log_folder = "/home/riv3r/SWE-bench/swebench/versioning/auto/log"  # 存放日志文件的文件夹
-dataset_folder = "/home/riv3r/SWE-bench/swebench/versioning/auto/dataset"  # 存放数据集的文件夹
+input_folder = os.path.join(root_path, "collect/tasks/auto")  # 存放 .jsonl 文件的文件夹
+output_folder = os.path.join(root_path, "versioning/results")  # 存放结果文件的文件夹
+version_folder = os.path.join(root_path, "versioning/auto/version")  # 存放版本信息的文件夹
+env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")  # 存放环境设置 commit 的文件夹
+versioning_log_folder = os.path.join(root_path, "versioning/auto/log")  # 存放日志文件的文件夹
+dataset_folder = os.path.join(root_path, "versioning/auto/dataset")  # 存放数据集的文件夹
+
 num_workers = 16  # 并行线程数量
 
 # 设置日志记录
