@@ -93,7 +93,7 @@ def get_repo_arch(
     root = RepoArchitecture(None)
 
     for item in _ghapi_tree(api, owner, repo, commit):
-
+        print(item)
         item_type, item_path = item["type"], item["path"]
 
         paths = item_path.split("/")
