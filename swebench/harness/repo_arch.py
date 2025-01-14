@@ -75,14 +75,20 @@ def _ghapi_file(
     ).decode()
 
 
-def _ghapi_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD"):
-    while True:
+def _ghapi_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD", max_retries=5):
+    retries = 0
+    while retries < max_retries:
         try:
+            print(f"Getting tree: {owner}/{repo}/{commit}")
             return api.git.get_tree(owner, repo, commit, recursive=True)["tree"]
-        except (KeyboardInterrupt, SystemExit) as e:
-            raise e
-        except:
-            pass
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed with error: {e}")
+            if retries >= max_retries:
+                raise RuntimeError("Max retries reached") from e
+
 
 
 def get_repo_arch(
