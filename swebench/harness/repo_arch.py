@@ -42,19 +42,21 @@ class RepoArchitecture:
         current, path = self.parent, self.name
         while current:
             if current.name:
-                path = f'{current.name}/{path}'
+                path = f"{current.name}/{path}"
             current = current.parent
         return path
 
 
 def _ghapi(token: str) -> GhApi:
     session = requests.Session()
-    session.request = lambda *args, **kwargs: requests.request(*args, timeout=4, **kwargs)
+    session.request = lambda *args, **kwargs: requests.request(
+        *args, timeout=4, **kwargs
+    )
     return GhApi(token=token, session=session)
 
 
 def _ghapi_info(
-        api: GhApi, owner: str, repo: str, path: str, commit: Optional[str] = None
+    api: GhApi, owner: str, repo: str, path: str, commit: Optional[str] = None
 ):
     while True:
         try:
@@ -66,16 +68,14 @@ def _ghapi_info(
 
 
 def _ghapi_file(
-        api: GhApi, owner: str, repo: str, path: str, commit: Optional[str] = None
+    api: GhApi, owner: str, repo: str, path: str, commit: Optional[str] = None
 ):
     return base64.b64decode(
         _ghapi_info(api, owner, repo, path, commit)["content"]
     ).decode()
 
 
-def _ghapi_tree(
-        api: GhApi, owner: str, repo: str, commit: str = "HEAD"
-):
+def _ghapi_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD"):
     while True:
         try:
             return api.git.get_tree(owner, repo, commit, recursive=True)["tree"]
@@ -85,7 +85,9 @@ def _ghapi_tree(
             pass
 
 
-def get_repo_arch(token: str, owner: str, repo: str, commit: Optional[str] = None) -> RepoArchitecture:
+def get_repo_arch(
+    token: str, owner: str, repo: str, commit: Optional[str] = None
+) -> RepoArchitecture:
     api = _ghapi(token)
 
     root = RepoArchitecture(None)
@@ -96,30 +98,30 @@ def get_repo_arch(token: str, owner: str, repo: str, commit: Optional[str] = Non
 
         paths = item_path.split("/")
 
-        if item_type == 'tree':
+        if item_type == "tree":
             root.find_dir(paths)
 
-        elif item['type'] == 'blob':
-            paths = item['path'].split('/')
+        elif item["type"] == "blob":
+            paths = item["path"].split("/")
             paths, name = paths[:-1], paths[-1]
             arch = root.find_dir(paths)
-            if name == 'Cargo.toml':
+            if name == "Cargo.toml":
                 arch.cargo_toml = _ghapi_file(api, owner, repo, item_path, commit)
-            elif name.endswith('.rs'):
+            elif name.endswith(".rs"):
                 arch.files.add(name)
 
     return root
 
 
 def get_repo_version(
-        repo: str,
-        root: RepoArchitecture,
-        default_version: Optional[str] = None,
+    repo: str,
+    root: RepoArchitecture,
+    default_version: Optional[str] = None,
 ) -> str:
     def _extract_version(_content: Optional[str]):
         if not _content:
             return None
-        m = re.search(r'version\s*=\s*"(.*)"', _content)
+        m = re.search(r'^\s*version\s*=\s*"\s*(\S*)\s*"\s*$', _content)
         if m:
             return m.group(1)
         else:
@@ -139,13 +141,15 @@ def get_repo_version(
     return default_version
 
 
-def get_cargo_test_cmd(root: RepoArchitecture, tests: list[str], flags: Optional[str] = None) -> list[str]:
+def get_cargo_test_cmd(
+    root: RepoArchitecture, tests: list[str], flags: Optional[str] = None
+) -> list[str]:
     submodule_test_dict = dict()
     for test in tests:
         # assert .rs file
         if not test.endswith(".rs"):
             continue
-        paths = test.split('/')
+        paths = test.split("/")
         paths, name = paths[:-1], paths[-1]
         # find nearest cargo submodule
         module = root.find_dir(paths, create_dir=False)
@@ -156,22 +160,33 @@ def get_cargo_test_cmd(root: RepoArchitecture, tests: list[str], flags: Optional
         if module_path not in submodule_test_dict:
             submodule_test_dict[module_path] = list()
         # try integration test
-        if module.has_dir("tests") and module.get_dir("tests").has_file(name):
+        if module.has_dir("tests") and f"{module_path}/tests/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
-                submodule_test_dict[module_path].append(f'cargo test --no-fail-fast --all-features --test "{name}"')
+                submodule_test_dict[module_path].append(
+                    f'cargo test --no-fail-fast --all-features --test "{name}"'
+                )
         # try bin test
-        elif module.has_dir("src") and module.get_dir("src").has_dir("bin") and module.get_dir("src").get_dir(
-                "bin").has_file(name):
+        elif (
+            module.has_dir("src")
+            and module.get_dir("src").has_dir("bin")
+            and f"{module_path}/src/bin/{name}" == test
+        ):
             if isinstance(submodule_test_dict[module_path], list):
-                submodule_test_dict[module_path].append(f'cargo test --no-fail-fast --all-features --bin "{name}"')
+                submodule_test_dict[module_path].append(
+                    f'cargo test --no-fail-fast --all-features --bin "{name}"'
+                )
         # try example test
-        elif module.has_dir("examples") and module.get_dir("examples").has_file(name):
+        elif module.has_dir("examples") and f"{module_path}/examples/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
-                submodule_test_dict[module_path].append(f'cargo test --no-fail-fast --all-features --example "{name}"')
+                submodule_test_dict[module_path].append(
+                    f'cargo test --no-fail-fast --all-features --example "{name}"'
+                )
         # try bench test
-        elif module.has_dir("benches") and module.get_dir("benches").has_file(name):
+        elif module.has_dir("benches") and f"{module_path}/benches/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
-                submodule_test_dict[module_path].append(f'cargo test --no-fail-fast --all-features --bench "{name}"')
+                submodule_test_dict[module_path].append(
+                    f'cargo test --no-fail-fast --all-features --bench "{name}"'
+                )
         # test all
         else:
             submodule_test_dict[module_path] = None
@@ -185,45 +200,80 @@ def get_cargo_test_cmd(root: RepoArchitecture, tests: list[str], flags: Optional
         if submodule_test_dict[module_path]:
             cmds.extend(submodule_test_dict[module_path])
         else:
-            cmds.append(f'cargo test --no-fail-fast --all-features"')
+            cmds.append(f"cargo test --no-fail-fast --all-features")
         if module_path:
             cmds.append(f'cd {"../" * (module_path.count("/") + 1)}')
     return cmds
 
 
 def test_bitflags_1(root):
-    print(get_cargo_test_cmd(root, ['tests/basic.rs'], ))
+    print(
+        get_cargo_test_cmd(
+            root,
+            ["tests/basic.rs"],
+        )
+    )
 
 
 def test_bitflags_2(root):
-    print(get_cargo_test_cmd(root, ['tests/basic.rs', 'tests/compile-fail/redefined.rs'], ))
+    print(
+        get_cargo_test_cmd(
+            root,
+            ["tests/basic.rs", "tests/compile-fail/redefined.rs"],
+        )
+    )
 
 
 def test_bitflags_3(root):
     print(
-        get_cargo_test_cmd(root,
-                           ['tests/basic.rs', 'tests/compile-fail/redefined.rs',
-                            'tests/compile-fail/trait/custom_impl.rs'], ))
+        get_cargo_test_cmd(
+            root,
+            [
+                "tests/basic.rs",
+                "tests/compile-fail/redefined.rs",
+                "tests/compile-fail/trait/custom_impl.rs",
+            ],
+        )
+    )
 
 
 def test_bitflags_4(root):
     print(
-        get_cargo_test_cmd(root,
-                           ['tests/basic.rs', 'tests/compile-fail/redefined.rs',
-                            'tests/compile-fail/trait/custom_impl.rs', 'tests/smoke-test/src/main.rs'], ))
+        get_cargo_test_cmd(
+            root,
+            [
+                "tests/basic.rs",
+                "tests/compile-fail/redefined.rs",
+                "tests/compile-fail/trait/custom_impl.rs",
+                "tests/smoke-test/src/main.rs",
+            ],
+        )
+    )
 
 
 def test_bitflags_5(root):
     print(
-        get_cargo_test_cmd(root,
-                           ['tests/basic.rs', 'tests/compile-fail/redefined.rs',
-                            'tests/compile-fail/trait/custom_impl.rs', 'tests/smoke-test/src/main.rs', 'src/lib.rs'], ))
+        get_cargo_test_cmd(
+            root,
+            [
+                "tests/basic.rs",
+                "tests/compile-fail/redefined.rs",
+                "tests/compile-fail/trait/custom_impl.rs",
+                "tests/smoke-test/src/main.rs",
+                "src/lib.rs",
+            ],
+        )
+    )
 
 
 def test_bitflags():
-    root = get_repo_arch(os.environ['GITHUB_TOKENS'], 'bitflags', 'bitflags',
-                         'dc971042c8132a5381ab3e2165983ee7f9d44c63')
-    print(get_repo_version('bitflags', root, '0.0.0'))
+    root = get_repo_arch(
+        os.environ["GITHUB_TOKENS"],
+        "bitflags",
+        "bitflags",
+        "dc971042c8132a5381ab3e2165983ee7f9d44c63",
+    )
+    print(get_repo_version("bitflags", root, "0.0.0"))
     test_bitflags_1(root)
     test_bitflags_2(root)
     test_bitflags_3(root)
@@ -232,21 +282,42 @@ def test_bitflags():
 
 
 def test_arrow_1(root):
-    print(get_cargo_test_cmd(root, ['arrow-flight/tests/flight_sql_client.rs']))
+    print(get_cargo_test_cmd(root, ["arrow-flight/tests/flight_sql_client.rs"]))
 
 
 def test_arrow_2(root):
-    print(get_cargo_test_cmd(root, ['arrow-flight/tests/flight_sql_client.rs', 'arrow-flight/examples/server.rs']))
+    print(
+        get_cargo_test_cmd(
+            root,
+            [
+                "arrow-flight/tests/flight_sql_client.rs",
+                "arrow-flight/examples/server.rs",
+            ],
+        )
+    )
 
 
 def test_arrow_3(root):
-    print(get_cargo_test_cmd(root, ['arrow-flight/tests/flight_sql_client.rs', 'arrow-flight/examples/server.rs',
-                                    'testing/data/csv/README.md']))
+    print(
+        get_cargo_test_cmd(
+            root,
+            [
+                "arrow-flight/tests/flight_sql_client.rs",
+                "arrow-flight/examples/server.rs",
+                "testing/data/csv/README.md",
+            ],
+        )
+    )
 
 
 def test_arrow():
-    root = get_repo_arch(os.environ['GITHUB_TOKENS'], 'apache', 'arrow-rs', "9ffa06543be51613ea1f509e63f6e7405b7d9989")
-    print(get_repo_version('arrow', root, '0.0.0'))
+    root = get_repo_arch(
+        os.environ["GITHUB_TOKENS"],
+        "apache",
+        "arrow-rs",
+        "9ffa06543be51613ea1f509e63f6e7405b7d9989",
+    )
+    print(get_repo_version("arrow", root, "0.0.0"))
     test_arrow_1(root)
     test_arrow_2(root)
     test_arrow_3(root)
