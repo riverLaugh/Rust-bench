@@ -3,7 +3,7 @@ import subprocess
 import logging
 
 # 根路径
-root_path = "/home/riv3r/SWE-bench/swebench"
+root_path = "/root/ARiSE/SWEbench/SWE-bench/swebench"
 
 # 配置路径
 input_folder = os.path.join(root_path, "collect/tasks/auto")  # 存放 .jsonl 文件的文件夹
@@ -12,6 +12,16 @@ version_folder = os.path.join(root_path, "versioning/auto/version")  # 存放版
 env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")  # 存放环境设置 commit 的文件夹
 versioning_log_folder = os.path.join(root_path, "versioning/auto/log")  # 存放日志文件的文件夹
 dataset_folder = os.path.join(root_path, "versioning/auto/dataset")  # 存放数据集的文件夹
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+if not os.path.exists(version_folder):
+    os.makedirs(version_folder)
+if not os.path.exists(env_commit_folder):
+    os.makedirs(env_commit_folder)
+if not os.path.exists(versioning_log_folder):
+    os.makedirs(versioning_log_folder)
+if not os.path.exists(dataset_folder):
+    os.makedirs(dataset_folder)
 
 num_workers = 16  # 并行线程数量
 
@@ -37,7 +47,7 @@ for root, dirs, files in os.walk(input_folder):
             # Step 1: 运行 get_versions.py
             if not os.path.exists(version_path):
                 get_versions_command = [
-                    "python", "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py",
+                    "python", f"{root_path}/versioning/get_versions.py",
                     "--instances_path", instances_path,
                     "--retrieval_method", "github",
                     "--num_workers", str(num_workers),
@@ -53,9 +63,9 @@ for root, dirs, files in os.walk(input_folder):
                 #split 是为了解决仓库名字中有.rs的问题
             
             # Step 2: 运行 environment_setup_commit.py
-            if not os.path.exists(f"/home/riv3r/SWE-bench/swebench/versioning/auto/dataset/{base_name}_versions.json"):
+            if not os.path.exists(f"{root_path}/versioning/auto/dataset/{base_name}_versions.json"):
                 environment_setup_command = [
-                    "python", "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py",
+                    "python", f"{root_path}/versioning/environment_setup_commit.py",
                     "--dataset_name", version_path,
                     "--output_dir", dataset_folder
                 ]
@@ -70,7 +80,7 @@ for root, dirs, files in os.walk(input_folder):
             # Step 3: 运行 run_validation.py（如果需要）
             run_validation_command = [
                 "python", "run_validation.py",
-                "--dataset_name", f"/home/riv3r/SWE-bench/swebench/versioning/auto/dataset/{base_name}_versions.json",
+                "--dataset_name", f"{root_path}/versioning/auto/dataset/{base_name}_versions.json",
                 "--run_id", f"{base_name}_versions",
                 "--max_workers", str(num_workers),
                 "--cache_level", "base",
