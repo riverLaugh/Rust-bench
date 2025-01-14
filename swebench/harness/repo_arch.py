@@ -160,7 +160,7 @@ def get_cargo_test_cmd(
         if module_path not in submodule_test_dict:
             submodule_test_dict[module_path] = list()
         # try integration test
-        if module.has_dir("tests") and module.get_dir("tests").has_file(name):
+        if module.has_dir("tests") and f"{module_path}/tests/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
                     f'cargo test --no-fail-fast --all-features --test "{name}"'
@@ -169,20 +169,20 @@ def get_cargo_test_cmd(
         elif (
             module.has_dir("src")
             and module.get_dir("src").has_dir("bin")
-            and module.get_dir("src").get_dir("bin").has_file(name)
+            and f"{module_path}/src/bin/{name}" == test
         ):
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
                     f'cargo test --no-fail-fast --all-features --bin "{name}"'
                 )
         # try example test
-        elif module.has_dir("examples") and module.get_dir("examples").has_file(name):
+        elif module.has_dir("examples") and f"{module_path}/examples/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
                     f'cargo test --no-fail-fast --all-features --example "{name}"'
                 )
         # try bench test
-        elif module.has_dir("benches") and module.get_dir("benches").has_file(name):
+        elif module.has_dir("benches") and f"{module_path}/benches/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
                     f'cargo test --no-fail-fast --all-features --bench "{name}"'
