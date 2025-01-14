@@ -3,6 +3,7 @@ from datasets import load_dataset
 from datetime import datetime
 from swebench.utils.dataset_utils import upload_to_huggingface
 from datasets import load_dataset
+from pandas import Timestamp
 import argparse
 import os
 
@@ -20,7 +21,14 @@ def main(args):
     # 查看数据集的列名和第一条记录
     # 定义一个函数，将字符串转换为 datetime 对象
     def parse_created_at(example):
-        example['created_at_parsed'] = datetime.strptime(example['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+        if isinstance(example['created_at'], datetime):
+            example['created_at_parsed'] = example['created_at']
+        elif isinstance(example['created_at'], Timestamp):
+            example['created_at_parsed'] = example['created_at'].to_pydatetime()
+        elif isinstance(example['created_at'], str):
+            example['created_at_parsed'] = datetime.strptime(example['created_at'], "%Y-%m-%dT%H:%M:%SZ")
+        else:
+            raise ValueError(f"Unsupported time type: {type(example['created_at'])}")
         return example
 
     # 应用转换函数
