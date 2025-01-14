@@ -8,7 +8,7 @@ import logging
 import os,requests
 from dataclasses import dataclass
 from typing import Any, Union, cast
-
+from swebench.harness.repo_arch import get_cargo_test_cmd, get_repo_arch
 from swebench.harness.make_test_cmds import make_test_cmds
 from swebench.harness.constants import (
     SWEbenchInstance,
@@ -222,9 +222,11 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     )
     diff_cmd = "git diff"
     git_status_cmd = "git status"
-    test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
-    test_commands = test_commands if test_commands else [f"{specs["test_cmd"]} "]
-    
+    repo = get_repo_arch(os.environ['GITHUB_TOKENS'], instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
+    test_commands = get_cargo_test_cmd(repo, tests_changed)
+    # test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
+    # test_commands = test_commands if test_commands else [f"{specs["test_cmd"]} "]
+
     eval_commands = []
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]

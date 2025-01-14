@@ -31,37 +31,41 @@ for root, dirs, files in os.walk(input_folder):
             logging.info(f"Processing: {file}")
             instances_path = os.path.join(root, file)
             base_name = os.path.splitext(file)[0]  # 去掉扩展名
-            
+            base_name = base_name.split(".")[0]
+            version_path = version_folder + f"/{base_name}_versions.json"
+
             # Step 1: 运行 get_versions.py
-            get_versions_command = [
-                "python", "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py",
-                "--instances_path", instances_path,
-                "--retrieval_method", "github",
-                "--num_workers", str(num_workers),
-                "--output_dir", version_folder,
-                "--cleanup"
-            ]
-            logging.info(f"Running: get_versions {file}")
-            try:
-                subprocess.run(get_versions_command, check=True)
-            except subprocess.CalledProcessError as e:
-                logging.error(f"Error running get_versions.py for {file}: {e}")
-                continue
-            #split 是为了解决仓库名字中有.rs的问题
-            version_path = version_folder + f"/{base_name.split('.')[0]}_versions.json"
+            if not os.path.exists(version_path):
+                get_versions_command = [
+                    "python", "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py",
+                    "--instances_path", instances_path,
+                    "--retrieval_method", "github",
+                    "--num_workers", str(num_workers),
+                    "--output_dir", version_folder,
+                    "--cleanup"
+                ]
+                logging.info(f"Running: get_versions {file}")
+                try:
+                    subprocess.run(get_versions_command, check=True)
+                except subprocess.CalledProcessError as e:
+                    logging.error(f"Error running get_versions.py for {file}: {e}")
+                    continue
+                #split 是为了解决仓库名字中有.rs的问题
+            
             # Step 2: 运行 environment_setup_commit.py
-            environment_setup_command = [
-                "python", "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py",
-                "--dataset_name", version_path,
-                "--output_dir", dataset_folder
-            ]
-            logging.info(f"Running: {' '.join(environment_setup_command)}")
-            try:
-                subprocess.run(environment_setup_command, check=True)
-            except subprocess.CalledProcessError as e:
-                os.remove(version_path)
-                logging.error(f"Error running environment_setup_commit.py for {file}: {e}")
-                continue
+            if not os.path.exists(f"/home/riv3r/SWE-bench/swebench/versioning/auto/dataset/{base_name}_versions.json"):
+                environment_setup_command = [
+                    "python", "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py",
+                    "--dataset_name", version_path,
+                    "--output_dir", dataset_folder
+                ]
+                logging.info(f"Running: {' '.join(environment_setup_command)}")
+                try:
+                    subprocess.run(environment_setup_command, check=True)
+                except subprocess.CalledProcessError as e:
+                    os.remove(version_path)
+                    logging.error(f"Error running environment_setup_commit.py for {file}: {e}")
+                    continue
 
             # Step 3: 运行 run_validation.py（如果需要）
             run_validation_command = [
