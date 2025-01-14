@@ -79,7 +79,7 @@ def _ghapi_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD", max_ret
     retries = 0
     while retries < max_retries:
         try:
-            print(f"Getting tree: {owner}/{repo}/{commit}")
+            # print(f"Getting tree: {owner}/{repo}/{commit}")
             return api.git.get_tree(owner, repo, commit, recursive=True)["tree"]
         except (KeyboardInterrupt, SystemExit):
             raise
@@ -99,7 +99,7 @@ def get_repo_arch(
     root = RepoArchitecture(None)
 
     for item in _ghapi_tree(api, owner, repo, commit):
-        print(item)
+        # print(item)
         item_type, item_path = item["type"], item["path"]
 
         paths = item_path.split("/")
