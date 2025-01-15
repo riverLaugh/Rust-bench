@@ -246,7 +246,7 @@ def make_test_cmds(
 ):
     repo = instance["repo"]
     if repo not in MAP_REPO_TO_TESTS:
-        return None
+        return specs.get("test_cmd",None)
     return MAP_REPO_TO_TESTS[repo](
         instance,
         specs,

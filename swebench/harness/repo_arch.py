@@ -157,6 +157,7 @@ def get_cargo_test_cmd(
             continue
         paths = test.split("/")
         paths, name = paths[:-1], paths[-1]
+        module_name = name.removesuffix(".rs")
         # find nearest cargo submodule
         module = root.find_dir(paths, create_dir=False)
         while not module.cargo_toml:
@@ -169,7 +170,7 @@ def get_cargo_test_cmd(
         if module.has_dir("tests") and f"{module_path}/tests/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --test "{name}"'
+                    f'cargo test --no-fail-fast --all-features --test "{module_name}"'
                 )
         # try bin test
         elif (
@@ -179,19 +180,19 @@ def get_cargo_test_cmd(
         ):
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --bin "{name}"'
+                    f'cargo test --no-fail-fast --all-features --bin "{module_name}"'
                 )
         # try example test
         elif module.has_dir("examples") and f"{module_path}/examples/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --example "{name}"'
+                    f'cargo test --no-fail-fast --all-features --example "{module_name}"'
                 )
         # try bench test
         elif module.has_dir("benches") and f"{module_path}/benches/{name}" == test:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --bench "{name}"'
+                    f'cargo test --no-fail-fast --all-features --bench "{module_name}"'
                 )
         # test all
         else:

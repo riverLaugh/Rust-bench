@@ -31,6 +31,8 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     handlers=[logging.FileHandler(log_file,mode="w"), logging.StreamHandler()])
 
+
+
 # 遍历文件夹，找到所有 .jsonl 文件
 for root, dirs, files in os.walk(input_folder):
     for file in files:
