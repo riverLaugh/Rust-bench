@@ -90,7 +90,6 @@ def _ghapi_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD", max_ret
                 raise RuntimeError("Max retries reached") from e
 
 
-
 def get_repo_arch(
     token: str, owner: str, repo: str, commit: Optional[str] = None
 ) -> RepoArchitecture:

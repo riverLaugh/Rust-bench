@@ -93,49 +93,13 @@ def make_arrow_rs_test_cmds(
         instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
 ):
     # ban cargo test warnning
-    cmds = ['export RUSTFLAGS="-Awarnings"']
-    # run doc test
-    docs = set()
-    for paths in [test.split("/") for test in tests_changed]:
-        paths.pop()
-        while paths and paths[-1] in {"src", "tests", "examples", "benches", "bin"}:
-            paths.pop()
-        docs.add("/".join(paths))
-    for dir in docs:
-        dirs = dir.split("/")
-        cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --all-features --doc")
-        cmds.append(f"cd ./{'../' * len(dirs)}")
-    # run unit test
-    for test_path in tests_changed:
-        if not test_path.endswith("src/lib.rs"):
-            continue
-        dirs = [dir for dir in test_path.replace("src/lib.rs", "").split("/") if dir]
-        cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --all-features --lib")
-        cmds.append(f"cd ./{'../' * len(dirs)}")
-    # run integration test
-    for test_path in tests_changed:
-        paths = test_path.split("/")
-        dirs, file = paths[:-1], paths[-1]
-        name = file.replace(".rs", "")
-        cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --all-features --test {name}")
-        cmds.append(f"cd ./{'../' * len(dirs)}")
-    # run bin test
-    for test_path in tests_changed:
-        if "src/bin/" not in test_path:
-            continue
-        dirs = [dir for dir in test_path.split("src/bin/")[0].split("/") if dir]
-        files = test_path.split("src/bin/")[1].split("/")
-        if len(files) != 1:
-            continue
-        file = files[0]
-        name = file.replace(".rs", "")
-        cmds.append(f"cd ./{'/'.join(dirs)}")
-        cmds.append(f"cargo test --no-fail-fast --all-features --bin {name}")
-        cmds.append(f"cd ./{'../' * len(dirs)}")
-    return cmds
+    # cmds = ['export RUSTFLAGS="-Awarnings"']
+    
+    return _base_single_module_test_commands(
+        tests_changed=tests_changed,
+        rust_flags="-Awarnings",
+        use_all_features=True
+    )
 
 
 def make_asterinas_test_cmds(
