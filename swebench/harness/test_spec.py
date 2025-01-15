@@ -30,19 +30,20 @@ from swebench.harness.dockerfiles import (
     get_dockerfile_env_asterinas,
 )
 from swebench.harness.utils import (
-    get_requirements,
     get_test_directives,
-    clean_cargo_toml,
-    clean_workspace_cargo_toml,
-    get_rust_test_command,
-    clean_comment,
-    findCrate,
 )
 
 logger = logging.getLogger(__name__)
 
 DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
 
+default_config = {
+        "rustc": "1.81.0",
+        "test_cmd": "cargo test --no-fail-fast --all-features",
+        "pre_install": [
+            "git submodule update --init --recursive",
+        ],
+    }
 
 @dataclass
 class TestSpec:
@@ -272,10 +273,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
 
     env_name = "testbed"
     repo_directory = f"/{env_name}"
-    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {
-        "rustc": "1.81.0",
-        "test_cmd": "cargo test --no-fail-fast --all-features",
-    })
+    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
     try:
