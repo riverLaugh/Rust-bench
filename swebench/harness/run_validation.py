@@ -17,7 +17,7 @@ from swebench.harness.constants import (
     APPLY_PATCH_PASS,
     INSTANCE_IMAGE_BUILD_DIR,
     KEY_INSTANCE_ID,
-    RUN_EVALUATION_LOG_DIR,
+    # RUN_EVALUATION_LOG_DIR,
 )
 from swebench.harness.docker_utils import (
     remove_image,
@@ -41,6 +41,7 @@ from swebench.harness.utils import load_swebench_dataset, str2bool
 from swebench.harness.grading import get_logs_eval   
 from swebench.harness.run_evaluation import get_gold_predictions, EvaluationError, get_dataset_from_preds
 
+RUN_EVALUATION_LOG_DIR = Path("logs/run_validation")
 
 def run_instance(
         test_spec: TestSpec,
@@ -50,6 +51,7 @@ def run_instance(
         client: docker.DockerClient,
         run_id: str,
         timeout: int | None = None,
+        auto: bool = False,
     ):
     """
     Run a single instance with the given prediction.
@@ -70,7 +72,10 @@ def run_instance(
     instance_id = test_spec.instance_id
     model_name_or_path = pred.get("model_name_or_path", "None").replace("/", "__")
     version_dir = f"{test_spec.repo.replace('/','_')}.{test_spec.version.replace('.','_')}"
-    log_dir = RUN_EVALUATION_LOG_DIR / run_id  / model_name_or_path/ version_dir  / instance_id
+    if auto:
+        log_dir = RUN_EVALUATION_LOG_DIR / "auto" /run_id / model_name_or_path / version_dir / instance_id
+    else:
+        log_dir = RUN_EVALUATION_LOG_DIR / run_id  / model_name_or_path/ version_dir  / instance_id
     log_dir.mkdir(parents=True, exist_ok=True)
 
     # Link the image build dir in the log dir
@@ -262,6 +267,7 @@ def run_instances(
         max_workers: int,
         run_id: str,
         timeout: int,
+        auto: bool,
     ):
     """
     Run all instances for the given predictions in parallel.
@@ -310,6 +316,7 @@ def run_instances(
                     client,
                     run_id,
                     timeout,
+                    auto,
                 ): None
                 for test_spec in test_specs
             }
@@ -370,7 +377,7 @@ def main(
     else:
         # build environment images + run instances
         build_env_images(client, dataset, force_rebuild, max_workers)
-        results = run_instances(predictions, dataset, cache_level, clean, force_rebuild, max_workers, run_id, timeout)
+        results = run_instances(predictions, dataset, cache_level, clean, force_rebuild, max_workers, run_id, timeout,auto)
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)

@@ -209,13 +209,14 @@ def build_base_images(
             client=client,
             build_dir=BASE_IMAGE_BUILD_DIR / image_name.replace(":", "__"),
         )
-    
     print("Base images built successfully.")
+    return test_specs
 
 
 def get_env_configs_to_build(
         client: docker.DockerClient,
         dataset: list,
+        test_specs: list = None
     ):
     """
     Returns a dictionary of image names to build scripts and dockerfiles for environment images.
@@ -227,7 +228,7 @@ def get_env_configs_to_build(
     """
     image_scripts = dict()
     base_images = dict()
-    test_specs = get_test_specs_from_dataset(dataset)
+    # test_specs = get_test_specs_from_dataset(dataset)
 
     for test_spec in test_specs:
         # Check if the base image exists
@@ -288,8 +289,8 @@ def build_env_images(
         env_image_keys = {x.env_image_key for x in get_test_specs_from_dataset(dataset)}
         for key in env_image_keys:
             remove_image(client, key, "quiet")
-    build_base_images(client, dataset, force_rebuild)
-    configs_to_build = get_env_configs_to_build(client, dataset)
+    test_specs= build_base_images(client, dataset, force_rebuild)
+    configs_to_build = get_env_configs_to_build(client, dataset, test_specs)
     if len(configs_to_build) == 0:
         print("No environment images need to be built.")
         return [], []
