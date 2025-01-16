@@ -145,6 +145,7 @@ def get_repo_version(
         queue.extend(arch.dirs.values())
     return default_version
 
+
 def get_cargo_test_cmd(
     root: RepoArchitecture, tests: list[str], flags: Optional[str] = None
 ) -> list[str]:
@@ -157,7 +158,7 @@ def get_cargo_test_cmd(
         test_dir, test_file = test_dir[:-1], test_dir[-1]
         test_name = test_file.removesuffix(".rs")
         # find nearest cargo submodule
-        module = root.find_dir(test_dir, create_dir=False)
+        module = root.find_dir(test_dir)
         while not module.cargo_toml:
             module = module.parent
         module_path = module.get_full_path()
