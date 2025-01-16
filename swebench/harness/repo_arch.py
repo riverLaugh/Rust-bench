@@ -145,20 +145,19 @@ def get_repo_version(
         queue.extend(arch.dirs.values())
     return default_version
 
-
 def get_cargo_test_cmd(
     root: RepoArchitecture, tests: list[str], flags: Optional[str] = None
 ) -> list[str]:
     submodule_test_dict = dict()
-    for test in tests:
+    for test_path in tests:
         # assert .rs file
-        if not test.endswith(".rs"):
+        if not test_path.endswith(".rs"):
             continue
-        paths = test.split("/")
-        paths, name = paths[:-1], paths[-1]
-        module_name = name.removesuffix(".rs")
+        test_dir = test_path.split("/")
+        test_dir, test_file = test_dir[:-1], test_dir[-1]
+        test_name = test_file.removesuffix(".rs")
         # find nearest cargo submodule
-        module = root.find_dir(paths, create_dir=False)
+        module = root.find_dir(test_dir, create_dir=False)
         while not module.cargo_toml:
             module = module.parent
         module_path = module.get_full_path()
@@ -166,32 +165,28 @@ def get_cargo_test_cmd(
         if module_path not in submodule_test_dict:
             submodule_test_dict[module_path] = list()
         # try integration test
-        if module.has_dir("tests") and f"{module_path}/tests/{name}" == test:
+        if f"{module_path}/tests/{test_file}" == test_path:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --test "{module_name}"'
+                    f'cargo test --no-fail-fast --all-features --test "{test_name}"'
                 )
         # try bin test
-        elif (
-            module.has_dir("src")
-            and module.get_dir("src").has_dir("bin")
-            and f"{module_path}/src/bin/{name}" == test
-        ):
+        elif f"{module_path}/src/bin/{test_file}" == test_path:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --bin "{module_name}"'
+                    f'cargo test --no-fail-fast --all-features --bin "{test_name}"'
                 )
         # try example test
-        elif module.has_dir("examples") and f"{module_path}/examples/{name}" == test:
+        elif f"{module_path}/examples/{test_file}" == test_path:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --example "{module_name}"'
+                    f'cargo test --no-fail-fast --all-features --example "{test_name}"'
                 )
         # try bench test
-        elif module.has_dir("benches") and f"{module_path}/benches/{name}" == test:
+        elif f"{module_path}/benches/{test_file}" == test_path:
             if isinstance(submodule_test_dict[module_path], list):
                 submodule_test_dict[module_path].append(
-                    f'cargo test --no-fail-fast --all-features --bench "{module_name}"'
+                    f'cargo test --no-fail-fast --all-features --bench "{test_name}"'
                 )
         # test all
         else:
