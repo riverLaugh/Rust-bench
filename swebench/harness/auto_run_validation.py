@@ -3,7 +3,7 @@ import subprocess
 import logging
 
 # 根路径
-root_path = "/home/riv3r/SWE-bench/swebench"
+root_path = "/root/ARiSE/SWEbench/SWE-bench/swebench"
 
 # 配置路径
 input_folder = os.path.join(root_path, "collect/tasks/auto")  # 存放 .jsonl 文件的文件夹
@@ -27,72 +27,84 @@ num_workers = 16  # 并行线程数量
 
 # 设置日志记录
 log_file = os.path.join(versioning_log_folder, 'process.log')
-logging.basicConfig(level=logging.INFO, 
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[logging.FileHandler(log_file,mode="w"), logging.StreamHandler()])
+log_file_detail = os.path.join(versioning_log_folder, 'process_detail.log')
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file, mode="w"),
+        logging.StreamHandler()  # 可选：同时在终端显示
+    ]
+)
+
+def run_command_with_logging(command, description):
+    """
+    运行命令并捕获日志
+    """
+    logging.info(f"Running: {description} -> {' '.join(command)}")
+    with open(log_file_detail, 'w') as log:
+        try:
+            # 捕获子进程输出
+            result = subprocess.run(
+                command,
+                stdout=log,
+                stderr=log,
+                text=True,
+                check=True
+            )
+            return result
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error running {description}: {e}")
+            return None
 
 
-
-# 遍历文件夹，找到所有 .jsonl 文件
-for root, dirs, files in os.walk(input_folder):
-    for file in files:
-        if file.endswith(".jsonl"):
-            # 构造文件路径
-            if "asterinas" in file:
-                continue
-            logging.info(f"Processing: {file}")
-            instances_path = os.path.join(root, file)
-            base_name = os.path.splitext(file)[0]  # 去掉扩展名
-            base_name = base_name.split(".")[0]
-            version_path = version_folder + f"/{base_name}_versions.json"
-
-            # Step 1: 运行 get_versions.py
-            if not os.path.exists(version_path):
-                get_versions_command = [
-                    "python", f"{root_path}/versioning/get_versions.py",
-                    "--instances_path", instances_path,
-                    "--retrieval_method", "github",
-                    "--num_workers", str(num_workers),
-                    "--output_dir", version_folder,
-                    "--cleanup"
-                ]
-                logging.info(f"Running: get_versions {file}")
-                try:
-                    subprocess.run(get_versions_command, check=True)
-                except subprocess.CalledProcessError as e:
-                    logging.error(f"Error running get_versions.py for {file}: {e}")
+if __name__ == "__main__":
+    # 遍历文件夹，找到所有 .jsonl 文件
+    for root, dirs, files in os.walk(input_folder):
+        for file in files:
+            if file.endswith(".jsonl"):
+                if "asterinas" in file:
                     continue
-                #split 是为了解决仓库名字中有.rs的问题
-            
-            # Step 2: 运行 environment_setup_commit.py
-            if not os.path.exists(f"{root_path}/versioning/auto/dataset/{base_name}_versions.json"):
-                environment_setup_command = [
-                    "python", f"{root_path}/versioning/environment_setup_commit.py",
-                    "--dataset_name", version_path,
-                    "--output_dir", dataset_folder
+                logging.info(f"Processing: {file}")
+                instances_path = os.path.join(root, file)
+                base_name = os.path.splitext(file)[0]
+                base_name = base_name.split(".")[0]
+                version_path = version_folder + f"/{base_name}_versions.json"
+
+                # Step 1: 运行 get_versions.py
+                if not os.path.exists(version_path):
+                    get_versions_command = [
+                        "python", f"{root_path}/versioning/get_versions.py",
+                        "--instances_path", instances_path,
+                        "--retrieval_method", "github",
+                        "--num_workers", str(num_workers),
+                        "--output_dir", version_folder,
+                        "--cleanup"
+                    ]
+                    run_command_with_logging(get_versions_command, f"get_versions {file}")
+
+                # Step 2: 运行 environment_setup_commit.py
+                if not os.path.exists(f"{root_path}/versioning/auto/dataset/{base_name}_versions.json"):
+                    environment_setup_command = [
+                        "python", f"{root_path}/versioning/environment_setup_commit.py",
+                        "--dataset_name", version_path,
+                        "--output_dir", dataset_folder
+                    ]
+                    result = run_command_with_logging(environment_setup_command, f"environment_setup_commit {file}")
+                    if result is None:
+                        os.remove(version_path)
+                        continue
+
+                # Step 3: 运行 run_validation.py
+                run_validation_command = [
+                    "python", "run_validation.py",
+                    "--dataset_name", f"{root_path}/versioning/auto/dataset/{base_name}_versions.json",
+                    "--run_id", f"{base_name}_versions",
+                    "--max_workers", str(num_workers),
+                    "--cache_level", "base",
+                    "--auto", "True"
                 ]
-                logging.info(f"Running: {' '.join(environment_setup_command)}")
-                try:
-                    subprocess.run(environment_setup_command, check=True)
-                except subprocess.CalledProcessError as e:
-                    os.remove(version_path)
-                    logging.error(f"Error running environment_setup_commit.py for {file}: {e}")
-                    continue
-
-            # Step 3: 运行 run_validation.py（如果需要）
-            run_validation_command = [
-                "python", "run_validation.py",
-                "--dataset_name", f"{root_path}/versioning/auto/dataset/{base_name}_versions.json",
-                "--run_id", f"{base_name}_versions",
-                "--max_workers", str(num_workers),
-                "--cache_level", "base",
-                "--auto", "True"
-            ]
-            logging.info(f"Running: {' '.join(run_validation_command)}")
-            try:
-                subprocess.run(run_validation_command, check=True)
-            except subprocess.CalledProcessError as e:
-                logging.error(f"Error running run_validation.py for {file}: {e}")
-                continue
-
-logging.info("All tasks completed.")
+                run_command_with_logging(run_validation_command, f"run_validation {file}")
+            else:
+                logging.info(f"no jsonl file found in {root}")
+    logging.info("All tasks completed.")
