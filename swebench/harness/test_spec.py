@@ -39,7 +39,6 @@ DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
 
 default_config = {
         "rustc": "1.81.0",
-        "test_cmd": "cargo test --no-fail-fast --all-features",
         "pre_install": [
             "git submodule update --init --recursive",
         ],
