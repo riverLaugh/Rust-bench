@@ -1,17 +1,19 @@
 import os
 import subprocess
 import logging
+import argparse
+import re
 
 # 根路径
 root_path = "/root/ARiSE/SWEbench/SWE-bench/swebench"
 
 # 配置路径
-input_folder = os.path.join(root_path, "collect/tasks/auto")  # 存放 .jsonl 文件的文件夹
-output_folder = os.path.join(root_path, "versioning/results")  # 存放结果文件的文件夹
-version_folder = os.path.join(root_path, "versioning/auto/version")  # 存放版本信息的文件夹
-env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")  # 存放环境设置 commit 的文件夹
-versioning_log_folder = os.path.join(root_path, "versioning/auto/log")  # 存放日志文件的文件夹
-dataset_folder = os.path.join(root_path, "versioning/auto/dataset")  # 存放数据集的文件夹
+input_folder = os.path.join(root_path, "collect/tasks/auto")
+output_folder = os.path.join(root_path, "versioning/results")
+version_folder = os.path.join(root_path, "versioning/auto/version")
+env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")
+versioning_log_folder = os.path.join(root_path, "versioning/auto/log")
+dataset_folder = os.path.join(root_path, "versioning/auto/dataset")
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 if not os.path.exists(version_folder):
@@ -25,26 +27,37 @@ if not os.path.exists(dataset_folder):
 
 num_workers = 16  # 并行线程数量
 
-# 设置日志记录
-log_file = os.path.join(versioning_log_folder, 'process.log')
-log_file_detail = os.path.join(versioning_log_folder, 'process_detail.log')
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file, mode="w"),
-        logging.StreamHandler()  # 可选：同时在终端显示
-    ]
-)
 
-def run_command_with_logging(command, description):
+def setup_logging(rerun):
+    """
+    设置日志记录方式，并根据 --rerun 参数处理日志文件的清空或追加。
+    """
+    log_mode = "w" if rerun else "a"  # 如果 rerun 为 True，覆盖日志文件；否则追加
+    log_file = os.path.join(versioning_log_folder, 'process.log')
+    log_file_detail = os.path.join(versioning_log_folder, 'process_detail.log')
+
+    # 如果 rerun 为 False（追加模式），清空 detail_log_file
+    if rerun and os.path.exists(log_file_detail):
+        open(log_file_detail, 'w').close()  # 清空文件内容
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file, mode=log_mode),
+            logging.StreamHandler()  # 可选：同时在终端显示
+        ]
+    )
+    return log_file, log_file_detail
+
+
+def run_command_with_logging(command, description, log_file_detail):
     """
     运行命令并捕获日志
     """
     logging.info(f"Running: {description} -> {' '.join(command)}")
-    with open(log_file_detail, 'w') as log:
+    with open(log_file_detail, 'a') as log:  # 始终以追加模式记录详细日志
         try:
-            # 捕获子进程输出
             result = subprocess.run(
                 command,
                 stdout=log,
@@ -58,13 +71,25 @@ def run_command_with_logging(command, description):
             return None
 
 
-if __name__ == "__main__":
+def main(args):
+    print(args.rerun)
+    log_file, log_file_detail = setup_logging(args.rerun)
+    finish = []
+    if not args.rerun:  # 如果不是重新运行，则解析已有日志中的完成任务
+        processing_pattern = re.compile(r"Processing: (\S+)")
+        with open(log_file, 'r', encoding='utf-8') as log:
+            for line in log:
+                # 检测正在处理的任务
+                processing_match = processing_pattern.search(line)
+                if processing_match:
+                    task = processing_match.group(1)
+                    finish.append(task)
+    print(f"finish:{finish}")
     # 遍历文件夹，找到所有 .jsonl 文件
     for root, dirs, files in os.walk(input_folder):
         for file in files:
-            if file.endswith(".jsonl"):
-                if "asterinas" in file:
-                    continue
+            print(f"file :{file}")
+            if file.endswith(".jsonl") and file not in finish:
                 logging.info(f"Processing: {file}")
                 instances_path = os.path.join(root, file)
                 base_name = os.path.splitext(file)[0]
@@ -81,7 +106,7 @@ if __name__ == "__main__":
                         "--output_dir", version_folder,
                         "--cleanup"
                     ]
-                    run_command_with_logging(get_versions_command, f"get_versions {file}")
+                    run_command_with_logging(get_versions_command, f"get_versions {file}", log_file_detail)
 
                 # Step 2: 运行 environment_setup_commit.py
                 if not os.path.exists(f"{root_path}/versioning/auto/dataset/{base_name}_versions.json"):
@@ -90,7 +115,7 @@ if __name__ == "__main__":
                         "--dataset_name", version_path,
                         "--output_dir", dataset_folder
                     ]
-                    result = run_command_with_logging(environment_setup_command, f"environment_setup_commit {file}")
+                    result = run_command_with_logging(environment_setup_command, f"environment_setup_commit {file}", log_file_detail)
                     if result is None:
                         os.remove(version_path)
                         continue
@@ -104,7 +129,14 @@ if __name__ == "__main__":
                     "--cache_level", "base",
                     "--auto", "True"
                 ]
-                run_command_with_logging(run_validation_command, f"run_validation {file}")
+                run_command_with_logging(run_validation_command, f"run_validation {file}", log_file_detail)
             else:
                 logging.info(f"no jsonl file found in {root}")
     logging.info("All tasks completed.")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--rerun', action='store_true', help="设置为 True 表示覆盖日志文件重新运行")
+    args = parser.parse_args()
+    main(args)
