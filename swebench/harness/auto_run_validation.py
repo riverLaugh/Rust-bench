@@ -130,6 +130,7 @@ def main(args):
                     "--auto", "True"
                 ]
                 run_command_with_logging(run_validation_command, f"run_validation {file}", log_file_detail)
+                logging.info(f"Finished: {file}")
     logging.info("All tasks completed.")
 
 
