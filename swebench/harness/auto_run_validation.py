@@ -84,11 +84,11 @@ def main(args):
                 if processing_match:
                     task = processing_match.group(1)
                     finish.append(task)
-    print(f"finish:{finish}")
+    # print(f"finish:{finish}")
     # 遍历文件夹，找到所有 .jsonl 文件
     for root, dirs, files in os.walk(input_folder):
         for file in files:
-            print(f"file :{file}")
+            # print(f"file :{file}")
             if file.endswith(".jsonl") and file not in finish:
                 logging.info(f"Processing: {file}")
                 instances_path = os.path.join(root, file)

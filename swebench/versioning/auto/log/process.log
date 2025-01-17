@@ -1,0 +1,78 @@
+2025-01-16 19:24:00,163 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-16 19:24:00,163 - INFO - Processing: mirrord-new-task-instances.jsonl
+2025-01-16 19:24:00,163 - INFO - Running: run_validation mirrord-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/mirrord-new-task-instances_versions.json --run_id mirrord-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 00:02:28,460 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 00:02:28,488 - INFO - Processing: raft-rs-new-task-instances.jsonl
+2025-01-17 00:02:28,495 - INFO - Running: run_validation raft-rs-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/raft-rs-new-task-instances_versions.json --run_id raft-rs-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 00:21:20,727 - INFO - Processing: dim-new-task-instances.jsonl
+2025-01-17 00:21:20,736 - INFO - Running: run_validation dim-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/dim-new-task-instances_versions.json --run_id dim-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 00:24:14,498 - INFO - Processing: lyon-new-task-instances.jsonl
+2025-01-17 00:24:14,498 - INFO - Running: run_validation lyon-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/lyon-new-task-instances_versions.json --run_id lyon-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 00:39:32,904 - INFO - Processing: indradb-new-task-instances.jsonl
+2025-01-17 00:39:32,907 - INFO - Running: get_versions indradb-new-task-instances.jsonl -> python /home/riv3r/SWE-bench/swebench/versioning/get_versions.py --instances_path /home/riv3r/SWE-bench/swebench/collect/tasks/auto/indradb-new-task-instances.jsonl --retrieval_method github --num_workers 16 --output_dir /home/riv3r/SWE-bench/swebench/versioning/auto/version --cleanup
+2025-01-17 00:39:37,500 - INFO - Running: environment_setup_commit indradb-new-task-instances.jsonl -> python /home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/version/indradb-new-task-instances_versions.json --output_dir /home/riv3r/SWE-bench/swebench/versioning/auto/dataset
+2025-01-17 00:39:39,194 - ERROR - Error running environment_setup_commit indradb-new-task-instances.jsonl: Command '['python', '/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py', '--dataset_name', '/home/riv3r/SWE-bench/swebench/versioning/auto/version/indradb-new-task-instances_versions.json', '--output_dir', '/home/riv3r/SWE-bench/swebench/versioning/auto/dataset']' returned non-zero exit status 1.
+2025-01-17 00:39:39,196 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 00:39:39,196 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 00:39:39,196 - INFO - Processing: roc-new-task-instances.jsonl
+2025-01-17 00:39:39,196 - INFO - Running: run_validation roc-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/roc-new-task-instances_versions.json --run_id roc-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 08:49:57,730 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 08:49:57,767 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 08:49:57,767 - INFO - Processing: martin-new-task-instances.jsonl
+2025-01-17 08:49:57,777 - INFO - Running: run_validation martin-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/martin-new-task-instances_versions.json --run_id martin-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 09:41:17,623 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 09:41:17,646 - INFO - Processing: skim-new-task-instances.jsonl
+2025-01-17 09:41:17,659 - INFO - Running: run_validation skim-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/skim-new-task-instances_versions.json --run_id skim-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 10:04:59,599 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,599 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,599 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 10:04:59,610 - INFO - Processing: quadratic-new-task-instances.jsonl
+2025-01-17 10:04:59,610 - INFO - Running: run_validation quadratic-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/quadratic-new-task-instances_versions.json --run_id quadratic-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 11:09:06,208 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 11:09:06,237 - INFO - Processing: SpacetimeDB-new-task-instances.jsonl
+2025-01-17 11:09:06,246 - INFO - Running: run_validation SpacetimeDB-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/SpacetimeDB-new-task-instances_versions.json --run_id SpacetimeDB-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 14:20:55,456 - INFO - Processing: once_cell-new-task-instances.jsonl
+2025-01-17 14:20:55,495 - INFO - Running: run_validation once_cell-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/once_cell-new-task-instances_versions.json --run_id once_cell-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 14:24:17,731 - INFO - Processing: strum-new-task-instances.jsonl
+2025-01-17 14:24:17,732 - INFO - Running: run_validation strum-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/strum-new-task-instances_versions.json --run_id strum-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 14:36:05,386 - INFO - Processing: tauri-new-task-instances.jsonl
+2025-01-17 14:36:05,388 - INFO - Running: run_validation tauri-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/tauri-new-task-instances_versions.json --run_id tauri-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 15:09:52,356 - INFO - Processing: rune-new-task-instances.jsonl
+2025-01-17 15:09:52,373 - INFO - Running: get_versions rune-new-task-instances.jsonl -> python /home/riv3r/SWE-bench/swebench/versioning/get_versions.py --instances_path /home/riv3r/SWE-bench/swebench/collect/tasks/auto/rune-new-task-instances.jsonl --retrieval_method github --num_workers 16 --output_dir /home/riv3r/SWE-bench/swebench/versioning/auto/version --cleanup
+2025-01-17 15:10:05,116 - INFO - Running: environment_setup_commit rune-new-task-instances.jsonl -> python /home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/version/rune-new-task-instances_versions.json --output_dir /home/riv3r/SWE-bench/swebench/versioning/auto/dataset
+2025-01-17 15:10:09,184 - ERROR - Error running environment_setup_commit rune-new-task-instances.jsonl: Command '['python', '/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py', '--dataset_name', '/home/riv3r/SWE-bench/swebench/versioning/auto/version/rune-new-task-instances_versions.json', '--output_dir', '/home/riv3r/SWE-bench/swebench/versioning/auto/dataset']' returned non-zero exit status 1.
+2025-01-17 15:10:09,186 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:10:09,186 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:10:09,186 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:10:09,187 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:10:09,187 - INFO - Processing: eww-new-task-instances.jsonl
+2025-01-17 15:10:09,189 - INFO - Running: run_validation eww-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/eww-new-task-instances_versions.json --run_id eww-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 15:25:22,672 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 15:25:22,674 - INFO - Processing: rio-new-task-instances.jsonl
+2025-01-17 15:25:22,674 - INFO - Running: run_validation rio-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/rio-new-task-instances_versions.json --run_id rio-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 15:50:03,871 - INFO - Processing: bottom-new-task-instances.jsonl
+2025-01-17 15:50:03,874 - INFO - Running: run_validation bottom-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/bottom-new-task-instances_versions.json --run_id bottom-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 15:55:04,514 - INFO - Processing: probe-rs-new-task-instances.jsonl
+2025-01-17 15:55:04,514 - INFO - Running: run_validation probe-rs-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/probe-rs-new-task-instances_versions.json --run_id probe-rs-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 16:35:20,677 - INFO - Processing: gosub-engine-new-task-instances.jsonl
+2025-01-17 16:35:20,681 - INFO - Running: run_validation gosub-engine-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/gosub-engine-new-task-instances_versions.json --run_id gosub-engine-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 16:49:20,779 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 16:49:20,780 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 16:49:20,780 - INFO - no jsonl file found in /home/riv3r/SWE-bench/swebench/collect/tasks/auto
+2025-01-17 16:49:20,780 - INFO - Processing: dufs-new-task-instances.jsonl
+2025-01-17 16:49:20,781 - INFO - Running: run_validation dufs-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/dufs-new-task-instances_versions.json --run_id dufs-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 19:24:46,836 - INFO - Processing: gfx-new-task-instances.jsonl
+2025-01-17 19:24:46,836 - INFO - Running: run_validation gfx-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/gfx-new-task-instances_versions.json --run_id gfx-new-task-instances_versions --max_workers 16 --cache_level base --auto True
+2025-01-17 19:48:34,414 - INFO - Finished: gfx-new-task-instances.jsonl
+2025-01-17 19:48:34,415 - INFO - Processing: Graphite-new-task-instances.jsonl
+2025-01-17 19:48:34,416 - INFO - Running: run_validation Graphite-new-task-instances.jsonl -> python run_validation.py --dataset_name /home/riv3r/SWE-bench/swebench/versioning/auto/dataset/Graphite-new-task-instances_versions.json --run_id Graphite-new-task-instances_versions --max_workers 16 --cache_level base --auto True
