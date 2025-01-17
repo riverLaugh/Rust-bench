@@ -1,0 +1,36 @@
+{
+    "tasks": {
+        "n": {
+            "name": "n",
+            "steps": [
+                [
+                    "g",
+                    "SUCCESS"
+                ],
+                [
+                    "e",
+                    "SUCCESS"
+                ],
+                [
+                    "r",
+                    "SUCCESS"
+                ],
+                [
+                    "run_validation niri-new-task-instances.jsonl",
+                    "FAILED"
+                ]
+            ],
+            "errors": [
+                [
+                    "run_validation niri-new-task-instances.jsonl",
+                    "Command '['python', 'run_validation.py', '--dataset_name', '/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/auto/dataset/niri-new-task-instances_versions.json', '--run_id', 'niri-new-task-instances_versions', '--max_workers', '16', '--cache_level', 'base', '--auto', 'True']' returned non-zero exit status 1."
+                ]
+            ]
+        }
+    },
+    "error_clusters": {
+        "Command '['python', 'run_validation.py', '--dataset_name', '/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/auto/dataset/niri-new-task-instances_versions.json', '--run_id', 'niri-new-task-instances_versions', '--max_workers', '16', '--cache_level', 'base', '--auto', 'True']' returned non-zero exit status 1.": [
+            "n"
+        ]
+    }
+}

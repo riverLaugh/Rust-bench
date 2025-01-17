@@ -130,8 +130,6 @@ def main(args):
                     "--auto", "True"
                 ]
                 run_command_with_logging(run_validation_command, f"run_validation {file}", log_file_detail)
-            else:
-                logging.info(f"no jsonl file found in {root}")
     logging.info("All tasks completed.")
 
 
