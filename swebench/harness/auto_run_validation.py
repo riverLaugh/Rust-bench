@@ -5,7 +5,7 @@ import argparse
 import re
 
 # 根路径
-root_path = "/root/ARiSE/SWEbench/SWE-bench/swebench"
+root_path = "/home/riv3r/SWE-bench/swebench"
 
 # 配置路径
 input_folder = os.path.join(root_path, "collect/tasks/auto")
