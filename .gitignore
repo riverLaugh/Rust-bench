@@ -189,4 +189,5 @@ swebench/harness/logs/*
 repos/*
 
 
-swebench/versioning/auto
+swebench/versioning/auto/dataset
+swebench/versioning/auto/version

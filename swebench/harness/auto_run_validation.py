@@ -3,7 +3,7 @@ import subprocess
 import logging
 
 # 根路径
-root_path = "/root/ARiSE/SWEbench/SWE-bench/swebench"
+root_path = "/home/riv3r/SWE-bench/swebench"
 
 # 配置路径
 input_folder = os.path.join(root_path, "collect/tasks/auto")  # 存放 .jsonl 文件的文件夹
@@ -105,6 +105,4 @@ if __name__ == "__main__":
                     "--auto", "True"
                 ]
                 run_command_with_logging(run_validation_command, f"run_validation {file}")
-            else:
-                logging.info(f"no jsonl file found in {root}")
     logging.info("All tasks completed.")
