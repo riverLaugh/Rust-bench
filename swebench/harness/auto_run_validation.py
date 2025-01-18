@@ -106,7 +106,9 @@ def main(args):
                         "--output_dir", version_folder,
                         "--cleanup"
                     ]
-                    run_command_with_logging(get_versions_command, f"get_versions {file}", log_file_detail)
+                    result =  run_command_with_logging(get_versions_command, f"get_versions {file}", log_file_detail)
+                    if result is None:
+                        continue
 
                 # Step 2: 运行 environment_setup_commit.py
                 if not os.path.exists(f"{root_path}/versioning/auto/dataset/{base_name}_versions.json"):
@@ -130,7 +132,7 @@ def main(args):
                     "--auto", "True"
                 ]
                 run_command_with_logging(run_validation_command, f"run_validation {file}", log_file_detail)
-                logging.info(f"Finished: {file}")
+        logging.info(f"Finished: {file}")
     logging.info("All tasks completed.")
 
 
