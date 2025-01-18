@@ -87,7 +87,7 @@ def main(args):
     # print(f"finish:{finish}")
     # 遍历文件夹，找到所有 .jsonl 文件
     for root, dirs, files in os.walk(input_folder):
-        for file in files:
+        for file in sorted(files, reverse=args.reverse):
             # print(f"file :{file}")
             if file.endswith(".jsonl") and file not in finish:
                 logging.info(f"Processing: {file}")
@@ -139,5 +139,6 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--rerun', action='store_true', help="设置为 True 表示覆盖日志文件重新运行")
+    parser.add_argument('--reverse', action='store_true', help="设置为 True 表示运行文件的顺序将从字典序的反向运行")
     args = parser.parse_args()
     main(args)
