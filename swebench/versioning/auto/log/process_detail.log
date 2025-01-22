@@ -1,1817 +1,0 @@
-2025-01-17 16:49:21,459 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 16:49:21,459 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 38 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/38 [00:00<?, ?it/s]Converting instances to test specs:   3%|▎         | 1/38 [00:01<00:47,  1.27s/it]Converting instances to test specs:   5%|▌         | 2/38 [00:02<00:44,  1.23s/it]Converting instances to test specs:   8%|▊         | 3/38 [00:03<00:47,  1.34s/it]Converting instances to test specs:  11%|█         | 4/38 [00:05<00:44,  1.31s/it]Converting instances to test specs:  13%|█▎        | 5/38 [00:06<00:45,  1.39s/it]Converting instances to test specs:  16%|█▌        | 6/38 [00:08<00:51,  1.61s/it]Converting instances to test specs:  18%|█▊        | 7/38 [00:09<00:45,  1.48s/it]Converting instances to test specs:  21%|██        | 8/38 [00:11<00:41,  1.38s/it]Converting instances to test specs:  24%|██▎       | 9/38 [00:12<00:39,  1.37s/it]Converting instances to test specs:  26%|██▋       | 10/38 [00:13<00:36,  1.31s/it]Converting instances to test specs:  29%|██▉       | 11/38 [00:14<00:34,  1.27s/it]Converting instances to test specs:  32%|███▏      | 12/38 [00:16<00:33,  1.29s/it]Converting instances to test specs:  34%|███▍      | 13/38 [00:17<00:31,  1.26s/it]Converting instances to test specs:  37%|███▋      | 14/38 [00:18<00:32,  1.34s/it]Converting instances to test specs:  39%|███▉      | 15/38 [00:20<00:29,  1.30s/it]Converting instances to test specs:  42%|████▏     | 16/38 [00:21<00:27,  1.26s/it]Converting instances to test specs:  50%|█████     | 19/38 [00:22<00:16,  1.15it/s]Converting instances to test specs:  53%|█████▎    | 20/38 [00:24<00:16,  1.07it/s]Converting instances to test specs:  55%|█████▌    | 21/38 [00:25<00:16,  1.01it/s]Converting instances to test specs:  58%|█████▊    | 22/38 [00:26<00:16,  1.06s/it]Converting instances to test specs:  61%|██████    | 23/38 [00:27<00:16,  1.09s/it]Converting instances to test specs:  63%|██████▎   | 24/38 [00:29<00:16,  1.18s/it]Converting instances to test specs:  66%|██████▌   | 25/38 [00:30<00:15,  1.18s/it]Converting instances to test specs:  68%|██████▊   | 26/38 [00:31<00:14,  1.24s/it]Converting instances to test specs:  71%|███████   | 27/38 [00:32<00:13,  1.22s/it]Converting instances to test specs:  74%|███████▎  | 28/38 [00:34<00:13,  1.32s/it]Converting instances to test specs:  76%|███████▋  | 29/38 [00:35<00:11,  1.27s/it]Converting instances to test specs:  79%|███████▉  | 30/38 [00:36<00:09,  1.21s/it]Converting instances to test specs:  82%|████████▏ | 31/38 [00:37<00:08,  1.23s/it]Converting instances to test specs:  84%|████████▍ | 32/38 [00:39<00:07,  1.21s/it]Converting instances to test specs:  87%|████████▋ | 33/38 [00:40<00:06,  1.21s/it]Converting instances to test specs:  89%|████████▉ | 34/38 [00:41<00:04,  1.24s/it]Converting instances to test specs:  92%|█████████▏| 35/38 [00:42<00:03,  1.23s/it]Converting instances to test specs:  95%|█████████▍| 36/38 [00:44<00:02,  1.21s/it]Converting instances to test specs:  97%|█████████▋| 37/38 [00:45<00:01,  1.29s/it]Converting instances to test specs: 100%|██████████| 38/38 [00:47<00:00,  1.36s/it]Converting instances to test specs: 100%|██████████| 38/38 [00:47<00:00,  1.24s/it]
-Base image sweb.base.x86_64:latest already exists, skipping build.
-Base images built successfully.
-Total environment images to build: 22
-Building environment images:   0%|          | 0/22 [00:00<?, ?it/s]Building environment images:   5%|▍         | 1/22 [05:02<1:45:56, 302.71s/it]Building environment images:  27%|██▋       | 6/22 [09:54<26:25, 99.08s/it]   Building environment images:  32%|███▏      | 7/22 [10:02<21:31, 86.08s/it]Building environment images:  36%|███▋      | 8/22 [10:02<17:34, 75.35s/it]Building environment images:  41%|████      | 9/22 [10:02<14:30, 66.99s/it]Building environment images:  45%|████▌     | 10/22 [10:03<12:03, 60.31s/it]Building environment images:  59%|█████▉    | 13/22 [10:03<06:57, 46.41s/it]Building environment images:  73%|███████▎  | 16/22 [10:04<03:46, 37.76s/it]Building environment images:  73%|███████▎  | 16/22 [10:14<03:50, 38.41s/it]Building environment images:  77%|███████▋  | 17/22 [15:04<04:25, 53.20s/it]Building environment images:  95%|█████████▌| 21/22 [15:10<00:43, 43.38s/it]Building environment images: 100%|██████████| 22/22 [15:10<00:00, 41.41s/it]
-All environment images built successfully.
-Running 38 instances...
-Running instances:   0%|          | 0/38 [00:00<?, ?it/s]2025-01-17 19:24:47,835 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 19:24:47,835 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 116 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/116 [00:00<?, ?it/s]Converting instances to test specs:   1%|          | 1/116 [00:02<03:52,  2.02s/it]Converting instances to test specs:   2%|▏         | 2/116 [00:03<03:45,  1.98s/it]Converting instances to test specs:   3%|▎         | 3/116 [00:06<03:54,  2.07s/it]Converting instances to test specs:   3%|▎         | 4/116 [00:08<03:48,  2.04s/it]Converting instances to test specs:   4%|▍         | 5/116 [00:10<03:42,  2.00s/it]Converting instances to test specs:   5%|▌         | 6/116 [00:12<03:47,  2.07s/it]Converting instances to test specs:   6%|▌         | 7/116 [00:14<03:41,  2.03s/it]Converting instances to test specs:   7%|▋         | 8/116 [00:26<09:39,  5.37s/it]Converting instances to test specs:   8%|▊         | 9/116 [00:41<14:53,  8.35s/it]Converting instances to test specs:   9%|▊         | 10/116 [00:53<16:52,  9.55s/it]Converting instances to test specs:   9%|▉         | 11/116 [01:08<19:27, 11.12s/it]Converting instances to test specs:  10%|█         | 12/116 [01:23<21:12, 12.23s/it]Converting instances to test specs:  11%|█         | 13/116 [01:31<18:48, 10.95s/it]Converting instances to test specs:  12%|█▏        | 14/116 [01:41<18:19, 10.78s/it]2025-01-17 19:26:30,617 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3494 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3470 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3327 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3300 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3172 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3168 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3097 does not have a version field, skipping
-2025-01-17 19:26:30,618 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3096 does not have a version field, skipping
-Converting instances to test specs:  20%|█▉        | 23/116 [01:46<04:08,  2.67s/it]Converting instances to test specs:  21%|██        | 24/116 [01:52<04:32,  2.96s/it]Converting instances to test specs:  22%|██▏       | 25/116 [01:54<04:26,  2.93s/it]Converting instances to test specs:  22%|██▏       | 26/116 [02:00<04:57,  3.30s/it]Converting instances to test specs:  23%|██▎       | 27/116 [02:11<07:09,  4.82s/it]Converting instances to test specs:  24%|██▍       | 28/116 [02:22<09:08,  6.24s/it]Converting instances to test specs:  25%|██▌       | 29/116 [02:30<09:34,  6.61s/it]2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1612 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1606 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1596 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1589 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1576 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1568 does not have a version field, skipping
-2025-01-17 19:27:19,554 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1445 does not have a version field, skipping
-Converting instances to test specs:  32%|███▏      | 37/116 [02:40<03:34,  2.72s/it]Converting instances to test specs:  33%|███▎      | 38/116 [02:51<04:40,  3.60s/it]Converting instances to test specs:  34%|███▎      | 39/116 [02:59<05:24,  4.22s/it]Converting instances to test specs:  34%|███▍      | 40/116 [03:09<06:41,  5.28s/it]Converting instances to test specs:  35%|███▌      | 41/116 [03:19<07:40,  6.14s/it]Converting instances to test specs:  36%|███▌      | 42/116 [03:26<07:45,  6.29s/it]Converting instances to test specs:  37%|███▋      | 43/116 [03:36<08:51,  7.29s/it]Converting instances to test specs:  38%|███▊      | 44/116 [03:54<12:02, 10.03s/it]Converting instances to test specs:  39%|███▉      | 45/116 [04:14<14:57, 12.64s/it]Converting instances to test specs:  40%|███▉      | 46/116 [04:35<17:12, 14.75s/it]Converting instances to test specs:  41%|████      | 47/116 [04:51<17:36, 15.31s/it]Converting instances to test specs:  41%|████▏     | 48/116 [05:08<17:45, 15.68s/it]Converting instances to test specs:  42%|████▏     | 49/116 [05:28<18:45, 16.80s/it]Converting instances to test specs:  43%|████▎     | 50/116 [05:40<16:58, 15.43s/it]2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2526 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2518 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2484 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2377 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2357 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2323 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2156 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3686 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3682 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3624 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3598 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3591 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3586 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3578 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3554 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1954 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1890 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1852 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1835 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1816 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1616 does not have a version field, skipping
-2025-01-17 19:30:29,020 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1613 does not have a version field, skipping
-Converting instances to test specs:  63%|██████▎   | 73/116 [05:51<01:21,  1.90s/it]Converting instances to test specs:  64%|██████▍   | 74/116 [06:01<01:37,  2.32s/it]Converting instances to test specs:  65%|██████▍   | 75/116 [06:08<01:48,  2.64s/it]Converting instances to test specs:  66%|██████▌   | 76/116 [06:18<02:14,  3.36s/it]Converting instances to test specs:  66%|██████▋   | 77/116 [06:25<02:28,  3.81s/it]2025-01-17 19:31:14,785 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-130 does not have a version field, skipping
-2025-01-17 19:31:14,785 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-116 does not have a version field, skipping
-Converting instances to test specs:  69%|██████▉   | 80/116 [06:30<01:49,  3.03s/it]Converting instances to test specs:  70%|██████▉   | 81/116 [06:34<01:52,  3.21s/it]Converting instances to test specs:  71%|███████   | 82/116 [06:36<01:40,  2.96s/it]Converting instances to test specs:  72%|███████▏  | 83/116 [06:40<01:45,  3.21s/it]Converting instances to test specs:  72%|███████▏  | 84/116 [06:44<01:49,  3.43s/it]Converting instances to test specs:  73%|███████▎  | 85/116 [06:49<01:57,  3.78s/it]Converting instances to test specs:  74%|███████▍  | 86/116 [06:54<01:57,  3.91s/it]2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2098 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2084 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2079 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2076 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2016 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2004 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1966 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2944 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2824 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2790 does not have a version field, skipping
-2025-01-17 19:31:42,928 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2756 does not have a version field, skipping
-Converting instances to test specs:  84%|████████▍ | 98/116 [07:06<00:28,  1.61s/it]Converting instances to test specs:  85%|████████▌ | 99/116 [07:22<00:48,  2.85s/it]2025-01-17 19:32:11,474 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2698 does not have a version field, skipping
-2025-01-17 19:32:11,474 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2537 does not have a version field, skipping
-Converting instances to test specs:  88%|████████▊ | 102/116 [07:32<00:42,  3.01s/it]Converting instances to test specs:  89%|████████▉ | 103/116 [07:44<00:51,  3.94s/it]Converting instances to test specs:  90%|████████▉ | 104/116 [07:54<00:58,  4.89s/it]Converting instances to test specs:  91%|█████████ | 105/116 [08:02<00:58,  5.33s/it]Converting instances to test specs:  91%|█████████▏| 106/116 [08:06<00:51,  5.11s/it]Converting instances to test specs:  92%|█████████▏| 107/116 [08:12<00:48,  5.37s/it]Converting instances to test specs:  93%|█████████▎| 108/116 [08:18<00:44,  5.56s/it]2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3058 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3054 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3051 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3047 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3022 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2989 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2960 does not have a version field, skipping
-2025-01-17 19:33:07,714 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2948 does not have a version field, skipping
-Converting instances to test specs: 100%|██████████| 116/116 [08:18<00:00,  4.30s/it]
-Base image sweb.base.x86_64:latest already exists, skipping build.
-Base images built successfully.
-Total environment images to build: 9
-Building environment images:   0%|          | 0/9 [00:00<?, ?it/s]Building environment images:  11%|█         | 1/9 [02:01<16:09, 121.15s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1__latest/build_image.log) for more information.
-Building environment images:  22%|██▏       | 2/9 [02:01<07:05, 60.73s/it] Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0__latest/build_image.log) for more information.
-Building environment images:  33%|███▎      | 3/9 [02:04<04:08, 41.45s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2__latest/build_image.log) for more information.
-Building environment images:  44%|████▍     | 4/9 [02:10<02:43, 32.64s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4__latest/build_image.log) for more information.
-Building environment images:  56%|█████▌    | 5/9 [02:11<01:44, 26.23s/it]Building environment images:  67%|██████▋   | 6/9 [03:03<01:31, 30.64s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3__latest/build_image.log) for more information.
-Building environment images:  78%|███████▊  | 7/9 [03:16<00:56, 28.09s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.6ac3f54ff463f24f70da03.gfx-rs_gfx.0_6:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 101
-Check (logs/build_images/env/sweb.env.x86_64.6ac3f54ff463f24f70da03.gfx-rs_gfx.0_6__latest/build_image.log) for more information.
-Building environment images:  89%|████████▉ | 8/9 [03:44<00:28, 28.04s/it]Building environment images: 100%|██████████| 9/9 [04:08<00:00, 27.60s/it]Building environment images: 100%|██████████| 9/9 [04:08<00:00, 27.60s/it]
-2025-01-17 19:38:55,440 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3494 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3470 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3327 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3300 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3172 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3168 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3097 does not have a version field, skipping
-2025-01-17 19:38:55,441 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3096 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1612 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1606 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1596 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1589 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1576 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1568 does not have a version field, skipping
-2025-01-17 19:39:44,592 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1445 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2526 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2518 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2484 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2377 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2357 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2323 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2156 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3686 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3682 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3624 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3598 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3591 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3586 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3578 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3554 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1954 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1890 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1852 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1835 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1816 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1616 does not have a version field, skipping
-2025-01-17 19:42:51,431 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1613 does not have a version field, skipping
-2025-01-17 19:43:31,420 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-130 does not have a version field, skipping
-2025-01-17 19:43:31,420 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-116 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2098 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2084 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2079 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2076 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2016 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2004 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-1966 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2944 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2824 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2790 does not have a version field, skipping
-2025-01-17 19:43:57,237 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2756 does not have a version field, skipping
-2025-01-17 19:44:25,948 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2698 does not have a version field, skipping
-2025-01-17 19:44:25,948 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2537 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3058 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3054 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3051 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3047 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-3022 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2989 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2960 does not have a version field, skipping
-2025-01-17 19:45:21,993 - swebench.harness.test_spec - WARNING - Instance gfx-rs__gfx-2948 does not have a version field, skipping
-BuildImageError sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest
-BuildImageError sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest
-BuildImageError sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest
-BuildImageError sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest
-BuildImageError sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest
-BuildImageError sweb.env.x86_64.6ac3f54ff463f24f70da03.gfx-rs_gfx.0_6:latest
-6 environment images failed to build.
-Running 116 instances...
-Running instances:   0%|          | 0/116 [00:00<?, ?it/s]Running instances:   9%|▉         | 11/116 [00:00<00:00, 109.04it/s]Error building image gfx-rs__gfx-993: Environment image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest not found for gfx-rs__gfx-993
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_2/gfx-rs__gfx-993/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1091: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-1091
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-1091/run_instance.log) for more information.
-Error building image gfx-rs__gfx-647: Environment image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest not found for gfx-rs__gfx-647
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_2/gfx-rs__gfx-647/run_instance.log) for more information.
-Error building image gfx-rs__gfx-420: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-420
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-420/run_instance.log) for more information.
-Error building image gfx-rs__gfx-316: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-316
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-316/run_instance.log) for more information.
-Error building image gfx-rs__gfx-387: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-387
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-387/run_instance.log) for more information.
-Error building image gfx-rs__gfx-308: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-308
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-308/run_instance.log) for more information.
-Error building image gfx-rs__gfx-297: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-297
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-297/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1147: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-1147
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-1147/run_instance.log) for more information.
-Error building image gfx-rs__gfx-695: Environment image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest not found for gfx-rs__gfx-695
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_2/gfx-rs__gfx-695/run_instance.log) for more information.
-Error building image gfx-rs__gfx-633: Environment image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest not found for gfx-rs__gfx-633
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_2/gfx-rs__gfx-633/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1123: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-1123
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-1123/run_instance.log) for more information.
-Error building image gfx-rs__gfx-770: Environment image sweb.env.x86_64.6ac3f54ff463f24f70da03.gfx-rs_gfx.0_6:latest not found for gfx-rs__gfx-770
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_6/gfx-rs__gfx-770/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1041: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-1041
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-1041/run_instance.log) for more information.
-Error building image gfx-rs__gfx-470: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-470
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-470/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1040: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-1040
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-1040/run_instance.log) for more information.
-Error building image gfx-rs__gfx-743: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-743
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-743/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1103: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-1103
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-1103/run_instance.log) for more information.
-Error building image gfx-rs__gfx-291: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-291
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-291/run_instance.log) for more information.
-Error building image gfx-rs__gfx-512: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-512
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-512/run_instance.log) for more information.
-Error building image gfx-rs__gfx-725: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-725
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-725/run_instance.log) for more information.
-Error building image gfx-rs__gfx-289: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-289
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-289/run_instance.log) for more information.
-Error building image gfx-rs__gfx-285: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-285
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-285/run_instance.log) for more information.
-Error building image gfx-rs__gfx-260: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-260
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-260/run_instance.log) for more information.
-Error building image gfx-rs__gfx-271: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-271
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-271/run_instance.log) for more information.
-Error building image gfx-rs__gfx-209: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-209
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-209/run_instance.log) for more information.
-Error building image gfx-rs__gfx-220: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-220
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-220/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1234: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-1234
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-1234/run_instance.log) for more information.
-Running instances:  31%|███       | 36/116 [00:00<00:00, 169.66it/s]Running instances:  43%|████▎     | 50/116 [00:11<00:14,  4.45it/s] Running instances:  44%|████▍     | 51/116 [01:42<02:11,  2.02s/it]Running instances:  45%|████▍     | 52/116 [01:43<02:06,  1.98s/it]Running instances:  46%|████▌     | 53/116 [02:46<03:18,  3.15s/it]Running instances:  48%|████▊     | 56/116 [03:01<03:14,  3.24s/it]Running instances:  48%|████▊     | 56/116 [03:01<03:14,  3.24s/it]
-Error building image gfx-rs__gfx-1301: Environment image sweb.env.x86_64.6ac3f54ff463f24f70da03.gfx-rs_gfx.0_6:latest not found for gfx-rs__gfx-1301
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_6/gfx-rs__gfx-1301/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1153: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-1153
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-1153/run_instance.log) for more information.
-Error building image gfx-rs__gfx-163: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-163
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-163/run_instance.log) for more information.
-Error building image gfx-rs__gfx-1166: Environment image sweb.env.x86_64.8aa54c0c56da348432c074.gfx-rs_gfx.0_4:latest not found for gfx-rs__gfx-1166
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_4/gfx-rs__gfx-1166/run_instance.log) for more information.
-Error building image gfx-rs__gfx-146: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-146
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-146/run_instance.log) for more information.
-Error building image gfx-rs__gfx-144: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-144
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-144/run_instance.log) for more information.
-Error building image gfx-rs__gfx-138: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-138
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-138/run_instance.log) for more information.
-Error building image gfx-rs__gfx-133: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-133
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-133/run_instance.log) for more information.
-Error building image gfx-rs__gfx-598: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-598
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-598/run_instance.log) for more information.
-Error building image gfx-rs__gfx-597: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-597
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-597/run_instance.log) for more information.
-Error building image gfx-rs__gfx-540: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-540
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-540/run_instance.log) for more information.
-Error building image gfx-rs__gfx-557: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-557
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-557/run_instance.log) for more information.
-Error building image gfx-rs__gfx-532: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-532
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-532/run_instance.log) for more information.
-Error building image gfx-rs__gfx-554: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-554
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-554/run_instance.log) for more information.
-Error building image gfx-rs__gfx-535: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-535
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-535/run_instance.log) for more information.
-Error building image gfx-rs__gfx-989: Environment image sweb.env.x86_64.d651ca410fa22338a30aa7.gfx-rs_gfx.0_2:latest not found for gfx-rs__gfx-989
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_2/gfx-rs__gfx-989/run_instance.log) for more information.
-Error building image gfx-rs__gfx-983: Environment image sweb.env.x86_64.fb06d225bf62a2f774e4d4.gfx-rs_gfx.0_3:latest not found for gfx-rs__gfx-983
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_3/gfx-rs__gfx-983/run_instance.log) for more information.
-Error building image gfx-rs__gfx-962: Environment image sweb.env.x86_64.1b07789f7f6cdea1f96d6c.gfx-rs_gfx.0_1:latest not found for gfx-rs__gfx-962
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_1/gfx-rs__gfx-962/run_instance.log) for more information.
-Error building image gfx-rs__gfx-828: Environment image sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest not found for gfx-rs__gfx-828
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_0/gfx-rs__gfx-828/run_instance.log) for more information.
-Error building image gfx-rs__gfx-861: Environment image sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest not found for gfx-rs__gfx-861
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_0/gfx-rs__gfx-861/run_instance.log) for more information.
-Error building image gfx-rs__gfx-779: Environment image sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest not found for gfx-rs__gfx-779
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_0/gfx-rs__gfx-779/run_instance.log) for more information.
-Error building image gfx-rs__gfx-829: Environment image sweb.env.x86_64.ae9ac977c1fcbaff837244.gfx-rs_gfx.0_0:latest not found for gfx-rs__gfx-829
-Check (logs/run_validation/auto/gfx-new-task-instances_versions/gold/gfx-rs_gfx.0_0/gfx-rs__gfx-829/run_instance.log) for more information.
-All instances run.
-Cleaning cached images...
-Removed 3 images.
-2025-01-17 19:48:35,084 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 19:48:35,084 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 146 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/146 [00:00<?, ?it/s]2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-425 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-422 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-418 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-410 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-406 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-394 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-388 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-386 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-362 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-933 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-932 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-918 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-910 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-905 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-903 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-899 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-878 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-873 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-649 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-647 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-623 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-617 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-601 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-594 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-585 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-572 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-564 does not have a version field, skipping
-2025-01-17 19:48:36,223 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1265 does not have a version field, skipping
-Converting instances to test specs:  20%|█▉        | 29/146 [00:23<01:36,  1.21it/s]Converting instances to test specs:  21%|██        | 30/146 [00:48<03:45,  1.94s/it]Converting instances to test specs:  21%|██        | 31/146 [01:11<06:15,  3.27s/it]Converting instances to test specs:  22%|██▏       | 32/146 [01:34<09:21,  4.93s/it]Converting instances to test specs:  23%|██▎       | 33/146 [01:57<12:51,  6.83s/it]Converting instances to test specs:  23%|██▎       | 34/146 [02:22<17:03,  9.14s/it]Converting instances to test specs:  24%|██▍       | 35/146 [02:51<22:37, 12.23s/it]Converting instances to test specs:  25%|██▍       | 36/146 [03:16<26:57, 14.70s/it]2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-812 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-784 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-772 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-736 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-702 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-681 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-673 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-662 does not have a version field, skipping
-2025-01-17 19:51:53,147 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-659 does not have a version field, skipping
-Converting instances to test specs:  32%|███▏      | 46/146 [03:40<09:34,  5.75s/it]Converting instances to test specs:  32%|███▏      | 47/146 [04:04<12:17,  7.45s/it]Converting instances to test specs:  33%|███▎      | 48/146 [04:29<15:32,  9.52s/it]Converting instances to test specs:  34%|███▎      | 49/146 [04:54<19:05, 11.81s/it]Converting instances to test specs:  34%|███▍      | 50/146 [05:17<21:48, 13.64s/it]Converting instances to test specs:  35%|███▍      | 51/146 [05:37<23:48, 15.03s/it]Converting instances to test specs:  36%|███▌      | 52/146 [06:02<26:48, 17.11s/it]2025-01-17 19:54:38,509 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1802 does not have a version field, skipping
-Converting instances to test specs:  37%|███▋      | 54/146 [06:24<22:34, 14.72s/it]Converting instances to test specs:  38%|███▊      | 55/146 [06:46<24:48, 16.36s/it]2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-547 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-519 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-503 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-492 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-479 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-478 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-465 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-462 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-443 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1434 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1427 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1419 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1409 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1395 does not have a version field, skipping
-2025-01-17 19:55:22,629 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1345 does not have a version field, skipping
-Converting instances to test specs:  49%|████▊     | 71/146 [07:08<04:52,  3.90s/it]Converting instances to test specs:  49%|████▉     | 72/146 [07:34<06:39,  5.40s/it]Converting instances to test specs:  50%|█████     | 73/146 [07:56<08:25,  6.92s/it]Converting instances to test specs:  51%|█████     | 74/146 [08:18<10:23,  8.66s/it]Converting instances to test specs:  51%|█████▏    | 75/146 [08:41<12:34, 10.63s/it]Converting instances to test specs:  52%|█████▏    | 76/146 [09:06<15:12, 13.04s/it]2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1472 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1469 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1457 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1452 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1446 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1444 does not have a version field, skipping
-2025-01-17 19:57:42,622 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-349 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-348 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-315 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-301 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-281 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-271 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-247 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-178 does not have a version field, skipping
-2025-01-17 19:57:42,623 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-95 does not have a version field, skipping
-Converting instances to test specs:  63%|██████▎   | 92/146 [09:29<03:27,  3.83s/it]Converting instances to test specs:  64%|██████▎   | 93/146 [09:50<04:24,  4.99s/it]Converting instances to test specs:  64%|██████▍   | 94/146 [10:11<05:31,  6.38s/it]Converting instances to test specs:  65%|██████▌   | 95/146 [10:35<07:02,  8.28s/it]Converting instances to test specs:  66%|██████▌   | 96/146 [10:57<08:31, 10.24s/it]Converting instances to test specs:  66%|██████▋   | 97/146 [11:26<10:50, 13.27s/it]Converting instances to test specs:  67%|██████▋   | 98/146 [11:52<12:28, 15.60s/it]Converting instances to test specs:  68%|██████▊   | 99/146 [12:15<13:29, 17.22s/it]Converting instances to test specs:  68%|██████▊   | 100/146 [12:38<14:05, 18.38s/it]Converting instances to test specs:  69%|██████▉   | 101/146 [13:04<15:22, 20.49s/it]Converting instances to test specs:  70%|██████▉   | 102/146 [13:27<15:22, 20.96s/it]Converting instances to test specs:  71%|███████   | 103/146 [13:49<15:19, 21.39s/it]Converting instances to test specs:  71%|███████   | 104/146 [14:11<15:07, 21.60s/it]Converting instances to test specs:  72%|███████▏  | 105/146 [14:36<15:20, 22.44s/it]Converting instances to test specs:  73%|███████▎  | 106/146 [14:58<14:56, 22.41s/it]Converting instances to test specs:  73%|███████▎  | 107/146 [15:20<14:32, 22.37s/it]Converting instances to test specs:  74%|███████▍  | 108/146 [15:44<14:27, 22.83s/it]Converting instances to test specs:  75%|███████▍  | 109/146 [16:14<15:22, 24.93s/it]Converting instances to test specs:  75%|███████▌  | 110/146 [17:02<19:03, 31.76s/it]Converting instances to test specs:  76%|███████▌  | 111/146 [17:28<17:31, 30.04s/it]Converting instances to test specs:  77%|███████▋  | 112/146 [17:55<16:31, 29.15s/it]Converting instances to test specs:  77%|███████▋  | 113/146 [18:17<14:44, 26.81s/it]Converting instances to test specs:  78%|███████▊  | 114/146 [18:39<13:35, 25.47s/it]Converting instances to test specs:  79%|███████▉  | 115/146 [19:03<12:54, 24.98s/it]Converting instances to test specs:  79%|███████▉  | 116/146 [19:26<12:13, 24.45s/it]Converting instances to test specs:  80%|████████  | 117/146 [19:48<11:28, 23.73s/it]Converting instances to test specs:  81%|████████  | 118/146 [20:10<10:46, 23.08s/it]Converting instances to test specs:  82%|████████▏ | 119/146 [20:36<10:53, 24.20s/it]Converting instances to test specs:  82%|████████▏ | 120/146 [21:00<10:22, 23.93s/it]Converting instances to test specs:  83%|████████▎ | 121/146 [21:23<09:55, 23.83s/it]Converting instances to test specs:  84%|████████▎ | 122/146 [21:47<09:29, 23.73s/it]Converting instances to test specs:  84%|████████▍ | 123/146 [22:11<09:10, 23.94s/it]Converting instances to test specs:  85%|████████▍ | 124/146 [22:38<09:05, 24.80s/it]Converting instances to test specs:  86%|████████▌ | 125/146 [23:04<08:45, 25.04s/it]Converting instances to test specs:  86%|████████▋ | 126/146 [23:28<08:15, 24.80s/it]Converting instances to test specs:  87%|████████▋ | 127/146 [23:51<07:42, 24.37s/it]Converting instances to test specs:  88%|████████▊ | 128/146 [24:14<07:12, 24.04s/it]2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-864 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-855 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-846 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-845 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-841 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-830 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-827 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-824 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-814 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1062 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1057 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1042 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1025 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1001 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-977 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-964 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-948 does not have a version field, skipping
-2025-01-17 20:12:51,208 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-934 does not have a version field, skipping
-Converting instances to test specs: 100%|██████████| 146/146 [24:14<00:00,  9.97s/it]
-Base image sweb.base.x86_64:latest already exists, skipping build.
-Base images built successfully.
-Total environment images to build: 3
-Building environment images:   0%|          | 0/3 [00:00<?, ?it/s]Building environment images:  33%|███▎      | 1/3 [00:59<01:58, 59.17s/it]Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 142, in build_image
-    raise docker.errors.BuildError(
-docker.errors.BuildError: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 128
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 324, in build_env_images
-    future.result()
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 449, in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
-    raise self._exception
-  File "/root/anaconda3/lib/python3.12/concurrent/futures/thread.py", line 58, in run
-    result = self.fn(*self.args, **self.kwargs)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/riv3r/SWE-bench/swebench/harness/docker_build.py", line 148, in build_image
-    raise BuildImageError(image_name, str(e), logger) from e
-swebench.harness.docker_build.BuildImageError: Error building image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest: The command '/bin/sh -c /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"' returned a non-zero code: 128
-Check (logs/build_images/env/sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8__latest/build_image.log) for more information.
-Building environment images:  67%|██████▋   | 2/3 [07:26<03:43, 223.33s/it]Building environment images: 100%|██████████| 3/3 [07:26<00:00, 148.92s/it]
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-425 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-422 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-418 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-410 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-406 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-394 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-388 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-386 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-362 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-933 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-932 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-918 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-910 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-905 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-903 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-899 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-878 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-873 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-649 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-647 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-623 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-617 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-601 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-594 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-585 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-572 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-564 does not have a version field, skipping
-2025-01-17 20:20:18,073 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1265 does not have a version field, skipping
-2025-01-17 20:24:04,122 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-812 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-784 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-772 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-736 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-702 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-681 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-673 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-662 does not have a version field, skipping
-2025-01-17 20:24:04,123 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-659 does not have a version field, skipping
-2025-01-17 20:26:51,084 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1802 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-547 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-519 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-503 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-492 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-479 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-478 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-465 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-462 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-443 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1434 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1427 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1419 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1409 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1395 does not have a version field, skipping
-2025-01-17 20:27:39,528 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1345 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1472 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1469 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1457 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1452 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1446 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1444 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-349 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-348 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-315 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-301 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-281 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-271 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-247 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-178 does not have a version field, skipping
-2025-01-17 20:29:56,980 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-95 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-864 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-855 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-846 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-845 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-841 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-830 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-827 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-824 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-814 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1062 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1057 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1042 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1025 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-1001 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-977 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-964 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-948 does not have a version field, skipping
-2025-01-17 20:44:20,723 - swebench.harness.test_spec - WARNING - Instance GraphiteEditor__Graphite-934 does not have a version field, skipping
-BuildImageError sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest
-1 environment images failed to build.
-Running 146 instances...
-Running instances:   0%|          | 0/146 [00:00<?, ?it/s]Running instances:   4%|▍         | 6/146 [00:00<00:02, 56.64it/s]Running instances:   8%|▊         | 11/146 [00:11<02:19,  1.04s/it]Running instances:   8%|▊         | 12/146 [00:57<10:36,  4.75s/it]Running instances:   9%|▉         | 13/146 [00:58<09:55,  4.48s/it]Running instances:  10%|▉         | 14/146 [02:36<24:40, 11.21s/it]Running instances:  10%|█         | 15/146 [02:51<24:57, 11.43s/it]Running instances:  11%|█         | 16/146 [03:37<29:30, 13.62s/it]Running instances:  12%|█▏        | 17/146 [05:07<38:49, 18.06s/it]Running instances:  12%|█▏        | 18/146 [05:08<36:31, 17.12s/it]Running instances:  16%|█▌        | 23/146 [05:08<27:28, 13.40s/it]Running instances:  18%|█▊        | 26/146 [05:21<24:44, 12.37s/it]Running instances:  18%|█▊        | 27/146 [06:33<28:52, 14.56s/it]Running instances:  19%|█▉        | 28/146 [14:23<1:00:40, 30.85s/it]Running instances:  20%|█▉        | 29/146 [14:27<58:19, 29.91s/it]  Running instances:  21%|██        | 30/146 [16:11<1:02:35, 32.38s/it]Running instances:  21%|██        | 31/146 [17:19<1:04:14, 33.52s/it]Running instances:  22%|██▏       | 32/146 [20:20<1:12:29, 38.15s/it]Running instances:  23%|██▎       | 33/146 [21:47<1:14:36, 39.61s/it]Running instances:  23%|██▎       | 34/146 [22:32<1:14:15, 39.78s/it]Running instances:  24%|██▍       | 35/146 [23:30<1:14:32, 40.29s/it]Running instances:  25%|██▍       | 36/146 [23:30<1:11:50, 39.19s/it]Error building image GraphiteEditor__Graphite-1250: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1250
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1250/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1242: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1242
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1242/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1309: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1309
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1309/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1292: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1292
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1292/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1256: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1256
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1256/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1210: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1210
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1210/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1218: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1218
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1218/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1277: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1277
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1277/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1155: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1155
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1155/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1209: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1209
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1209/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1238: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1238
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1238/run_instance.log) for more information.
-Error building image sweb.eval.x86_64.graphiteeditor__graphite-1519:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.graphiteeditor__graphite-1519__latest/build_image.log) for more information.
-Error building image sweb.eval.x86_64.graphiteeditor__graphite-1516:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.graphiteeditor__graphite-1516__latest/build_image.log) for more information.
-UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Error building image sweb.eval.x86_64.graphiteeditor__graphite-1523:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.graphiteeditor__graphite-1523__latest/build_image.log) for more information.
-Error building image GraphiteEditor__Graphite-1135: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1135
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1135/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1130: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1130
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1130/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1123: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1123
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1123/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1106: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1106
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1106/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1099: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1099
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1099/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1088: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1088
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1088/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1077: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1077
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1077/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1075: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1075
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1075/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1065: Environment image sweb.env.x86_64.c146d87578d1645b017826.graphiteeditor_graphite.0_8:latest not found for GraphiteEditor__Graphite-1065
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_8/GraphiteEditor__Graphite-1065/run_instance.log) for more information.
-Running instances:  25%|██▌       | 37/146 [28:54<1:25:09, 46.88s/it]Running instances:  26%|██▌       | 38/146 [28:55<1:22:12, 45.67s/it]Running instances:  27%|██▋       | 39/146 [28:56<1:19:25, 44.54s/it]Running instances:  27%|██▋       | 40/146 [32:14<1:25:27, 48.37s/it]Running instances:  29%|██▉       | 42/146 [33:36<1:23:13, 48.02s/it]Running instances:  29%|██▉       | 43/146 [33:41<1:20:41, 47.01s/it]Running instances:  31%|███       | 45/146 [34:08<1:16:37, 45.52s/it]Running instances:  32%|███▏      | 46/146 [35:26<1:17:03, 46.23s/it]Error building image GraphiteEditor__Graphite-2097: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-2097/run_instance.log) for more information.
-Evaluation error for GraphiteEditor__Graphite-1878: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-1878/run_instance.log) for more information.
-Evaluation error for GraphiteEditor__Graphite-1793: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-1793/run_instance.log) for more information.
-Evaluation error for GraphiteEditor__Graphite-1794: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-1794/run_instance.log) for more information.
-w  `�:w  p#9w  �:w  P
-9w  P9w  `�;w  �;w  �9w  09w   �:w  ��:w  ��:w  �9w  p!�w  0�iw   �w  ���w  �}1w  �v1w  �~1w  ��iw  0�iw  ��iw  P9w  ��iw  �9w  ��iw  9w  ��iw  �9w  0�iw  9w  ��iw  p9w  0�iw  �9w  0�iw  09w  ��iEvaluation error for GraphiteEditor__Graphite-1750: >>>>> Patch Apply Failed:
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-Hunk #1 succeeded at 3149 (offset -1 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3594 (offset -1 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3644 (offset -1 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3658 (offset -1 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3690 (offset -2 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3704 (offset -2 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3715 (offset -2 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3726 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3792 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3804 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 3974 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4043 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4106 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4134 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4246 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4299 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4448 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4540 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4658 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4817 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4844 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4909 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 4947 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5015 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5028 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5058 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5087 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5126 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5156 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5177 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5605 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5769 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5827 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5846 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5872 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5886 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5907 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 5928 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6028 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6166 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6191 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6278 (offset -4 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6345 (offset -4 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6401 (offset -4 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6419 (offset -13 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6568 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6752 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 6786 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7180 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7341 (offset 4 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7330 (offset -18 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7713 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7762 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7821 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7836 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7900 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7914 (offset -7 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7938 (offset -8 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7962 (offset -9 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 7995 (offset -9 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 8008 (offset -9 lines).
-patching file demo-artwork/isometric-fountain.graphite
-patching file demo-artwork/just-a-potted-cactus.graphite
-patching file demo-artwork/procedural-string-lights.graphite
-patching file demo-artwork/red-dress.graphite
-patching file demo-artwork/valley-of-spires.graphite
-patching file editor/src/consts.rs
-patching file editor/src/dispatcher.rs
-patching file editor/src/dispatcher.rs
-Hunk #1 succeeded at 98 (offset -1 lines).
-patching file editor/src/messages/dialog/dialog_message.rs
-patching file editor/src/messages/dialog/simple_dialogs/coming_soon_dialog.rs
-patching file editor/src/messages/frontend/frontend_message.rs
-patching file editor/src/messages/frontend/frontend_message.rs
-patching file editor/src/messages/frontend/frontend_message.rs
-patching file editor/src/messages/input_mapper/input_mappings.rs
-patching file editor/src/messages/layout/layout_message_handler.rs
-patching file editor/src/messages/portfolio/document/document_message.rs
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 48 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 287 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 308 (offset -2 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 317 (offset -2 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 330 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 394 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 423 (offset -6 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 448 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 469 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 486 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 539 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 557 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 678 (offset 20 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 792 (offset 21 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 806 (offset 26 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 962 (offset 32 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 973 (offset 36 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1004 (offset 37 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1016 (offset 37 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1127 (offset 34 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1140 (offset 33 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1152 (offset 32 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1174 (offset 39 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1223 (offset 46 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1309 (offset 61 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1426 (offset 61 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1462 (offset 63 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1936 (offset 54 lines).
-patching file editor/src/messages/portfolio/document/document_message_handler.rs
-Hunk #1 succeeded at 1998 (offset 54 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message.rs
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message.rs
-Hunk #1 succeeded at 28 (offset -2 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message.rs
-Hunk #1 succeeded at 67 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message.rs
-Hunk #1 succeeded at 154 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 40 (offset 2 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 62 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 88 (offset 9 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 130 (offset 21 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 219 (offset 64 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 266 (offset 76 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 282 (offset 73 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 314 (offset 73 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 350 (offset 78 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 371 (offset 81 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 426 (offset 97 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 442 (offset 101 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 455 (offset 105 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 536 (offset 119 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 562 (offset 119 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 608 (offset 119 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 647 (offset 120 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 655 (offset 120 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 681 (offset 109 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 781 (offset 199 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/graph_operation_message_handler.rs
-Hunk #1 succeeded at 836 (offset 199 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 45 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 60 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 80 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 114 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 130 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 167 (offset 33 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 240 (offset 49 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 287 (offset 53 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 304 (offset 45 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 329 (offset 19 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 367 (offset 19 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 375 (offset 19 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 385 (offset 19 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 393 (offset 19 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 442 (offset 31 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 462 (offset 39 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 474 (offset 38 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 502 (offset 46 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 647 (offset 81 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 681 (offset 81 lines).
-patching file editor/src/messages/portfolio/document/graph_operation/utility_types.rs
-Hunk #1 succeeded at 702 (offset 82 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 40 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 71 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 130 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 148 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 196 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 214 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 234 (offset 1 line).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 258 (offset 4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 266 (offset 3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 283 (offset 4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 293 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 327 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 340 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 372 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 391 (offset 7 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 417 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 429 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 473 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 487 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 519 (offset 4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 561 (offset 4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 573 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 605 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 616 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 650 (offset -4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 920 (offset -22 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 985 (offset -21 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1057 (offset -22 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1081 (offset -31 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1170 (offset 20 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1132 (offset -32 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1118 (offset -84 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1183 (offset -33 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1283 (offset 29 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1240 (offset -34 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 FAILED at 1312.
-1 out of 1 hunk FAILED -- saving rejects to file editor/src/messages/portfolio/document/node_graph/document_node_types.rs.rej
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1311 (offset -35 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1341 (offset -35 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1430 (offset 16 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1392 (offset -36 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1378 (offset -88 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1443 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1468 (offset -38 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1481 (offset -38 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1520 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1534 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1571 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 1595 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2150 (offset -16 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2138 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2126 (offset -64 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2159 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2168 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2191 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2204 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2220 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2233 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2247 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2260 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2272 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2284 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2292 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2311 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2321 (offset -41 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2336 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2363 (offset -38 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2371 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2383 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2400 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2418 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2427 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2436 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2450 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2464 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2477 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2495 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2503 (offset -39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2546 (offset -40 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2589 (offset -18 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2611 (offset -18 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2626 (offset -18 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2690 (offset -18 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2701 (offset -18 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2716 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2746 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2816 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/document_node_types.rs
-Hunk #1 succeeded at 2913 (offset -25 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 11 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 32 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 44 (offset -5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 71 (offset -5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 93 (offset -4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 102 (offset -8 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message.rs
-Hunk #1 succeeded at 122 (offset -13 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 40 (offset 2 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 60 (offset 3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 72 (offset 2 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 191 (offset 49 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 293 (offset -36 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 331 (offset -34 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 343 (offset -37 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 357 (offset -36 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 443 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 465 (offset -4 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 475 (offset -3 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 529 (offset 39 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 611 (offset 5 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 757 (offset 15 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 890 (offset 77 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 906 (offset 78 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 947 (offset 91 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 973 (offset 93 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 989 (offset 96 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 1028 (offset 96 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 1248 (offset 223 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 1476 (offset 418 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 1495 (offset 418 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_graph_message_handler.rs
-Hunk #1 succeeded at 1644 (offset 432 lines).
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-patching file editor/src/messages/portfolio/document/node_graph/node_properties.rs
-Hunk #1 succeeded at 2045 (offset 13 lines).
-patching file editor/src/messages/portfolio/document/node_graph/utility_types.rs
-patching file editor/src/messages/portfolio/document/node_graph/utility_types.rs
-Hunk #1 succeeded at 52 (offset -13 lines).
-patching file editor/src/messages/portfolio/document/node_graph/utility_types.rs
-Hunk #1 succeeded at 79 (offset -13 lines).
-patching file editor/src/messages/portfolio/document/overlays/utility_types.rs
-patching file editor/src/messages/portfolio/document/properties_panel/properties_panel_message_handler.rs
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 109 (offset -5 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 146 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 174 (offset -2 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 223 (offset -1 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 246 (offset -2 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 264 (offset 4 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 359 (offset 8 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 387 (offset 11 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 396 (offset 11 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 440 (offset 13 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 571 (offset 21 lines).
-patching file editor/src/messages/portfolio/document/utility_types/document_metadata.rs
-Hunk #1 succeeded at 661 (offset 14 lines).
-patching file editor/src/messages/portfolio/document/utility_types/nodes.rs
-patching file editor/src/messages/portfolio/document/utility_types/nodes.rs
-patching file editor/src/messages/portfolio/document/utility_types/nodes.rs
-Hunk #1 succeeded at 71 (offset 6 lines).
-patching file editor/src/messages/portfolio/document/utility_types/nodes.rs
-Hunk #1 succeeded at 101 (offset 12 lines).
-patching file editor/src/messages/portfolio/document/utility_types/nodes.rs
-Hunk #1 succeeded at 120 (offset 15 lines).
-patching file editor/src/messages/portfolio/document/utility_types/transformation.rs
-patching file editor/src/messages/portfolio/portfolio_message_handler.rs
-patching file editor/src/messages/portfolio/portfolio_message_handler.rs
-Hunk #1 succeeded at 384 (offset 6 lines).
-patching file editor/src/messages/tool/common_functionality/graph_modification_utils.rs
-patching file editor/src/messages/tool/common_functionality/resize.rs
-patching file editor/src/messages/tool/common_functionality/snapping.rs
-patching file editor/src/messages/tool/common_functionality/snapping/layer_snapper.rs
-patching file editor/src/messages/tool/tool_messages/artboard_tool.rs
-patching file editor/src/messages/tool/tool_messages/artboard_tool.rs
-Hunk #1 succeeded at 237 (offset 4 lines).
-patching file editor/src/messages/tool/tool_messages/artboard_tool.rs
-Hunk #1 succeeded at 265 (offset 8 lines).
-patching file editor/src/messages/tool/tool_messages/artboard_tool.rs
-Hunk #1 succeeded at 288 (offset 8 lines).
-patching file editor/src/messages/tool/tool_messages/artboard_tool.rs
-Hunk #1 succeeded at 407 (offset 12 lines).
-patching file editor/src/messages/tool/tool_messages/brush_tool.rs
-patching file editor/src/messages/tool/tool_messages/brush_tool.rs
-Hunk #1 succeeded at 356 (offset 1 line).
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-Hunk #1 succeeded at 252 (offset 2 lines).
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-Hunk #1 succeeded at 293 (offset 4 lines).
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-Hunk #1 succeeded at 374 (offset 7 lines).
-patching file editor/src/messages/tool/tool_messages/gradient_tool.rs
-Hunk #1 succeeded at 388 (offset 7 lines).
-patching file editor/src/messages/tool/tool_messages/path_tool.rs
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 203 (offset 9 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 323 (offset 7 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 360 (offset 15 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 384 (offset 16 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 403 (offset 21 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 543 (offset 31 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 557 (offset 31 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 587 (offset 39 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 751 (offset 46 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 801 (offset 53 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 827 (offset 60 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 944 (offset 60 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 1029 (offset 74 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 1071 (offset 85 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 1194 (offset 91 lines).
-patching file editor/src/messages/tool/tool_messages/select_tool.rs
-Hunk #1 succeeded at 1252 (offset 111 lines).
-patching file editor/src/messages/tool/tool_messages/spline_tool.rs
-patching file editor/src/messages/tool/tool_messages/spline_tool.rs
-Hunk #1 succeeded at 208 (offset -3 lines).
-patching file editor/src/messages/tool/tool_messages/spline_tool.rs
-Hunk #1 succeeded at 236 (offset -5 lines).
-patching file editor/src/messages/tool/tool_messages/text_tool.rs
-patching file editor/src/messages/tool/tool_messages/text_tool.rs
-Hunk #1 succeeded at 33 (offset -1 lines).
-patching file editor/src/messages/tool/tool_messages/text_tool.rs
-Hunk #1 succeeded at 213 (offset -1 lines).
-patching file editor/src/messages/tool/tool_messages/text_tool.rs
-patching file editor/src/messages/tool/tool_messages/text_tool.rs
-Hunk #1 succeeded at 431 (offset 4 lines).
-patching file editor/src/node_graph_executor.rs
-patching file frontend/src/components/Editor.svelte
-patching file frontend/src/components/panels/Document.svelte
-patching file frontend/src/components/panels/Layers.svelte
-patching file frontend/src/components/panels/Layers.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 477 (offset -3 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 509 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 559 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 601 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 611 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 622 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 634 (offset -1 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 651 (offset -2 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 672 (offset -2 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 693 (offset -2 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 706 (offset -2 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 764 (offset -2 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 789 (offset 5 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 850 (offset 6 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 880 (offset 12 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 903 (offset 12 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 925 (offset 12 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 951 (offset 12 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 972 (offset 12 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1004 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1038 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1058 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1081 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1100 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1147 (offset 13 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1155 (offset 8 lines).
-patching file frontend/src/components/views/Graph.svelte
-Hunk #1 succeeded at 1255 (offset 20 lines).
-patching file frontend/src/components/widgets/WidgetSection.svelte
-patching file frontend/src/components/widgets/buttons/ParameterExposeButton.svelte
-patching file frontend/src/state-providers/node-graph.ts
-patching file frontend/src/state-providers/node-graph.ts
-Hunk #1 succeeded at 51 (offset 1 line).
-patching file frontend/src/wasm-communication/messages.ts
-patching file frontend/src/wasm-communication/messages.ts
-patching file frontend/src/wasm-communication/messages.ts
-Hunk #1 succeeded at 84 (offset 4 lines).
-patching file frontend/src/wasm-communication/messages.ts
-Hunk #1 succeeded at 103 (offset 4 lines).
-patching file frontend/src/wasm-communication/messages.ts
-Hunk #1 succeeded at 137 (offset 4 lines).
-patching file frontend/src/wasm-communication/messages.ts
-Hunk #1 succeeded at 943 (offset 8 lines).
-patching file frontend/src/wasm-communication/messages.ts
-Hunk #1 succeeded at 1343 (offset 8 lines).
-patching file frontend/wasm/src/editor_api.rs
-patching file frontend/wasm/src/editor_api.rs
-patching file frontend/wasm/src/editor_api.rs
-patching file frontend/wasm/src/editor_api.rs
-patching file frontend/wasm/src/editor_api.rs
-Hunk #1 succeeded at 691 (offset 7 lines).
-patching file frontend/wasm/src/editor_api.rs
-Hunk #1 succeeded at 713 (offset 15 lines).
-patching file libraries/bezier-rs/src/subpath/core.rs
-patching file libraries/bezier-rs/src/subpath/core.rs
-patching file node-graph/compilation-client/src/main.rs
-patching file node-graph/compilation-client/src/main.rs
-Hunk #1 succeeded at 65 (offset -2 lines).
-patching file node-graph/gcore/src/consts.rs
-patching file node-graph/gcore/src/graphic_element.rs
-patching file node-graph/gcore/src/graphic_element.rs
-patching file node-graph/gcore/src/memo.rs
-patching file node-graph/gcore/src/memo.rs
-patching file node-graph/gcore/src/types.rs
-patching file node-graph/gcore/src/types.rs
-patching file node-graph/gpu-compiler/src/lib.rs
-patching file node-graph/gpu-compiler/src/lib.rs
-patching file node-graph/gpu-compiler/src/templates/spirv-template.rs
-patching file node-graph/graph-craft/src/document.rs
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 136 (offset 52 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 179 (offset 53 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 192 (offset 53 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 331 (offset 53 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 360 (offset 52 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 394 (offset 52 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 445 (offset 45 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 477 (offset 46 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 493 (offset 49 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 501 (offset 49 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 582 (offset 49 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 674 (offset 88 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 696 (offset 98 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 779 (offset 137 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 792 (offset 137 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 816 (offset 87 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 882 (offset 117 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 926 (offset 109 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 950 (offset 110 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 971 (offset 119 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 980 (offset 119 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1001 (offset 124 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1047 (offset 124 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1072 (offset 129 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1087 (offset 129 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1124 (offset 135 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1269 (offset 174 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1302 (offset 184 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1311 (offset 184 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1374 (offset 187 lines).
-patching file node-graph/graph-craft/src/document.rs
-Hunk #1 succeeded at 1391 (offset 187 lines).
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 70 (offset 1 line).
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 151 (offset 1 line).
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 219 (offset 1 line).
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 298 (offset 1 line).
-patching file node-graph/graph-craft/src/document/value.rs
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 365 (offset 1 line).
-patching file node-graph/graph-craft/src/document/value.rs
-Hunk #1 succeeded at 380 (offset 1 line).
-patching file node-graph/graph-craft/src/graphene_compiler.rs
-patching file node-graph/graph-craft/src/proto.rs
-patching file node-graph/graphene-cli/src/main.rs
-patching file node-graph/graphene-cli/src/main.rs
-Hunk #1 succeeded at 90 (offset -2 lines).
-patching file node-graph/graphene-cli/src/main.rs
-Hunk #1 succeeded at 123 (offset -58 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 182 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 236 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 256 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 264 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 281 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 390 (offset -1 lines).
-patching file node-graph/gstd/src/gpu_nodes.rs
-Hunk #1 succeeded at 433 (offset -1 lines).
-patching file node-graph/gstd/src/lib.rs
-patching file node-graph/gstd/src/quantization.rs
-patching file node-graph/interpreted-executor/src/dynamic_executor.rs
-patching file node-graph/interpreted-executor/src/dynamic_executor.rs
-Hunk #1 succeeded at 208 (offset 2 lines).
-patching file node-graph/interpreted-executor/src/node_registry.rs
-patching file node-graph/interpreted-executor/src/node_registry.rs
-patching file node-graph/interpreted-executor/src/node_registry.rs
-patching file node-graph/interpreted-executor/src/node_registry.rs
-patching file node-graph/interpreted-executor/src/node_registry.rs
-Hunk #1 succeeded at 799 (offset -1 lines).
-patching file node-graph/interpreted-executor/src/node_registry.rs
-Hunk #1 succeeded at 809 (offset -1 lines).
-patching file node-graph/node-macro/src/lib.rs
-patching file node-graph/node-macro/src/lib.rs
-patching file node-graph/node-macro/src/lib.rs
-patching file node-graph/wgpu-executor/src/executor.rs
-patching file node-graph/wgpu-executor/src/lib.rs
-patching file node-graph/wgpu-executor/src/lib.rs
-patching file node-graph/wgpu-executor/src/lib.rs
-patching file node-graph/wgpu-executor/src/lib.rs
-
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_4/GraphiteEditor__Graphite-1750/run_instance.log) for more information.Running instances:  32%|███▏      | 47/146 [39:12<1:22:34, 50.05s/it]Running instances:  33%|███▎      | 48/146 [40:16<1:22:13, 50.34s/it]Running instances:  34%|███▍      | 50/146 [40:29<1:17:44, 48.59s/it]Running instances:  36%|███▋      | 53/146 [40:36<1:11:14, 45.96s/it]Running instances:  36%|███▋      | 53/146 [40:55<1:11:48, 46.33s/it]Running instances:  37%|███▋      | 54/146 [41:13<1:10:13, 45.80s/it]Running instances:  38%|███▊      | 55/146 [41:31<1:08:42, 45.30s/it]Running instances:  38%|███▊      | 56/146 [43:19<1:09:38, 46.43s/it]Running instances:  39%|███▉      | 57/146 [46:43<1:12:57, 49.19s/it]Running instances:  40%|███▉      | 58/146 [50:19<1:16:21, 52.06s/it]Running instances:  41%|████      | 60/146 [51:03<1:13:10, 51.05s/it]Running instances:  41%|████      | 60/146 [51:03<1:13:10, 51.05s/it]
-
-Error building image GraphiteEditor__Graphite-1953: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-1953/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-2012: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-2012/run_instance.log) for more information.
-Error building image GraphiteEditor__Graphite-1952: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Check (logs/run_validation/auto/Graphite-new-task-instances_versions/gold/GraphiteEditor_Graphite.0_11/GraphiteEditor__Graphite-1952/run_instance.log) for more information.
-All instances run.
-Cleaning cached images...
-Removed 2 images.
-2025-01-17 21:35:38,605 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 21:35:38,606 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 60 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/60 [00:00<?, ?it/s]Converting instances to test specs:   2%|▏         | 1/60 [00:02<02:06,  2.14s/it]Converting instances to test specs:   3%|▎         | 2/60 [00:04<02:01,  2.09s/it]Converting instances to test specs:   5%|▌         | 3/60 [00:06<02:03,  2.17s/it]Converting instances to test specs:   7%|▋         | 4/60 [00:08<01:59,  2.13s/it]Converting instances to test specs:   8%|▊         | 5/60 [00:11<02:18,  2.52s/it]Converting instances to test specs:  10%|█         | 6/60 [00:15<02:30,  2.78s/it]Converting instances to test specs:  12%|█▏        | 7/60 [00:17<02:16,  2.57s/it]Converting instances to test specs:  13%|█▎        | 8/60 [00:19<02:07,  2.46s/it]Converting instances to test specs:  15%|█▌        | 9/60 [00:21<02:00,  2.36s/it]Converting instances to test specs:  17%|█▋        | 10/60 [00:23<01:51,  2.24s/it]Converting instances to test specs:  20%|██        | 12/60 [00:25<01:15,  1.57s/it]Converting instances to test specs:  22%|██▏       | 13/60 [00:27<01:28,  1.89s/it]Converting instances to test specs:  23%|██▎       | 14/60 [00:29<01:26,  1.89s/it]Converting instances to test specs:  25%|██▌       | 15/60 [00:31<01:26,  1.91s/it]Converting instances to test specs:  27%|██▋       | 16/60 [00:34<01:34,  2.15s/it]Converting instances to test specs:  28%|██▊       | 17/60 [00:36<01:33,  2.16s/it]Converting instances to test specs:  30%|███       | 18/60 [00:38<01:28,  2.10s/it]Converting instances to test specs:  32%|███▏      | 19/60 [00:42<01:49,  2.67s/it]Converting instances to test specs:  33%|███▎      | 20/60 [00:46<01:53,  2.84s/it]Converting instances to test specs:  35%|███▌      | 21/60 [00:48<01:42,  2.62s/it]Converting instances to test specs:  37%|███▋      | 22/60 [00:50<01:34,  2.48s/it]Converting instances to test specs:  38%|███▊      | 23/60 [00:52<01:26,  2.33s/it]Converting instances to test specs:  40%|████      | 24/60 [00:54<01:19,  2.22s/it]Converting instances to test specs:  43%|████▎     | 26/60 [00:55<00:54,  1.59s/it]Converting instances to test specs:  45%|████▌     | 27/60 [00:57<00:55,  1.70s/it]Converting instances to test specs:  47%|████▋     | 28/60 [00:59<00:56,  1.76s/it]Converting instances to test specs:  48%|████▊     | 29/60 [01:02<00:58,  1.88s/it]Converting instances to test specs:  50%|█████     | 30/60 [01:07<01:22,  2.74s/it]Converting instances to test specs:  52%|█████▏    | 31/60 [01:10<01:22,  2.84s/it]Converting instances to test specs:  53%|█████▎    | 32/60 [01:12<01:13,  2.63s/it]Converting instances to test specs:  55%|█████▌    | 33/60 [01:14<01:07,  2.51s/it]Converting instances to test specs:  57%|█████▋    | 34/60 [01:16<01:02,  2.41s/it]Converting instances to test specs:  58%|█████▊    | 35/60 [01:19<01:05,  2.62s/it]Converting instances to test specs:  60%|██████    | 36/60 [01:23<01:08,  2.85s/it]Converting instances to test specs:  62%|██████▏   | 37/60 [01:23<00:50,  2.19s/it]Converting instances to test specs:  63%|██████▎   | 38/60 [01:28<01:04,  2.93s/it]Converting instances to test specs:  65%|██████▌   | 39/60 [01:32<01:05,  3.12s/it]Converting instances to test specs:  67%|██████▋   | 40/60 [01:34<00:56,  2.82s/it]Converting instances to test specs:  68%|██████▊   | 41/60 [01:37<00:58,  3.05s/it]Converting instances to test specs:  70%|███████   | 42/60 [01:40<00:51,  2.84s/it]Converting instances to test specs:  72%|███████▏  | 43/60 [01:42<00:44,  2.61s/it]Converting instances to test specs:  73%|███████▎  | 44/60 [01:44<00:39,  2.48s/it]Converting instances to test specs:  75%|███████▌  | 45/60 [01:47<00:38,  2.55s/it]Converting instances to test specs:  77%|███████▋  | 46/60 [01:49<00:35,  2.55s/it]Converting instances to test specs:  78%|███████▊  | 47/60 [01:53<00:36,  2.82s/it]Converting instances to test specs:  80%|████████  | 48/60 [01:54<00:29,  2.43s/it]Converting instances to test specs:  82%|████████▏ | 49/60 [01:57<00:30,  2.73s/it]Converting instances to test specs:  83%|████████▎ | 50/60 [02:00<00:27,  2.73s/it]Converting instances to test specs:  85%|████████▌ | 51/60 [02:02<00:23,  2.58s/it]Converting instances to test specs:  87%|████████▋ | 52/60 [02:05<00:20,  2.54s/it]Converting instances to test specs:  88%|████████▊ | 53/60 [02:07<00:17,  2.49s/it]Converting instances to test specs:  90%|█████████ | 54/60 [02:10<00:14,  2.42s/it]Converting instances to test specs:  92%|█████████▏| 55/60 [02:12<00:11,  2.32s/it]Converting instances to test specs:  93%|█████████▎| 56/60 [02:14<00:08,  2.23s/it]Converting instances to test specs:  95%|█████████▌| 57/60 [02:16<00:06,  2.26s/it]Converting instances to test specs:  97%|█████████▋| 58/60 [02:18<00:04,  2.31s/it]Converting instances to test specs:  98%|█████████▊| 59/60 [02:20<00:02,  2.20s/it]Converting instances to test specs: 100%|██████████| 60/60 [02:24<00:00,  2.58s/it]Converting instances to test specs: 100%|██████████| 60/60 [02:24<00:00,  2.41s/it]
-Base image sweb.base.x86_64:latest already exists, skipping build.
-Base images built successfully.
-Total environment images to build: 15
-Building environment images:   0%|          | 0/15 [00:00<?, ?it/s]Building environment images:   7%|▋         | 1/15 [07:09<1:40:16, 429.77s/it]Building environment images:  13%|█▎        | 2/15 [07:10<46:35, 215.07s/it]  Building environment images:  27%|██▋       | 4/15 [07:10<19:43, 107.58s/it]Building environment images:  53%|█████▎    | 8/15 [07:10<06:16, 53.81s/it] Building environment images:  87%|████████▋ | 13/15 [07:10<01:06, 33.13s/it]Building environment images: 100%|██████████| 15/15 [07:10<00:00, 28.71s/it]
-All environment images built successfully.
-Running 60 instances...
-Running instances:   0%|          | 0/60 [00:00<?, ?it/s]Running instances:   2%|▏         | 1/60 [06:17<6:11:18, 377.60s/it]Running instances:   3%|▎         | 2/60 [07:50<3:47:19, 235.16s/it]Running instances:   5%|▌         | 3/60 [08:47<2:46:58, 175.77s/it]Running instances:   8%|▊         | 5/60 [11:01<2:01:17, 132.31s/it]Running instances:  10%|█         | 6/60 [11:02<1:39:26, 110.49s/it]Running instances:  12%|█▏        | 7/60 [11:55<1:30:13, 102.15s/it]Running instances:  15%|█▌        | 9/60 [11:56<1:07:40, 79.62s/it] Running instances:  17%|█▋        | 10/60 [12:14<1:01:11, 73.44s/it]Running instances:  18%|█▊        | 11/60 [13:17<59:13, 72.52s/it]  Running instances:  20%|██        | 12/60 [13:26<53:44, 67.17s/it]Running instances:  23%|██▎       | 14/60 [17:36<57:50, 75.45s/it]Running instances:  25%|██▌       | 15/60 [17:44<53:12, 70.95s/it]Running instances:  28%|██▊       | 17/60 [17:44<44:52, 62.61s/it]Running instances:  30%|███       | 18/60 [17:54<41:47, 59.71s/it]Running instances:  32%|███▏      | 19/60 [18:07<39:07, 57.25s/it]Running instances:  33%|███▎      | 20/60 [19:09<38:19, 57.49s/it]Running instances:  35%|███▌      | 21/60 [21:03<39:07, 60.19s/it]Running instances:  37%|███▋      | 22/60 [21:45<37:35, 59.36s/it]Running instances:  38%|███▊      | 23/60 [23:48<38:17, 62.10s/it]Running instances:  42%|████▏     | 25/60 [23:57<33:32, 57.51s/it]Running instances:  42%|████▏     | 25/60 [24:14<33:56, 58.20s/it]Running instances:  43%|████▎     | 26/60 [25:14<33:00, 58.26s/it]Running instances:  45%|████▌     | 27/60 [25:15<30:52, 56.13s/it]Running instances:  48%|████▊     | 29/60 [26:07<27:55, 54.06s/it]Running instances:  50%|█████     | 30/60 [26:20<26:20, 52.67s/it]Running instances:  52%|█████▏    | 31/60 [29:53<27:58, 57.86s/it]Running instances:  55%|█████▌    | 33/60 [35:19<28:53, 64.21s/it]Running instances:  57%|█████▋    | 34/60 [35:47<27:22, 63.17s/it]Running instances:  58%|█████▊    | 35/60 [39:22<28:07, 67.49s/it]Running instances:  60%|██████    | 36/60 [39:30<26:20, 65.84s/it]Running instances:  65%|██████▌   | 39/60 [39:38<21:20, 60.99s/it]Running instances:  67%|██████▋   | 40/60 [39:49<19:54, 59.74s/it]Running instances:  68%|██████▊   | 41/60 [40:31<18:46, 59.31s/it]Running instances:  70%|███████   | 42/60 [40:34<17:23, 57.96s/it]Running instances:  72%|███████▏  | 43/60 [43:05<17:02, 60.14s/it]Running instances:  75%|███████▌  | 45/60 [44:26<14:48, 59.25s/it]Running instances:  78%|███████▊  | 47/60 [45:25<12:33, 57.99s/it]Running instances:  80%|████████  | 48/60 [46:17<11:34, 57.86s/it]Running instances:  83%|████████▎ | 50/60 [46:17<09:15, 55.55s/it]Running instances:  87%|████████▋ | 52/60 [46:18<07:07, 53.43s/it]Running instances:  90%|█████████ | 54/60 [46:20<05:08, 51.48s/it]Running instances:  90%|█████████ | 54/60 [46:39<05:11, 51.85s/it]Running instances:  92%|█████████▏| 55/60 [47:01<04:16, 51.31s/it]Running instances:  93%|█████████▎| 56/60 [47:02<03:21, 50.40s/it]Running instances:  95%|█████████▌| 57/60 [47:38<02:30, 50.16s/it]Running instances:  97%|█████████▋| 58/60 [56:10<01:56, 58.11s/it]Running instances:  98%|█████████▊| 59/60 [58:24<00:59, 59.40s/it]Running instances: 100%|██████████| 60/60 [59:58<00:00, 59.97s/it]Running instances: 100%|██████████| 60/60 [59:58<00:00, 59.97s/it]
-Error building image algesten__ureq-669: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_8/algesten__ureq-669/run_instance.log) for more information.
-Evaluation error for algesten__ureq-703: >>>>> Patch Apply Failed:
-patching file Cargo.lock
-Hunk #1 succeeded at 264 with fuzz 2.
-patching file Cargo.lock
-Hunk #1 succeeded at 283 with fuzz 2 (offset -3 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 450.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 FAILED at 633.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 FAILED at 653.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 FAILED at 687.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 793 with fuzz 1 (offset 75 lines).
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 894 (offset 50 lines).
-patching file README.md
-patching file src/agent.rs
-patching file src/agent.rs
-patching file src/lib.rs
-patching file src/response.rs
-
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_9/algesten__ureq-703/run_instance.log) for more information.
-Evaluation error for algesten__ureq-857: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-857/run_instance.log) for more information.
-Evaluation error for algesten__ureq-848: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-848/run_instance.log) for more information.
-Evaluation error for algesten__ureq-880: >>>>> Patch Apply Failed:
-patching file Cargo.lock
-Hunk #1 FAILED at 1026.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file src/run.rs
-patching file src/run.rs
-Hunk #1 succeeded at 401 (offset 5 lines).
-patching file src/run.rs
-Hunk #1 succeeded at 425 (offset 9 lines).
-
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-880/run_instance.log) for more information.
-Evaluation error for algesten__ureq-878: >>>>> Patch Apply Failed:
-patching file Cargo.lock
-patching file Cargo.lock
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 85 with fuzz 3.
-patching file Cargo.lock
-Hunk #1 succeeded at 112 (offset 3 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 154 with fuzz 1 (offset 23 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 206 (offset 43 lines).
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 268 (offset 19 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 319 (offset 43 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 286.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 490 (offset 182 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 518 with fuzz 2 (offset 194 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 576 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 614 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 632 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 644 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 460.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 705 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 506.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 751 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 773 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 783 (offset 212 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 803 with fuzz 2 (offset 212 lines).
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 848 (offset 48 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 625.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 950 (offset 252 lines).
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 985 (offset 51 lines).
-patching file Cargo.lock
-Hunk #1 FAILED at 765.
-1 out of 1 hunk FAILED -- saving rejects to file Cargo.lock.rej
-patching file Cargo.lock
-Hunk #1 succeeded at 1032 (offset 246 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 1044 (offset 246 lines).
-patching file Cargo.lock
-Hunk #1 succeeded at 1082 (offset 246 lines).
-patching file Cargo.lock
-Reversed (or previously applied) patch detected!  Assuming -R.
-Hunk #1 succeeded at 1155 (offset 50 lines).
-patching file deny.toml
-patching file src/lib.rs
-
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_10/algesten__ureq-878/run_instance.log) for more information.
-Evaluation error for algesten__ureq-815: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-815/run_instance.log) for more information.
-Evaluation error for algesten__ureq-789: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-789/run_instance.log) for more information.
-Evaluation error for algesten__ureq-843: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-843/run_instance.log) for more information.
-Evaluation error for algesten__ureq-786: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-786/run_instance.log) for more information.
-Evaluation error for algesten__ureq-781: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-781/run_instance.log) for more information.
-Evaluation error for algesten__ureq-863: Test timed out after 1800 seconds.
-Check (logs/run_validation/auto/ureq-new-task-instances_versions/gold/algesten_ureq.2_1/algesten__ureq-863/run_instance.log) for more information.
-All instances run.
-Cleaning cached images...
-Removed 15 images.
-2025-01-17 22:47:54,517 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 22:47:54,517 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-2025-01-17 22:47:55,204 - __main__ - INFO - Getting versions for 24 instances for move-language/move
-2025-01-17 22:47:55,204 - __main__ - INFO - Split instances into 16 groups with lengths [2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1]
-2025-01-17 22:48:01,602 - __main__ - INFO - Saved merged results to /home/riv3r/SWE-bench/swebench/versioning/auto/version/move-new-task-instances_versions.json (24 instances)
-Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 24 examples [00:00, 727.81 examples/s]
-Map:   0%|          | 0/24 [00:00<?, ? examples/s]Map: 100%|██████████| 24/24 [00:00<00:00, 4070.33 examples/s]
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 89, in <module>
-    main(args)
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 42, in main
-    version = example['version']
-              ~~~~~~~^^^^^^^^^^^
-KeyError: 'version'
-2025-01-17 22:48:05,855 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-17 22:48:05,855 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py", line 454, in <module>
-    main(args)
-  File "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py", line 284, in main
-    repo_prefix = data_tasks[0]["repo"].replace("/", "__")
-                  ~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 89, in <module>
-    main(args)
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 15, in main
-    dataset = load_dataset("json", data_files= dataset_name)['train']
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 2592, in load_dataset
-    builder_instance = load_dataset_builder(
-                       ^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 2264, in load_dataset_builder
-    dataset_module = dataset_module_factory(
-                     ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 1804, in dataset_module_factory
-    ).get_module()
-      ^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/load.py", line 1141, in get_module
-    data_files = DataFilesDict.from_patterns(
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/data_files.py", line 715, in from_patterns
-    DataFilesList.from_patterns(
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/data_files.py", line 620, in from_patterns
-    resolve_pattern(
-  File "/root/anaconda3/lib/python3.12/site-packages/datasets/data_files.py", line 407, in resolve_pattern
-    raise FileNotFoundError(error_msg)
-FileNotFoundError: Unable to find '/home/riv3r/SWE-bench/swebench/versioning/auto/version/gifski-new-task-instances_versions.json'
-2025-01-18 12:28:03,576 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-18 12:28:03,576 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py", line 454, in <module>
-    main(args)
-  File "/home/riv3r/SWE-bench/swebench/versioning/get_versions.py", line 284, in main
-    repo_prefix = data_tasks[0]["repo"].replace("/", "__")
-                  ~~~~~~~~~~^^^
-IndexError: list index out of range
-2025-01-18 12:28:04,782 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-18 12:28:04,782 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-2025-01-18 12:28:05,079 - __main__ - INFO - Getting versions for 18 instances for framesurge/perseus
-2025-01-18 12:28:05,079 - __main__ - INFO - Split instances into 16 groups with lengths [2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-2025-01-18 12:28:10,898 - __main__ - INFO - Saved merged results to /home/riv3r/SWE-bench/swebench/versioning/auto/version/perseus-new-task-instances_versions.json (18 instances)
-Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 18 examples [00:00, 609.10 examples/s]
-Map:   0%|          | 0/18 [00:00<?, ? examples/s]Map: 100%|██████████| 18/18 [00:00<00:00, 2366.69 examples/s]
-Traceback (most recent call last):
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 89, in <module>
-    main(args)
-  File "/home/riv3r/SWE-bench/swebench/versioning/environment_setup_commit.py", line 42, in main
-    version = example['version']
-              ~~~~~~~^^^^^^^^^^^
-KeyError: 'version'
-2025-01-18 12:28:13,911 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-18 12:28:13,912 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 18 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/18 [00:00<?, ?it/s]Converting instances to test specs:   6%|▌         | 1/18 [00:03<01:04,  3.81s/it]Converting instances to test specs:  11%|█         | 2/18 [00:53<08:10, 30.67s/it]Converting instances to test specs:  17%|█▋        | 3/18 [01:46<10:15, 41.01s/it]Converting instances to test specs:  22%|██▏       | 4/18 [01:57<06:45, 29.00s/it]Converting instances to test specs:  28%|██▊       | 5/18 [02:06<04:43, 21.77s/it]Converting instances to test specs:  33%|███▎      | 6/18 [03:14<07:31, 37.62s/it]Converting instances to test specs:  39%|███▉      | 7/18 [04:16<08:23, 45.74s/it]Converting instances to test specs:  44%|████▍     | 8/18 [05:19<08:32, 51.21s/it]Converting instances to test specs:  50%|█████     | 9/18 [06:24<08:18, 55.40s/it]Converting instances to test specs:  56%|█████▌    | 10/18 [07:37<08:05, 60.70s/it]Converting instances to test specs:  61%|██████    | 11/18 [08:45<07:20, 62.93s/it]Converting instances to test specs:  67%|██████▋   | 12/18 [09:55<06:32, 65.34s/it]Converting instances to test specs:  72%|███████▏  | 13/18 [10:55<05:18, 63.61s/it]Converting instances to test specs:  78%|███████▊  | 14/18 [11:53<04:07, 62.00s/it]Converting instances to test specs:  83%|████████▎ | 15/18 [12:52<03:02, 60.92s/it]Converting instances to test specs:  89%|████████▉ | 16/18 [13:45<01:57, 58.61s/it]Converting instances to test specs:  94%|█████████▍| 17/18 [13:49<00:42, 42.27s/it]Converting instances to test specs: 100%|██████████| 18/18 [13:59<00:00, 32.61s/it]Converting instances to test specs: 100%|██████████| 18/18 [13:59<00:00, 46.66s/it]
-Base image sweb.base.x86_64:latest already exists, skipping build.
-Base images built successfully.
-Total environment images to build: 1
-Building environment images:   0%|          | 0/1 [00:00<?, ?it/s]Building environment images: 100%|██████████| 1/1 [07:13<00:00, 434.00s/it]Building environment images: 100%|██████████| 1/1 [07:13<00:00, 434.00s/it]
-All environment images built successfully.
-Running 18 instances...
-Running instances:   0%|          | 0/18 [00:00<?, ?it/s]Running instances:   6%|▌         | 1/18 [00:33<09:34, 33.78s/it]Running instances:  11%|█         | 2/18 [01:01<08:09, 30.61s/it]Running instances:  22%|██▏       | 4/18 [08:04<28:17, 121.22s/it]Running instances:  50%|█████     | 9/18 [09:25<09:25, 62.88s/it] Running instances:  61%|██████    | 11/18 [09:54<06:18, 54.03s/it]Running instances:  72%|███████▏  | 13/18 [09:55<03:48, 45.79s/it]Running instances:  72%|███████▏  | 13/18 [10:08<03:53, 46.78s/it]Running instances:  78%|███████▊  | 14/18 [10:14<02:55, 43.89s/it]Running instances:  89%|████████▉ | 16/18 [11:06<01:23, 41.67s/it]Running instances:  94%|█████████▍| 17/18 [11:06<00:39, 39.23s/it]Running instances: 100%|██████████| 18/18 [11:07<00:00, 37.10s/it]Running instances: 100%|██████████| 18/18 [11:07<00:00, 37.10s/it]
-Error building image sweb.eval.x86_64.linkerd__linkerd2-proxy-40:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.linkerd__linkerd2-proxy-40__latest/build_image.log) for more information.
-Error building image sweb.eval.x86_64.linkerd__linkerd2-proxy-482:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.linkerd__linkerd2-proxy-482__latest/build_image.log) for more information.
-Error building image sweb.eval.x86_64.linkerd__linkerd2-proxy-1138:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128
-Check (logs/build_images/instances/sweb.eval.x86_64.linkerd__linkerd2-proxy-1138__latest/build_image.log) for more information.
-All instances run.
-Cleaning cached images...
-Removed 1 images.
-2025-01-18 13:14:21,644 - numexpr.utils - INFO - Note: NumExpr detected 32 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
-2025-01-18 13:14:21,644 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
-Running 229 unevaluated instances...
-Converting instances to test specs:   0%|          | 0/229 [00:00<?, ?it/s]Converting instances to test specs:   0%|          | 1/229 [01:31<5:47:59, 91.58s/it]Converting instances to test specs:   1%|          | 2/229 [03:16<6:16:54, 99.62s/it]Converting instances to test specs:   1%|▏         | 3/229 [05:12<6:42:45, 106.93s/it]Converting instances to test specs:   2%|▏         | 4/229 [06:41<6:14:36, 99.90s/it] Converting instances to test specs:   2%|▏         | 5/229 [08:34<6:30:08, 104.50s/it]Converting instances to test specs:   3%|▎         | 6/229 [09:56<6:00:44, 97.06s/it] Converting instances to test specs:   3%|▎         | 7/229 [11:18<5:40:40, 92.07s/it]Converting instances to test specs:   3%|▎         | 8/229 [12:43<5:30:45, 89.80s/it]Converting instances to test specs:   4%|▍         | 9/229 [14:10<5:26:08, 88.95s/it]Converting instances to test specs:   4%|▍         | 10/229 [15:31<5:15:09, 86.35s/it]Converting instances to test specs:   5%|▍         | 11/229 [16:56<5:12:41, 86.06s/it]Converting instances to test specs:   5%|▌         | 12/229 [18:17<5:05:17, 84.41s/it]Converting instances to test specs:   6%|▌         | 13/229 [19:38<5:00:12, 83.39s/it]Converting instances to test specs:   6%|▌         | 14/229 [21:03<5:00:22, 83.82s/it]Converting instances to test specs:   7%|▋         | 15/229 [22:25<4:57:29, 83.41s/it]Converting instances to test specs:   7%|▋         | 16/229 [24:18<5:28:10, 92.44s/it]Converting instances to test specs:   7%|▋         | 17/229 [26:15<5:52:26, 99.75s/it]Converting instances to test specs:   8%|▊         | 18/229 [28:14<6:10:54, 105.47s/it]Converting instances to test specs:   8%|▊         | 19/229 [30:18<6:28:28, 110.99s/it]Converting instances to test specs:   9%|▊         | 20/229 [32:18<6:36:12, 113.75s/it]Converting instances to test specs:   9%|▉         | 21/229 [34:15<6:38:06, 114.84s/it]Converting instances to test specs:  10%|▉         | 22/229 [36:13<6:38:57, 115.64s/it]Converting instances to test specs:  10%|█         | 23/229 [38:11<6:39:41, 116.42s/it]Converting instances to test specs:  10%|█         | 24/229 [40:12<6:42:21, 117.76s/it]Converting instances to test specs:  11%|█         | 25/229 [42:10<6:40:17, 117.73s/it]Converting instances to test specs:  11%|█▏        | 26/229 [44:06<6:36:48, 117.28s/it]Converting instances to test specs:  12%|█▏        | 27/229 [46:02<6:33:41, 116.94s/it]Converting instances to test specs:  12%|█▏        | 28/229 [47:53<6:25:48, 115.17s/it]Converting instances to test specs:  13%|█▎        | 29/229 [49:43<6:19:02, 113.71s/it]Converting instances to test specs:  13%|█▎        | 30/229 [51:33<6:13:09, 112.51s/it]Converting instances to test specs:  14%|█▎        | 31/229 [53:24<6:09:11, 111.88s/it]Converting instances to test specs:  14%|█▍        | 32/229 [55:18<6:10:20, 112.79s/it]Converting instances to test specs:  14%|█▍        | 33/229 [57:13<6:09:50, 113.21s/it]Converting instances to test specs:  15%|█▍        | 34/229 [59:08<6:10:15, 113.93s/it]Converting instances to test specs:  15%|█▌        | 35/229 [1:01:00<6:05:55, 113.18s/it]Converting instances to test specs:  16%|█▌        | 36/229 [1:02:52<6:02:56, 112.83s/it]Converting instances to test specs:  16%|█▌        | 37/229 [1:04:40<5:56:41, 111.46s/it]Converting instances to test specs:  17%|█▋        | 38/229 [1:06:34<5:57:34, 112.33s/it]Converting instances to test specs:  17%|█▋        | 39/229 [1:08:24<5:52:52, 111.43s/it]Converting instances to test specs:  17%|█▋        | 40/229 [1:10:12<5:48:16, 110.56s/it]Converting instances to test specs:  18%|█▊        | 41/229 [1:12:02<5:45:16, 110.19s/it]Converting instances to test specs:  18%|█▊        | 42/229 [1:13:48<5:40:14, 109.17s/it]Converting instances to test specs:  19%|█▉        | 43/229 [1:15:43<5:43:44, 110.88s/it]Converting instances to test specs:  19%|█▉        | 44/229 [1:16:22<4:35:19, 89.29s/it] Converting instances to test specs:  20%|█▉        | 45/229 [1:17:07<3:53:09, 76.03s/it]Converting instances to test specs:  20%|██        | 46/229 [1:17:49<3:20:48, 65.84s/it]Converting instances to test specs:  21%|██        | 47/229 [1:18:32<2:59:01, 59.02s/it]Converting instances to test specs:  21%|██        | 48/229 [1:19:16<2:44:33, 54.55s/it]Converting instances to test specs:  21%|██▏       | 49/229 [1:19:56<2:29:43, 49.91s/it]Converting instances to test specs:  22%|██▏       | 50/229 [1:20:35<2:19:42, 46.83s/it]Converting instances to test specs:  22%|██▏       | 51/229 [1:21:16<2:13:56, 45.15s/it]Converting instances to test specs:  23%|██▎       | 52/229 [1:21:53<2:05:43, 42.62s/it]Converting instances to test specs:  23%|██▎       | 53/229 [1:22:32<2:01:42, 41.49s/it]Converting instances to test specs:  24%|██▎       | 54/229 [1:23:11<1:59:14, 40.88s/it]Converting instances to test specs:  24%|██▍       | 55/229 [1:23:47<1:53:42, 39.21s/it]Converting instances to test specs:  24%|██▍       | 56/229 [1:24:26<1:53:10, 39.25s/it]Converting instances to test specs:  25%|██▍       | 57/229 [1:25:03<1:50:18, 38.48s/it]Converting instances to test specs:  25%|██▌       | 58/229 [1:27:07<3:02:40, 64.10s/it]Converting instances to test specs:  26%|██▌       | 59/229 [1:29:13<3:54:50, 82.89s/it]Converting instances to test specs:  26%|██▌       | 60/229 [1:31:16<4:27:10, 94.86s/it]Converting instances to test specs:  27%|██▋       | 61/229 [1:33:21<4:50:26, 103.73s/it]Converting instances to test specs:  27%|██▋       | 62/229 [1:34:46<4:33:43, 98.34s/it] Converting instances to test specs:  28%|██▊       | 63/229 [1:36:50<4:52:46, 105.82s/it]Converting instances to test specs:  28%|██▊       | 64/229 [1:38:54<5:06:09, 111.33s/it]Converting instances to test specs:  28%|██▊       | 65/229 [1:40:56<5:12:55, 114.49s/it]Converting instances to test specs:  29%|██▉       | 66/229 [1:42:56<5:15:52, 116.27s/it]Converting instances to test specs:  29%|██▉       | 67/229 [1:44:58<5:18:47, 118.07s/it]Converting instances to test specs:  30%|██▉       | 68/229 [1:46:58<5:17:40, 118.39s/it]Converting instances to test specs:  30%|███       | 69/229 [1:48:58<5:17:33, 119.09s/it]Converting instances to test specs:  31%|███       | 70/229 [1:50:57<5:15:00, 118.87s/it]Converting instances to test specs:  31%|███       | 71/229 [1:52:57<5:14:07, 119.29s/it]Converting instances to test specs:  31%|███▏      | 72/229 [1:54:56<5:12:21, 119.37s/it]Converting instances to test specs:  32%|███▏      | 73/229 [1:55:45<4:15:05, 98.11s/it] Converting instances to test specs:  32%|███▏      | 74/229 [1:56:30<3:32:26, 82.24s/it]Converting instances to test specs:  33%|███▎      | 75/229 [1:57:17<3:03:54, 71.66s/it]Converting instances to test specs:  33%|███▎      | 76/229 [1:58:06<2:45:39, 64.97s/it]Converting instances to test specs:  34%|███▎      | 77/229 [1:58:52<2:29:42, 59.10s/it]Converting instances to test specs:  34%|███▍      | 78/229 [1:59:42<2:22:09, 56.49s/it]Converting instances to test specs:  34%|███▍      | 79/229 [2:00:29<2:13:49, 53.53s/it]Converting instances to test specs:  35%|███▍      | 80/229 [2:01:16<2:08:20, 51.68s/it]Converting instances to test specs:  35%|███▌      | 81/229 [2:02:02<2:02:55, 49.84s/it]Converting instances to test specs:  36%|███▌      | 82/229 [2:02:48<1:59:05, 48.61s/it]Converting instances to test specs:  36%|███▌      | 83/229 [2:03:36<1:58:05, 48.53s/it]Converting instances to test specs:  37%|███▋      | 84/229 [2:04:21<1:54:59, 47.58s/it]Converting instances to test specs:  37%|███▋      | 85/229 [2:05:09<1:54:35, 47.75s/it]Converting instances to test specs:  38%|███▊      | 86/229 [2:05:56<1:53:00, 47.41s/it]Converting instances to test specs:  38%|███▊      | 87/229 [2:06:47<1:54:53, 48.54s/it]Converting instances to test specs:  38%|███▊      | 88/229 [2:07:44<2:00:06, 51.11s/it]Converting instances to test specs:  39%|███▉      | 89/229 [2:08:31<1:56:28, 49.92s/it]Converting instances to test specs:  39%|███▉      | 90/229 [2:09:18<1:53:32, 49.01s/it]Converting instances to test specs:  40%|███▉      | 91/229 [2:10:08<1:53:06, 49.18s/it]Converting instances to test specs:  40%|████      | 92/229 [2:10:59<1:53:41, 49.80s/it]Converting instances to test specs:  41%|████      | 93/229 [2:11:48<1:52:26, 49.61s/it]Converting instances to test specs:  41%|████      | 94/229 [2:12:39<1:52:06, 49.82s/it]Converting instances to test specs:  41%|████▏     | 95/229 [2:13:26<1:49:26, 49.00s/it]Converting instances to test specs:  42%|████▏     | 96/229 [2:14:18<1:50:34, 49.88s/it]Converting instances to test specs:  42%|████▏     | 97/229 [2:15:08<1:50:14, 50.11s/it]Converting instances to test specs:  43%|████▎     | 98/229 [2:15:56<1:47:42, 49.33s/it]Converting instances to test specs:  43%|████▎     | 99/229 [2:16:46<1:47:17, 49.52s/it]Converting instances to test specs:  44%|████▎     | 100/229 [2:17:33<1:45:10, 48.92s/it]Converting instances to test specs:  44%|████▍     | 101/229 [2:19:36<2:31:42, 71.11s/it]Converting instances to test specs:  45%|████▍     | 102/229 [2:21:36<3:01:30, 85.75s/it]Converting instances to test specs:  45%|████▍     | 103/229 [2:23:35<3:20:42, 95.57s/it]Converting instances to test specs:  45%|████▌     | 104/229 [2:25:36<3:35:24, 103.40s/it]Converting instances to test specs:  46%|████▌     | 105/229 [2:27:44<3:48:52, 110.75s/it]Converting instances to test specs:  46%|████▋     | 106/229 [2:29:44<3:52:50, 113.58s/it]Converting instances to test specs:  47%|████▋     | 107/229 [2:31:47<3:56:29, 116.30s/it]Converting instances to test specs:  47%|████▋     | 108/229 [2:33:49<3:57:45, 117.90s/it]Converting instances to test specs:  48%|████▊     | 109/229 [2:35:57<4:02:05, 121.05s/it]Converting instances to test specs:  48%|████▊     | 110/229 [2:38:09<4:06:39, 124.36s/it]Converting instances to test specs:  48%|████▊     | 111/229 [2:40:17<4:06:46, 125.48s/it]Converting instances to test specs:  49%|████▉     | 112/229 [2:42:20<4:02:56, 124.59s/it]Converting instances to test specs:  49%|████▉     | 113/229 [2:44:15<3:55:44, 121.93s/it]Converting instances to test specs:  50%|████▉     | 114/229 [2:46:12<3:50:42, 120.37s/it]Converting instances to test specs:  50%|█████     | 115/229 [2:48:09<3:46:51, 119.40s/it]Converting instances to test specs:  51%|█████     | 116/229 [2:48:48<2:59:15, 95.18s/it] Converting instances to test specs:  51%|█████     | 117/229 [2:49:24<2:24:25, 77.37s/it]Converting instances to test specs:  52%|█████▏    | 118/229 [2:49:57<1:58:21, 63.98s/it]Converting instances to test specs:  52%|█████▏    | 119/229 [2:50:28<1:39:09, 54.09s/it]Converting instances to test specs:  52%|█████▏    | 120/229 [2:51:03<1:28:04, 48.48s/it]Converting instances to test specs:  53%|█████▎    | 121/229 [2:51:34<1:17:41, 43.16s/it]Converting instances to test specs:  53%|█████▎    | 122/229 [2:52:07<1:11:32, 40.12s/it]
