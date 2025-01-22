@@ -192,5 +192,4 @@ repos/*
 swebench/versioning/auto/dataset
 swebench/versioning/auto/version
 
-!swebench/versioning/auto/log/process_detail.log
-!swebench/versioning/auto/log/process.log
+log.zip
