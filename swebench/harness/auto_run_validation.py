@@ -129,7 +129,8 @@ def main(args):
                     "--run_id", f"{base_name}_versions",
                     "--max_workers", str(num_workers),
                     "--cache_level", "base",
-                    "--auto", "True"
+                    "--auto", "True",
+                    "--clean","True",
                 ]
                 run_command_with_logging(run_validation_command, f"run_validation {file}", log_file_detail)
         logging.info(f"Finished: {file}")
