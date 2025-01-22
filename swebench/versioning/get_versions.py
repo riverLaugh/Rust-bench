@@ -94,12 +94,16 @@ def get_version(instance, is_build=False, path_repo=None):
                 instance["base_commit"],
                 path_to_version,
             )
+            count = 0
             while True:
                 try:
-                    init_text = requests.get(url,timeout=5).text
-                    break
+                    if count != 10:
+                        init_text = requests.get(url,timeout=5).text
+                    else:
+                        break
                 except:
                     print(f"Fetch from URL: {url} failed, retrying...")
+                    count += 1
                     continue
         version = _find_version_in_text(init_text, instance)
         if version is not None:
