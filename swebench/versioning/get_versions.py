@@ -94,17 +94,19 @@ def get_version(instance, is_build=False, path_repo=None):
                 instance["base_commit"],
                 path_to_version,
             )
-            count = 0
-            while True:
-                try:
-                    if count != 10:
-                        init_text = requests.get(url,timeout=5).text
-                    else:
-                        break
-                except:
-                    print(f"Fetch from URL: {url} failed, retrying...")
-                    count += 1
-                    continue
+        count = 0
+        max_retries = 5
+
+        while count < max_retries:  # 限制重试次数
+            try:
+                init_text = requests.get(url, timeout=5).text
+                break  # 如果成功获取数据，退出循环
+            except Exception as e:
+                print(f"Fetch from URL: {url} failed (attempt {count + 1}/{max_retries}), retrying...")
+                count += 1  # 增加重试计数
+        else:
+            print("Failed to fetch the URL after maximum retries.")
+
         version = _find_version_in_text(init_text, instance)
         if version is not None:
             if instance["repo"] == "serde-rs/serde":
