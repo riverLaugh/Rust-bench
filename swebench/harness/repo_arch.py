@@ -25,7 +25,7 @@ class GithubApiPool:
         while True:
             try:
                 return func_timeout(timeout, method, args=(self.fetch(), *args,), kwargs=kwargs)
-            except HTTP403ForbiddenError as e:
+            except HTTP403ForbiddenError:
                 print(f"403 Forbidden: Access denied, switching to next available API.")
                 self._rotate()
             except FunctionTimedOut:
