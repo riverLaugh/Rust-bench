@@ -4,7 +4,7 @@ from typing import Optional, Union, Callable
 from func_timeout import func_timeout
 from func_timeout.exceptions import FunctionTimedOut
 from ghapi.all import GhApi
-from requests.exceptions import HTTPError
+from fastcore.net import HTTP403ForbiddenError
 
 
 def gh_tree(api: GhApi, owner: str, repo: str, commit: str = "HEAD", **kwargs):
@@ -25,16 +25,15 @@ class GithubApiPool:
         while True:
             try:
                 return func_timeout(timeout, method, args=(self.fetch(), *args,), kwargs=kwargs)
-            except HTTPError as e:
-                if e.response.status_code == 403:
-                    print(f"403 Forbidden: Access denied, switching to next available API.")
-                    self._rotate()
-                else:
-                    print(f"HTTP Error {e.response.status_code}: {e.response.reason}. Retrying...")
+            except HTTP403ForbiddenError as e:
+                print(f"403 Forbidden: Access denied, switching to next available API.")
+                self._rotate()
             except FunctionTimedOut:
                 print(f"Connection timed out. Retrying...")
-            except:
+            except (SystemError, KeyboardInterrupt):
                 raise
+            except Exception as e:
+                print(f"Unexpected error {e}. Retrying...")
 
     def _rotate(self):
         if not self.apis:
