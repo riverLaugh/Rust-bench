@@ -193,15 +193,28 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
     else:
         env_setup_commands = specs.get("env_setup", [])  # 如果没有 "env_setup"，则返回空列表 []
         reqs_commands = [
-            f"rustup default {specs['rustc']}",
-            f"git clone -o origin https://github.com/{repo} {repo_directory}",
+            f"MAX_RETRIES=5",
+            f"""
+            retry() {{
+                local attempt=0
+                local command="$*"
+                until $command; do
+                    attempt=$((attempt + 1))
+                    if [ $attempt -ge $MAX_RETRIES ]; then
+                        echo "Command '$command' failed after $MAX_RETRIES attempts. Exiting."
+                        exit 1
+                    fi
+                    echo "Command '$command' failed. Retrying... (Attempt $attempt/$MAX_RETRIES)"
+                done
+            }}
+            """,
+            f"retry rustup default {specs['rustc']}",
+            f"retry git clone -o origin https://github.com/{repo} {repo_directory}",
             f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
             f"cd {repo_directory}",
             f"git reset --hard {instance['environment_setup_commit']}",
             *env_setup_commands,
-            "cargo fetch",
-            # f"git reset --hard {instance['environment_setup_commit']}",
-            # f"ls -la {repo_directory}", 
+            f"retry cargo fetch",
         ]
 
     return reqs_commands
