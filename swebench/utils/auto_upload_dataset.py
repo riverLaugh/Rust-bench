@@ -4,6 +4,8 @@ import time
 from datasets import Dataset
 from huggingface_hub import HfApi, HfFolder
 import schedule
+from datetime import datetime
+import re
 
 # Hugging Face 配置
 HF_USERNAME = "r1v3r"
@@ -14,17 +16,47 @@ REPO_NAME = "auto_validated"  # 数据集名称
 JSON_FILE_PATH = "/home/riv3r/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
 LAST_UPLOAD_COUNT_FILE = "/tmp/last_upload_count.txt"  # 临时文件，用于存储上次上传的实例数量
 
+
+def post_process_data(func):
+    def wrapper(*args, **kwargs):
+
+        retval = func(*args, **kwargs)
+
+        time_re = re.compile(r"(\d{4})-(\d{2})-(\d{2})(?:T| )(\d{2}):(\d{2}):(\d{2})Z?")
+
+        for data in retval:
+
+            # 1. 将时间字符串转为毫秒级整数时间戳
+            if isinstance(data["created_at"], str):
+                time_match = re.match(time_re, data["created_at"])
+                if time_match:
+                    data["created_at"] = int(
+                        datetime.strptime(
+                            f"{time_match.group(1)}-{time_match.group(2)}-{time_match.group(3)}T{time_match.group(4)}:{time_match.group(5)}:{time_match.group(6)}",
+                            "%Y-%m-%dT%H:%M:%S",
+                        ).timestamp() * 1000
+                    )
+
+        return retval
+
+    return wrapper
+
+
+@post_process_data
 def load_json(file_path):
     with open(file_path, "r") as f:
         data = json.load(f)
     return data
 
+
 def convert_to_hf_dataset(data):
     return Dataset.from_list(data)
+
 
 def upload_to_hf(dataset, repo_name, token):
     # 推送数据集到 Hugging Face Hub
     dataset.push_to_hub(repo_name, token=token)
+
 
 def get_last_upload_count():
     """读取上次上传时记录的实例数量"""
@@ -33,17 +65,19 @@ def get_last_upload_count():
             return int(f.read().strip())
     return 0
 
+
 def save_current_upload_count(count):
     """保存当前实例数量到文件"""
     with open(LAST_UPLOAD_COUNT_FILE, "w") as f:
         f.write(str(count))
+
 
 def main():
     # 1. 加载 JSON 数据
     if not os.path.exists(JSON_FILE_PATH):
         print(f"JSON file not found: {JSON_FILE_PATH}")
         return
-    
+
     data = load_json(JSON_FILE_PATH)
     current_count = len(data)
     print(f"Loaded {current_count} records from JSON.")
@@ -67,6 +101,7 @@ def main():
         save_current_upload_count(current_count)
     else:
         print("No new instances detected. Skipping upload.")
+
 
 if __name__ == "__main__":
     main()
