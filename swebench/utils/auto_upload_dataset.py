@@ -2,18 +2,17 @@ import json
 import os
 import time
 from datasets import Dataset
-from huggingface_hub import HfApi, HfFolder
 import schedule
-from datetime import datetime
 import re
+from datetime import datetime
 
 # Hugging Face 配置
 HF_USERNAME = "r1v3r"
 HF_TOKEN = os.getenv("HUGGING_FACE_HUB_TOKEN", None)
-REPO_NAME = "auto_validated"  # 数据集名称
+REPO_NAME = "auto_validated2"  # 数据集名称
 
 # JSON 文件路径
-JSON_FILE_PATH = "/home/riv3r/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
+JSON_FILE_PATH = "/data/RustBench/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
 LAST_UPLOAD_COUNT_FILE = "/tmp/last_upload_count.txt"  # 临时文件，用于存储上次上传的实例数量
 
 
@@ -26,15 +25,16 @@ def post_process_data(func):
 
         for data in retval:
 
-            # 1. 将时间字符串转为毫秒级整数时间戳
-            if isinstance(data["created_at"], str):
+            # 1. 将时间转为标准时间字符串
+            if isinstance(data["created_at"], int):
+                ts = int(data["created_at"])
+                data["created_at"] = datetime.fromtimestamp(int(ts / 1000)).strftime("%Y-%m-%dT%H:%M:%S")
+
+            elif isinstance(data["created_at"], str):
                 time_match = re.match(time_re, data["created_at"])
                 if time_match:
-                    data["created_at"] = int(
-                        datetime.strptime(
-                            f"{time_match.group(1)}-{time_match.group(2)}-{time_match.group(3)}T{time_match.group(4)}:{time_match.group(5)}:{time_match.group(6)}",
-                            "%Y-%m-%dT%H:%M:%S",
-                        ).timestamp() * 1000
+                    data["created_at"] = (
+                        f"{time_match.group(1)}-{time_match.group(2)}-{time_match.group(3)}T{time_match.group(4)}:{time_match.group(5)}:{time_match.group(6)}"
                     )
 
         return retval
