@@ -1,0 +1,657 @@
+[
+    {
+        "instance_id": "dtolnay__anyhow-34",
+        "problem_statement": "Figure out how context should interact with downcasting\nFor example if we have:\r\n\r\n```rust\r\nlet e = fs::read(\"/...\").context(ReadFailed).unwrap_err();\r\nmatch e.downcast_ref::<ReadFailed>() {\r\n```\r\n\r\nshould this downcast succeed or fail?\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ratatui__ratatui-310",
+        "problem_statement": "Enable setting the underline color\n## Problem\r\nThere is a nonstandard ansi escape code that allows setting the underline color.\r\n\r\nThis is done with the code `58`. it uses the same arguments as the `38` and `48` codes do for settings their colors.\r\nThe underline color can be reset with the code `59`.\r\n\r\nSee [kitty documentation](https://sw.kovidgoyal.net/kitty/underlines/) for more info.\r\n\r\nThis is implemented in at least kitty, wezterm, alacritty, gnome terminal and konsole.\r\n\r\n## Solution\r\nAllow this to be possible\r\n```rust\r\nStyle::default().underline(Color::Blue).add_modifier(Modifier::UNDERLINE),\r\n```\r\n\r\nI can make a PR if needed.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ron-rs__ron-112",
+        "problem_statement": "Support for multi-line string literals\nWill RON ever support multi-line string literals? This is a feature that missing from JSON, but is present in YAML, TOML, and in Rust proper, like so:\r\n\r\n```yaml\r\n# YAML multi-line string literals\r\nkey: >\r\n  This is a very long sentence\r\n  that spans several lines in the YAML\r\n  but which will be rendered as a string\r\n  without carriage returns.\r\n```\r\n\r\n```toml\r\n# TOML multi-line string literals\r\nkey = '''\r\n    This is a very long sentence\r\n    that spans several lines in the TOML\r\n    but which will be rendered as a string\r\n    without carriage returns.\r\n'''\r\n```\r\n\r\n```rust\r\n// Rust multi-line string literals\r\nlet key = r#\"\r\n    This is a very long sentence\r\n    that spans several lines in Rust\r\n    but which will be rendered as a string\r\n    without carriage returns.\r\n\"#;\r\n\r\nlet key = r##\"\r\n    This is a sentence which happens\r\n    to contain a '#' character inside.\r\n\"##;\r\n```\r\n\r\nThis could be a useful for storing localized strings for dialogue boxes, for example, or other complex strings that are too tedious and error-prone to escape by hand. Here is some pseudo-RON syntax showing how this feature could be used:\r\n\r\n```ron\r\nSystem(\r\n    arch: \"x86_64-linux\",\r\n    shell: \"/usr/bin/bash\",\r\n    packages: [\"firefox\", \"git\", \"rustup\"],\r\n    startup: r##\"\r\n        #!/usr/bin/bash\r\n        export PS1=\"...\"\r\n        echo \"Done booting!\"\r\n    \"##,\r\n)\r\n```\r\n\r\nGiven that RON already mimics Rust's notation quite well, adopting its syntax for raw string literals would make this feature feel right at home. See the [official reference page](https://doc.rust-lang.org/reference/tokens.html#raw-string-literals) and [Rust By Example](https://rustbyexample.com/std/str.html#literals-and-escapes) for details.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ron-rs__ron-78",
+        "problem_statement": "Add hexadecimal numbers\nAnd maybe it's a good idea to add octal and binary (`0o...` and `0b...`) notations too.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ron-rs__ron-75",
+        "problem_statement": "Ergonomics of optional fields\nIf I have a struct like\r\n\r\n```rust\r\n#[derive(Debug, Clone, Deserialize)]\r\npub struct Settings {\r\n    pub font: Option<PathBuf>, // <- optional field\r\n    pub other_value: u8,\r\n}\r\n```\r\n\r\nI can omit the field in `.ron` file to get `None`:\r\n\r\n```json\r\n(\r\n    other_value: 0,\r\n)\r\n```\r\n\r\nBut I'm forced to write `Some()` around the actual value which clutters up the config:\r\n\r\n```json\r\n(\r\n    font: Some(\"OpenSans-Regular.ttf\"), // :(\r\n    // font: \"OpenSans-Regular.ttf\", // I want this\r\n    other_value: 0,\r\n)\r\n```\r\n\r\nSeems like an ergonomic problem to me :(\r\n\r\nSee https://gitter.im/ron-rs/ron?at=59d228bd614889d47565733d\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ron-rs__ron-206",
+        "problem_statement": "Add function to serialize to a Writer\nBincode has [`serialize_into`](https://docs.rs/bincode/1.2.1/bincode/fn.serialize_into.html) which supports an arbitrary Writer, this would be very useful for RON as well, especially with `BufWriter`, because the data gets very large.\r\n\r\nI'm seeing huge RAM spikes because of RON serialization: From ~90 MB baseline RAM usage to over 700 MB when it's serializing. Btw, the resulting ron file is 20 MB large.\r\n\r\n![image](https://user-images.githubusercontent.com/535593/75310821-3271ba80-5855-11ea-9318-2f0295dd594f.png)\r\n\r\n---\r\n\r\nIn the above application, I'm serializing app state to disk every 10s.\r\nBtw, the CPU usage is also quite high. This is the CPU & RAM usage when serializing to bincode instead. With ROM, the CPU usage is almost always at ~27% (probably because it takes so long), with bincode, it only shows short spikes (to 24%) when serializing:\r\n\r\n![image](https://user-images.githubusercontent.com/535593/75310907-76fd5600-5855-11ea-9275-32bf815ff0e2.png)\r\n\r\n---\r\n\r\nAnyway, with a function like `serialize_into`+`BufWriter` we could at least reduce the RAM spikes.\r\nThis would also allow chaining it with e.g. a Gzip encoder for streaming compression, e.g. like with bincode:\r\n```rust\r\n\tbincode::serialize_into(\r\n\t\tGzBuilder::new()\r\n\t\t\t.write(BufWriter::new(File::create(path)?), Compression::best()),\r\n\t\t&data,\r\n\t)?;\r\n```\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ron-rs__ron-150",
+        "problem_statement": "Don't split empty sets/arrays into multiple lines\nI noticed a lot of sections like this:\r\n```ron\r\n                            vertical_blurs: [\r\n                            ],\r\n                            horizontal_blurs: [\r\n                            ],\r\n                            scalings: [\r\n                            ],\r\n                            blits: [\r\n                            ],\r\n                            outputs: [\r\n                            ],\r\n```\r\n\r\nI think it would be strictly an improvement if we detect that a set/map/array is empty and avoid inserting a new line in this case.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "async-graphql__async-graphql-1542",
+        "problem_statement": "Support for extended JSON representations of BSON\n## Description of the feature\r\nBSON allows for a typed representation of its data in an [extended JSON representation](https://www.mongodb.com/docs/manual/reference/mongodb-extended-json/#mongodb-extended-json--v2-). To properly integrate with BSON, `async-graphql` should have the functionality handle these representations. \r\n\r\nTo be speciffic, the types `bson::ObjectId` and `bson::Uuid` implement `async_graphql::ScalarType` but do not currently support the alternative, more strongly typed representation.\r\n\r\n## Code example (if possible)\r\nThis conversion chain will fail currently\r\n```rust\r\nlet id = bson::Uuid::new();\r\nlet bson_value = bson::bson!(id);\r\nlet extended_json_value = serde_json::json!(bson_value);\r\nlet gql_value = async_graphql::ConstValue::from_json(extended_json_value).expect(\"valid json\");\r\nassert_eq!(\r\n    id,\r\n    <bson::Uuid as ScalarType>::parse(gql_value).expect(\"parsing succeeds\")  // panics\r\n);\r\n```\r\n\r\nThe reason for the failure are the different implementations of `serde::Serialize` for `bson::Uuid` and `bson::Bson`: \r\n- `bson::Uuid` is serialized as a hex string with dashes\r\n```json\r\n\"f136c009-e465-4f69-9170-8e898b1f9547\"\r\n```\r\n-  `bson::Bson::Binary` has the form described [here](https://www.mongodb.com/docs/manual/reference/mongodb-extended-json/#mongodb-bsontype-Binary)\r\n```json\r\n{ \"$binary\": { \"base64\": \"8TbACeRlT2mRcI6Jix+VRw==\", \"subType\": \"04\" } }\r\n```\r\n\r\nThe exact same happens with `bson::ObjectId` and `bson::Bson::ObjectId`.\nSupport for extended JSON representations of BSON\n## Description of the feature\r\nBSON allows for a typed representation of its data in an [extended JSON representation](https://www.mongodb.com/docs/manual/reference/mongodb-extended-json/#mongodb-extended-json--v2-). To properly integrate with BSON, `async-graphql` should have the functionality handle these representations. \r\n\r\nTo be speciffic, the types `bson::ObjectId` and `bson::Uuid` implement `async_graphql::ScalarType` but do not currently support the alternative, more strongly typed representation.\r\n\r\n## Code example (if possible)\r\nThis conversion chain will fail currently\r\n```rust\r\nlet id = bson::Uuid::new();\r\nlet bson_value = bson::bson!(id);\r\nlet extended_json_value = serde_json::json!(bson_value);\r\nlet gql_value = async_graphql::ConstValue::from_json(extended_json_value).expect(\"valid json\");\r\nassert_eq!(\r\n    id,\r\n    <bson::Uuid as ScalarType>::parse(gql_value).expect(\"parsing succeeds\")  // panics\r\n);\r\n```\r\n\r\nThe reason for the failure are the different implementations of `serde::Serialize` for `bson::Uuid` and `bson::Bson`: \r\n- `bson::Uuid` is serialized as a hex string with dashes\r\n```json\r\n\"f136c009-e465-4f69-9170-8e898b1f9547\"\r\n```\r\n-  `bson::Bson::Binary` has the form described [here](https://www.mongodb.com/docs/manual/reference/mongodb-extended-json/#mongodb-bsontype-Binary)\r\n```json\r\n{ \"$binary\": { \"base64\": \"8TbACeRlT2mRcI6Jix+VRw==\", \"subType\": \"04\" } }\r\n```\r\n\r\nThe exact same happens with `bson::ObjectId` and `bson::Bson::ObjectId`.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "bincode-org__bincode-217",
+        "problem_statement": "Set is_human_readable to false\nI have not released this yet but I will in the next few days. https://github.com/serde-rs/serde/pull/1044\r\n\r\n```rust\r\ntrait Serializer {\r\n    /* ... */\r\n\r\n    fn is_human_readable(&self) -> bool { true }\r\n}\r\n\r\ntrait Deserializer<'de> {\r\n    /* ... */\r\n\r\n    fn is_human_readable(&self) -> bool { true }\r\n}\r\n```\r\n\r\nBincode should override these to false to get more compact representation for types like IpAddr and Datetime.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "boa-dev__boa-199",
+        "problem_statement": "Shorthand method syntax\nIs needed\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tokio-rs__bytes-721",
+        "problem_statement": "Consider replacing Bytes::make_mut by impl From<Bytes> for BytesMut\n`Bytes::make_mut` is a very good addition to the API but I think it would be better if it was instead exposed as `<BytesMut as From<Bytes>>::from`. Could this be done before the next bytes version is released? `Bytes::make_mut` isn't released yet.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starkware-libs__cairo-6720",
+        "problem_statement": "Implement code action for creating module files\nBasically copy this from IntelliJ Rust:\n\nhttps://github.com/user-attachments/assets/c5fef694-3a5a-4d2c-b864-2fbaa84eba3a\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-992",
+        "problem_statement": "Reorganize test snapshot folder\nSince the number of tests is increasing, so I suggest moving test snapshots to subfolders for each front/back.\r\n\r\nAs is:\r\n```\r\n./test/in\r\n./test/out\r\n```\r\nTo be:\r\n```\r\n./test/in/wgsl\r\n./test/in/spv\r\n...\r\n\r\n./test/out/wgsl\r\n./test/out/glsl\r\n...\r\n```\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-2454",
+        "problem_statement": "Change frexp and modf to work with structures\nSee https://github.com/gpuweb/gpuweb/pull/1973\r\nI think this change needs to be done at IR level.\nChange frexp and modf to return structures\nCloses #1161\r\nTODO:\r\n- [x] IR\r\n- [x] validation\r\n- [x] typifier\r\n- [ ] frontends (except WGSL)\r\n- [ ] backends (except WGSL)\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-2353",
+        "problem_statement": "Missing extractBits and insertBits implementations for HLSL\nSeems they were implemented for other backends in #1449 but not for HLSL.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-2005",
+        "problem_statement": "[hlsl-out] Implement push constants\nTracking issue for implementing push constants for the HLSL backend\r\n\r\nhttps://github.com/gfx-rs/naga/blob/f90e563c281cfc71c794e0426ebcced9e3999202/src/back/hlsl/writer.rs#L583\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-1993",
+        "problem_statement": "[wgsl-in] Add break-if as optional at end of continuing\nSpec PR: https://github.com/gpuweb/gpuweb/pull/2618\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "gfx-rs__naga-749",
+        "problem_statement": "Implement image queries in SPIR-V backend\n`Expression::ImageQuery { .. }` support is missing\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tweag__nickel-979",
+        "problem_statement": "Simpler closing delimiters for special strings\n**Is your feature request related to a problem? Please describe.**\r\nCurrently, the delimiters for multiline strings are `m%\"`/`\"%m` (or with more consecutive `%`, as long as the numbers of `%` of the opening and the closing delimiter match).\r\n\r\nRepeating the `m` is not very useful (having the `%` is though, to avoid having to escape `\"` inside multiline strings). New team members also sometimes didn't remember if the closing delimiters were `\"%m` or `\"m%`.\r\n\r\nThis syntax scheme also doesn't scale well for other type of strings: we can imagine having raw strings at some point, using the same scheme `r%\"`, but also language-specific strings to enable highlighting in the editor, such as `cpp-lang%\"`, as well as another multicharacters delimiter with #948. With several alphanumeric characters in the delimiter, this scheme becomes really clunky.\r\n\r\n**Describe the solution you'd like**\r\nFor multiline strings, and all future special strings literals, have the same closing delimiter `\"%` or `\"%...%`, dropping the `m`. This is backward-incompatible. We could still allow both `\"%m` and `\"%` to remedy this, but honestly we're at a stage were we can afford to do such breaking changes, and this will prove much better in the long term than having to put up with a legacy alternative syntax.\r\n\r\nFor the record, this what Rust does with raw strings `r#\"...\"#`, as well as C++ (where you don't have to repeat the `R` or the `u8` at the end of special strings).\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "railwayapp__nixpacks-557",
+        "problem_statement": "First class support for Turborepo\n### Feature request\r\n\r\n[Turborepo](https://turborepo.org/) app support similar to how NX is supported with Nixpacks.\r\n\r\nWe should have a `NIXPACKS_TURBO_APP_NAME` configure variable that can be used to custom the build and start commands that are used.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "nushell__nushell-5111",
+        "problem_statement": "unary `!` not supported\n**Is your feature request related to a problem? Please describe.**\r\nnu scripts can't do unary negation.\r\n\r\n**Describe the solution you'd like**\r\nI'd like to be able to do `!$foo`. But currently, you have to do `$foo == $false` instead.\r\n\r\n**Describe alternatives you've considered**\r\nThe current workaround is to do `$foo == $false` and such.\r\n\r\n**Additional context**\r\n![image](https://user-images.githubusercontent.com/17535/126553236-85c00e66-d654-46ba-ba2b-19db43868318.png)\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "o2sh__onefetch-625",
+        "problem_statement": "Allow for optional colors\nThis was originally going to be a quick and painless change using an `OptionalColor` type and `.into()`, but it quickly turned into way more changes than expected :sweat_smile: Hopefully nothing has broken.\r\n\r\nThe last commit is `TEMP` because it seems like `strum` is naively using `None` instead of `Option::None` in its macro definition, breaking that commit. https://github.com/spenserblack/onefetch/commit/5142c5fd2f89aad1fe394c4abce09d5026e000d8 is OK to review, though. I'll make a PR to `strum`, but, assuming https://github.com/spenserblack/onefetch/commit/5142c5fd2f89aad1fe394c4abce09d5026e000d8 is good, ~~it's ready to be merged if we don't want to wait~~.\r\n\r\nEdit: Nevermind, tests fail on that commit.\r\n\r\nEdit2: Force-pushed, 0ef1c64019ff52ff18cbb9263dd9259fbdf79556 should be OK.\r\n\r\nEdit3: https://github.com/Peternator7/strum/pull/214 merged, on next release this whole PR should be ready to review.\r\n\r\nEdit4: No need for a new strum release. I realized that `Fg` is a more descriptive variant than `None`.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-4117",
+        "problem_statement": "Feature request: command to burn runes\nWould be nice to have a burn command that would either send the runes to a special address or that would make a cenotaph to burn them. The number of burned runes would be displayed on the rune page.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-4065",
+        "problem_statement": "Allow specifying wallet rescan timestamp when restoring\nWe recently fixed #1589, which triggers a wallet rescan when a wallet is restored from a descriptor. However, rescans are expensive. We should allow the user to optinally provide a timestamp or date when restoring, in order to avoid rescanning the entire chain.\r\n\r\nMaybe something like:\r\n\r\n```\r\nord wallet restore --timestamp N\r\n```\r\n\r\nWhere N is either a unix timestamp, or a YYYY-MM-DD date. If the user provides a date, we should round it to midnight the previous day, to avoid issues with time zones.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-3949",
+        "problem_statement": "Look up sat by satpoint\n`/satpoint/<SATPOINT>`\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-975",
+        "problem_statement": "Show content-type on inscription page\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-917",
+        "problem_statement": "Allow listing inscriptions in ordinal wallet\nI think it should show inscriptions, not UTXOS, so one line per inscription, and any UTXOs which don't have inscriptions should be skipped.\r\n\r\nSo something like this for each inscription:\r\n\r\n```\r\nINSCRIPTION_ID\\tCONTENT_TYPE\\tSATPOINT\r\n```\r\n\r\nThe localhost and ordinals.com URLS should also be displayed.\r\n\r\nAnd maybe the command should be `ord wallet inscriptions`\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ordinals__ord-609",
+        "problem_statement": "Sort event-based properties on ordinal page\nEvent based properties should be listed from least rapidly changing to most rapidly changing:\r\n\r\n- cycle\r\n- epoch\r\n- period\r\n- block\r\n- offset\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ouch-org__ouch-692",
+        "problem_statement": "Support decompressing stdin\nWith `tar`, I can run something like `curl .../file.tar.gz | tar xvz`. It would be nice if `ouch` supported that for formats where streaming is possible.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ouch-org__ouch-118",
+        "problem_statement": "Changing `--output` to `--dir`\n# Suggestion\r\n\r\nReplace the `-o/--output` flag of the `decompress` subcommand by `-d/--dir`.\r\n\r\n# Why?\r\n\r\n```\r\nOPTIONS:\r\n    -o, --output <OUTPUT>    Decompress files in a directory other than the current\r\n```\r\n\r\n`--output` usually is referred to the file that is created, but in this case it's about the output directory.\r\n\r\nExample: `gcc main.c --output main`.\r\n\r\nExample: `ouch compress 1 2 3 archive.tar.gz`, \r\nIf you check the _help_ for the subcommand `compress`, we the argument `archive.tar.gz` is the `<OUTPUT>` positional arg, again, has no relation to directories or folders, but output file instead.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "shssoichiro__oxipng-531",
+        "problem_statement": "Please support running in parallel across multiple files\nIf I run `oxipng -Z *.png` on a directory full of PNG files, it runs 2 combinations at a time on one file at a time, using 100% of two CPUs and leaving all the others idle.\r\n\r\nI'd love to have oxipng run on all the PNG files given to it in parallel, up to the limits of available CPUs. That would make it easier to run oxipng on a large number of images quickly.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "Nukesor__pueue-583",
+        "problem_statement": "Run an extra command whenever the queue is empty\n### A detailed description of the feature you would like to see added.\r\n\r\nHi thanks for the tool! My (summarized) use case is like this: Submit a few deep learning jobs to my workstation, and when all are done (i.e. GPU is finally idle), send me a Slack message such that I can come and use the idle GPU. For example, I will need the idle GPU to tentatively run some new commands, debug them, and when they look good, submit it to the queue.\r\n\r\nThus, it would be great to have a feature that, when the job is empty, run an extra command to notify users.\r\n\r\nEDIT: Looks like I can use the \"Callback\" feature to handle it. Seems need to query `pueue` to know whether the queue is empty now, thus it would be great if this information could be provided as a variable.\r\n\r\nEDIT: Looks like it can be done by e.g. https://github.com/Nukesor/pueue/blob/9a402d5f895fdf489e7b8006375946080ea5950c/pueue/src/daemon/callbacks.rs#L62 add a line here, giving `state.tasks.len()`.\r\n\r\n### Explain your usecase of the requested feature\r\n\r\n(see above)\r\n\r\n### Alternatives\r\n\r\n_No response_\r\n\r\n### Additional context\r\n\r\n_No response_\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "PyO3__pyo3-2262",
+        "problem_statement": "Version 0.15.2 with support for Pypy 3.9 and Python 3.6\nHi! First of all, thanks for building and maintaining this project!\r\n\r\nThe cryptography project, which depends on this PyO3, is currently unable to provide support for Pypy with Python 3.9, because a large portion of their users still use Python 3.6, which was dropped in version 0.16 of PyO3, the same that first includes support for Pypy 3.9.\r\n\r\nThis is the relevant issue: https://github.com/pyca/cryptography/issues/6924\r\n\r\nIt has been suggested that a new patch release could be used to solve this issue, for example a version 0.15.2 adding support for Pypy 3.9 while also keeping support for Python 3.6.\r\n\r\nIs that feasible? Would a pull request be accepted? If yes, can you give me some pointers or tips so that I can start working on this?\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dathere__qsv-203",
+        "problem_statement": "Auto-detect delimiter\n**Is your feature request related to a problem? Please describe.**\r\n\r\nIn my daily work, a .csv file is comma-separated 50% of the time, and semi-colon-separated the other 50%. I use this command-line tool hundreds of times a day. It's incredibly frustrating to have to first figure out which separator character is being used, and then adjust my command appropriately.\r\n\r\n**Describe the solution you'd like**\r\n\r\nIdeally `qsv` would auto-detect a delimiter by default. However, this would break backwards compatibility, so I suggest having a environment variable to turn this on.\r\n\r\n```bash\r\n$ export QSV_AUTO_DETECT_DELIMITER=1\r\n$ qsv table my_file.csv\r\n```\r\n\r\nWhen this environment variable is set, any value of `QSV_DELIMITER` would be ignored.\r\n\r\n**Describe alternatives you've considered**\r\n\r\nI tried to achieve this using a bash wrapper, but it was a bit fiddly because I need to do different things depending on whether qsv is being passed a file (in which case I sniff the file and then pass the delimiter to the qsv command) or a stream (in which case I sniff the stream, and then pass the amount I've already sniffed plus the rest of the stream to qsv).\r\n\r\n**Additional context**\r\n\r\nDuplicate of https://github.com/BurntSushi/xsv/issues/294\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dathere__qsv-184",
+        "problem_statement": "Add `--human-readable` option to `count`\nWe already use the `thousands` crate for progress bars.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dathere__qsv-35",
+        "problem_statement": "Postgres support  - SQL queries to CSV; high performance CSV inserts/upserts using COPY\nleveraging either [rust-postgres](https://github.com/sfackler/rust-postgres) or [Diesel](https://diesel.rs/) (as it supports MySQL and SQLite as well ).\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "slawlor__ractor-257",
+        "problem_statement": "Add a pre_stop fn or some way to wait until post_stop has finished\n**Is your feature request related to a problem? Please describe.**\r\nI have some actors where I perform finalization operations when the actor is stopped, and need to wait until those have finished. \r\nI assumed that post_stop would be executed before stop_and_wait finishes but it seems like that isn't the case. Would it be possible to add a pre_stop function to the Actor trait or alternatively wait until post_stop is finished in stop_and_wait?\r\n\r\n**Describe the solution you'd like**\r\nAdd a `pre_stop` function to the Actor trait.\r\n\r\n**Describe alternatives you've considered**\r\nRight now I'm sending a custom stop message with a reply port to my actor to stop it but that is inconvenient and I now need to remember which actors must be stopped with their custom stop message.\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "cberner__redb-308",
+        "problem_statement": "Optimize storage of multi-map tables\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "cberner__redb-287",
+        "problem_statement": "Dynamic Sizing/Capacity\nthanks for your work on this!\r\n\r\nCurious if you have any thought on allowing for dynamic database sizes? \r\n\r\n`libmdbx` does this (see [here](https://gitflic.ru/project/erthink/libmdbx) (author is russian and was moved to a russian based competitor after start of Ukraine invasion)), and it provides a good UX from that perspective.\r\n\r\nDocumentation for their resizing: https://libmdbx.dqdkfa.ru/group__c__settings.html#ga79065e4f3c5fb2ad37a52b59224d583e\r\n\r\nOn a broader note, there are some other interesting ideas in there that may provide some further inspiration\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rust-lang__rustfmt-5372",
+        "problem_statement": "New config option to support lower width limit on code blocks in doc comments\nThe motivation for this new option is outlined in #5345, and the option proposed here is a potential solution to that scenario.\r\n\r\nSpecifically, we need to introduce a new config option named something like `doc_comment_code_block_width` (but feel free to come up with a better name) that's used to set the width threshold used when rustfmt is reformating code blocks residing within doc comments.\r\n\r\nThis should be a fairly straightforward option to add, and a great way to start getting familiar with rustfmt, for anyone that's interested!\r\n\r\nImplementation pointers:\r\n\r\n* Add an entry for the new option in the [Configurations.md](https://github.com/rust-lang/rustfmt/blob/master/Configurations.md) file, and the [configuration mod](https://github.com/rust-lang/rustfmt/blob/master/src/config/mod.rs), default value should also be `100`\r\n* Update the cloned config value that's used when formatting the code block here:\r\nhttps://github.com/rust-lang/rustfmt/blob/79515f17ed4661da864347c90c76c51f9bf86069/src/comment.rs#L726-L742\r\n\r\nI suspect what you'll want to do is ensure the `max_width` value on the cloned config is overridden to the lowest value between the new `doc_comment_code_block_width` or `max_width` (since the overarching `max_width` needs to be the ceiling anyway) \r\n\r\n#5228 may also serve as a helpful reference for adding new options\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "salvo-rs__salvo-785",
+        "problem_statement": "Find a way to rename OpenAPI object and operation globally\nOn the swagger spec the operationIds are very long\r\n\r\n<img width=\"975\" alt=\"Screenshot 2024-01-10 at 18 47 46\" src=\"https://github.com/salvo-rs/salvo/assets/6940726/d3169bc1-287c-481d-94aa-cbd561ba54b7\">\r\n\r\nThis results in very long auto generated code\r\n\r\n<img width=\"739\" alt=\"Screenshot 2024-01-10 at 18 48 07\" src=\"https://github.com/salvo-rs/salvo/assets/6940726/ca20c83e-9bb6-4366-8742-eaf40ad007d9\">\r\n\r\nWe need away to reduce it.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "salvo-rs__salvo-784",
+        "problem_statement": "Find a way to rename OpenAPI object and operation globally\nOn the swagger spec the operationIds are very long\r\n\r\n<img width=\"975\" alt=\"Screenshot 2024-01-10 at 18 47 46\" src=\"https://github.com/salvo-rs/salvo/assets/6940726/d3169bc1-287c-481d-94aa-cbd561ba54b7\">\r\n\r\nThis results in very long auto generated code\r\n\r\n<img width=\"739\" alt=\"Screenshot 2024-01-10 at 18 48 07\" src=\"https://github.com/salvo-rs/salvo/assets/6940726/ca20c83e-9bb6-4366-8742-eaf40ad007d9\">\r\n\r\nWe need away to reduce it.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rust-scraper__scraper-187",
+        "problem_statement": "Support for `:has()` selector\nHi, do you plan to support [the `:has()` selector](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)? To my understanding, this css keyword is needed for selecting objects based on the parent of another known object.\r\n\r\nConsider the following example:\r\n```html\r\n<div>\r\n    <div id=\"foo\">\r\n        Hi There!\r\n    </div>\r\n</div>\r\n<ul>\r\n    <li>first</li>\r\n    <li>second</li>\r\n    <li>third</li>\r\n</ul>\r\n```\r\nIn order to select the second list item, I would like to use the following selector:\r\n\r\n```rust\r\nlet selector = Selector::parse(\"div:has(div#foo) + ul > li:nth-child(2)\").unwrap();\r\n```\r\n\r\nThis line however panics as of `scraper` version 0.18.1.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-2569",
+        "problem_statement": "Package version: Nimble project support\n## Feature Request\r\n\r\n#### Describe the solution you'd like\r\n\r\nNimble projects contain a `version` property that should be included in the package version module.\r\n\r\n#### Implementing\r\n\r\nWhen a file with the extension `.nimble` is in the current directory the version can be read by using [`nimble dump`](https://github.com/nim-lang/nimble#nimble-dump) to parse & evaluate the file. The output can be in INI-compatible format (default) or JSON with the `--json` flag. You could use a parser for INI or JSON, or just use a regex (which is probably faster than parsing).\r\n\r\nRunning the command `nimble dump` in the project will either output the project information or error with an non-zero exit code.\r\n\r\n#### Test cases\r\n\r\nIn a new directory create a file containing `example.nimble` filled with\r\n\r\n```nims\r\n# Comments\r\nversion     = \"1.2.3\"\r\nauthor      = \"Example Author\"\r\ndescription = \"A Nim package\"\r\nlicense     = \"MIT\"\r\n```\r\n\r\nRunning `nimble dump` should output\r\n\r\n```ini\r\nname: \"tmp\"\r\nversion: \"1.2.3\"\r\nauthor: \"Example Author\"\r\ndesc: \"A Nim package\"\r\nlicense: \"MIT\"\r\nskipDirs: \"\"\r\nskipFiles: \"\"\r\nskipExt: \"\"\r\ninstallDirs: \"\"\r\ninstallFiles: \"\"\r\ninstallExt: \"\"\r\nrequires: \"\"\r\nbin: \"\"\r\nbinDir: \"\"\r\nsrcDir: \"\"\r\nbackend: \"c\"\r\n```\r\n\r\nand with `--json`\r\n\r\n```json\r\n{\r\n  \"name\": \"tmp\",\r\n  \"version\": \"1.2.3\",\r\n  \"author\": \"Example Author\",\r\n  \"desc\": \"A Nim package\",\r\n  \"license\": \"MIT\",\r\n  \"skipDirs\": [],\r\n  \"skipFiles\": [],\r\n  \"skipExt\": [],\r\n  \"installDirs\": [],\r\n  \"installFiles\": [],\r\n  \"installExt\": [],\r\n  \"requires\": [],\r\n  \"bin\": [],\r\n  \"binDir\": \"\",\r\n  \"srcDir\": \"\",\r\n  \"backend\": \"c\"\r\n}\r\n```\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-4008",
+        "problem_statement": "Add username alias to kubernetes module \nCurrent Behavior\r\nwith the new OC client version 4.7 username also includes the server name and due to this in prompt big username is printing.\r\nand this feature came from this https://github.com/starship/starship/pull/3569\r\n\r\nExpected Behavior\r\nwe should be able to show only the username.\r\n\r\nEnvironment\r\nStarship version: [the output of starship --version]\r\n```\r\nstarship 1.5.4\r\ntag:v1.5.4\r\ncommit_hash:d420a63e\r\nbuild_time:2022-03-24 19:18:47 +00:00\r\nbuild_env:rustc 1.59.0 (9d1b2106e 2022-02-23),\r\n\r\n- Shell type: [fish, zsh] bash\r\n- Shell version: [the output of `fish --version` or `zsh --version`]\r\n- Shell plugin manager: [if present, e.g. oh-my-fish, oh-my-zsh, fisher, antigen] Nothing\r\n- Terminal emulator: [e.g. iTerm, Hyper, Terminator] putty/mobaX\r\n- Operating system: [e.g. macOS 10.13.4, Windows 10] : RHEL\r\n\r\n\r\n\r\n#### Starship Configuration\r\n<!-- Can be found in  ~/.config/starship.toml -->\r\n[kubernetes]\r\nformat = '[☸︎ ($user on )$context \\($namespace\\)](dimmed green) '\r\ndisabled = false\r\n\r\noc client version \r\n└─> oc version\r\nClient Version: 4.7.0-202107141046.p0.git.8b4b094.assembly.stream-8b4b094\r\nKubernetes Version: v1.20.14+0d60930\r\n\r\noc whoami -c\r\n/ocpcluster-ocpd-corp-abc-com:6443/pratik\r\n\r\n\nAdd username alias to kubernetes module \nCurrent Behavior\r\nwith the new OC client version 4.7 username also includes the server name and due to this in prompt big username is printing.\r\nand this feature came from this https://github.com/starship/starship/pull/3569\r\n\r\nExpected Behavior\r\nwe should be able to show only the username.\r\n\r\nEnvironment\r\nStarship version: [the output of starship --version]\r\n```\r\nstarship 1.5.4\r\ntag:v1.5.4\r\ncommit_hash:d420a63e\r\nbuild_time:2022-03-24 19:18:47 +00:00\r\nbuild_env:rustc 1.59.0 (9d1b2106e 2022-02-23),\r\n\r\n- Shell type: [fish, zsh] bash\r\n- Shell version: [the output of `fish --version` or `zsh --version`]\r\n- Shell plugin manager: [if present, e.g. oh-my-fish, oh-my-zsh, fisher, antigen] Nothing\r\n- Terminal emulator: [e.g. iTerm, Hyper, Terminator] putty/mobaX\r\n- Operating system: [e.g. macOS 10.13.4, Windows 10] : RHEL\r\n\r\n\r\n\r\n#### Starship Configuration\r\n<!-- Can be found in  ~/.config/starship.toml -->\r\n[kubernetes]\r\nformat = '[☸︎ ($user on )$context \\($namespace\\)](dimmed green) '\r\ndisabled = false\r\n\r\noc client version \r\n└─> oc version\r\nClient Version: 4.7.0-202107141046.p0.git.8b4b094.assembly.stream-8b4b094\r\nKubernetes Version: v1.20.14+0d60930\r\n\r\noc whoami -c\r\n/ocpcluster-ocpd-corp-abc-com:6443/pratik\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-3839",
+        "problem_statement": "More informative VI mode indicator\n## Feature Request\r\n\r\n#### Is your feature request related to a problem? Please describe.\r\n\r\nRecognise this might be a Fish-specific problem. Delving onwards...\r\n\r\nMigrating from SpaceFish, where the  vi-mode indicator gave feed back on whether you were in replace, visual, insert or normal mode, as described [here](https://github.com/matchai/spacefish/blob/master/docs/Options.md). I must admit, I'm a big fan of the character switching between insert and normal mode! But it gives me confusing information on visual or replace mode. \r\n\r\nIf you are in normal mode and then switch into either visual or replace mode, the prompt character switches back to insert mode. This is incredibly confusing, as there is now no clear indication of whether you are in insert, replace, or visual. When you then exit visual/replace mode, it switches back to the normal mode character, as expected.\r\n\r\n#### Describe the solution you'd like\r\n\r\nSolution A: Allow custom configuration of characters for each mode. Basically, the currently implementation expanded to have a character for visual and replace modes.\r\n\r\nSolution B: Allow inclusion of the default `fish_mode_prompt`, though I suspect this would be more complicated.\r\n\r\n#### Describe alternatives you've considered\r\nI have manually configured `fish_mode_prompt`, but this is blocked/disabled by Starship.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-3753",
+        "problem_statement": "Only show git branch when not on master/main\nI like to keep the prompt as simple as possible and for it to only show information when it is relevant and useful. I use a single-line prompt and it usually looks nearly identical to the standard Debian bash prompt (coloured) when there aren't any active starship modules.\r\n\r\nWhile I would like the git branch symbol to appear when it a git directory, I only want the branch name to appear when not in main/master. Not only would it be a lot neater, it would be much better at reminding me when I am not in main, which I am often doing even when the branch name is always displaying.\r\n\r\nDoes anybody know of any workarounds that can make this possible?\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-2994",
+        "problem_statement": "GNUCOBOL support\nHello,\r\n\r\nI'd like to see GNUCOBOL support get added into Starship, it would function like the other language compilers in Starship.\r\n\r\nThe version would be gotten by: \r\n`echo -n v && cobc -version | head -n 1 | awk '{ print $3 }'`\r\nAnd it would be triggered by the detection of a .cbl/CBL or a .cob/COB file in the current folder.\r\n\r\nI know that probably isn't the fastest way to get the version, but since I don't really know rust or do bash scripting, I'm leaving this part to the experts.\r\n\r\nI've been getting into COBOL recently and I would like to see it added to Starship. I know that it may not be the most popular feature, but even then, if someone out there can provide a patch or similar, I'd be forever grateful.\r\n\r\nMany thanks,\r\nZenithium\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-6310",
+        "problem_statement": "Add `deno.lock` to default detect_files list for `deno`\nI noticed when running `deno install` on a node project with only a `package.json` file that Starship does not pick up on `deno` usage. Because Deno 2 supports interoperability with `package.json` files, I think it would be useful if the default list of `detect_files` included the `deno.lock` file. Thanks!\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "starship__starship-5081",
+        "problem_statement": "Add variable for the expected Node.js version\n## Feature Request\r\n\r\nFor Node.js, Starship provides the [variable](https://starship.rs/config/#node-js) `version` and the [options](https://starship.rs/config/#node-js) `style` and `not_capable_style`. `version` is the version of the installed Node.js and it is displayed using the format specified in `style` when it matches the version specified in `package.json` (property `$.engines.node`) or using the format specified in `not_capable_style` when it does not match.\r\n\r\nThis is helpful in itself but it could be more helpful than than. When the version of the interpreter does not match the project requirements, the first execution of any `yarn` command in the directory tells not only that the current version of Node.js is not appropriate for the project but it also tells what version is expected.\r\n\r\nStarship could bring the same information without even running `yarn`.\r\nIt already knows what is written in `package.json` and has the information in memory. This is how it detects if the current version of Node.js is good or not and decides to render it using `style` or `not_capable_style`. All it needs is to provide a variable similar to `version` that contains the Node.js version required by the project (the value of property `$.engines.node` from `package.json`).\r\n\r\nPlease add a new variable (it could be named `expected_version`) that contains the value of property `$.engines.node` from `package.json`).\r\n\r\n---\r\n\r\nA similar solution can be implemented for other languages that declare the version of the interpreter that they need to run (PHP, Python, Ruby etc.)\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "static-web-server__static-web-server-74",
+        "problem_statement": "Add trailing slash when missing\n**Is your feature request related to a problem? Please describe.**\r\nCurrent, managing relative links is a pain because navigating to `website.com/myfolder` returns the index page of that folder with no redirect. This means that if `index.html` references `./image.png`, the browser will try to get it from `website.com/image.png` instead of `website.com/myfolder/image.png`.\r\n\r\n**Describe the solution you'd like**\r\n\r\nWhen serving a folder, check if there is a trailing slash. If there isn't, do a redirect to a path with the slash at the end.\r\n\nAdd trailing slash when missing\n**Is your feature request related to a problem? Please describe.**\r\nCurrent, managing relative links is a pain because navigating to `website.com/myfolder` returns the index page of that folder with no redirect. This means that if `index.html` references `./image.png`, the browser will try to get it from `website.com/image.png` instead of `website.com/myfolder/image.png`.\r\n\r\n**Describe the solution you'd like**\r\n\r\nWhen serving a folder, check if there is a trailing slash. If there isn't, do a redirect to a path with the slash at the end.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "TeXitoi__structopt-14",
+        "problem_statement": "Consider using field doc comment as help text by default\nWhen no `help = \"Foo\"` argument is given in the `structopt` attribute on a field, you could use the field's doc comment if present. This might make the code a bit clearer while also reducing duplicating the text.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "paritytech__substrate-13502",
+        "problem_statement": "Add `TryState` hook for `MessageQueue`\nThe `MessageQueue` pallet has quite a few storage assumptions which could be checked in a `try_state` hook.   \r\n\r\n:point_right: *Mentor* issues are meant for new-comers. Please ask before picking them up.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "FuelLabs__sway-4810",
+        "problem_statement": "Add sway-lsp go_to_def for storage test back in. \nThis was removed in #4464. Just making a note to but it back in. The sway project that this tests against has been modified so the line and char's will need updating. \r\n\r\nOld code for reference\r\n\r\n```rust\r\n#[tokio::test]\r\nasync fn go_to_definition_for_storage() {\r\n    let (mut service, _) = LspService::new(Backend::new);\r\n    let uri = init_and_open(\r\n        &mut service,\r\n        test_fixtures_dir().join(\"tokens/storage/src/main.sw\"),\r\n    )\r\n    .await;\r\n    let mut i = 0..;\r\n\r\n    let mut go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 24,\r\n        req_char: 9,\r\n        def_line: 12,\r\n        def_start_char: 0,\r\n        def_end_char: 7,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n    definition_check_with_req_offset(&mut service, &mut go_to, 25, 8, &mut i).await;\r\n    definition_check_with_req_offset(&mut service, &mut go_to, 26, 8, &mut i).await;\r\n\r\n    let mut go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 24,\r\n        req_char: 17,\r\n        def_line: 13,\r\n        def_start_char: 4,\r\n        def_end_char: 8,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage.var1\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n    definition_check_with_req_offset(&mut service, &mut go_to, 25, 17, &mut i).await;\r\n    definition_check_with_req_offset(&mut service, &mut go_to, 26, 17, &mut i).await;\r\n\r\n    let go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 24,\r\n        req_char: 21,\r\n        def_line: 3,\r\n        def_start_char: 4,\r\n        def_end_char: 5,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage.var1.x\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n\r\n    let go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 25,\r\n        req_char: 21,\r\n        def_line: 4,\r\n        def_start_char: 4,\r\n        def_end_char: 5,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage.var1.y\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n\r\n    let go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 26,\r\n        req_char: 21,\r\n        def_line: 5,\r\n        def_start_char: 4,\r\n        def_end_char: 5,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage.var1.z\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n\r\n    let go_to = GotoDefinition {\r\n        req_uri: &uri,\r\n        req_line: 26,\r\n        req_char: 23,\r\n        def_line: 9,\r\n        def_start_char: 4,\r\n        def_end_char: 5,\r\n        def_path: \"sway-lsp/tests/fixtures/tokens/storage/src/main.sw\",\r\n    };\r\n    // storage.var1.z.x\r\n    let _ = lsp::definition_check(&mut service, &go_to, &mut i).await;\r\n\r\n    shutdown_and_exit(&mut service).await;\r\n}\r\n```\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "swc-project__swc-2053",
+        "problem_statement": "A better transform for \"misc import thorw\"\n<!--\r\nIf you are using swc at work, please considering adding your company to https://swc.rs/users/\r\nIf then, your issue will be fixed more quickly.\r\n-->\r\n\r\n**Describe the feature**\r\nNow these code\r\n``` js\r\nimport { bar } from 'foo';\r\nbar = jest.fn()\r\n```\r\nwill be transformed to\r\n``` js\r\nbar = (jest.fn(), (function() { throw new Error('\"' + 'bar' + '\" is read-only.') })())\r\n```\r\nIf the assignee `bar` becomes `_foo.bar`(Babel's implement now), after jest plugin removes the assert, in the test, the test writer can override modules, for mock something.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "trishume__syntect-506",
+        "problem_statement": "Support for gutterSettings\nsyntect currently reads from `gutter` and `gutterForeground` when loading themes: https://github.com/trishume/syntect/blob/c61ce60c72d67ad4e3dd06d60ff3b13ef4d2698c/src/highlighting/theme_load.rs#L254-L257\r\nBut many themes instead store their gutter settings in a `gutterSettings` key. See for instance the base16 themes at https://github.com/chriskempson/base16-textmate/tree/master/Themes . `gutterSettings` seems to be more popular than `gutterForeground`. A GitHub search for themes with `gutterSettings` returns [3k hits](https://github.com/search?q=path%3A*.tmTheme%20gutterSettings&type=code) while a search for `gutterForeground` returns [1.5k.](https://github.com/search?q=path%3A*.tmTheme+gutterForeground&type=code) Adding this would probably solve #315 \n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "quickwit-oss__tantivy-2333",
+        "problem_statement": "support more syntax for field grouping\nwe support field grouping like this `title:(+return +\"pink panther\")`, but not like `title:(return AND \"pink panther\")`. That should be added to be as close as possible to lucene when it can reasonably be done\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tealdeer-rs__tealdeer-236",
+        "problem_statement": "Include custom pages and Patches directory in `--show-paths` option\nQuote from PR #142\n> We should also include the custom pages directory in the new --show-paths option output, but that's probably best done in a separate PR, in order not to hold up this one.\n\nAcceptance Criteria:\n* Using `--show-paths` includes the location of the custom_pages directory in the output\n* Tests are created / updated for new and changed code\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "Keats__tera-508",
+        "problem_statement": "Way to exclude / filter out before sorting\nI would like to sort an array by an attribute and exclude ones that don't have that attribute. Currently I'm getting the following error\r\n\r\n```\r\nNull is not a sortable value\r\n```\r\n\r\n**Example template**\r\n\r\n```\r\n{% for post in posts\r\n    | sort(attribute=\"date\")\r\n    | reverse\r\n%}\r\n  ...\r\n{% endfor %}\r\n```\r\n\r\n**My suggested ways of doing this**\r\n\r\n1. Make the `value` arg on `filter` optional and if not given then filter out nulls.\r\n\r\n```\r\n{% for post in posts\r\n    | filter(attribute=\"date\")\r\n    | sort(attribute=\"date\")\r\n    | reverse\r\n%}\r\n  ...\r\n{% endif %\r\n```\r\n\r\n2. Sort doesn't fail on missing or null attributes and excludes by default (might be too magical).\r\n\r\n3.  Optional argument to sort to allow this.\r\n\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "latex-lsp__texlab-1211",
+        "problem_statement": "ignore single warnings/errors\nIt is useful sometimes to ignore single warnings. For example I would like to have labels for each section even if I do not cite the section. so for example I would like to ignore the warnings on those lines. E.g.\r\n\r\n\\section{test}\r\n\\label{test} % type: ignore\r\n\r\nso even if I do not have sometime \\label{test} I would not get unused label warning\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rome__tools-4629",
+        "problem_statement": "📎 New `rome lint` command\n### Description\n\nRome has a command called `rome check`, which does multiple things:\r\n- check formatting\r\n- checks linting\r\n- check imports\r\n\r\nAnd it will contain more in the future. To avoid possible friction in the future, I think Rome should ship a new command called `rome lint`, which only checks the code against lint rules. It will also have `-apply` and `--apply-unsafe` arguments.\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "obi1kenobi__trustfall-350",
+        "problem_statement": "implement TryIntoStruct for EdgeParameters\nusing the TryIntoStruct trait: https://github.com/obi1kenobi/trustfall/releases/tag/trustfall-v0.5.0 , we can unpack edge params into a struct like:\r\n```rs\r\nstruct Params {\r\n    ends_with_regex: Vec<String>\r\n}\r\n```\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "crate-ci__typos-345",
+        "problem_statement": "RFE: better handling of ordinal numbers\nCurrently there are false positives like:\r\n\r\n```shellsession\r\n$ echo 2nd | typos - | head -n 1\r\nerror: `nd` should be `and`\r\n```\r\n\r\nOne approach to these would be to treat everything where a sequence of numbers is followed by `th`, `nd`, or `rd` as ok.\r\n\r\nBut it would be nice to do better, e.g. in regex pseudospec, stopping at first match\r\n```\r\n([0-9]*11)st -> \\1th\r\n([0-9]*12)nd -> \\1th\r\n([0-9]*13)rd -> \\1th\r\n([0-9]*1)th -> \\1st\r\n([0-9]*2)th -> \\1nd\r\n([0-9]*3)th -> \\1rd\r\n([0-9]+)(nd|rd) -> \\1th\r\n([0-9]+)th -> <this is ok>\r\n```\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ducaale__xh-276",
+        "problem_statement": "Feature request: support forcing ipv4/ipv6\n`cURL` supports `-4`/`--ipv4` and `-6`/`--ipv6` flags. Quoting the `curl(1)` manpage:\r\n\r\n``` text\r\n       -4, --ipv4\r\n              This option tells curl to resolve names to IPv4 addresses only, and\r\n              not for example try IPv6.\r\n\r\n              Example:\r\n               curl --ipv4 https://example.com\r\n\r\n              See also --http1.1 and --http2. This option overrides -6, --ipv6.\r\n\r\n       -6, --ipv6\r\n              This option tells curl to resolve names to IPv6 addresses only, and\r\n              not for example try IPv4.\r\n\r\n              Example:\r\n               curl --ipv6 https://example.com\r\n\r\n              See also --http1.1 and --http2. This option overrides -4, --ipv4.\r\n```\r\n\r\nFor testing purposes, having this feature would be really convenient.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ducaale__xh-46",
+        "problem_statement": "Allow multiline field value for JSON request body\nI don't know if it's supported by `httpie`, but I think it's a valid use case. Basically when requesting with JSON body, one do it like this:\r\n\r\n```bash\r\nht -j -v put https://httpbin.org/put SingleLine=my_string\r\nPUT /put HTTP/1.1\r\naccept: application/json, */*\r\naccept-encoding: gzip, deflate\r\nconnection: keep-alive\r\ncontent-length: 26\r\ncontent-type: application/json\r\nhost: httpbin.org\r\n\r\n{\r\n    \"SingleLine\": \"my_string\"\r\n}\r\n\r\nHTTP/2.0 200 OK\r\naccess-control-allow-credentials: true\r\naccess-control-allow-origin: *\r\ncontent-length: 474\r\ncontent-type: application/json\r\ndate: Tue, 09 Feb 2021 06:53:46 GMT\r\nserver: gunicorn/19.9.0\r\n\r\n{\r\n    \"args\": {},\r\n    \"data\": \"{\\\"SingleLine\\\":\\\"my_string\\\"}\",\r\n    \"files\": {},\r\n    \"form\": {},\r\n    \"headers\": {\r\n        \"Accept\": \"application/json, */*\",\r\n        \"Accept-Encoding\": \"gzip, deflate\",\r\n        \"Content-Length\": \"26\",\r\n        \"Content-Type\": \"application/json\",\r\n        \"Host\": \"httpbin.org\",\r\n        \"X-Amzn-Trace-Id\": \"Root=1-6022317a-<removed>\"\r\n    },\r\n    \"json\": {\r\n        \"SingleLine\": \"my_string\"\r\n    },\r\n    \"origin\": \"<removed>\",\r\n    \"url\": \"https://httpbin.org/put\"\r\n}\r\n```\r\n\r\nThat worked flawlessly, and I really like the way JSON body was constructed by using separated key-value pairs, it's much easy to write, and easier to type without  typo.\r\n\r\nBut when one of the values contains multiple lines, `ht` is not happy:\r\n\r\n```bash\r\nht -j -v put https://httpbin.org/put SingleLine=my_string MultiLine=my\\nstring\r\nerror: Invalid value for '<REQUEST_ITEM>...': error: \"MultiLine=my\\nstring\" is not a valid value\r\n\r\n```\r\n\r\nThis happens with `ht 0.5.0` which is the latest version. I know for `httpie` you can pipe raw JSON data into it so any form of data is supported, but simple key-value construction is just so much better. Will `ht` support this?\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "sigoden__dufs-179",
+        "problem_statement": "[Feature Request] Edit files\nThe ability to edit and save files on the server. txt, yaml, php etc.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "sigoden__dufs-177",
+        "problem_statement": "[Feature request] API to search and list directories\n## Specific Demand\r\n\r\nAn API to search for a file and show contents of a directory.\r\n\r\n\r\n### list directory API \r\ncurl http://127.0.0.1:5000/path-to-directory?list_contents=true to return a list of this files contents, analogous to running the linux command  `ls /path-to-directory` on the server locally \r\n\r\n### search API \r\n\r\ncurl http://127.0.0.1:5000/path-to-directory?search_for=${NAME_STR} would be analogous to running the linux command `find  -L /path-to-directory -name \"${NAME_STR}\"` on the server locally;\r\n\r\n## Implement Suggestion\r\n\r\nHaven't thought about this seriously yet; I figure its best to agree on an API \n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "metalbear-co__mirrord-2589",
+        "problem_statement": "Add function detour for FN__SEC_TRUST_EVALUATE_WITH_ERROR\nCloses #2569 \n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "metalbear-co__mirrord-2247",
+        "problem_statement": "Allow for dumping intproxy logs to files\nCurrently, whenever the internal proxy dies, the user is left only with some communication error. Having logs from the proxy would allow us to find the root of the problem\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "metalbear-co__mirrord-2699",
+        "problem_statement": "Support specifying both header and path filter for stealing HTTP\nIMO we should probably just allow for any set/combination of filters.\r\nRemember to verify config after fetching `mirrord-protocol` version used by agent/operator\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "roc-lang__roc-6794",
+        "problem_statement": "Use yellow underline in warnings\nWe currently use `^^^^^^` in red to underline both in errors and warnings, we should use yellow (the same we use for the warning counter) in warnings. I believe changes to be made mainly in crates/reporting. I think this is feasible as good first issue, but talk to us on [zulip](https://roc.zulipchat.com/) if you need help.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "roc-lang__roc-7004",
+        "problem_statement": "Format invisible unicode as a literal\nHave the formatter swap invisible unicode in Str with the literal\r\n\r\nSee [zulip discussion for more context](https://roc.zulipchat.com/#narrow/stream/304641-ideas/topic/Non-printable.20characters.20in.20.60Str.60/near/454529871)\r\n\r\n## example module\r\n```roc\r\nmodule []\r\n\r\n# this string has invisible unicode in it... let's have the formatter make this obvious\r\nstringWithInivisbleUnicode = \"﻿FOO\"\r\n\r\nexpect stringWithInivisbleUnicode == \"FOO\" # false\r\n```\r\n\r\n## REPL\r\n```\r\n» Str.toUtf8 \"﻿FOO\" \r\n\r\n[239, 187, 191, 70, 79, 79] : List U8\r\n\r\n» Str.toUtf8 \"\\u(feff)FOO\"\r\n\r\n[239, 187, 191, 70, 79, 79] : List U8\r\n```\r\n\r\n## after formatting\r\n```roc\r\nmodule []\r\n\r\n# this string has invisible unicode in it... let's have the formatter make this obvious\r\nstringWithInivisbleUnicode = \"\\u(feff)FOO\"\r\n\r\nexpect stringWithInivisbleUnicode == \"FOO\" # false, but now it's easier to see what is causing this issue. \r\n```\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "linkerd__linkerd2-proxy-2237",
+        "problem_statement": "handle `Opaque` protocol hints on endpoints\nCurrently, when the outbound proxy makes a direct connection prefixed\r\nwith a `TransportHeader` in order to send HTTP traffic, it will always\r\nsend a `SessionProtocol` hint with the HTTP version as part of the\r\nheader. This instructs the inbound proxy to use that protocol, even if\r\nthe target port has a ServerPolicy that marks that port as opaque, which\r\ncan result in incorrect handling of that connection. See\r\nlinkerd/linkerd2#9888 for details.\r\n\r\nIn order to prevent this, linkerd/linkerd2-proxy-api#197 adds a new\r\n`ProtocolHint` value to the protobuf endpoint metadata message. This\r\nwill allow the Destination controller to explicitly indicate to the\r\noutbound proxy that a given endpoint is known to handle all connections\r\nto a port as an opaque TCP stream, and that the proxy should not perform\r\na protocol upgrade or send a `SessionProtocol` in the transport header.\r\nThis branch updates the proxy to handle this new hint value, and adds\r\ntests that the outbound proxy behaves as expected.\r\n\r\nOnce the Destination controller is updated to send this `ProtocolHint`\r\nfor ports that are marked as opaque on the inbound side, this will fix\r\nlinkerd/linkerd2#9888.\r\n\r\nThis branch is currently a draft because the `linkerd2-proxy-api`\r\nchanges have not been published yet. Once a new version of the proxy API\r\nis published, we'll update this branch to depend on that, and this can\r\nbe merged.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rinja-rs__askama-393",
+        "problem_statement": "Allow paths to start with `::`\n[Discovered while working on #315 and #327.]\r\n\r\nAt the moment `{{ std::string::String::new()}}` works but `{{ ::std::string::String::new() }}` doesn't.\r\n\nAllow paths to start with `::`\n[Discovered while working on #315 and #327.]\r\n\r\nAt the moment `{{ std::string::String::new()}}` works but `{{ ::std::string::String::new() }}` doesn't.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ast-grep__ast-grep-1083",
+        "problem_statement": "export meta variables defined in transform\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ast-grep__ast-grep-1636",
+        "problem_statement": "[perf] improve scan perf by skipping files without any rules\n`ast-grep scan` now traverses all files in the directory even if they do not have any rule associated to them. We can avoid this overhead by taking language into consideration when iterating over file systems.\r\n\r\nBefore\r\n\r\n![image](https://github.com/user-attachments/assets/3b1944e5-dbb4-4f5d-8913-a515b6a0303b)\r\n\r\nAfter\r\n<img width=\"1025\" alt=\"image\" src=\"https://github.com/user-attachments/assets/8971fd92-dec1-42bd-97e6-beefe9c630d0\">\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ast-grep__ast-grep-1588",
+        "problem_statement": "[refactor] have a semi-structured tracing output\nExample\r\n\r\n```\r\nsg: summary|file: scannedCount=199\r\nsg: entity|file|src/cli/scan.rs: skippedCount=47\r\nsg: entity|rule|my-rule-id: finalSeverity=off\r\nsg: entity|rule|my-rule-id: skipReason=ruleFilter\r\nsg: entity|rule|my-rule-id: skipReason=severityOff\r\nsg: detail|file*rule|src/cli/scan.rs,my-ast-grep-rule: hitResult=hitByInclude\r\nsg: detail|file*rule|src/cli/scan.rs,my-ast-grep-rule: hitResult=hitByExclude\r\nsg: detail|file*rule|src/cli/scan.rs,my-ast-grep-rule: hitResult=normalHit\r\n```\r\n\r\n[EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form) notation, \r\n\r\n```ebnf\r\nOUTPUT := \"sg: \", GRANULARITY,  \"|\", ENTITY_TYPE, ENTITY_IDENTIFIER_LIST , \": \", KEY_VAL_PAIR;\r\nGRANULARITY = \"summary\" | \"entity\" | \"detail\";\r\nENTITY_TYPE = \"file\" | \"rule\" | \"file*rule\";\r\nENTITY_IDENTIFER_LIST = \"\" | ( \"|\", IDENTIFIER { IDENTIFIERS } );\r\nIDENTIFIERS = \",\", IDENTIFIER;\r\nKEY_VAL_PAIR = KEY, \"=\", VAL;\r\n```\r\n\r\nInformal Notation\r\n\r\n```\r\nsg: <GRANULARITY>|<ENTITY_TYPE>|<ENTITY_IDENTIFIERS_SEPARATED_BY_COMMA>: KEY=VAL\r\n```\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ast-grep__ast-grep-1242",
+        "problem_statement": "add test for different strictness\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "ast-grep__ast-grep-789",
+        "problem_statement": "[feature] support `--inline-rules` option for sg scan\nCurrently, there is no way to use a rule without a YAML file on the disk.\r\n\r\nWe can add a `--inline-rules` option to scan files without a physical rule.\r\n\r\nThis is especially useful for scripting/languages without native bindings. \r\n\r\nBasically, we can achieve a programmatic usage of ast-grep by combining `inline-rules` and `json`\r\n\r\n```\r\nsg scan --inline-rules --json <<EOF\r\nrule:\r\n  pattern: XXX\r\nEOF\r\n```\r\n\r\nIt can simulate napi's behavior. `inline-rules` is the input and `json` will be the output.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "bevyengine__bevy-9895",
+        "problem_statement": "Ignore system order ambiguities from specific components and resources.\n## What problem does this solve or what need does it fill?\r\n\r\nCurrently, it is possible to ignore system order ambiguities for whole sets of systems by using the `ambiguous_with` API. However, it would be useful to ignore ambiguities resulting from specific components or resources to handle the situation where ambiguous uses of those types should not be considered a bug.\r\n\r\n### Motivation\r\n\r\nIn my app, many systems need write-only access to a specific component in order to send gameplay packets. The systems are ordered in such a way to ensure game logic correctness, but they're not ordered strictly enough to resolve the ambiguities. Resolving the ambiguities \"properly\" would pollute the schedule with ordering constraints between modules that do not actually depend on each other for correctness. This harms local reasoning.\r\n\r\n## What solution would you like?\r\n\r\nAdd `ambiguous_resource` and `ambiguous_component` methods to `App` and `Schedule` at least. \r\n\r\n```rust\r\nuse bevy_ecs::{\r\n    prelude::*,\r\n    schedule::{LogLevel, ScheduleBuildSettings},\r\n};\r\n\r\n#[derive(Resource)]\r\nstruct MyResource;\r\n\r\nfn main() {\r\n    let mut world = World::new();\r\n    world.insert_resource(MyResource);\r\n\r\n    Schedule::default()\r\n        .set_build_settings(ScheduleBuildSettings {\r\n            ambiguity_detection: LogLevel::Error,\r\n            ..Default::default()\r\n        })\r\n        .add_systems((foo, bar)) // Ambiguous systems.\r\n        .ambiguous_resource::<MyResource>() // Mark the resource as ambiguous.\r\n        .run(&mut world); // Does not panic.\r\n}\r\n\r\nfn foo(_: ResMut<MyResource>) {}\r\n\r\nfn bar(_: ResMut<MyResource>) {}\r\n```\r\n\r\n## What alternative(s) have you considered?\r\n\r\n- Ignore the ambiguity detector entirely and wait for #9862.\r\n- Do whatever flecs does in this situation. (Does flecs have ambiguity detection? Why or why not?)\r\n\r\n## Additional context\r\n\r\n#8595 appears to solve a related but separate concern (that I would love to have a fix for!).\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-2940",
+        "problem_statement": "📎  Implement named-grid-areas-no-invalid\n## Description\r\n\r\nImplement [named-grid-areas-no-invalid](https://stylelint.io/user-guide/rules/named-grid-areas-no-invalid)\r\n\r\n> [!IMPORTANT]\r\n> - Please skip implementing options for now since we will evaluate users actually want them later.\r\n> - Please ignore handling extended CSS language cases such as `sass` and `less`.\r\n> - Please skip custom function since we haven't syntax model yet.\r\n\r\n**Want to contribute?** Lets you know you are interested! We will assign you to the issue to prevent several people to work on the same issue. Don't worry, we can unassign you later if you are no longer interested in the issue! Read our [contributing guide](https://github.com/biomejs/biome/blob/main/CONTRIBUTING.md) and [analyzer contributing guide](https://github.com/biomejs/biome/blob/main/crates/biome_analyze/CONTRIBUTING.md).\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-3143",
+        "problem_statement": "📎 Implement `jsx-a11y/autocomplete-valid` - `useValidAutocomplete`\n### Description\n\n- [eslint-plugin-jsx-a11y/docs/rules/autocomplete-valid.md at main · jsx-eslint/eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/autocomplete-valid.md)\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-4179",
+        "problem_statement": "📎 Implement `useCollapsedIf` - `clippy/collapsible_if`, `unicorn/no-lonely-if`\n### Description\n\nImplement [clippy/collapsible_if](https://rust-lang.github.io/rust-clippy/master/#/collapsible_if) and [unicorn/no-lonely-if](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-lonely-if.md).\r\n\r\n**Want to contribute?** Lets you know you are interested! We will assign you to the issue to prevent several people to work on the same issue. Don't worry, we can unassign you later if you are no longer interested in the issue! Read our [contributing guide](https://github.com/biomejs/biome/blob/main/CONTRIBUTING.md) and [analyzer contributing guide](https://github.com/biomejs/biome/blob/main/crates/biome_analyze/CONTRIBUTING.md).\r\n\r\nThe implementer could take some inspirations from the implementation of existing rules such as `useCollapsedElseIf`.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "boa-dev__boa-156",
+        "problem_statement": "Implement Array.prototype.find()\nArray methods are implemented here, for e.g here's concat:\r\nhttps://github.com/jasonwilliams/boa/blob/master/src/lib/js/array.rs#L78-L109\r\n\r\n**Specification:**\r\nhttps://tc39.es/ecma262/#sec-array.prototype.find\r\n\r\n**Contributing & Debugging**\r\nhttps://github.com/jasonwilliams/boa#contributing\r\nhttps://github.com/jasonwilliams/boa/blob/master/docs/debugging.md\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "boa-dev__boa-138",
+        "problem_statement": "String.matchAll(regexp)\n`matchAll` function would need to be added to the string object here:\r\nhttps://github.com/jasonwilliams/boa/blob/master/src/lib/js/string.rs\r\n\r\nIt would be very similar to:\r\nhttps://github.com/jasonwilliams/boa/blob/master/src/lib/js/regexp.rs#L212-L251\r\n\r\nSpec:\r\nhttps://tc39.es/ecma262/#sec-string.prototype.matchAll\r\n\r\nNotes:\r\nhttps://github.com/jasonwilliams/boa/blob/master/docs/debugging.md\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-521",
+        "problem_statement": "📎 Implement `lint/noEmptyBlockStatements` - `eslint/no-empty` `eslint/no-empty-static-block`\n### Description\r\n\r\nThis lint rule should integrate both [no-empty](https://eslint.org/docs/latest/rules/no-empty/) and [no-empty-static-block](https://eslint.org/docs/latest/rules/no-empty-static-block/) rules.\r\n\r\n**Want to contribute?** Lets you know you are interested! We will assign you to the issue to prevent several people to work on the same issue. Don't worry, we can unassign you later if you are no longer interested in the issue! Read our [contributing guide](https://github.com/biomejs/biome/blob/main/CONTRIBUTING.md) and [analyzer contributing guide](https://github.com/biomejs/biome/blob/main/crates/biome_analyze/CONTRIBUTING.md).\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-411",
+        "problem_statement": "📎 Implement `lint/useShorthandAssign` - `eslint/operator-assignment`\n### Description\r\n\r\nImplement [operator-assignment](https://eslint.org/docs/latest/rules/operator-assignment/).\r\n\r\n**Want to contribute?** Lets we know you are interested! We will assign you to the issue to prevent several people to work on the same issue. Don't worry, we can unassign you later if you are no longer interested in the issue! Read our [contributing guide](https://github.com/biomejs/biome/blob/main/CONTRIBUTING.md) and [analyzer contributing guide](https://github.com/biomejs/biome/blob/main/crates/biome_analyze/CONTRIBUTING.md).\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "biomejs__biome-3034",
+        "problem_statement": "📎  Implement selector-pseudo-class-no-unknown\n## Description\r\n\r\nImplement [selector-pseudo-class-no-unknown](https://stylelint.io/user-guide/rules/selector-pseudo-class-no-unknown)\r\n\r\n> [!IMPORTANT]\r\n> - Please skip implementing options for now since we will evaluate users actually want them later.\r\n> - Please ignore handling extended CSS language cases such as `sass` and `less`.\r\n> - Please skip custom function since we haven't syntax model yet.\r\n\r\n**Want to contribute?** Lets you know you are interested! We will assign you to the issue to prevent several people to work on the same issue. Don't worry, we can unassign you later if you are no longer interested in the issue! Read our [contributing guide](https://github.com/biomejs/biome/blob/main/CONTRIBUTING.md) and [analyzer contributing guide](https://github.com/biomejs/biome/blob/main/crates/biome_analyze/CONTRIBUTING.md).\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tracel-ai__burn-2540",
+        "problem_statement": "`conv2d` should check if `dilation > 0`\n<!-- Please search existing issues to avoid creating duplicates -->\r\n\r\n### Feature description\r\n\r\n`tensor::module::conv2d()` should check if `dilation` is greater than 0.\r\n\r\nI haven't checked, but `conv1d` and `conv3d` also should have that check included.\r\n\r\n<!-- Describe the feature you'd like -->\r\n\r\n### Feature motivation\r\n\r\nMathematically convolution with dilation (0,0) doesn't really make sense. The implementation in backends can handle dilation (0,0) without error, but the output is nonsensical.\r\n\r\n<!-- Why do you want this? -->\r\n\r\n### (Optional) Suggest a Solution\r\n\r\n<!--\r\n  How do you think we should implement this feature? \r\n  Things to address include:\r\n    * Details of the technical implementation\r\n    * Tradeoffs made in design decisions\r\n    * Caveats and considerations for the future\r\n-->\r\n\r\nPresumably a simple `if () {panic!()}` will work. \n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "huggingface__candle-2568",
+        "problem_statement": "ONNX: unsupported GatherElements ops\nCurrently `GatherElements` operator is not supported in candle-onnx. This would be convenient since a number of converted models using [HummingBird ML](https://github.com/microsoft/hummingbird) use this operator (including Tree Classifiers).\r\n\r\n`GatherElements` slightly differs from `Gather` which is already supported. `GatherElements` is already supported by burn. Defined here: https://onnx.ai/onnx/operators/onnx__GatherElements.html\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "axodotdev__cargo-dist-279",
+        "problem_statement": "json input for cargo dist init\nBeing able to take in [workspace.metadata.dist](https://docs.rs/cargo-dist/latest/cargo_dist/tasks/struct.DistMetadata.html) as json when running `cargo dist init` would be useful for building API endpoints that update your settings.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "axodotdev__cargo-dist-275",
+        "problem_statement": "default to the version specified in `rust-toolchain.toml` when `rust-toolchain-version` not provided\nI use cargo's `rust-toolchain.toml` to pin my rust version to a specific stable release.\r\nThis enforces that developers and CI all run the same version of rust.\r\nIt also allows me to set CI to fail if any rustc or clippy warnings occur without violating the \"not rocket science\" rule.\r\n\r\nI think this should be the standard way to set what rust version to use, with the `rust-toolchain-version` acting as override and automatically setup when the user hasnt created a `rust-toolchain.toml`\r\n\r\nI think the following logic would work:\r\n* If a `rust-toolchain.toml` specifies a `channel` (the toolchain version) then:\r\n   * `cargo dist init` should not set a `rust-toolchain-version`\r\n* If a `rust-toolchain.toml` specifies a `channel` (the toolchain version) and cargo dist's `rust-toolchain-version` is unset then:\r\n   * `cargo dist generate-ci` should not include the `name: Install cargo-dist` section. The `rust-toolchain.toml` will cause rustup to automatically install the specified toolchain the first time `cargo` is invoked in a directory containing `rust-toolchain.toml` or one of its subdirectories)\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "axodotdev__cargo-dist-1503",
+        "problem_statement": "Provide single environment variable for configuring GitHub installation and update URLs\nWe currently provide one environment variable to configure the installation URL for the shell and PowerShell installers: `INSTALLER_DOWNLOAD_URL`. This variable is release-specific, and contains not just the domain but also the path where the installers for *a specific version* should be found. This makes it less flexible than it could be; it's not usable as a \"set and forget\" URL for users who need to use mirrors for fetching artifacts. We'd like to be able to configure a base URL instead, that overrides just that `https://github.com` portion of the GitHub URL while having the installer provide the rest of the path.\r\n\r\nWe also need an environment variable suitable for use with the updater. The updater needs to access either the GitHub or axo Releases API, and some users may need to specify a proxy or mirror for those servers as well.\r\n\r\nWe had some initial discussions about reusing `INSTALLER_DOWNLOAD_URL` for this: we would take just the base URL and use that as the GitHub API root. This left us with an interesting ambiguity, however: the relationship between the web and API URLs isn't fully stable. For GitHub dotcom, web is at `github.com` and the API is at `api.github.com`. For GitHub Enterprise, however, the API is at `domain.com/api` instead of a subdomain. We expect that some users using this feature to mirror will be mirroring releases from GitHub dotcom to Enterprise, and so we need to make sure that whatever option we pick here doesn't lock one set of users out from using this feature.\r\n\r\nWhile we could define separate URLs for the installer URL and the GitHub API, that's unnecessarily clunky and some users understandably won't want to do that. Instead, one option would be to define two environment variables for the two different styles of *hosting*: one for GitHub dotcom style URLs, one for GitHub Enterprise style URLs.\r\n\r\n* `INSTALLER_GITHUB_BASE_URL` (or similar) - replaces the `github.com` part of the installer URL, looks for the API at the `api.` subdomain\r\n* `INSTALLER_GITHUB_ENTERPRISE_BASE_URL` (or similar) - replaces the `github.com` part of the installer URL, looks for the API at the `/api` path at that domain\r\n\r\nSince axo Releases has its own URL structures, we should focus on just overriding GitHub at this time and provide different URLs for overriding axo.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "axodotdev__cargo-dist-1465",
+        "problem_statement": "add unified checksum file\nWe can/should generate a single checksum file instead of a dozen. The multiple files were necessary Long Ago and no longer are.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "axodotdev__cargo-dist-357",
+        "problem_statement": "reintroduce column headers, add human-readable platform column \nin 0.1.0 the download artifacts table lost it's headers due them being identified, reasonably, as redundant. however github markdown doesn't allow tables w/o headers so the outcome is that the table looks \"broken\":\r\n<img width=\"540\" alt=\"Screenshot 2023-08-23 at 4 53 32 PM\" src=\"https://github.com/axodotdev/cargo-dist/assets/1163554/fa1eb8d5-d77e-46e3-9095-ee15ddc7e4e6\">\r\n\r\ni propose:\r\n1. adding a new \"platform\" column that gives a \"human readable\" version of the target triple\r\n2. re-add the headers, given the additional utility they provide for said platform column\r\n\r\nadded benefit: it's symmetrical with how we handle this in oranda:\r\n<img width=\"842\" alt=\"Screenshot 2023-08-23 at 4 53 42 PM\" src=\"https://github.com/axodotdev/cargo-dist/assets/1163554/ef5de98e-0d3e-4517-9a89-ce05564b250d\">\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "mozilla__cbindgen-452",
+        "problem_statement": "Mark non-pub fields as private in c++ headers\nIf I have the following Rust struct:\r\n\r\n```rust\r\n#[repr(C)]\r\npub struct MyStruct {\r\n    value1: i32,\r\n    pub value2: i32\r\n}\r\n```\r\nIt would be very useful for the generated struct to reflect the field's visibility:\r\n\r\n```c++\r\nstruct MyStruct {\r\nprivate:\r\n    int32_t value1;\r\npublic:\r\n    int32_t value2;\r\n};\r\n```\r\n\r\nMy main motivation for this is to create exported structs where **all fields are private**. An example is a pointer wrapper: If I allocate a pointer for an opaque struct with Box and then return the raw pointer, there's nothing stopping the caller from modifying it before passing it back for destruction. If instead I make a struct to wrap it, and give it private fields, all the caller can do is copy the struct around and pass it back unchanged.\r\n\r\nA change like this would enable APIs that were more type-safe and more in the spirit of Rust.\r\n\r\nAn alternate, lower-tech approach would be an annotation to just unconditionally mark all fields private. I imagine most use-cases will want all-private or all-public fields, so an annotation to set them all private might be a smarter solution, and save field-specific visibility for a use case that needs it.\r\n\r\nWhat do you think? Is there interest in this? If so I'd be happy to tackle it.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "mozilla__cbindgen-466",
+        "problem_statement": "Keep order of exported functions\nHi,\r\n\r\nIn my project all `extern \"C\" pub fn`'s are declared in a single file / module.\r\nIs it possible to ensure that the order of the generated exported functions in the header keeps same as in the module?\r\n\r\nTo me it seems that the functions are ordered by the functions name. Am I correct about this? Is there a way of changing / workaround this?\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "mozilla__cbindgen-489",
+        "problem_statement": "Create opaque type for a generic specialization with `RefCell` etc.\nI have:\r\n\r\n```rust\r\nbundle.rs:\r\n\r\npub type Memoizer = RefCell<IntlLangMemoizer>;\r\npub type FluentBundle<R> = bundle::FluentBundleBase<R, Memoizer>;\r\n\r\nffi.rs:\r\n\r\ntype FluentBundleRc = FluentBundle<Rc<FluentResource>>;\r\n\r\n#[no_mangle]\r\npub unsafe extern \"C\" fn fluent_bundle_new(\r\n    locales: &ThinVec<nsCString>,\r\n    use_isolating: bool,\r\n    pseudo_strategy: &nsACString,\r\n) -> *mut FluentBundleRc;\r\n```\r\n\r\ncbindgen generates out of it:\r\n\r\n```cpp\r\nusing Memoizer = RefCell<IntlLangMemoizer>;\r\n\r\ntemplate<typename R>\r\nusing FluentBundle = FluentBundleBase<R, Memoizer>;\r\n```\r\n\r\nwhich results in an error:\r\n\r\n```\r\n error: no template named 'RefCell'\r\n 0:05.42 using Memoizer = RefCell<IntlLangMemoizer>;\r\n```\r\n\r\nIt would be great to have cbindgen generate an opaque type in this case since all uses in C++ use it as opaque.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rust-lang__cc-rs-1181",
+        "problem_statement": "Encoded `CFLAGS` for supporting spaces\nAccording to https://github.com/rust-lang/cc-rs/#external-configuration-via-environment-variables spaces nor escapes for spaces are not supported in e.g. `C(XX)FLAGS`. In [`xbuild`](https://github.com/rust-mobile/xbuild) we [use `CFLAGS` to set a `--sysroot` path](https://github.com/rust-mobile/xbuild/blob/875f933f5908b49436e7176f2c0cfd7f5233ee24/xbuild/src/cargo/mod.rs#L444-L445), and this can occasionally contain spaces on Windows machines (because the toolchain is unpacked to a user folder, and users like to have `Firstname Surname` as username and profile directory).\r\n\r\nA likable solution is new `CARGO_ENCODED_RUSTFLAGS`-like variables, where spaces within individual args are supported by requiring the user to replace space delimiters in between separate arguments with the `\\x1f` ASCII Unit Separator: https://doc.rust-lang.org/cargo/reference/environment-variables.html, to allow more mechanical piecing-together of these variables without messing around with nested quotes or backslash-escapes.\r\n\r\nReferencing https://github.com/rust-mobile/xbuild/issues/124, where this is one of the deciding factors to build our Android compiler support _differently_.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "rust-lang__cc-rs-1279",
+        "problem_statement": "Mechanism for automatically passing flags used by rustc\nWhen cc-rs is running in a build script, it currently does not check which flags were passed to rustc.\n\nThere are some flags which in order to be fully effective need to be passed to both rustc and cc, a good example being AArch64 branch protection - if the Rust code is built with BTI but the C component is not, that will disable BTI for the whole binary.\n\nWould some mechanism for checking which flags were passed to rustc and determining their corresponding cc flags be desirable to have? This could either be in the form of adding them in automatically, a separate function such as `inherit_rustc_flags()` or even just a warning to the user that some flags that should match don't match.\n\nI'm thinking about implementing something along the lines of what I described above, but I wanted to ask for some thoughts from people who work on this crate. Is this desirable in the first place? If so, roughly what direction should I go in with this?\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "cross-rs__cross-890",
+        "problem_statement": "Support Rootless Docker\n### Checklist\r\n\r\n- [X] I've looked through the [issues and pull requests](https://github.com/cross-rs/cross/issues?q=) for similar request\r\n- [ ] This feature could be solved with a [custom docker image](https://github.com/cross-rs/cross#custom-docker-images) (optional)\r\n\r\n### Describe your request\r\n\r\nCurrently, if using rootless docker, `cross` fails to run. This is because we automatically add `--user 1000:1000` permissions (or the current UID/GID) when running Docker. This is an issue, because there is now rootless docker:\r\n\r\nFirst, install rootless docker:\r\n\r\n```bash\r\n$  dockerd-rootless-setuptool.sh install  # this may require a --force if the rootful docker is available.\r\n```\r\n\r\nThen, use the rootless context and try to touch a file:\r\n\r\n```bash\r\n$ docker context use rootless \r\nrootless\r\nCurrent context is now \"rootless\"\r\n$ docker run --user 1000:1000 -it --rm -v \"$PWD\":/project -w /project ubuntu:20.04 bash\r\ngroups: cannot find name for group ID 1000\r\n$ touch a\r\ntouch: cannot touch 'a': Permission denied\r\n```\r\n\r\nThis can be solved by allowing an environment variable to override our default, good assumptions of whether the container engine is rootful or not.\r\n\r\n### Describe why this would be a good inclusion for `cross`\r\n\r\nCurrently, detecting rootful/rootless mode is quite difficult, or expensive computationally, and the defaults are quite good:\r\n- Podman always runs rootless\r\n- Docker mostly runs rootful\r\n\r\nTherefore, just making these assumptions generally works. However, this is an issue if rootless docker exists, or we have another container engine that runs as root. In short, we need to be able to override setting `--user 1000:1000` permissions. This likely could best be done with a `CROSS_ROOTLESS_CONTAINER_ENGINE`, which is an `Option<bool>`, parsed via `bool_from_envvar`. If it's not present, use the sensible default. If it is present, force the presence or absence of lower user permissions.\r\n\r\nThis also should simplify supporting new container engines, since we can handle those with varying behavior quite easily, without any code changes, until we can provide reasonable defaults for them, such as in #588.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "crossterm-rs__crossterm-541",
+        "problem_statement": "KeyEvent's KeyCode's case could be normalized to be less redundant\n**Is your feature request related to a problem? Please describe.**\r\nIt is a little frustrating when comparing something like \r\n```\r\nKeyEvent { KeyCode::Char('a'), KeyModifiers::SHIFT } == KeyEvent { KeyCode::Char('A'), KeyModifiers::SHIFT }\r\n```\r\nand getting false, when chances are these are the same. This also leads to issues where if a lowercase keycode is combined with the shift key modifier (or an uppercase without shift), it will always be unequal to the output of something like read().\r\n\r\n**Describe the solution you'd like**\r\nWhen deriving Eq/PartialEq it could convert to the same casing for both the left and right hand side before comparison.\r\n\r\n**Describe alternatives you've considered in any**\r\nThe casing for KeyCode could be normalized at construction. This was my first idea, but it is possible some people might be pulling the character out of the keycode with the assumption it will preserve casing, and this would be a breaking change.\r\n\r\n**Additional context**\r\nCame across this when writing tests for combining key modifiers (`KeyModifiers::SHIFT | KeyModifiers::ALT` type thing) and found it unusual that I had to specify casing both as a modifier and in the char.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dtolnay__cxx-319",
+        "problem_statement": "Consider allowing one cxxbridge cli invocation to emit both header and cc\nAs currently implemented, two invocations of the cli command are required and the output goes to stdout.\r\n\r\n```bash\r\n$ cxxbridge path/to/lib.rs --header > generated.h\r\n$ cxxbridge path/to/lib.rs > generated.cc\r\n```\r\n\r\nIn some Starlark-based environments (or others) it turns out to be desirable to emit both outputs from a single invocation.\r\n\r\n```python\r\ngenrule(\r\n    name = \"gen\",\r\n    src = \"...\",\r\n    cmd = \"$(exe //path/to:cxxbridge-cmd) ${SRC}\",\r\n    outs = {\r\n        \"header\": [\"generated.h\"],\r\n        \"source\": [\"generated.cc\"],\r\n    },\r\n)\r\n```\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-694",
+        "problem_statement": "UPDATE ... FROM ( subquery ) only supported in PostgreSQL\nHi 👋 \r\n\r\nThe `UPDATE <table> FROM (SELECT ...)` statement is only supported with `PostgreSQL` dialect.\r\n\r\nIt should be also supported for other technologies. \r\nHere are a few examples:\r\n- [BigQuery](https://cloud.google.com/bigquery/docs/reference/standard-sql/dml-syntax#update_statement)\r\n- [Snowflake](https://docs.snowflake.com/en/sql-reference/sql/update.html)\r\n- [Redshift](https://docs.aws.amazon.com/redshift/latest/dg/c_Examples_of_UPDATE_statements.html)\r\n- [SQL Server](https://docs.microsoft.com/fr-fr/sql/t-sql/queries/update-transact-sql?view=sql-server-ver16)\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-436",
+        "problem_statement": "extract operator: add support for `week` keywords\nSupport ` EXTRACT(WEEK FROM to_timestamp('2020-09-08T12:00:00+00:00'))`\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-655",
+        "problem_statement": "Support \"date\" and \"timestamp\" inside window frame RANGE Queries\n# Support INTERVAL in window RANGE Queries\r\n\r\nCurrently, we do not support the queries taking `date` or `timestamp` for range inside window frames. Following query\r\n\r\n```sql\r\nSELECT \r\nCOUNT(*) OVER (ORDER BY ts RANGE BETWEEN  '1 DAY' PRECEDING AND '1 DAY' FOLLOWING) \r\nFROM t;\r\n```\r\n\r\nproduces the error below: \r\n\r\n```sql\r\nParserError(\"Expected literal int, found: INTERVAL\")\r\n```\r\n\r\nRelevant section in the code, where window frame bounds are parsed can be found here.\r\n\r\n[sqlparser-rs/parser.rs at 6afd194e947cfd800376f424ff7c300ee385cd9e · sqlparser-rs/sqlparser-rs](https://github.com/sqlparser-rs/sqlparser-rs/blob/6afd194e947cfd800376f424ff7c300ee385cd9e/src/parser.rs#L679)\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-1058",
+        "problem_statement": "Support more forms of generated columns for SQLite dialect\nSQLite allows some ways of defining a generated column which sqlparser currently rejects.\r\n\r\nFirst, the `GENERATED ALWAYS` keywords are optional:\r\n\r\n```rust\r\nParser::parse_sql(&SQLiteDialect {},\r\n    \"CREATE TABLE t1(a INT, b INT AS (a * 2) STORED);\")?;\r\n```\r\n\r\n```\r\nError: sql parser error: Expected ',' or ')' after column definition, found: AS at Line: 1, Column 30\r\n```\r\n\r\nSecond, the clause can have a `VIRTUAL` keyword stuck on the end (instead of `STORED`). This is the default behaviour anyway, just made explicit.\r\n\r\n```rust\r\nParser::parse_sql(&SQLiteDialect {},\r\n    \"CREATE TABLE t1(a INT, b INT GENERATED ALWAYS AS (a * 2) VIRTUAL);\")?;\r\n```\r\n\r\n```\r\nError: sql parser error: Expected ',' or ')' after column definition, found: VIRTUAL at Line: 1, Column 58\r\n```\r\n\r\n~~I think the distinction of stored-or-not is also not exposed in the AST at present.~~\r\n\r\nI can have a go at fixing one or both of these, but I wanted to record the issue clearly first.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-1256",
+        "problem_statement": "feat: Support Mysql GROUP_CONCAT\nhttps://dev.mysql.com/doc/refman/8.3/en/aggregate-functions.html#function_group-concat\r\n\r\n```sql\r\nGROUP_CONCAT([DISTINCT] expr [,expr ...]\r\n             [ORDER BY {unsigned_integer | col_name | expr}\r\n                 [ASC | DESC] [,col_name ...]]\r\n             [SEPARATOR str_val])\r\n```\r\n\r\nAnd for StarRocks.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-1241",
+        "problem_statement": "Support Struct datatype parsing for GenericDialect\nCurrent BigQueryDialect is capable of parsing struct data type such as\r\n```\r\ncreate table t (s struct<n int, s varchar>);\r\n```\r\nAccording to [README](https://github.com/sqlparser-rs/sqlparser-rs/tree/0b5722afbfb60c3e3a354bc7c7dc02cb7803b807?tab=readme-ov-file#new-syntax), this feature should also support GenericDialect, however in current code, before parsing this syntax, we [only allow BigQueryDialect to have this syntax](https://github.com/sqlparser-rs/sqlparser-rs/blob/2f437db2a68724e4ae709df22f53999d24804ac7/src/parser/mod.rs#L5280)\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-1101",
+        "problem_statement": "Support sqlite PRAGMA statements with string values\nHi, first of all, thank you for the amazing project.\r\n\r\nI'm working on a DB client and need the ability to parse such statements:\r\n```\r\nPRAGMA table_info(\"sqlite_master\")\r\nPRAGMA table_info = \"sqlite_master\"\r\n```\r\nWhich can be parsed and passed to SQLite on other DB clients.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-749",
+        "problem_statement": "support keyword `NANOSECOND`\ni'd like to add a new keyword `NANOSECOND` so that we could parse something likes\r\n\r\n`SELECT EXTRACT(NANOSECOND FROM d)`\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__datafusion-sqlparser-rs-783",
+        "problem_statement": "Support MySQL's empty row insert\nMySQL supports default row inserts [1], which we don't, like:\r\n\r\n```sql\r\nINSERT INTO tb () VALUES ();\r\n```\r\n\r\nThis returns: `ParserError(\"Expected identifier, found: )\")`\r\n\r\nMaybe the columns list could be an option, instead of a vector? This way we can differentiate between non-existent lists (`INSERT INTO tb VALUES ...`) and empty lists (`INSERT INTO tb () ...`).\r\n\r\n[1]: https://dev.mysql.com/doc/refman/8.0/en/insert.html\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dandavison__delta-403",
+        "problem_statement": "🚀 delta does not recognize Git's copy detection \nGit has special flags and configuration variables for `git log`, `git show`, `git diff`,  `git diff-tree`,  `git diff-index`,  `git diff-tree`, and `git format-patch` to detect copies as well as renames. \r\n\r\nThese add \"copy from\"/\"copy to\" lines in the diff header when Git detects a new file is in fact copied from an existing file. Currently delta shows these as renames, which is confusing. It would be nice if they would show up correctly as copies. \r\n\r\nAn example from the [same issue for diff-so-fancy](https://github.com/so-fancy/diff-so-fancy/issues/349#issuecomment-619029880):\r\n> @ scottchiefbaker this setting tells git how to display renamed (same or similar content, new name, old file is missing) and copied (same or similar content, new name, old file present) files. By default git only detects renames, any copy is shown as new file. `diff.renames copies` works also for second case.\r\n> \r\n> To illustrate this one can create dummy repository as\r\n> \r\n> ```\r\n> git init\r\n> echo \"hurr-durr\" > first_file\r\n> git add .\r\n> git commit -m \"first\"\r\n> ```\r\n> \r\n> After that copy and stage (or commit) some file:\r\n> \r\n> ```\r\n> cp first_file copied_file\r\n> git add .\r\n> ```\r\n> \r\n> And inspect this change:\r\n> \r\n> ```\r\n> ❯ git --no-pager diff --staged\r\n> diff --git a/copied_file b/copied_file\r\n> new file mode 100644\r\n> index 0000000..d7b6a5e\r\n> --- /dev/null\r\n> +++ b/copied_file\r\n> @@ -0,0 +1 @@\r\n> +hurr-durr\r\n> \r\n> /tmp/copy-example master*\r\n> ❯ git --no-pager diff -C --staged  # -C has the same meaning\r\n> diff --git a/first_file b/copied_file\r\n> similarity index 100%\r\n> copy from first_file\r\n> copy to copied_file\r\n> ```\r\n> \r\n> I hope this narrowed down example helps better than original ones.\r\n> Looks like fancy just doesn't know how to parse `copy from/to` headers in diff.\r\n\r\nRelevant parts of the Git documentation:\r\n\r\n-    [`-C` option for diff, show, log, etc.](https://git-scm.com/docs/git-diff#Documentation/git-diff.txt--Cltngt)\r\n-    [Doc for Git's extended diff header](https://git-scm.com/docs/git-diff#_generating_patch_text_with_p)\r\n-    [`diff.renames` configuration for diff, show, log](https://git-scm.com/docs/git-config#Documentation/git-config.txt-diffrenames)\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dandavison__delta-1158",
+        "problem_statement": "🚀 Configurable timestamp output format in git blame\nIn git blame I noticed this:\r\n![image](https://user-images.githubusercontent.com/6927259/184130106-14883b20-ec05-4ec3-ac65-060b4d35f85f.png)\r\n\r\nIt would be helpful to know e.g. which change was applied first but this can not be figured out from the humanized timestamp.\r\nhttps://github.com/dandavison/delta/blob/738c5a141bf86d3e05aa348eb87df78c36a72337/src/handlers/blame.rs#L273\r\n\r\nI changed it locally to: `blame.time.format(\"%H:%M %Y-%m-%d\").to_string(),`.\r\n\r\nWould it be possible to make this configurable? Perhaps a new option *--blame-**output**-timestamp-format* could be added. If present (and not empty) it would be used as a format string. If not, we will fall back to HumanTime formatting. What do you think?\r\n\r\nI can work on a PR if this could be accepted.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dandavison__delta-581",
+        "problem_statement": "🚀 Use light/dark theme base on terminal theme or system variable.\nHi, I have set my terminal to auto change themes based on macOS appearance. It would be much appreciated if delta can use light/dark theme base on terminal theme or system variable.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dandavison__delta-668",
+        "problem_statement": "🚀 Show Github commit hyperlinks even if remote URL does not contain `git@`\nHi! I was recently a bit confused why hyperlinks for commits were working in some of my local clones but not others.\r\nAfter a bit of investigation I've figured out that it's caused by the remote URL being simply `github.com:user/repo` instead of `git@github.com:user/repo`, which is not matched by the current regex.\r\n\r\nNow, this remote URL only works in the first place because of a custom SSH config containing something like this:\r\n```\r\nHost github.com\r\n    HostName github.com\r\n    User git\r\n    IdentityFile <some key>\r\n```\r\n\r\nConsidering that I fully understand if you'd prefer to not support such configs out-of-the-box. (You can also put anything into the `Host` portion there and have it still end up going to GitHub with configs like this and I imagine that parsing the SSH config or anything similar to make everything here work is definitely out of scope 😄 ).\r\n\r\nStill, I figured specifically allowing omitting the `git@` is a pretty small change so I might as well ask (and I suspect this is at least a *somewhat* common config; I don't remember where I stole it, but I definitely got the idea from someone else).\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tokio-rs__tokio-6724",
+        "problem_statement": "Vectored IO for `write_all_buf`\n**Is your feature request related to a problem? Please describe.**\r\n\r\nThe `AsyncWriteExt` trait provides the `write_all_buf` function to write the entire contents of a `Buf` type to the underlying writer. However, if the buf is fragmented (eg a VecDeque<u8> or Chain), then it can have potentially bad performance with the current implementation, writing many small buffers at a time. This is because the current impl only uses `chunk()` to get the first chunk slice only.\r\n\r\nhttps://github.com/tokio-rs/tokio/blob/a02407171a3f1aeb86e7406bcac9dfb415278308/tokio/src/io/util/write_all_buf.rs#L47\r\n\r\n**Describe the solution you'd like**\r\n\r\nIf the underlying writer `is_write_vectored()`, `write_all_buf` could make use of `Buf::chunks_vectored` to fill an IO slice to use with `poll_write_vectored`.\r\n\r\nThe vectored io-slice can use a fixed size array, eg 4 or 8. When advancing the io-slice, should a chunk be removed, it could call `chunks_vectored` again to fill the io-slice, considering that chunks_vectored should be a fairly cheap operation.\r\n\r\n**Describe alternatives you've considered**\r\n\r\nSimilar implementation discussions have occurred in #3679.\r\nPerformance testing is needed, and real-world use cases of `write_all_buf` should be examined\r\n\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "tokio-rs__tokio-6593",
+        "problem_statement": "Allow setting `unhandled_panic` behavior as option on `tokio::test`\n**Is your feature request related to a problem? Please describe.**\r\nI have several unit tests that run some handler code that is under test in a `tokio::spawn`ed task, and sends/receives bytes to/from that handler code from the main task. My AsyncRead + AsyncWrite mock will panic if it sees unexpected bytes, and if this happens in the background task the test will hang. I'd prefer the test to shut down in this scenario, and so I'm using the `unhandled_panic` option introduced by #4516.\r\n\r\n**Describe the solution you'd like**\r\n`#[tokio::test(unhandled_panic = ShutdownRuntime)`\r\n\r\n**Describe alternatives you've considered**\r\nCurrently I manually set up a tokio runtime for my tests that require this behavior.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "asterinas__asterinas-1125",
+        "problem_statement": "Lockless mutability for current task data.\n**This is currently a work-in-progress RFC**\r\n\r\n<!-- Thank you for taking the time to propose a new idea or significant change. Please provide a comprehensive overview of the concepts and motivations at play. -->\r\n\r\n### Summary\r\n\r\n<!-- Briefly summarize the idea, change, or feature you are proposing. What is it about, and what does it aim to achieve? -->\r\n\r\nThis RFC plans to introduce a mechanism for implementing lock-less inner mutability of task data that would be only accessible through the current task.\r\n\r\n### Context and Problem Statement\r\n\r\n<!-- Describe the problem or inadequacy of the current situation/state that your proposal is addressing. This is a key aspect of putting your RFC into context. -->\r\n\r\nIn `aster-nix`, there would be a hell lot of inner mutability patterns using `Mutex` or `SpinLock` in the thread structures, such as `SigMask`, `SigStack` and `sig_context`, etc. They are all implemented with locks. However, they should only be accessed through the current thread. There would be no syncing required. Modifying them from non-current threads should be illegal. Locks are too heavy-weighted for such kind of inner mutability patterns.\r\n\r\nAlso, for shared thread/task data, we access them using `current!` in thread/task contexts. These operations would also require fetching the task from a `cpu_local!` object that incurs heavy type-checking and interrupt/preempt blocking operations. Such jobs can be ignored when the caller is definitely in the current task's contexts. As #1105 points out, even the most simple system call `getpid` would access such task exclusive variables many times. Current implementation would require multiple locking operations and IRQ/preempt guarding operations. Many cycles are wasted doing so.\r\n\r\nWe currently only have per-task data storage that is shared (the implementer should provide `Send + Sync` types). Most of the data that don't need to be shared are also stored here, which would require a lock for inner mutability. In this RFC, I would like to introduce a new kind of data in the `ostd::Task` that is exclusive (not shared, no need to be `Send + Sync`). It would offer a chance to implement the above mentioned per-task storage without locks, boosting the performance by a lot.\r\n\r\n### Proposal\r\n\r\nCurrently we access them via `current!()`, which would return a reference over the current task and it's corresponding data. The data is defined within a structure (either `PosixThread` or `KernelThread` currently).\r\n\r\nIn `aster-nix`, most code are running in the context of a task (other code runs in interrupt contexts). So the code would only have one replica of task local exclusive data that is accessible. Such data would only be accessed by the code in the corresponding task context also. Such kind of data should be safely mutably accessed. OSTD should provide a way to define task-context-global per-task mutable variables that are not visible in interrupt contexts. By doing so, many of the data specific to a task can be implemented lock-less.\r\n\r\n<!-- Clearly and comprehensively describe your proposal including high-level technical specifics, any new interfaces or APIs, and how it should integrate into the existing system. -->\r\n\r\n#### Task entry point\r\n\r\nThe optimal solution would let the task function receive references to the task data as arguments. Then all the functions that requires the data of the current task would like to receive arguments like so. This is the requirement of a function that should be used as a task entry point:\r\n\r\n```rust\r\n/// The entrypoint function of a task takes 4 arguments:\r\n///  1. the mutable task context,\r\n///  2. the shared task context,\r\n///  3. the reference to the mutable per-task data,\r\n///  4. and the reference to the per-task data.\r\npub trait TaskFn =\r\n    Fn(&mut MutTaskInfo, &SharedTaskInfo, &mut dyn Any, &(dyn Any + Send + Sync)) + 'static;\r\n```\r\n\r\nAn example of usage:\r\n\r\n```rust\r\n// In `aster-nix`\r\n\r\nuse ostd::task::{MutTaskInfo, Priority, SharedTaskInfo};\r\nuse crate::thread::{\r\n    MutKernelThreadInfo, MutThreadInfo, SharedKernelThreadInfo, SharedThreadInfo, ThreadExt,\r\n};\r\n\r\nfn init_thread(\r\n    task_ctx_mut: &mut MutTaskInfo,\r\n    task_ctx: &SharedTaskInfo,\r\n    thread_ctx_mut: &mut MutThreadInfo,\r\n    thread_ctx: &SharedThreadInfo,\r\n    kthread_ctx_mut: &mut MutKernelThreadInfo,\r\n    kthread_ctx: &SharedKernelThreadInfo,\r\n) {\r\n    println!(\r\n        \"[kernel] Spawn init thread, tid = {}\",\r\n        thread_ctx.tid\r\n    );\r\n    let initproc = Process::spawn_user_process(\r\n        karg.get_initproc_path().unwrap(),\r\n        karg.get_initproc_argv().to_vec(),\r\n        karg.get_initproc_envp().to_vec(),\r\n    )\r\n    .expect(\"Run init process failed.\");\r\n    // Wait till initproc become zombie.\r\n    while !initproc.is_zombie() {\r\n        // We don't have preemptive scheduler now.\r\n        // The long running init thread should yield its own execution to allow other tasks to go on.\r\n        task_ctx_mut.yield_now();\r\n    }\r\n}\r\n\r\n#[controlled]\r\npub fn run_first_process() -> ! {\r\n    let _thread = thread::new_kernel(init_thread, Priority::normal(), CpuSet::new_full());\r\n}\r\n```\r\n\r\nSuch approach can eliminate the need of neither `current!` nor `current_thread!`, but introduces verbose parameters for the functions. This approach would be implemented by #1108 .\r\n\r\n### Motivation and Rationale\r\n\r\n<!-- Elaborate on why this proposal is important. Provide justifications for why it should be considered and what benefits it brings. Include use cases, user stories, and pain points it intends to solve. -->\r\n\r\n### Detailed Design\r\n\r\n<!-- Dive into the nitty-gritty details of your proposal. Discuss possible implementation strategies, potential issues, and how the proposal would alter workflows, behaviors, or structures. Include pseudocode, diagrams, or mock-ups if possible. -->\r\n\r\n### Alternatives Considered\r\n\r\n<!-- Detail any alternative solutions or features you've considered. Why were they discarded in favor of this proposal? -->\r\n\r\n#### Context markers\r\n\r\nOf course, the easiest way to block IRQ code from accessing task exclusive local data is to have a global state `IN_INTERRUPT_CONTEXT` and check for this state every time when accessing the task exclusive local variables. This would incur some (but not much) runtime overhead. Such overhead can be eliminated by static analysis, which we would encourage.\r\n\r\nThere would be 3 kind of contexts: the bootstrap context, the task context and the interrupt context. So the code would have $2^3=8$ types of possibilities to run in different contexts. But there are only 4 types that are significant:\r\n\r\n 1. Utility code that could run in all 3 kind of contexts;\r\n 2. Bootstrap code that only runs in the bootstrap context;\r\n 3. The IRQ handler that would only run in the interrupt context;\r\n 4. Task code that would only run in the task context.\r\n\r\nOther code can be regarded as the type 1., since we do not know where would it run (for example, the page table cursor methods).\r\n\r\nCode must be written in functions (except for some really low level bootstrap code, which are all in OSTD). So we can mark functions with the above types, and check if type 1./2./3. functions accessed task local exclusive global variables.\r\n\r\nHere are the rules for function types:\r\n\r\n - All functions that may call 2. should be 2., the root of type 2. function is `ostd::main` and `ostd::ap_entry`;\r\n - all functions that may call 3. should be 3., the root of type 3. functions are send to `IrqLine::on_active`;\r\n - all functions that may call 4. should be 4., the root of type 4. functions are send to `TaskOptions`;\r\n - if a function can be call with multiple types of functions, it is type 1.\r\n\r\nIn this alternative, two tools will be introduced:\r\n\r\n 1. A procedural macro crate `code_context` (re-exported by OSTD) that provides function attributes `#[code_context::task]`, `#[code_context::interrupt]`, `#[code_context::boot]`. If not specified, the function is type 1.;\r\n 2. A tools that uses rustc to check the above rules ([an example](https://github.com/heinzelotto/rust-callgraph/tree/master)). OSDK would run this tool before compilation to reject unsound code.\r\n\r\n### Additional Information and Resources\r\n\r\n<!-- Offer any additional information, context, links, or resources that stakeholders might find helpful for understanding the proposal. -->\r\n\r\n### Open Questions\r\n\r\n<!-- List any questions that you have that might need further discussion. This can include areas where you are seeking feedback or require input to finalize decisions. -->\r\n\r\n### Future Possibilities\r\n\r\n<!-- If your RFC is likely to lead to subsequent changes, provide a brief outline of what those might be and how your proposal may lay the groundwork for them. -->\r\n\r\n<!-- We appreciate your effort in contributing to the evolution of our system and look forward to reviewing and discussing your ideas! -->\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-5439",
+        "problem_statement": "Refine `Display` implementation for `FlightError`\n**Is your feature request related to a problem or challenge? Please describe what you are trying to do.**\r\n\r\nThere's a `TODO` for a better `std::fmt::Display` implementation on `FlightError`. Currently it forwards to `std::fmt::Debug`, which does not appear to be a good practice as errors should describe themselves with friendly messages provided by `Display`.\r\n\r\nhttps://github.com/apache/arrow-rs/blob/ef5c45cf4186a8124da5a1603ebdbc09ef9928fc/arrow-flight/src/error.rs#L50-L55\r\n\r\n**Describe the solution you'd like**\r\n\r\nMatch the variants of the error and specify different prompts like what we did for `ArrowError`.\r\n\r\nhttps://github.com/apache/arrow-rs/blob/ef5c45cf4186a8124da5a1603ebdbc09ef9928fc/arrow-schema/src/error.rs#L79-L87\r\n\r\n**Describe alternatives you've considered**\r\n\r\nDerive the implementation with `thiserror`. The code can be more concise with the cost of introducing a new build-time dependency.\r\n\r\n**Additional context**\r\n\r\nA better practice to implement `Display` for errors is **NOT** to include the error source. AWS SDK has adopted this as described in https://github.com/awslabs/aws-sdk-rust/issues/657. However, this could be considered as a breaking change as many developers have not realize that one should leverage something like [`std::error::Report`](https://doc.rust-lang.org/stable/std/error/struct.Report.html) to get the error sources printed.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-5717",
+        "problem_statement": "[parquet_derive] support OPTIONAL (def_level = 1) columns by default\n## Problem Description\r\n<!--\r\nA clear and concise description of what the problem is. Ex. I'm always frustrated when [...] \r\n(This section helps Arrow developers understand the context and *why* for this feature, in addition to  the *what*)\r\n-->\r\nI'm working on parquet files written by `pyarrow` (embedded in `pandas`). I came across `parquet_derive` and it avoids boilerplates in my project.\r\nThe problem is, it doesn't work on the parquet files that is written by `pandas` with default setup, it throws error information:\r\n\r\n```text\r\nParquet error: must specify definition levels\r\n```\r\n\r\nAfter digging into this, I found that the problem is the parquet file generated by `pyarrow` has def_level=1, i.e., every column, even without a null value, is OPTIONAL.\r\n\r\n<img width=\"677\" alt=\"image\" src=\"https://github.com/apache/arrow-rs/assets/27212391/b6b4cc96-8c53-4d41-9c66-4f802476dd7a\">\r\n\r\nHowever, the macro generate code that does not allow definition level, thus it fails to parsing columns with OPTIONAL value, even there is no actual NULL values:\r\n\r\n```rust\r\ntyped.read_records(num_records, None, None, &mut vals)?;\r\n```\r\n\r\nThe API it calls is: https://docs.rs/parquet/latest/parquet/column/reader/struct.GenericColumnReader.html#method.read_records .\r\n\r\n## My Solution\r\n\r\nThe solution is straight-forward. I have fixed the problem locally, I'm willing to contribute a pull request, but I don't know if this solution is reasonable in the scope of the whole `arrow` project.\r\n\r\nBasically, I think we need to provide definition level in `read_record`:\r\n\r\n```rust\r\ntyped.read_records(num_records, None /*should use a Some(&mut Vec<i16>)*/, None, &mut vals)?;\r\n```\r\n\r\nIn one word, with this solution, `parquet_derive` can now handle:\r\n1. (already supported) parquet file with all columns REQUIRED\r\n2. **(new introduced) parquet file with OPTIONAL columns but are always guaranteed to be valid**.\r\n\r\n### Pros\r\n\r\n- This solution does not break current features\r\n- This solution makes parquet_derive more general in handling parquet files.\r\n\r\nIt can pass the tests in `parquet_derive_tests`. I also add checks against the parsed records and valid records, to avoid abusing it for columns with NULLs.\r\n\r\n### Cons\r\n\r\n- It will be slightly slower since it allocates an extra `Vec<i16>` for each column when invoking `read_from_row_group`.\r\n\r\nI don't think it is a big deal, though, compared to the inconvenience of not supporting OPTIONAL columns. Moreover, we can make use of the max_def_levels (for REQUIRED column, it is 0) to skip creating the Vec.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-6269",
+        "problem_statement": "parquet_derive: support reading selected columns from parquet file\n# Feature Description\r\n\r\nI'm effectively using `parquet_derive` in my project, and I found that there are two inconvenient constraints:\r\n\r\n1. The `ParquetRecordReader` enforces the struct to organize fields exactly in the **same order** in the parquet file.\r\n2. The `ParquetRecordReader` enforces the struct to parse **all fields** in the parquet file. \"all\" might be exaggerating, but it is what happens if you want to get the last column, even only the last column.\r\n\r\nAs describe in its document:\r\n\r\n> Derive flat, simple RecordReader implementations. Works by parsing a struct tagged with #[derive(ParquetRecordReader)] and emitting the correct writing code for each field of the struct. Column readers are generated in the order they are defined.\r\n\r\nIn my use cases (and I believe these are common requests), user should be able to read pruned parquet file, and they should have the freedom to re-organize fields' ordering in decoded struct.\r\n\r\n# My Solution\r\n\r\nI introduced a `HashMap` to map field name to its index. Of course, it assumes field name is unique, and this is always true since the current `parquet_derive` macro is applied to a flat struct without nesting.\r\n\r\n# Pros and Cons\r\n\r\nObviously removing those two constraints makes `parquet_derive` a more handy tool.\r\n\r\nBut it has some implied changes:\r\n\r\n- previously, since the `ParquetRecordReader` relies only on the index of fields, it allows that a field is named as `abc` to implicitly rename itself to `bcd` in the encoded struct. After this change, user must guarantee that the field name in `ParquetRecordReader` to exist in parquet columns.\r\n  - I think it is more intuitive and more natural to constrain the \"field name\" rather than \"index\", if we use `ParquetRecordReader` to derive a decoder macro.\r\n- allowing reading partial parquet file may improve the performance for some users, but introducing a `HashMap` in the parser may slowdown the function a bit.\r\n  - when the `num_records` in a single parsing call is large enough, the cost of `HashMap` lookup is negligible.\r\n\r\nBoth implied changes seem to have a more positive impact than negative impact. Please review if this is a reasonable feature request. \r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-2407",
+        "problem_statement": "Support `peek_next_page` and `skip_next_page` in `InMemoryPageReader`\n**Is your feature request related to a problem or challenge? Please describe what you are trying to do.**\r\nwhen i was implementing bench using `skip_records` got\r\n\r\n```\r\nBenchmarking arrow_array_reader/Int32Array/binary packed skip, mandatory, no NULLs: Warming up for 3.0000 sthread 'main' panicked at 'not implemented', /CLionProjects/github/arrow-rs/parquet/src/util/test_common/page_util.rs:169:9\r\n\r\n```\r\n\r\nwhich is unimplemented\r\n\r\n**Describe the solution you'd like**\r\n<!--\r\nA clear and concise description of what you want to happen.\r\n-->\r\n\r\n**Describe alternatives you've considered**\r\n<!--\r\nA clear and concise description of any alternative solutions or features you've considered.\r\n-->\r\n\r\n**Additional context**\r\n<!--\r\nAdd any other context or screenshots about the feature request here.\r\n-->\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-4681",
+        "problem_statement": "Handle Misaligned IPC Buffers\n**Is your feature request related to a problem or challenge? Please describe what you are trying to do.**\r\n<!--\r\nA clear and concise description of what the problem is. Ex. I'm always frustrated when [...] \r\n(This section helps Arrow developers understand the context and *why* for this feature, in addition to  the *what*)\r\n-->\r\n\r\nThe flatbuffer specification recommends that buffers are aligned to 64-bit boundaries, however, this is not mandated. Additionally when loading a flatbuffer from an in-memory source, it is possible the source buffer itself isn't aligned.\r\n\r\nWe already re-align interval buffers, we should do this consistently\r\n\r\n**Describe the solution you'd like**\r\n<!--\r\nA clear and concise description of what you want to happen.\r\n-->\r\n\r\nWe should automatically re-align mis-aligned IPC buffers\r\n\r\n**Describe alternatives you've considered**\r\n<!--\r\nA clear and concise description of any alternative solutions or features you've considered.\r\n-->\r\n\r\n**Additional context**\r\n<!--\r\nAdd any other context or screenshots about the feature request here.\r\n-->\r\n\r\nRelates to #4254 which would likely produce mis-aligned buffers\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-4909",
+        "problem_statement": "Add read access to settings in `csv::WriterBuilder`\n**Is your feature request related to a problem or challenge? Please describe what you are trying to do.**\r\n\r\nWhile implementing CSV writing in DataFusion (see https://github.com/apache/arrow-datafusion/pull/7390/files), we would like to be able to check the value of `has_headers` before actually constructing a csv writer. However, the current API has no way to do read the current values (only modify them): https://docs.rs/arrow-csv/45.0.0/arrow_csv/writer/struct.WriterBuilder.html\r\n\r\n\r\n**Describe the solution you'd like**\r\nIt would be nice to have read only access to the fields. Maybe something like\r\n\r\n```rust\r\n    let builder = WriterBuilder::new().has_headers(false);\r\n \r\n    let has_headers = builder.get_has_headers()\r\n```\r\n\r\nIt is somewhat unfortunate that the builder already uses `has_headers` to set the field names rather than `with_has_headers`\r\n\r\n**Describe alternatives you've considered**\r\nWe can keep a copy of has_headers around as @devinjdangelo  has done in https://github.com/apache/arrow-datafusion/pull/7390/files\r\n\r\n**Additional context**\r\n<!--\r\nAdd any other context or screenshots about the feature request here.\r\n-->\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "apache__arrow-rs-2044",
+        "problem_statement": "Support `peek_next_page()` and `skip_next_page` in `SerializedPageReader`\n**Is your feature request related to a problem or challenge? Please describe what you are trying to do.**\r\nAdd `skip_next_page` and `peek_next_page` function to SerializedPageReader that uses the column index to skip the next page without reading it.\r\nrelated #1792 \r\n\r\n**Describe the solution you'd like**\r\nA clear and concise description of what you want to happen.\r\n\r\n**Describe alternatives you've considered**\r\nA clear and concise description of any alternative solutions or features you've considered.\r\n\r\n**Additional context**\r\nAdd any other context or screenshots about the feature request here.\r\n\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "GuillaumeGomez__sysinfo-245",
+        "problem_statement": "Feature Request: support retrieve CPU number and load info\nThanks for providing the awesome library for retrieving system information. But some information cannot be retrieved by this crate, like CPU number and CPU average load. (So I must use another crate like https://docs.rs/sys-info/0.5.8/sys_info/index.html).\r\n\r\nIf this crate can provide a full feature, it's will be great.\r\n\r\nThanks to all authors and contributors for this repo.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "GuillaumeGomez__sysinfo-679",
+        "problem_statement": "Add check to ensure that types are using common md files and not manual doc comments\nFor example `System` or `Process`.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "GuillaumeGomez__sysinfo-1161",
+        "problem_statement": "Should `exe` be included in default process retrieval (and removed from `ProcessRefreshKind`)?\nIt seems to be a basic information that everyone might want all the time.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "crossbeam-rs__crossbeam-454",
+        "problem_statement": "AtomicCell without lock for non-usize values in stable.\nNow that `std::atomic::AtomicU{8,16,32,64}` has been stabilized, please allow `AtomicCell` to store values with non-`usize` widths without a lock. \r\n\r\nThis would require increasing the min rust version. Let me know if you like me to send a pull request.\r\n\r\nThanks.\n",
+        "response": "Feature Development"
+    },
+    {
+        "instance_id": "dtolnay__syn-1714",
+        "problem_statement": "Parse explicit tail call syntax\nhttps://github.com/rust-lang/rust/pull/112887\n",
+        "response": "Feature Development"
+    }
+]

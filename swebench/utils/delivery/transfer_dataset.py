@@ -203,7 +203,7 @@ def stringify_locations(locations):
 def main():
     # 配置 argparse
     parser = argparse.ArgumentParser(description="Convert HF dataset to JSON format.")
-    parser.add_argument('--dataset_name', type=str, default="r1v3r/RustGPT_Bench_100", help='Hugging Face dataset name')
+    parser.add_argument('--dataset_name', type=str, default="r1v3r/auto_0207_bug", help='Hugging Face dataset name')
     parser.add_argument('--split', type=str, default="train", help='Dataset split to use')
     parser.add_argument('--output', type=str, default="entries.json", help='Output JSON file path')
     args = parser.parse_args()
