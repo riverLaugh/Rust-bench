@@ -210,7 +210,15 @@ def make_test_cmds(
 ):
     repo = instance["repo"]
     if repo not in MAP_REPO_TO_TESTS:
-        return specs.get("test_cmd",None)
+        test_cmd = specs.get("test_cmd", None)
+        if test_cmd is None:
+            return None
+        elif isinstance(test_cmd,str):
+            return [test_cmd]
+        elif isinstance(test_cmd,list):
+            return test_cmd
+        else:
+            raise ValueError(f"Unsupported test commands")
     return MAP_REPO_TO_TESTS[repo](
         instance,
         specs,

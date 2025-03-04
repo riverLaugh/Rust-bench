@@ -1,17 +1,9 @@
-import argparse
 import os
-import sys
 import json
-import re
 from datasets import load_dataset
-from pathlib import Path
-from tqdm import tqdm
-import pandas as pd
-import subprocess
 import openai
-import requests
-import base64
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
 
 def classify_with_openai(problem_statement, openai_api_key, model="gpt-4o-2024-08-06"):
     """
@@ -27,8 +19,6 @@ def classify_with_openai(problem_statement, openai_api_key, model="gpt-4o-2024-0
     """
     openai.api_key = openai_api_key
     openai.base_url = "https://api5.xhub.chat/v1/"
-    # system_messages = "You are an AI assistant that categorizes issues into predefined types and determines the severity level along with the reason."
-    # 假设 system_messages 已定义
     system_messages = "您是一个专业的问题分类助手。"
 
     # 构建修改后的 prompt
@@ -73,37 +63,59 @@ def classify_with_openai(problem_statement, openai_api_key, model="gpt-4o-2024-0
             }
         )
         content = response.choices[0].message.content.strip()
-        # json_cleaned = re.sub(r'"\n(.*?)":', r'"\1":', content)
-        print(content)
-        # 假设返回格式为：
-        # Problem Type: Type1
-        # Severity Level: low
-        # Reason: ...
         response_json = json.loads(content)
         return response_json
-    
     except Exception as e:
         print(f"OpenAI API error: {e}")
-        # return "Unknown", "Unknown", "Unknown"
+        return {
+            "description": "Unknown",
+            "problem_type": "Unknown",
+            "level": "Unknown",
+            "level_reason": "Unknown"
+        }
 
-
-
-dataset = load_dataset("r1v3r/RustGPT_Bench_100",split="train")
-
-openai_api = os.getenv("OPENAI_API_KEY")
-
-entries = []
-
-for example in dataset:
+def process_example(example, openai_api_key):
+    """
+    处理单个示例，调用 OpenAI API 进行分类。
+    
+    Args:
+        example (dict): 数据集中的单个示例。
+        openai_api_key (str): OpenAI API 密钥。
+    
+    Returns:
+        dict: 包含分类结果的字典。
+    """
     problem_statement = example["problem_statement"]
-    response_json = classify_with_openai(problem_statement, openai_api)
-    entries.append({
+    response_json = classify_with_openai(problem_statement, openai_api_key)
+    return {
         "instance_id": example["instance_id"],
         "description": response_json["description"],
         "problem_type": response_json["problem_type"],
         "severity_level": response_json["level"],
         "reason": response_json["level_reason"]
-    })
+    }
 
-with open("classification_results.json", "w") as f:
-    json.dump(entries, f, indent=4)
+def main():
+    # 加载数据集
+    dataset = load_dataset("r1v3r/auto_0207_bug", split="train")
+    openai_api = os.getenv("OPENAI_API_KEY")
+
+    entries = []
+    # 使用 ThreadPoolExecutor 实现多线程
+    with ThreadPoolExecutor(max_workers=10) as executor:  # 调整 max_workers 以控制线程数
+        futures = [executor.submit(process_example, example, openai_api) for example in dataset]
+
+        # 等待所有任务完成并收集结果，同时显示进度条
+        for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
+            try:
+                result = future.result()
+                entries.append(result)
+            except Exception as e:
+                print(f"Error processing example: {e}")
+
+    # 将结果保存到文件
+    with open("classification_results.json", "w", encoding="utf-8") as f:
+        json.dump(entries, f, ensure_ascii=False, indent=4)
+
+if __name__ == "__main__":
+    main()
