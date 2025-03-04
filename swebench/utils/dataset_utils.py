@@ -134,14 +134,14 @@ def upload_version(json_file_path:str , dataset_name):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/swebench/harness/results/proc-macro2-None-task-instances_versions_validated.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/data/RustBench/SWE-bench/swebench/harness/results/proc-macro2-None-task-instances_versions_validated.json"  # 替换为你的 JSON 文件路径
     
     dataset = Dataset.from_json(json_file_path,features=features)
 
     upload_to_huggingface(dataset,"r1v3r/proc-macro2_validated")
     # upload_version(json_file_path,"r1v3r/proc-macro2_validated")
-    # dataset = load_dataset('csv', data_files="/home/riv3r/SWE-bench/swebench/utils/analysis_results.csv")
+    # dataset = load_dataset('csv', data_files="/data/RustBench/SWE-bench/swebench/utils/analysis_results.csv")
 
     # upload_to_huggingface(dataset,"r1v3r/data_classification")
-    # dataset = List2dataset("/home/riv3r/SWE-bench/swebench/harness/results/asterinas_validated.json")
+    # dataset = List2dataset("/data/RustBench/SWE-bench/swebench/harness/results/asterinas_validated.json")
     # upload_to_huggingface(dataset=dataset,dataset_name="r1v3r/asterinas_validated")

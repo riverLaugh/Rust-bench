@@ -4,16 +4,42 @@ import time
 from datasets import Dataset
 from huggingface_hub import HfApi, HfFolder
 import schedule
+import re
+import datetime
+import traceback
 
 # Hugging Face 配置
 HF_USERNAME = "r1v3r"
 HF_TOKEN = os.getenv("HUGGING_FACE_HUB_TOKEN", None)
-REPO_NAME = "auto_validated"  # 数据集名称
+REPO_NAME = "auto_validated2"  # 数据集名称
 
 # JSON 文件路径
-JSON_FILE_PATH = "/home/riv3r/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
+JSON_FILE_PATH = "/data/RustBench/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
 LAST_UPLOAD_COUNT_FILE = "/tmp/last_upload_count.txt"  # 临时文件，用于存储上次上传的实例数量
 
+def post_process_data(func):
+    def wrapper(*args,**kwargs):
+
+        retval = func(*args,**kwargs)
+
+        time_re = re.compile(r'(\d{4})-(\d{2})-(\d{2})(?:T| )(\d{2}):(\d{2}):(\d{2})Z?')
+        
+        for data in retval:
+            
+            # 1. 将时间转为标准时间字符串
+            if isinstance(data['created_at'],int):
+                ts = int(data['created_at'])
+                data['created_at'] = datetime.datetime.fromtimestamp(int(ts / 1000)).strftime("%Y-%m-%dT%H:%M:%S")
+
+            elif isinstance(data['created_at'],str):
+                time_match = re.match(time_re,data['created_at'])
+                if time_match:
+                    data['created_at'] = f"{time_match.group(1)}-{time_match.group(2)}-{time_match.group(3)}T{time_match.group(4)}:{time_match.group(5)}:{time_match.group(6)}"
+
+        return retval
+    return wrapper
+
+@post_process_data
 def load_json(file_path):
     with open(file_path, "r") as f:
         data = json.load(f)
@@ -36,7 +62,7 @@ def get_last_upload_count():
 def save_current_upload_count(count):
     """保存当前实例数量到文件"""
     with open(LAST_UPLOAD_COUNT_FILE, "w") as f:
-        f.write(str(count))
+        f.write(str(count))      
 
 def main():
     # 1. 加载 JSON 数据
@@ -74,5 +100,10 @@ if __name__ == "__main__":
     schedule.every(1).hours.do(main)
 
     while True:
-        schedule.run_pending()
-        time.sleep(600)
+        try:
+            schedule.run_pending()
+            time.sleep(600)
+        except (KeyboardInterrupt,SystemExit):
+            break
+        except:
+            traceback.print_exc()
