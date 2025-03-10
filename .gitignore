@@ -187,7 +187,7 @@ swebench/harness/save/*
 *asterinas
 swebench/harness/logs/*
 repos/*
-
+swebench/collect/statistics/*
 
 swebench/versioning/auto/dataset
 swebench/versioning/auto/version
