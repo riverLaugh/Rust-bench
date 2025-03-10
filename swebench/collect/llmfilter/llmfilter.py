@@ -216,9 +216,9 @@ def main(args):
 
     # 提取文件名并生成其他文件名
     input_filename = input_file.split("/")[-1].split("-")[0]  # 提取文件名部分
-    output_file = f"/home/riv3r/SWE-bench/swebench/collect/llmfilter/{input_filename}_output.json"
-    output_file_all = f"/home/riv3r/SWE-bench/swebench/collect/llmfilter/{input_filename}_output.all.json"
-    output_json_file = f"/home/riv3r/SWE-bench/swebench/collect/llmfilter/{input_filename}_llm.json"
+    output_file = f"/data/RustBench/SWE-bench/swebench/collect/llmfilter/{input_filename}_output.json"
+    output_file_all = f"/data/RustBench/SWE-bench/swebench/collect/llmfilter/{input_filename}_output.all.json"
+    output_json_file = f"/data/RustBench/SWE-bench/swebench/collect/llmfilter/{input_filename}_llm.json"
 
 
     processed_instances = []

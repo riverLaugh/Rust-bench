@@ -134,6 +134,7 @@ class Repo:
             "per_page": per_page,
             **kwargs,
         }
+        
         while True:
             try:
                 # Get values from API call
@@ -151,6 +152,7 @@ class Repo:
                 if num_pages is not None and page >= num_pages:
                     break
                 page += 1
+
             # except urllib.error.URLError as e:
             #     # logger.error(
             #     #     f"[{self.owner}/{self.name}] Error processing page {page} "
@@ -159,12 +161,14 @@ class Repo:
             #     logger.error(f"URLError caught, {e.reason}")
             #     logger.error(f"Retrying in {delay} seconds...")
             #     time.sleep(delay)
+
             except Exception as e:
                 # Rate limit handling
                 logger.error(
                     f"[{self.owner}/{self.name}] Error processing page {page} "
                     f"w/ token {self.token[:10]} - {e}"
                 )
+                
                 # waiting for api rate limit reset
                 while True:
                     rl = self.api.rate_limit.get()
@@ -175,6 +179,7 @@ class Repo:
                         f"for token {self.token[:10]}, checking again in 5 minutes"
                     )
                     time.sleep(60 * 5)
+
         if not quiet:
             logger.info(
                 f"[{self.owner}/{self.name}] Processed {(page-1)*per_page + len(values)} values"

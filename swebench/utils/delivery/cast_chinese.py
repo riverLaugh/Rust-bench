@@ -1,6 +1,6 @@
 import json
 
-with open("/home/riv3r/SWE-bench/swebench/utils/delivery/classification_results.json", "r") as f:
+with open("/data/RustBench/SWE-bench/swebench/utils/delivery/classification_results.json", "r") as f:
     data = json.load(f)
 
 with open("classification_results_cn.json", "w") as f:

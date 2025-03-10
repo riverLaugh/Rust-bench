@@ -89,7 +89,7 @@ def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
         try:
 
             if auto:
-                path_pr = os.path.join(path_prs, f"auto/{repo_name}-prs.jsonl")
+                path_pr = os.path.join(path_prs, f"auto3/{repo_name}-prs.jsonl")
             else:
                 path_pr = os.path.join(path_prs, f"{repo_name}-prs.jsonl")
 
@@ -131,7 +131,7 @@ def construct_data_files(data: dict,pr_lock,task_lock,mode:str):
 
             # modify path_task based on weather auto is True
             if auto:
-                path_task = os.path.join(path_tasks, f"auto/{repo_name}-{mode}-task-instances.jsonl")
+                path_task = os.path.join(path_tasks, f"auto3/{repo_name}-{mode}-task-instances.jsonl")
             else:
                 path_task = os.path.join(path_tasks, f"{repo_name}-{mode}-task-instances.jsonl")
 

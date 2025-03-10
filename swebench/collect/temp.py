@@ -69,9 +69,9 @@ def move_files_by_letter(directory, target_directory, start_letter):
 
 if __name__ == "__main__":
     # 源文件夹路径
-    source_directory = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto"
+    source_directory = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto"
     # 目标文件夹路径
-    destination_directory = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto2"
+    destination_directory = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto2"
 
     # 获取统计结果
     try:

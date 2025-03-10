@@ -183,7 +183,7 @@ swebench/collect/temp
 swebench/collect/count.py
 swebench/collect/test.py
 swebench/collect/test.json
-
+swebench/harness/save/*
 *asterinas
 swebench/harness/logs/*
 repos/*

@@ -3,11 +3,13 @@ import json
 import platform
 import re
 import toml
+import json
 from tqdm.auto import tqdm
 import logging
 import os,requests
 from dataclasses import dataclass
 from typing import Any, Union, cast
+from datetime import datetime
 from swebench.harness.repo_arch import GithubApiPool, get_cargo_test_cmd, get_repo_arch
 from swebench.harness.make_test_cmds import make_test_cmds
 from swebench.harness.constants import (
@@ -43,6 +45,149 @@ default_config = {
             "git submodule update --init --recursive",
         ],
     }
+#todo
+threshold_time = "2024-11-27"
+
+RUST_RELEASE_DATES = [
+    ("2015-05-15", "1.0.0"),
+    ("2015-06-25", "1.1.0"),
+    ("2015-08-07", "1.2.0"),
+    ("2015-09-17", "1.3.0"),
+    ("2015-10-29", "1.4.0"),
+    ("2015-12-10", "1.5.0"),
+    ("2016-01-21", "1.6.0"),
+    ("2016-03-03", "1.7.0"),
+    ("2016-04-14", "1.8.0"),
+    ("2016-05-26", "1.9.0"),
+    ("2016-07-07", "1.10.0"),
+    ("2016-08-18", "1.11.0"),
+    ("2016-09-29", "1.12.0"),
+    ("2016-10-20", "1.12.1"),
+    ("2016-11-10", "1.13.0"),
+    ("2016-12-22", "1.14.0"),
+    ("2017-02-02", "1.15.0"),
+    ("2017-02-09", "1.15.1"),
+    ("2017-03-16", "1.16.0"),
+    ("2017-04-27", "1.17.0"),
+    ("2017-06-08", "1.18.0"),
+    ("2017-07-20", "1.19.0"),
+    ("2017-08-31", "1.20.0"),
+    ("2017-10-12", "1.21.0"),
+    ("2017-11-22", "1.22.0"),
+    ("2017-11-22", "1.22.1"),
+    ("2018-01-04", "1.23.0"),
+    ("2018-02-15", "1.24.0"),
+    ("2018-03-01", "1.24.1"),
+    ("2018-03-29", "1.25.0"),
+    ("2018-05-10", "1.26.0"),
+    ("2018-05-29", "1.26.1"),
+    ("2018-06-05", "1.26.2"),
+    ("2018-06-21", "1.27.0"),
+    ("2018-07-10", "1.27.1"),
+    ("2018-07-20", "1.27.2"),
+    ("2018-08-02", "1.28.0"),
+    ("2018-09-13", "1.29.0"),
+    ("2018-09-25", "1.29.1"),
+    ("2018-10-11", "1.29.2"),
+    ("2018-10-25", "1.30.0"),
+    ("2018-11-08", "1.30.1"),
+    ("2018-12-06", "1.31.0"),
+    ("2018-12-20", "1.31.1"),
+    ("2019-01-17", "1.32.0"),
+    ("2019-02-28", "1.33.0"),
+    ("2019-04-11", "1.34.0"),
+    ("2019-04-25", "1.34.1"),
+    ("2019-05-14", "1.34.2"),
+    ("2019-05-23", "1.35.0"),
+    ("2019-07-04", "1.36.0"),
+    ("2019-08-15", "1.37.0"),
+    ("2019-09-20", "1.38.0"),
+    ("2019-11-07", "1.39.0"),
+    ("2019-12-19", "1.40.0"),
+    ("2020-01-30", "1.41.0"),
+    ("2020-02-27", "1.41.1"),
+    ("2020-03-12", "1.42.0"),
+    ("2020-04-23", "1.43.0"),
+    ("2020-05-07", "1.43.1"),
+    ("2020-06-04", "1.44.0"),
+    ("2020-06-18", "1.44.1"),
+    ("2020-07-16", "1.45.0"),
+    ("2020-07-30", "1.45.1"),
+    ("2020-08-03", "1.45.2"),
+    ("2020-08-27", "1.46.0"),
+    ("2020-10-08", "1.47.0"),
+    ("2020-11-19", "1.48.0"),
+    ("2020-12-31", "1.49.0"),
+    ("2021-02-11", "1.50.0"),
+    ("2021-03-25", "1.51.0"),
+]
+
+RUST_RELEASE_DATES.extend([
+    ("2021-05-06", "1.52.0"),
+    ("2021-06-17", "1.53.0"),
+    ("2021-07-29", "1.54.0"),
+    ("2021-09-09", "1.55.0"),
+    ("2021-10-21", "1.56.0"),
+    ("2021-12-02", "1.57.0"),
+    ("2022-01-13", "1.58.0"),
+    ("2022-02-24", "1.59.0"),
+    ("2022-04-07", "1.60.0"),
+    ("2022-05-19", "1.61.0"),
+    ("2022-06-30", "1.62.0"),
+    ("2022-08-11", "1.63.0"),
+    ("2022-09-22", "1.64.0"),
+    ("2022-11-03", "1.65.0"),
+    ("2022-12-15", "1.66.0"),
+    ("2023-01-26", "1.67.0"),
+    ("2023-03-09", "1.68.0"),
+    ("2023-04-20", "1.69.0"),
+    ("2023-06-01", "1.70.0"),
+    ("2023-07-13", "1.71.0"),
+    ("2023-08-24", "1.72.0"),
+    ("2023-10-05", "1.73.0"),
+    ("2023-11-16", "1.74.0"),
+    ("2023-12-28", "1.75.0"),
+    ("2024-02-08", "1.76.0"),
+])
+
+RUST_RELEASE_DATES.extend([
+    ("2024-02-08", "1.76.0"),
+    ("2024-03-21", "1.77.0"),
+    ("2024-03-28", "1.77.1"),
+    ("2024-03-30", "1.77.2"),
+    ("2024-05-02", "1.78.0"),
+    ("2024-06-13", "1.79.0"),
+    ("2024-07-25", "1.80.0"),
+    ("2024-08-08", "1.80.1"),
+    ("2024-09-05", "1.81.0"),
+    ("2024-10-17", "1.82.0"),
+    ("2024-11-28", "1.83.0"),
+    ("2025-01-09", "1.84.0"),
+    ("2025-01-30", "1.84.1"),
+    ("2025-02-20", "1.85.0"),
+])
+
+def get_rust_version_for_date(target_date: str) -> str:
+    """
+    根据给定日期返回应该使用的 Rust 版本
+    参数 target_date 格式为 'YYYY-MM-DD'
+    """
+    target_datetime = datetime.strptime(target_date, "%Y-%m-%d")
+    
+    # 初始化为默认版本 1.81.0（最新版本）
+    selected_version = "1.81.0"
+    
+    # 按照日期从最新到最旧排序版本列表
+    sorted_releases = sorted(RUST_RELEASE_DATES, key=lambda x: datetime.strptime(x[0], "%Y-%m-%d"), reverse=True)
+    
+    # 找到第一个不晚于目标日期的版本
+    for release_date, version in sorted_releases:
+        release_datetime = datetime.strptime(release_date, "%Y-%m-%d")
+        if release_datetime <= target_datetime:
+            selected_version = version
+            break
+            
+    return selected_version
 
 @dataclass
 class TestSpec:
@@ -143,7 +288,7 @@ def get_test_specs_from_dataset(dataset: Union[list[SWEbenchInstance], list[Test
     return filtered_result
 
 
-def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
+def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time):
     """
     Create a list of bash commands to set up the repository for testing.
     This is the setup script for the instance image.
@@ -154,8 +299,11 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name):
         # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
         f"git reset --hard {base_commit}",
-        # f"git remote remove origin",
     ]
+    rust_version = get_rust_version_for_date(time)
+    setup_commands.append(f"rustup default {rust_version}")
+    setup_commands.append(f"cargo lts {time}")
+    setup_commands.append(f"cargo update")
 
     if repo in MAP_REPO_TO_INSTALL:
         setup_commands.append(MAP_REPO_TO_INSTALL[repo])
@@ -242,6 +390,15 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
         test_commands = get_cargo_test_cmd(repo, tests_changed)
 
+    # write test commands
+    test_commands_output_dir = os.path.join(os.path.dirname(__file__),'save','test_commands',instance['repo'].replace('/','__'))
+    os.makedirs(test_commands_output_dir,exist_ok=True)
+    test_commands_output_path = os.path.join(test_commands_output_dir,f"{instance['instance_id']}.json")
+    if not os.path.exists(test_commands_output_path):
+        with open(test_commands_output_path,'w',encoding='utf-8') as f:
+            json.dump(test_commands,f)
+
+
     eval_commands = []
     if "eval_commands" in specs:
         eval_commands += specs["eval_commands"]
@@ -275,6 +432,8 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     base_commit = instance["base_commit"]
     problem_statement = instance["problem_statement"]
     hints_text = instance["hints_text"]  # Unused
+    time = instance["created_at"].split("T")[0] 
+
     test_patch = instance["test_patch"]
     def _from_json_or_obj(key: str) -> Any:
         """If key points to string, load with json"""
@@ -289,7 +448,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     repo_directory = f"/{env_name}"
     specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
 
-    repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name)
+    repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time)
     try:
         env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
     except Exception as e:

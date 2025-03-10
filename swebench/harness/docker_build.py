@@ -124,7 +124,7 @@ def build_image(
             decode=True,
             platform=platform,
             nocache=nocache,
-            network_mode="bridge",
+            network_mode="host",
         )
 
         # Log the build process continuously

@@ -38,7 +38,8 @@ def main(args):
     version_to_latest_commit = {}
 
     for example in dataset:
-        # print(example)
+        if 'version' not in example:
+            continue
         version = example['version']
         created_at = example['created_at_parsed']
         base_commit = example['base_commit']
@@ -55,6 +56,9 @@ def main(args):
 
     # 定义一个函数，根据 version 添加 environment_setup_commit
     def add_environment_setup_commit(example):
+        if 'version' not in example:
+            example['environment_setup_commit'] = None
+            return example
         version = example['version']
         if version in version_to_environment_setup_commit:
             example['environment_setup_commit'] = version_to_environment_setup_commit[version]
