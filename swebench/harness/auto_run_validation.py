@@ -5,10 +5,10 @@ import argparse
 import re
 
 # 根路径
-root_path = "/data/RustBench/SWE-bench/swebench"
+root_path = "/home/riv3r/SWE-bench/swebench"
 
 # 配置路径
-input_folder = os.path.join(root_path, "collect/tasks/auto3")
+input_folder = os.path.join(root_path, "collect/tasks/auto")
 output_folder = os.path.join(root_path, "versioning/results")
 version_folder = os.path.join(root_path, "versioning/auto/version")
 env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")
@@ -25,7 +25,7 @@ if not os.path.exists(versioning_log_folder):
 if not os.path.exists(dataset_folder):
     os.makedirs(dataset_folder)
 
-num_workers = 8  # 并行线程数量
+num_workers = 16  # 并行线程数量
 
 
 def setup_logging(rerun):

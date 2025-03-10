@@ -10,10 +10,10 @@ from datetime import datetime
 # Hugging Face 配置
 HF_USERNAME = "r1v3r"
 HF_TOKEN = os.getenv("HUGGING_FACE_HUB_TOKEN", None)
-REPO_NAME = "auto_validated3"  # 数据集名称
+REPO_NAME = "auto_validated"  # 数据集名称
 
 # JSON 文件路径
-JSON_FILE_PATH = "/data/RustBench/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
+JSON_FILE_PATH = "/home/riv3r/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
 LAST_UPLOAD_COUNT_FILE = "/tmp/last_upload_count.txt"  # 临时文件，用于存储上次上传的实例数量
 
 

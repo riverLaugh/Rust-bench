@@ -85,7 +85,7 @@ def fetch_dataset_from_hf(dataset_name, split='train'):
 
 # Main function
 def main():
-    # input_file = "/data/RustBench/SWE-bench/swebench/harness/results/asterinas_validated.json"
+    # input_file = "/home/riv3r/SWE-bench/swebench/harness/results/asterinas_validated.json"
     # data = read_json_local(input_file)
 
     data = fetch_dataset_from_hf("r1v3r/bitflags_validated", "train")

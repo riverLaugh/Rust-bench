@@ -476,9 +476,9 @@ def merge_classification_results(results_list):
 
 def split_all_tasks_by_time(cutoff_time,output_dir):
         # 指定要读取的目录路径
-    directory_path_auto1 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto"
-    directory_path_auto2 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto2"
-    directory_path_auto3 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto3"
+    directory_path_auto1 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto"
+    directory_path_auto2 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto2"
+    directory_path_auto3 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto3"
 
     # 分类实例
     classification_result1 = classify_instances_by_time2(directory_path_auto1, cutoff_time)
@@ -500,12 +500,12 @@ def split_all_tasks_by_time(cutoff_time,output_dir):
 if __name__ == "__main__":
     
     cutoff_time = "2024-04-01T00:00:00Z"
-    output_dir = "/data/RustBench/SWE-bench/swebench/collect/statistics"
+    output_dir = "/home/riv3r/SWE-bench/swebench/collect/statistics"
 
-    directory_path_auto1 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto"
-    directory_path_auto2 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto2"
-    directory_path_auto3 = "/data/RustBench/SWE-bench/swebench/collect/tasks/auto3"
-    # file_path="/data/RustBench/SWE-bench/swebench/collect/rust_repos_diff_227.json"
+    directory_path_auto1 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto"
+    directory_path_auto2 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto2"
+    directory_path_auto3 = "/home/riv3r/SWE-bench/swebench/collect/tasks/auto3"
+    # file_path="/home/riv3r/SWE-bench/swebench/collect/rust_repos_diff_227.json"
 
     split_all_tasks_by_time(cutoff_time,output_dir)
 

@@ -17,8 +17,8 @@ def set_tokens():
 
 if __name__ == '__main__':
     file_path = 'rust_repos_diff_227.json'
-    path_prs = '/data/RustBench/SWE-bench/swebench/collect/prs'
-    path_tasks = '/data/RustBench/SWE-bench/swebench/collect/tasks'
+    path_prs = '/home/riv3r/SWE-bench/swebench/collect/prs'
+    path_tasks = '/home/riv3r/SWE-bench/swebench/collect/tasks'
     set_tokens()
 
     data_list = load_json_to_list(file_path)

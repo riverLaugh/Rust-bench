@@ -35,6 +35,6 @@ def merge_json_files(folder_path):
 
 if __name__ == "__main__":
     # 指定文件夹路径和输出文件路径
-    folder_path = "/data/RustBench/SWE-bench/swebench/harness/results"
+    folder_path = "/home/riv3r/SWE-bench/swebench/harness/results"
     
     merge_json_files(folder_path)
