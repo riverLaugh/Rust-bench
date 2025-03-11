@@ -210,10 +210,18 @@ def main(pr_file: str, output: str, mode:str, token: Optional[str] = None, task_
                         # If has test suite, write to output file
                         print(json.dumps(instance), end="\n", flush=True, file=output)
                         with_tests += 1
+
     if auto:
-        with task_lock:
-            log_file.write('Done:{}\n'.format(reponame))
-            log_file.close()
+        cur_repo_exist = False
+        with open(log,'r') as f:
+            for line in f:
+                if line.split(":")[1] == reponame:
+                    cur_repo_exist = True
+        if not cur_repo_exist:            
+            with task_lock:
+                log_file.write('Done:{}\n'.format(reponame))
+                log_file.flush()
+    log_file.close()
     logger.info(f"[{', '.join(repos.keys())}] Total instances: {total_instances}, completed: {completed}, with tests: {with_tests}")
     logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been beeninspected")
 

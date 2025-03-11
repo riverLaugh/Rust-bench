@@ -4,15 +4,16 @@ import time
 from datasets import Dataset
 import schedule
 import re
+import traceback
 from datetime import datetime
 
 # Hugging Face 配置
 HF_USERNAME = "r1v3r"
 HF_TOKEN = os.getenv("HUGGING_FACE_HUB_TOKEN", None)
-REPO_NAME = "auto_validated2"  # 数据集名称
+REPO_NAME = "auto_validated"  # 数据集名称
 
 # JSON 文件路径
-JSON_FILE_PATH = "/data/RustBench/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
+JSON_FILE_PATH = "/home/riv3r/SWE-bench/swebench/harness/results/auto/defaultconfig_validated.json"
 LAST_UPLOAD_COUNT_FILE = "/tmp/last_upload_count.txt"  # 临时文件，用于存储上次上传的实例数量
 
 
@@ -69,7 +70,7 @@ def get_last_upload_count():
 def save_current_upload_count(count):
     """保存当前实例数量到文件"""
     with open(LAST_UPLOAD_COUNT_FILE, "w") as f:
-        f.write(str(count))
+        f.write(str(count))      
 
 
 def main():
@@ -109,5 +110,10 @@ if __name__ == "__main__":
     schedule.every(1).hours.do(main)
 
     while True:
-        schedule.run_pending()
-        time.sleep(600)
+        try:
+            schedule.run_pending()
+            time.sleep(600)
+        except (KeyboardInterrupt,SystemExit):
+            break
+        except:
+            traceback.print_exc()

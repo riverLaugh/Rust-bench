@@ -49,7 +49,7 @@ def upload_to_huggingface(dataset, dataset_name, token):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/root/ARiSE/SWEbench/SWE-bench/swebench/versioning/results/output_validated.jsonl"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/results/output_validated.jsonl"  # 替换为你的 JSON 文件路径
     dataset_name = "r1v3r/bitflags_tests_dataset"  # 替换为你想要的数据集名称
     hf_token = os.environ.get("HUGGING_FACE_HUB_TOKEN", None)
 

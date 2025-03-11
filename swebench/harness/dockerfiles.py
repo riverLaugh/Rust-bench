@@ -5,31 +5,8 @@ FROM --platform={platform} ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
-ENV RUSTUP_DIST_SERVER=https://mirror.sjtu.edu.cn/rust-static
-ENV RUSTUP_UPDATE_ROOT=https://mirror.sjtu.edu.cn/rust-static/rustup
-
-RUN mkdir -p ~/.cargo && \
-    cat <<EOF > ~/.cargo/config
-[source.crates-io]
-replace-with = "sjtu"
-
-[source.tuna]
-registry = "https://mirrors.tuna.tsinghua.edu.cn/crates.io-index"
-
-# 中国科学技术大学
-[source.ustc]
-registry = "git://mirrors.ustc.edu.cn/crates.io-index"
-
-# 上海交通大学
-[source.sjtu]
-registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index"
-
-# rustcc社区
-[source.rustcc]
-registry = "git://crates.rustcc.cn/crates.io-index"
-EOF
-
-
+ENV RUSTUP_DIST_SERVER="https://rsproxy.cn"
+ENV RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
 
 RUN apt update && apt install -y \
 wget \
@@ -46,10 +23,14 @@ tzdata \
 
 RUN apt-get update && \
     apt-get install -y libssl-dev
-
 # 安装 Rustup 和指定的 Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH=/root/.cargo/bin:$PATH
+RUN git clone https://github.com/riverLaugh/LTS.git
+RUN cd LTS && git checkout main && cargo install --path . 
+
+RUN git clone --bare https://github.com/rust-lang/crates.io-index-archive.git
+ENV CARGO_REGISTRY_GIT_DIR=/crates.io-index-archive.git
 
 # 设置 Rust 默认版本，可以使用 'stable', 'beta', 'nightly' 或具体版本号如 '1.67.0'
 RUN rustup default nightly
@@ -68,6 +49,21 @@ RUN apt-get install protobuf-compiler -y
 
 _DOCKERFILE_ENV = r"""FROM --platform={platform} sweb.base.{arch}:latest
 
+RUN mkdir -p ~/.cargo && \
+    cat <<EOF > ~/.cargo/config
+[source.crates-io]
+replace-with = 'rsproxy'
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+[net]
+git-fetch-with-cli = true
+EOF
+
+
 COPY ./setup_env.sh /root/
 RUN chmod +x /root/setup_env.sh
 RUN /bin/bash -c "source ~/.bashrc && /root/setup_env.sh"
@@ -79,8 +75,8 @@ WORKDIR /testbed/
 
 _DOCKERFILE_ENV_asterinas = r"""
 FROM --platform={platform} asterinas/asterinas:{tag}
-ENV HTTPS_PROXY=http://172.24.16.1:7899
-ENV HTTP_PROXY=http://172.24.16.1:7899
+
+
 
 # ENV RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup
 # ENV RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
