@@ -1,0 +1,550 @@
+{
+    "hyperium__hyper-567": {
+        "errors": [
+            "2025-03-12 23:53:38,232 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.0.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/9mba_vcnk1s2gxnb_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:55,087 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:55,087 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-567:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-920": {
+        "errors": [
+            "2025-03-12 23:49:14,033 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-08-21/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/bf91da07e7cf81c5ba2d0fc453cb21edbf0d26def4f1a28093bf10851cc017c0.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:49:18,844 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:49:18,844 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-920:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-898": {
+        "errors": [
+            "2025-03-12 23:49:29,262 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-07-05/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/cf47787fd50bf6c7f68db290eab054e493e4619d42a8faf66565431449055f1c.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:50:46,101 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:50:46,101 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-898:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-875": {
+        "errors": [
+            "2025-03-12 23:50:51,660 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-22/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/274df0e18ce91c53145df31ebb82c1886ce0e149fc27081210c85f37b2c05adf.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:51:47,090 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:51:47,090 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-875:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-994": {
+        "errors": [
+            "2025-03-12 23:49:09,390 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128",
+            "2025-03-12 23:49:09,391 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-994:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128"
+        ]
+    },
+    "hyperium__hyper-867": {
+        "errors": [
+            "2025-03-12 23:52:22,847 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-22/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/274df0e18ce91c53145df31ebb82c1886ce0e149fc27081210c85f37b2c05adf.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:23,295 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:23,295 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-867:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-899": {
+        "errors": [
+            "2025-03-12 23:49:28,902 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-07-05/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/cf47787fd50bf6c7f68db290eab054e493e4619d42a8faf66565431449055f1c.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:50:46,094 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:50:46,094 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-899:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-873": {
+        "errors": [
+            "2025-03-12 23:50:51,047 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-22/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/274df0e18ce91c53145df31ebb82c1886ce0e149fc27081210c85f37b2c05adf.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:51:44,315 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:51:44,315 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-873:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-910": {
+        "errors": [
+            "2025-03-12 23:49:14,397 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-07-05/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/cf47787fd50bf6c7f68db290eab054e493e4619d42a8faf66565431449055f1c.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:49:18,844 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:49:18,844 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-910:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-971": {
+        "errors": [
+            "2025-03-12 23:49:09,696 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128",
+            "2025-03-12 23:49:09,696 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-971:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 128"
+        ]
+    },
+    "hyperium__hyper-36": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:49,840 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:49,840 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-36:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-166": {
+        "errors": [
+            "2025-03-13 00:29:04,497 - INFO - warning: spurious network error (3 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:29:05,624 - INFO - warning: spurious network error (2 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:29:09,218 - INFO - warning: spurious network error (1 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:31:09,421 - INFO - warning: spurious network error (3 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 31 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:32:18,136 - INFO - warning: spurious network error (2 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 35 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:33:28,790 - INFO - warning: spurious network error (1 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 39 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:34:29,392 - INFO - error: failed to get `curl` as a dependency of package `hyper v0.0.1 (/testbed)`",
+            "  [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 43 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:34:30,308 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:34:30,308 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-166:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-29": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:57,135 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:57,135 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-29:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-108": {
+        "errors": [
+            "2025-03-13 00:37:41,967 - INFO - error: failed to get `move-acceptor` as a dependency of package `hyper v0.0.1 (/testbed)`",
+            "2025-03-13 00:37:42,550 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:42,550 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-108:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-180": {
+        "errors": [
+            "2025-03-13 00:30:42,234 - INFO - warning: spurious network error (3 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 35 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:32:44,168 - INFO - warning: spurious network error (2 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 39 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:33:39,308 - INFO - warning: spurious network error (1 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 43 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:35:26,452 - INFO - error: failed to get `curl` as a dependency of package `hyper v0.0.1 (/testbed)`",
+            "  [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 47 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:35:27,222 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:35:27,222 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-180:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-76": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:36,301 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:36,301 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-76:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-20": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:38:03,732 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:38:03,732 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-20:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-48": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:49,283 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:49,283 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-48:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-165": {
+        "errors": [
+            "2025-03-13 00:35:00,634 - INFO - warning: spurious network error (3 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:37:52,196 - INFO - warning: spurious network error (3 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 31 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:39:58,232 - INFO - warning: spurious network error (2 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 35 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:40:42,314 - INFO - warning: spurious network error (1 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 39 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:42:58,825 - INFO - error: failed to select a version for the requirement `time = \"^0.3\"`",
+            "2025-03-13 00:42:59,392 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:42:59,392 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-165:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-153": {
+        "errors": [
+            "2025-03-13 00:35:55,254 - INFO - warning: spurious network error (3 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:35:59,861 - INFO - warning: spurious network error (2 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:36:08,695 - INFO - warning: spurious network error (1 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:36:19,467 - INFO - error: failed to get `cookie` as a dependency of package `hyper v0.0.1 (/testbed)`",
+            "  [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:36:20,069 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:36:20,069 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-153:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-25": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:57,314 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:57,314 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-25:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-195": {
+        "errors": [
+            "2025-03-13 00:26:46,712 - INFO - warning: spurious network error (3 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:26:47,884 - INFO - warning: spurious network error (2 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:26:51,625 - INFO - warning: spurious network error (1 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:31:13,638 - INFO - warning: spurious network error (3 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 35 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:33:33,233 - INFO - warning: spurious network error (2 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 39 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:34:48,987 - INFO - warning: spurious network error (1 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 43 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:38:07,374 - INFO - error: failed to select a version for the requirement `time = \"^0.3\"`",
+            "2025-03-13 00:38:08,055 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:38:08,056 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-195:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-182": {
+        "errors": [
+            "2025-03-13 00:28:09,367 - INFO - warning: spurious network error (3 tries remaining): [35] SSL connect error (OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443 ); class=Net (12)",
+            "2025-03-13 00:32:08,756 - INFO - warning: spurious network error (3 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 35 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:33:28,192 - INFO - warning: spurious network error (2 tries remaining): [92] Stream error in the HTTP/2 framing layer (HTTP/2 stream 39 was not closed cleanly: CANCEL (err 8)); class=Net (12)",
+            "2025-03-13 00:37:05,191 - INFO - error: failed to select a version for the requirement `time = \"^0.3\"`",
+            "2025-03-13 00:37:07,268 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:07,269 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-182:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-59": {
+        "errors": [
+            "called `Result::unwrap()` on an `Err` value: Custom { kind: Other, error: \"fatal: not a valid object name ^{tree}\\n\" }",
+            "2025-03-13 00:37:43,162 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:43,162 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-59:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-113": {
+        "errors": [
+            "2025-03-13 00:37:07,804 - INFO - error: failed to get `move-acceptor` as a dependency of package `hyper v0.0.1 (/testbed)`",
+            "2025-03-13 00:37:08,409 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:37:08,409 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-113:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2941": {
+        "errors": [
+            "2025-03-12 21:20:47,350 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:20:51,017 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:20:51,017 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2941:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2958": {
+        "errors": [
+            "2025-03-12 21:19:21,937 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:19:24,429 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:19:24,430 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2958:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2932": {
+        "errors": [
+            "2025-03-12 21:21:26,444 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:21:34,159 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:21:34,159 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2932:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2969": {
+        "errors": [
+            "2025-03-12 21:16:36,590 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:16:38,141 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:16:38,141 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2969:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2970": {
+        "errors": [
+            "2025-03-12 21:16:13,695 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:16:15,102 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:16:15,103 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2970:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2929": {
+        "errors": [
+            "2025-03-12 21:21:58,593 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:22:00,680 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:22:00,681 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2929:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2949": {
+        "errors": [
+            "2025-03-12 21:19:38,219 - INFO - error: failed to select a version for the requirement `http = \"^1\"`",
+            "2025-03-12 21:19:47,252 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:19:47,252 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2949:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-3152": {
+        "errors": [
+            "2025-03-12 20:59:40,367 - INFO - error: no matching package named `http-body-util` found",
+            "2025-03-12 20:59:50,825 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 20:59:50,825 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-3152:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-645": {
+        "errors": [
+            "2025-03-12 23:53:23,092 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.2.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/2s7hs7vsan0g32v3_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:23,513 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:23,513 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-645:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-687": {
+        "errors": [
+            "2025-03-12 23:53:09,092 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.4.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/vsgj80hz_sipyhrv_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:09,493 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:09,493 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-687:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-621": {
+        "errors": [
+            "2025-03-12 23:53:37,796 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.1.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/98dnii2sioqicv3g_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:55,100 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:55,100 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-621:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-647": {
+        "errors": [
+            "2025-03-12 23:53:20,416 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.2.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/wwuacqd8ks4jtfvl_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:21,201 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:21,201 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-647:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-680": {
+        "errors": [
+            "2025-03-12 23:53:09,755 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.4.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/l_vg3bx4u_178v5m_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:10,239 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:10,239 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-680:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-625": {
+        "errors": [
+            "2025-03-12 23:53:34,350 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.1.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/whglywu2a51act2l_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:55,099 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:55,099 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-625:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-677": {
+        "errors": [
+            "2025-03-12 23:53:10,293 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.4.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/9obqmdy7n8nshcwe_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:10,856 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:10,856 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-677:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-636": {
+        "errors": [
+            "2025-03-12 23:53:23,820 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.2.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/m4t1vczc8y0a3xr6_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:24,417 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:24,417 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-636:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-693": {
+        "errors": [
+            "2025-03-12 23:53:05,877 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.4.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/y8u322_mls4c2ko1_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:06,572 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:06,572 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-693:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-632": {
+        "errors": [
+            "2025-03-12 23:53:23,414 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.2.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/6u550qtntsywxb_e_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:53:23,998 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:53:23,998 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-632:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-2216": {
+        "errors": [
+            "2025-03-12 22:04:14,922 - INFO - error: failed to select a version for the requirement `bytes = \"^1\"`",
+            "2025-03-12 22:04:15,850 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:04:15,850 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2216:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2480": {
+        "errors": [
+            "2025-03-12 21:41:31,120 - INFO - error: failed to select a version for the requirement `httparse = \"^1.4\"`",
+            "2025-03-12 21:41:39,025 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:41:39,026 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2480:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2348": {
+        "errors": [
+            "2025-03-12 21:57:01,884 - INFO - HEAD is now at a470446d chore(error): remove undocumented public error module (#2344)",
+            "2025-03-12 21:58:54,632 - INFO - error: no matching package named `h2` found",
+            "2025-03-12 21:59:01,592 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:59:01,592 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2348:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2369": {
+        "errors": [
+            "2025-03-12 21:54:48,996 - INFO - HEAD is now at dad5c879 fix(client): log socket option errors instead of returning error (#2361)",
+            "2025-03-12 21:57:11,540 - INFO - error: no matching package named `h2` found",
+            "2025-03-12 21:57:25,734 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:57:25,734 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2369:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2357": {
+        "errors": [
+            "2025-03-12 21:59:49,134 - INFO - error: no matching package named `h2` found",
+            "2025-03-12 22:00:14,297 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:00:14,297 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2357:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2346": {
+        "errors": [
+            "2025-03-12 21:57:26,640 - INFO - HEAD is now at a470446d chore(error): remove undocumented public error module (#2344)",
+            "2025-03-12 21:59:33,982 - INFO - error: no matching package named `h2` found",
+            "2025-03-12 21:59:36,366 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:59:36,366 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2346:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2372": {
+        "errors": [
+            "2025-03-12 21:56:14,636 - INFO - error: failed to select a version for the requirement `h2 = \"^0.3\"`",
+            "2025-03-12 21:56:52,979 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:56:52,986 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2372:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2337": {
+        "errors": [
+            "2025-03-12 22:00:32,184 - INFO - error: no matching package named `h2` found",
+            "2025-03-12 22:01:32,075 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:01:32,075 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2337:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2371": {
+        "errors": [
+            "2025-03-12 21:56:15,378 - INFO - error: failed to select a version for the requirement `h2 = \"^0.3\"`",
+            "2025-03-12 21:56:53,313 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 21:56:53,313 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2371:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-841": {
+        "errors": [
+            "2025-03-12 23:52:32,600 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-04-10/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/721a2bfb1f2ffff09b59911ba686a3a55eac6a2df88f19168be0a7c8a1fdffca.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:33,189 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:33,189 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-841:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-771": {
+        "errors": [
+            "2025-03-12 23:52:41,612 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-03-01/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/b0681ec71318644fd8602ce836f06bf4e5491c57d4a2dcc47bb838258313c36f.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:42,103 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:42,103 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-771:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-834": {
+        "errors": [
+            "2025-03-12 23:52:33,791 - INFO - HEAD is now at 43ac0dd0 Merge pull request #828 from hyperium/pub-control-error",
+            "2025-03-12 23:52:36,711 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-04-10/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/721a2bfb1f2ffff09b59911ba686a3a55eac6a2df88f19168be0a7c8a1fdffca.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:37,662 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:37,662 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-834:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-775": {
+        "errors": [
+            "2025-03-12 23:52:42,521 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-03-01/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/b0681ec71318644fd8602ce836f06bf4e5491c57d4a2dcc47bb838258313c36f.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:43,226 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:43,226 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-775:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-845": {
+        "errors": [
+            "2025-03-12 23:52:32,371 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-04-10/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/721a2bfb1f2ffff09b59911ba686a3a55eac6a2df88f19168be0a7c8a1fdffca.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:32,915 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:32,915 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-845:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-853": {
+        "errors": [
+            "2025-03-12 23:52:28,045 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-04-10/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/721a2bfb1f2ffff09b59911ba686a3a55eac6a2df88f19168be0a7c8a1fdffca.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:28,490 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:28,490 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-853:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-827": {
+        "errors": [
+            "2025-03-12 23:52:36,695 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-04-10/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/721a2bfb1f2ffff09b59911ba686a3a55eac6a2df88f19168be0a7c8a1fdffca.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:37,488 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:37,488 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-827:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-857": {
+        "errors": [
+            "2025-03-12 23:52:22,853 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-22/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/274df0e18ce91c53145df31ebb82c1886ce0e149fc27081210c85f37b2c05adf.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:23,518 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:23,518 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-857:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-778": {
+        "errors": [
+            "2025-03-12 23:52:41,276 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-03-01/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/b0681ec71318644fd8602ce836f06bf4e5491c57d4a2dcc47bb838258313c36f.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:41,839 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:41,839 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-778:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-856": {
+        "errors": [
+            "2025-03-12 23:52:27,348 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-22/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/274df0e18ce91c53145df31ebb82c1886ce0e149fc27081210c85f37b2c05adf.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-12 23:52:27,829 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:27,829 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-856:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-1594": {
+        "errors": [
+            "2025-03-12 22:52:07,147 - INFO - error: no matching version `^0.1.13` found for package `http`",
+            "2025-03-12 22:52:15,106 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:52:15,106 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-1594:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-743": {
+        "errors": [
+            "2025-03-12 23:52:54,746 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.7.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/cb5p4yyrsziu4kue_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:52:55,183 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:55,183 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-743:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-750": {
+        "errors": [
+            "2025-03-12 23:52:52,484 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.7.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/et3zzwl02vnjjglu_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:52:52,958 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:52,958 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-750:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-1865": {
+        "errors": [
+            "2025-03-12 22:35:51,240 - INFO - error: failed to load source for a dependency on `tokio`",
+            "2025-03-12 22:35:58,200 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:35:58,200 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-1865:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-1912": {
+        "errors": [
+            "2025-03-12 22:24:58,817 - INFO - error: failed to select a version for the requirement `futures-channel-preview = \"= 0.3.0-alpha.19\"`",
+            "2025-03-12 22:25:29,047 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:25:29,047 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-1912:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-2019": {
+        "errors": [
+            "2025-03-12 22:16:52,171 - INFO - error: failed to select a version for the requirement `bytes = \"^0.5\"`",
+            "2025-03-12 22:17:02,541 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:17:02,541 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-2019:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-1894": {
+        "errors": [
+            "2025-03-12 22:36:38,825 - INFO - error: failed to load source for a dependency on `tokio`",
+            "2025-03-12 22:37:30,759 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 22:37:30,759 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-1894:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-1983": {
+        "errors": [
+            "2025-03-12 22:19:05,246 - INFO - error: could not download file from 'https://rsproxy.cn/dist/channel-rust-1.38.0.toml' to '/root/.rustup/tmp/ltgn6regj0y47k3__file.toml': failed to make network request: error sending request for url (https://rsproxy.cn/dist/channel-rust-1.38.0.toml): client error (Connect): tls handshake eof",
+            "2025-03-12 22:19:05,825 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 22:19:05,825 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-1983:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-377": {
+        "errors": [
+            "2025-03-13 00:09:41,693 - INFO - error: no matching package named `num_cpus` found",
+            "2025-03-13 00:09:42,539 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-13 00:09:42,540 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-377:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-3185": {
+        "errors": [
+            "2025-03-12 20:58:30,946 - INFO - error: failed to select a version for the requirement `h2 = \"^0.4.2\"`",
+            "2025-03-12 20:58:52,771 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-12 20:58:52,778 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-3185:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "hyperium__hyper-699": {
+        "errors": [
+            "2025-03-12 23:52:56,549 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.4.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/6vy5t0u7dj_f5v6o_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:52:57,223 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:57,223 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-699:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "hyperium__hyper-718": {
+        "errors": [
+            "2025-03-12 23:52:55,981 - INFO - error: could not download file from 'https://rsproxy.cn/dist/rust-1.5.0-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/uh960o7qcdgbn3_c_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-12 23:52:56,385 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-12 23:52:56,385 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.hyperium__hyper-718:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    }
+}

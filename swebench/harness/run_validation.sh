@@ -4,11 +4,12 @@
 
 # 1.21
 python run_validation.py \
-    --dataset_name r1v3r/serde-None-task-instances_versions \
-    --run_id serde-None-task-instances_versions \
+    --dataset_name r1v3r/auto_0207_bug\
+    --run_id ratatui \
     --max_workers 4 \
-    --cache_level env \
-    --instance_ids serde-rs__serde-2847 serde-rs__serde-2845 serde-rs__serde-2562
+    --cache_level instance \
+    --clean 1 \
+    --instance_ids ratatui__ratatui-518
 
 # 1.20
 # python run_validation.py \

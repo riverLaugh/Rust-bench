@@ -300,8 +300,14 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,tim
         f"cd {repo_directory}",
         f"git reset --hard {base_commit}",
     ]
-    rust_version = get_rust_version_for_date(time)
-    setup_commands.append(f"rustup default {rust_version}")
+
+    # 根据时间获取对应的 Rust 版本
+    if repo == "serde-rs/serde" :
+        setup_commands.append(f"rustup toolchain install nightly-{time}")
+        setup_commands.append(f"rustup default nightly-{time}")
+    else:
+        rust_version = get_rust_version_for_date(time)
+        setup_commands.append(f"rustup default {rust_version}")
     setup_commands.append(f"cargo lts {time}")
     setup_commands.append(f"cargo update")
 
@@ -360,9 +366,9 @@ def make_env_script_list(instance, specs, repo, repo_directory, env_name):
             f"retry git clone -o origin https://github.com/{repo} {repo_directory}",
             f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
             f"cd {repo_directory}",
-            f"git reset --hard {instance['environment_setup_commit']}",
+            # f"git reset --hard {instance['environment_setup_commit']}",
             *env_setup_commands,
-            f"retry cargo fetch",
+            # f"retry cargo fetch",
         ]
 
     return reqs_commands

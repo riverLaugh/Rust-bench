@@ -1,0 +1,436 @@
+{
+    "serde-rs__serde-813": {
+        "errors": [
+            "2025-03-11 20:34:16,465 - INFO - error: no release found for 'nightly-2017-03-09'",
+            "2025-03-11 20:34:16,964 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:34:16,964 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-813:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-811": {
+        "errors": [
+            "2025-03-11 20:34:21,379 - INFO - error: no release found for 'nightly-2017-03-09'",
+            "2025-03-11 20:34:21,855 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:34:21,855 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-811:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-738": {
+        "errors": [
+            "2025-03-11 20:15:54,795 - INFO - error: no release found for 'nightly-2017-02-01'",
+            "2025-03-11 20:15:55,306 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:15:55,306 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-738:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-765": {
+        "errors": [
+            "2025-03-11 20:38:54,964 - INFO - error: no release found for 'nightly-2017-02-15'",
+            "2025-03-11 20:38:55,795 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:38:55,795 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-765:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-733": {
+        "errors": [
+            "2025-03-11 20:15:59,082 - INFO - error: no release found for 'nightly-2017-01-31'",
+            "2025-03-11 20:15:59,694 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:15:59,694 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-733:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-837": {
+        "errors": [
+            "2025-03-11 20:33:40,626 - INFO - error: no release found for 'nightly-2017-04-03'",
+            "2025-03-11 20:33:41,089 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:33:41,089 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-837:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-653": {
+        "errors": [
+            "2025-03-11 20:41:54,002 - INFO - error: no release found for 'nightly-2016-12-24'",
+            "2025-03-11 20:41:54,542 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:54,542 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-653:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-509": {
+        "errors": [
+            "2025-03-11 20:10:14,585 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-08-19/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/d8a902f412a7fe3cad0b6546377db796fae5485dad987a4d5bad3a3749425cf9.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:10:15,323 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:15,323 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-509:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-566": {
+        "errors": [
+            "2025-03-11 20:09:53,789 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-09-28/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/558aaa4a0aa87424ebde778d9749b7cece4985d8c2558c3b20ea25e6650caec0.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:09:54,213 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:09:54,213 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-566:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-678": {
+        "errors": [
+            "2025-03-11 20:41:49,908 - INFO - error: no release found for 'nightly-2017-01-11'",
+            "2025-03-11 20:41:50,623 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:50,623 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-678:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-681": {
+        "errors": [
+            "2025-03-11 20:41:45,871 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6291619896fc6a83d619945148670b6420aa06ec/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/d158b686b4572d7fa54ef499e093eec493d21d842f68e207bd3d6e2c49b7ef9a.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:41:46,395 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:46,395 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-681:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-475": {
+        "errors": [
+            "2025-03-11 20:10:21,190 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-08-03/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/f4c78e66e6fc5b25eb25d8ab382d98168d5389a6cc51df5dc0faa13903708788.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:10:21,846 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:21,846 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-475:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-684": {
+        "errors": [
+            "2025-03-11 20:41:46,894 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6291619896fc6a83d619945148670b6420aa06ec/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/d158b686b4572d7fa54ef499e093eec493d21d842f68e207bd3d6e2c49b7ef9a.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:41:47,414 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:47,414 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-684:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-523": {
+        "errors": [
+            "2025-03-11 20:10:09,002 - INFO - error: no release found for 'nightly-2016-08-24'",
+            "2025-03-11 20:10:09,820 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:09,820 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-523:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-510": {
+        "errors": [
+            "2025-03-11 20:10:14,506 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-08-19/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/d8a902f412a7fe3cad0b6546377db796fae5485dad987a4d5bad3a3749425cf9.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:10:15,137 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:15,137 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-510:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-671": {
+        "errors": [
+            "2025-03-11 20:41:54,543 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://s3.amazonaws.com/rust-lang-ci/cargo-builds/40a4ce61b0114ee3b4b31205ad00e59df5be692f/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/a54e4fa5b825aedc2386b8e00c51661b370d06446f10acceafe15202b7d661b1.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:41:55,600 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:55,600 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-671:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-664": {
+        "errors": [
+            "2025-03-11 20:41:54,413 - INFO - error: no release found for 'nightly-2017-01-03'",
+            "2025-03-11 20:41:55,317 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:55,317 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-664:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-476": {
+        "errors": [
+            "2025-03-11 20:10:21,217 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-08-04/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/dab39d31f32c59deefc7bcd9f229157169e83198c45d436ff1c18f21d7dad304.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:10:22,067 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:22,067 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-476:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-536": {
+        "errors": [
+            "2025-03-11 20:10:04,857 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-09-02/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/a417b054ad266e270ab11c4b1f3bf012df3d4b2d4018f4b8ab30df113d64b2e5.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:10:05,397 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:05,397 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-536:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-652": {
+        "errors": [
+            "2025-03-11 20:41:58,235 - INFO - error: no release found for 'nightly-2016-12-24'",
+            "2025-03-11 20:41:58,694 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:58,694 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-652:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-578": {
+        "errors": [
+            "2025-03-11 20:42:00,114 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-10-08/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/619266805b2da6deb9cf4d2211d92f233954e6b8158e60b367e47d5725b80008.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:42:00,671 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:42:00,671 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-578:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-558": {
+        "errors": [
+            "2025-03-11 20:09:59,101 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-09-27/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/00c1ac34264e7fda4154c38febc77fc047065321593fcc3f7814245e956b3909.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:09:59,504 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:09:59,504 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-558:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-682": {
+        "errors": [
+            "2025-03-11 20:41:49,775 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://s3.amazonaws.com/rust-lang-ci/cargo-builds/6291619896fc6a83d619945148670b6420aa06ec/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/d158b686b4572d7fa54ef499e093eec493d21d842f68e207bd3d6e2c49b7ef9a.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:41:50,363 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:50,363 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-682:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-2403": {
+        "errors": [
+            "2025-03-11 20:45:07,527 - INFO - error: failed to select a version for the requirement `syn = \"^2.0.3\"`",
+            "2025-03-11 20:45:20,374 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:45:20,374 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-2403:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-233": {
+        "errors": [
+            "2025-03-11 20:39:52,787 - INFO - HEAD is now at a926cb62 chore(codegen): Clean up error handling",
+            "2025-03-11 20:40:17,196 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2016-02-08/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/_u98h8dxiznyagud_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:40:30,547 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:40:30,547 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-233:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-245": {
+        "errors": [
+            "2025-03-11 20:39:29,385 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2016-02-23/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/2vfwpmpdpbm5ixgc_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:39:30,834 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:39:30,834 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-245:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-241": {
+        "errors": [
+            "2025-03-11 20:39:44,755 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2016-02-22/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/ch9x3jh_yswb145z_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:39:46,428 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:39:46,428 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-241:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-242": {
+        "errors": [
+            "2025-03-11 20:41:38,291 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:41:38,291 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-242:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-224": {
+        "errors": [
+            "2025-03-11 20:40:49,496 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2016-01-28/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/yhu8_3u9v4o9a9i9_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:41:00,127 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:00,127 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-224:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-115": {
+        "errors": [
+            "2025-03-11 20:11:40,915 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:11:40,915 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-115:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-114": {
+        "errors": [
+            "2025-03-11 20:11:00,947 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-07-22/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/g8460htmklp8b51__file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:11:02,396 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:02,396 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-114:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-80": {
+        "errors": [
+            "2025-03-11 20:11:06,274 - INFO - error: no release found for 'nightly-2015-05-20'",
+            "2025-03-11 20:11:06,863 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:06,863 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-80:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1831": {
+        "errors": [
+            "2025-03-11 20:00:39,251 - INFO - error: failed to select a version for the requirement `syn = \"^1.0.33\"`",
+            "2025-03-11 20:00:40,831 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:00:40,831 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1831:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-1874": {
+        "errors": [
+            "2025-03-11 19:58:53,619 - INFO - error: component 'rustfmt' for target 'x86_64-unknown-linux-gnu' is unavailable for download for channel 'nightly-2020-08-10'",
+            "2025-03-11 19:58:54,551 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 19:58:54,552 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1874:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1656": {
+        "errors": [
+            "2025-03-11 20:11:10,555 - INFO - error: no release found for 'nightly-2019-10-22'",
+            "2025-03-11 20:11:19,319 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:19,319 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1656:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1706": {
+        "errors": [
+            "2025-03-11 20:01:25,839 - INFO - HEAD is now at a81968af Turn panic to error in SystemTime serialization",
+            "2025-03-11 20:03:10,352 - INFO - error: failed to select a version for the requirement `macrotest = \"= 1.0.0\"`",
+            "2025-03-11 20:03:11,611 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:03:11,611 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1706:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-118": {
+        "errors": [
+            "2025-03-11 20:10:47,148 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-07-23/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/n0f_fz5aae28zsyo_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:10:47,624 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:47,624 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-118:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-139": {
+        "errors": [
+            "2025-03-11 20:41:34,225 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-08-14/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/i_sdalvmhphk30jg_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:41:37,627 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:41:37,627 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-139:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-129": {
+        "errors": [
+            "2025-03-11 20:10:39,914 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-08-07/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/svdwcgelsjkhzjks_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:10:40,471 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:40,471 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-129:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-111": {
+        "errors": [
+            "2025-03-11 20:11:18,143 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-07-17/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/2anwhbz6l71yl_4y_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:11:20,145 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:20,145 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-111:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-117": {
+        "errors": [
+            "2025-03-11 20:10:53,802 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-07-23/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/1_mp2v0atea3gpiy_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:10:54,690 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:54,690 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-117:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-127": {
+        "errors": [
+            "2025-03-11 20:10:40,512 - INFO - error: could not download file from 'https://rsproxy.cn/dist/2015-08-06/rust-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/tmp/glf6i0lomowcmd6l_file.tar.gz': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:10:41,227 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:10:41,227 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-127:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1622": {
+        "errors": [
+            "2025-03-11 20:11:25,502 - INFO - error: some components are unavailable for download for channel 'nightly-2019-09-07': 'clippy' for target 'x86_64-unknown-linux-gnu', 'rustfmt' for target 'x86_64-unknown-linux-gnu'Sometimes not all components are available in any given nightly.",
+            "2025-03-11 20:11:27,496 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:27,497 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1622:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1270": {
+        "errors": [
+            "2025-03-11 19:56:26,009 - INFO - error: no matching version `^0.6` found for package `quote`",
+            "2025-03-11 19:56:28,770 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 19:56:28,770 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1270:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    },
+    "serde-rs__serde-1499": {
+        "errors": [
+            "2025-03-11 20:11:46,974 - INFO - error: component 'clippy' for target 'x86_64-unknown-linux-gnu' is unavailable for download for channel 'nightly-2019-03-18'",
+            "2025-03-11 20:11:47,448 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:47,448 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1499:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1559": {
+        "errors": [
+            "2025-03-11 20:11:48,194 - INFO - error: component 'clippy' for target 'x86_64-unknown-linux-gnu' is unavailable for download for channel 'nightly-2019-06-27'",
+            "2025-03-11 20:11:48,752 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:48,752 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1559:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1363": {
+        "errors": [
+            "2025-03-11 19:51:39,800 - INFO - error: no release found for 'nightly-2018-08-23'",
+            "2025-03-11 19:51:40,225 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 19:51:40,225 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1363:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1241": {
+        "errors": [
+            "2025-03-11 21:08:19,073 - INFO - error: no release found for 'nightly-2018-05-02'",
+            "2025-03-11 21:08:19,551 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:08:19,551 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1241:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1256": {
+        "errors": [
+            "2025-03-11 19:55:45,701 - INFO - error: no release found for 'nightly-2018-05-12'",
+            "2025-03-11 19:55:46,661 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 19:55:46,661 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1256:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1572": {
+        "errors": [
+            "2025-03-11 20:11:26,307 - INFO - error: component 'clippy' for target 'x86_64-unknown-linux-gnu' is unavailable for download for channel 'nightly-2019-07-12'",
+            "2025-03-11 20:11:27,496 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:11:27,497 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1572:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1521": {
+        "errors": [
+            "2025-03-11 20:13:11,226 - INFO - error: component download failed for rustc-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/dist/2019-05-06/rustc-nightly-x86_64-unknown-linux-gnu.tar.xz' to '/root/.rustup/downloads/8abc7b7dfa1e8a3de1a53face9e259e093f29b78f1d75d7f51384d7cc3f6a454.partial': http request returned an unsuccessful status code: 504",
+            "2025-03-11 20:13:12,239 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:13:12,239 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1521:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-338": {
+        "errors": [
+            "2025-03-11 21:04:06,754 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-19/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/39ad5f6179b7afa9cd7e743ddf8ba867c419b1401ef79b21cefb19db3348991b.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:04:07,446 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:04:07,446 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-338:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-412": {
+        "errors": [
+            "2025-03-11 21:03:55,423 - INFO - error: no release found for 'nightly-2016-06-29'",
+            "2025-03-11 21:04:00,717 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:04:00,717 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-412:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-249": {
+        "errors": [
+            "2025-03-11 20:39:10,829 - INFO - error: no release found for 'nightly-2016-02-24'",
+            "2025-03-11 20:39:11,339 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:39:11,339 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-249:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-308": {
+        "errors": [
+            "2025-03-11 20:39:06,707 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-06/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/c93e896fec6b04ae32f984a12d790c5182ff2e6ba92e3a6f72cb9c56e34d109a.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:39:07,253 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:39:07,253 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-308:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-322": {
+        "errors": [
+            "2025-03-11 20:39:01,059 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-13/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/f38483d07ea26fa95a7dd69cda5bd51ef99be237d30f4751e330331e315f838d.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 20:39:01,606 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 20:39:01,606 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-322:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-371": {
+        "errors": [
+            "2025-03-11 21:03:56,621 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-06-11/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/21101a44493482d9824bc3ec8a597d9985983417e45bd6af6fdd631dbab45927.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:04:01,150 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:04:01,151 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-371:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-335": {
+        "errors": [
+            "2025-03-11 21:04:13,000 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-05-15/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/776a47aeb2d5bd7f98f3b8a4e7c3ee25887edbf23441599c9d095a028fdec16c.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:04:13,536 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:04:13,536 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-335:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-354": {
+        "errors": [
+            "2025-03-11 21:04:05,905 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-06-06/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/4c38160592fe502143cbbe385a8046845dac59e0d477b66afc1e737f09844a65.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:04:06,686 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:04:06,687 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-354:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-418": {
+        "errors": [
+            "2025-03-11 21:03:50,865 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-07-03/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/8400e27630916653facaf86f000ae604edf07f666dcc2b714d0ca7066ad45e12.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:03:51,481 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:03:51,481 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-418:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-437": {
+        "errors": [
+            "2025-03-11 21:03:46,177 - INFO - error: component download failed for cargo-x86_64-unknown-linux-gnu: could not download file from 'https://rsproxy.cn/cargo-dist/2016-07-12/cargo-nightly-x86_64-unknown-linux-gnu.tar.gz' to '/root/.rustup/downloads/e2bd5f403b84fc262a915868e09914a47ee1792717e100d9f83f7c18fb960796.partial': http request returned an unsuccessful status code: 404",
+            "2025-03-11 21:03:50,825 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1",
+            "2025-03-11 21:03:50,826 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-437:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 1"
+        ]
+    },
+    "serde-rs__serde-1830": {
+        "errors": [
+            "2025-03-11 20:00:37,933 - INFO - error: failed to select a version for the requirement `syn = \"^1.0.58\"`",
+            "2025-03-11 20:00:39,714 - ERROR - Error: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101",
+            "2025-03-11 20:00:39,714 - ERROR - docker.errors.BuildError during sweb.eval.x86_64.serde-rs__serde-1830:latest: The command '/bin/sh -c /bin/bash /root/setup_repo.sh' returned a non-zero code: 101"
+        ]
+    }
+}
