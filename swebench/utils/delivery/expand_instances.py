@@ -1,18 +1,20 @@
 import argparse
 import os
 import json
+import re
 from datasets import load_dataset,Dataset
 from numpy import var
 import openai
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
+from swebench import inference
 from swebench.inference.make_datasets.create_text_dataset import main as create_text_dataset
 from swebench.utils.delivery.transfer_dataset import main as make_code_snippet
 from swebench.inference.make_datasets.utils import AutoContextManager
 from tempfile import TemporaryDirectory
 from swebench.inference.make_datasets.utils import AutoContextManager, ingest_directory_contents
 
-def check(problem_statement,code_snippet,num_reports, openai_api_key, model="gpt-4o-2024-08-06") ->dict:
+def run_inference(instance, openai_api_key, model="gpt-4o-2024-08-06") ->list:
     """
     使用 OpenAI API 获取问题类型和等级判定原因。
     
@@ -24,68 +26,77 @@ def check(problem_statement,code_snippet,num_reports, openai_api_key, model="gpt
     Returns:
         tuple: (problem_type, severity_level, reason)
     """
-    openai.api_key = openai_api_key
-    openai.base_url = "https://api5.xhub.chat/v1/"
-    system_messages = "您是一个专业的问题分类助手，专门分析代码中的潜在问题，并提供详细的分类和评估。"
+
+    system_messages = "您是一位资深的 Rust 程序专家，擅长分析 Rust 代码中的潜在问题，并提供详细的分类和评估。您的任务是根据模型生成的 bug report、相关代码片段和正确的评估（ground truth），对问题进行分类、评估其级别并提供理由。"
 
     prompt = (
         f"{system_messages}\n\n"
-        f"以下是用户提供的问题陈述和相关的代码片段，请结合两者进行分析。\n\n"
-        f"问题陈述: \"{problem_statement}\"\n\n"
-        f"代码片段: \"{code_snippet}\"\n\n"
-        f"请生成一个不超过 300 字的描述（description），总结问题的核心、代码中的具体表现以及可能的影响，并辅以相关代码示例。\n"
-        f"请将问题分类为一个类型（problem_type），类型名称不超过十个汉字。常见问题类型包括：逻辑错误、性能问题、安全漏洞、代码风格问题等。您可根据情况选择或定义新类型。\n"
-        f"接下来，评估 case 级别（level）为 'low' 或 'high' 之一：\n"
-        f"- 'low' 表示低价值问题，例如误报的 lint 警告，希望引导大模型在 review 类似问题时降低优先级。\n"
-        f"- 'high' 表示高价值问题，例如可能导致程序崩溃的错误，需要用户关注和解决。\n"
-        f"最后，请提供一个详细的评估理由（level_reason），不超过 300 字，包括对代码的分析、问题的潜在影响以及您选择该级别的依据，辅以相关代码示例。\n"
-        f"请确保所有回答使用中文，并严格遵守字数限制。\n"
-        f"请以以下 JSON 格式返回您的回答，确保 JSON 键名是单行字符串，不包含换行符：\n"
-        f"{{\n  \"description\": \"...\",\n  \"problem_type\": \"...\",\n  \"level\": \"...\",\n  \"level_reason\": \"...\"\n}}"
+        f"以下是模型生成的 bug report（注意：此报告不一定正确）：\n"
+        f"\"{instance["bug_report"]}\"\n\n"
+        f"以下是相关代码片段：\n"
+        f"\"{instance["code_snippet"]}\"\n\n"
+        f"以下是正确的评估（ground truth）：\n"
+        f"\"{instance["problem_statement"]}\"\n\n"
+        f"请按照以下步骤完成任务，所有回答使用中文并严格遵守字数限制：\n\n"
+        f"1. **分类问题类型（problem_type）**：\n"
+        f"   - 将 bug report 指出的问题分类为一个类型，类型名称简洁且不超过十个汉字。\n"
+        f"   - 常见类型包括：逻辑错误、性能问题、安全漏洞、代码风格问题等。\n"
+        f"   - 若现有类型不适用，可根据具体情况定义新类型。\n"
+        f"   - 分类时，请对比 bug report 和 ground truth 的差异。\n\n"
+        f"2. **评估级别（level）**：\n"
+        f"   - 评估 bug report 的级别为 'low' 或 'high'：\n"
+        f"     - 'low'：低价值问题，例如 bug report 错误或问题微不足道，建议降低类似问题的优先级。\n"
+        f"     - 'high'：高价值问题，例如 bug report 正确且问题严重（如程序崩溃或安全漏洞），需用户关注。\n"
+        f"   - 请对比 bug report 和 ground truth，根据差异选择级别。\n\n"
+        f"3. **提供评估理由（level_reason）**：\n"
+        f"   - 提供详细理由，不超过 300 字。\n"
+        f"   - 包括代码分析、问题潜在影响及选择级别的依据，辅以相关代码示例。\n\n"
+        f"请以以下 JSON 格式返回结果，确保键名是单行字符串，不含换行符：\n"
+        f"{{\n"
+        f"  \"problem_type\": \"...\",\n"
+        f"  \"level\": \"...\",\n"
+        f"  \"level_reason\": \"...\"\n"
+        f"}}"
     )
 
     # 调用 OpenAI API
     try:
-        for i in range(num_reports):
-            response = openai.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_messages},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=0.3,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "response",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "description": {"type": "string"},
-                                "problem_type": {"type": "string"},
-                                "level": {"type": "string"},
-                                "level_reason": {"type": "string"}
-                            },
-                            "required": ["description", "problem_type", "level", "level_reason"]
-                        }
+        response = openai.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_messages},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.3,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "response",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "problem_type": {"type": "string"},
+                            "level": {"type": "string"},
+                            "level_reason": {"type": "string"}
+                        },
+                        "required": ["problem_type", "level", "level_reason"]
                     }
                 }
-            )
-            content = response.choices[0].message.content.strip()
-            response_json = json.loads(content)
+            }
+        )
+        content = response.choices[0].message.content.strip()
+        response_json = json.loads(content)
         return response_json
     except Exception as e:
         print(f"OpenAI API error: {e}")
         return {
-            "description": "Unknown",
             "problem_type": "Unknown",
             "level": "Unknown",
             "level_reason": "Unknown"
         }
 
 
-
-def generate_bug_report(instance, openai_api,model) -> dict:
+def generate_bug_report(num_samples,instance, openai_api,model) -> list:
     """
     处理单个示例，调用 OpenAI API 进行分类。
     
@@ -96,53 +107,24 @@ def generate_bug_report(instance, openai_api,model) -> dict:
     Returns:
         dict: 包含分类结果的字典。
     """
+    res = []
     openai.api_key = openai_api
     openai.base_url = "https://api5.xhub.chat/v1/"
-    response = openai.chat.completions.create(
-        model=model,
-        messages=[
-            {"role":"system","content":instance["text"].split("\n", 1)[0]},
-            {"role":"user","content":instance["text"].split("\n", 1)[1]},
-        ],
-        temperature=0.3
-    )
-    content = response.choices[0].message.content.strip()
-    return{"instance_id":instance["instance_id"],"bug_report":content}
 
+    for i in range(num_samples):
+        response = openai.chat.completions.create(
+            model=model,
+            messages=[
+                {"role":"system","content":instance["text"].split("\n", 1)[0]},
+                {"role":"user","content":instance["text"].split("\n", 1)[1]},
+            ],
+            temperature=0.7
+        )
+        content = response.choices[0].message.content.strip()
+        instance["bug_report"] = content
+        res.append(instance)
 
-def merge_json(entry_data, response_data, output_file):
-    """
-    读取两个 JSON 文件，根据 instance_id 合并，并保存为 JSONL 文件。
-
-    :param entry_file: 包含代码片段等信息的 JSON 文件路径。
-    :param response_file: 包含问题类型等信息的 JSON 文件路径。
-    :param output_file: 输出 JSONL 文件路径。
-    """
-    # 构建合并后的数据
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for entry in entry_data:
-            # 查找匹配的 response 数据
-            matching_response = next((r for r in response_data if r["instance_id"] == entry["instance_id"]), None)
-            if matching_response:
-                merged_json = {
-                    "code_snippet": entry["code_snippet"],
-                    "target_function": entry["target_function"],
-                    "review_type": entry["review_type"],
-                    "issue_detail": {
-                        "problem_type": matching_response["problem_type"],
-                        "location": entry["issue_detail"]["location"],
-                        "level": matching_response["severity_level"],
-                        "description": matching_response["description"],
-                        "level_reason": matching_response["reason"]
-                    },
-                    "repo": entry["repo"],
-                    "branch": entry["branch"],
-                    "file_path": entry["file_path"],
-                    "language": entry["language"]
-                }
-                # 将每条记录写入 JSONL 文件
-                f.write(json.dumps(merged_json, ensure_ascii=False) + '\n')
-    print(f"Merged JSONL saved to {output_file}")
+    return res
 
 
 
@@ -150,47 +132,50 @@ def merge_json(entry_data, response_data, output_file):
 def main(dataset_name_or_path: str, num_samples: int, output_dir: str):
     # 加载数据集
     openai_api = os.getenv("OPENAI_API_KEY")
-    dataset = create_text_dataset(dataset_name_or_path="r1v3r/RustGPT_Bench_100",splits="train",validation_ratio=0,output_dir="",prompt_style="bug_report",file_source="oracle")
+    dataset_hf = create_text_dataset(dataset_name_or_path="r1v3r/RustGPT_Bench_100",splits="train",validation_ratio=0,output_dir="",prompt_style="bug_report",file_source="oracle")
+    dataset = [x for x in dataset_hf]
     code_entries = make_code_snippet("r1v3r/RustGPT_Bench_100", openai_api,output=None)
-    bug_report = []
+    bug_report_dataset = []
     with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(generate_bug_report, instance, openai_api) for instance in dataset]
+        futures = [executor.submit(generate_bug_report,num_samples ,instance, openai_api) for instance in dataset]
 
         for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
             try:
                 result = future.result()
-                bug_report.append(result)
+                bug_report_dataset.extend(result)
             except Exception as e:
                 print(f"Error processing example: {e}")
 
-    with open("bug_report.json", "w", encoding="utf-8") as f:
-        json.dump(bug_report, f, indent=4)
-        
+    
     def add_code_snippet(example):
         for code in code_entries:
             if example["instance_id"] == code["instance_id"]:
                 example["code_snippet"] = code["code_snippet"]
                 break
         return example
-    dataset = dataset.map(add_code_snippet)
-    check_res = []
+    
+    dataset = bug_report_dataset.map(add_code_snippet) #在bug report dataset的基础上添加code snippet
+    res = []
     with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(check, sample["text"], sample["code_snippet"], openai_api,num_samples) for sample in dataset]
+        futures = [executor.submit(run_inference, sample ,openai_api) for sample in dataset]
 
         for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
             try:
                 result = future.result()
-                check_res.append(result)
+                res.append(result)
             except Exception as e:
                 print(f"Error processing example: {e}")
 
-    merge_json(code_entries,check_res,"final.json")
-
+    for i in res: #将code entries和结果合并，这是一个一对多的关系
+        for j in code_entries:
+            if i["instance_id"] == j["instance_id"]:
+                pass
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_name_or_path", type=str, default="r1v3r/RustGPT_Bench_100", help="Dataset name or path")
-    parser.add_argument("--num_samples", type=int, default=100, help="Number of samples to generate")
+    parser.add_argument("--num_samples", type=int, default=2, help="Number of samples to generate")
     parser.add_argument("--output_dir", type=str, default="", help="Output directory")
     main(**vars(parser.parse_args()))
 
@@ -248,6 +233,3 @@ if __name__ == "__main__":
     # # 将结果保存到文件
     # with open("classification_results.json", "w", encoding="utf-8") as f:
     #     json.dump(entries, f, ensure_ascii=False, indent=4)
-
-if __name__ == "__main__":
-    main()

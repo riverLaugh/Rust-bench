@@ -167,11 +167,11 @@ def main(
         dataset["validation"] = train_val["test"]
     for split in dataset:
         logger.info(f"Found {len(dataset[split])} {split} instances")
-    if push_to_hub_user is not None:
-        dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', token=hub_token)
-    else:
-        dataset.save_to_disk(str(output_file))
-    logger.info(f"Finsihed saving to {output_file}")
+    # if push_to_hub_user is not None:
+    #     dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', token=hub_token)
+    # else:
+    #     dataset.save_to_disk(str(output_file))
+    # logger.info(f"Finsihed saving to {output_file}")
     return dataset
     # if push_to_hub_user is not None:
     #     dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)

@@ -188,38 +188,27 @@ def prompt_style_2(instance):
     return final_text
 
 def prompt_bug_report(instance):
-    premise = "You will be provided with a codebase. Analyze the code and generate a detailed bug report highlighting potential issues, their causes, and possible solutions."
+    premise = "您将获得一个代码库。请分析代码并生成一份详细的 bug 报告，突出潜在问题、其原因以及可能的解决方案。"
     
     readmes_text = make_code_text(instance.get("readmes", ""))
     code_text = make_code_text(instance.get("file_contents", ""))
     test_patch = instance["test_patch"]
     test_file = make_code_text(instance.get("test_file",""))
+    
     instructions = (
-        "Please respond with a comprehensive bug report in the following format:\n\n"
-        "### Bug Report\n"
-        "1. **Issue Summary**: A brief description of the bug.\n"
-        "2. **Detailed Description**: An in-depth explanation of the issue, including affected components.\n"
-        "3. **Steps to Reproduce**: Clear and concise steps to reproduce the bug.\n"
-        "4. **Expected Behavior**: What should happen if the bug is not present.\n"
-        "5. **Actual Behavior**: What actually happens due to the bug.\n"
-        "6. **Possible Causes**: Potential reasons or root causes of the bug.\n"
-        "7. **Suggested Fixes**: Recommendations on how to fix the issue.\n"
-        "8. **Additional Notes**: Any other relevant information or observations.\n"
+        "请以一段连贯的文字回应，提供一份全面的 bug 报告，包括以下内容：\n"
+        "- **问题概述**：简要描述 bug。\n"
+        "- **详细描述**：深入解释问题，包括受影响的组件。\n"
+        "- **重现步骤**：清晰简洁地说明如何重现 bug 的步骤。\n"
+        "- **预期行为**：如果没有 bug，应该发生什么。\n"
+        "- **实际行为**：由于 bug 导致的实际发生情况。\n"
+        "- **可能原因**：bug 的潜在原因或根本原因。\n"
+        "- **建议修复**：关于如何修复问题的建议。\n"
+        "- **附加说明**：任何其他相关信息或观察结果。\n"
     )
     
-    bug_report_example = """### Bug Report
-    1. **Issue Summary**: Null Pointer Exception in User Authentication Module.
-    2. **Detailed Description**: When a user attempts to log in without providing a password, the system crashes with a Null Pointer Exception in the authentication module.
-    3. **Steps to Reproduce**:
-        1. Navigate to the login page.
-        2. Enter a valid username.
-        3. Leave the password field empty.
-        4. Click the "Login" button.
-    4. **Expected Behavior**: The system should prompt the user to enter a password without crashing.
-    5. **Actual Behavior**: The application crashes and returns a Null Pointer Exception.
-    6. **Possible Causes**: The authentication handler does not check for null or empty password inputs before processing.
-    7. **Suggested Fixes**: Implement input validation to ensure that the password field is not empty before proceeding with authentication. Add error handling to manage unexpected null values gracefully.
-    8. **Additional Notes**: This issue affects all users attempting to log in without a password and could lead to security vulnerabilities if not addressed promptly.
+    bug_report_example = """### Bug 报告示例
+在用户认证模块中存在空指针异常问题。当用户尝试在不提供密码的情况下登录时，系统会在认证模块中崩溃，出现空指针异常。具体来说，当用户在登录页面输入有效用户名但留空密码字段并点击“登录”按钮时，应用程序会崩溃并返回空指针异常。重现步骤为：导航到登录页面，输入一个有效的用户名，留空密码字段，然后点击“登录”按钮。如果没有 bug，系统应提示用户输入密码，而不会崩溃。然而，实际行为是应用程序崩溃并返回空指针异常。可能原因是认证处理程序在处理前未检查密码输入是否为空或 null。建议修复方法是实施输入验证，确保在进行认证之前密码字段不为空，并添加错误处理以优雅地管理意外的 null 值。此问题影响所有尝试在不输入密码的情况下登录的用户，如果不及时解决，可能会导致安全漏洞。
 """
 
     final_text = [
@@ -229,13 +218,13 @@ def prompt_bug_report(instance):
         code_text,
         "</codebase>",
         instructions,
-        "<bug_report>",
+        "<bug_report_example>",
         bug_report_example,
-        "</bug_report>",
+        "</bug_report_example>",
         "<Trigger Test>",
         test_file,
         test_patch,
-        "<Trigger Test>",
+        "</Trigger Test>",
         ""
     ]
     
