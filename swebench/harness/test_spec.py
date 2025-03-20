@@ -438,6 +438,14 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     base_commit = instance["base_commit"]
     problem_statement = instance["problem_statement"]
     hints_text = instance["hints_text"]  # Unused
+    if isinstance(instance["created_at"], int):
+        # 转换为秒（datetime 需要秒级时间戳）
+        timestamp_ms = instance["created_at"]
+        timestamp_s = timestamp_ms/ 1000
+
+        # 转换为日期时间
+        date_time = datetime.fromtimestamp(timestamp_s)
+        instance["created_at"] = date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
     time = instance["created_at"].split("T")[0] 
 
     test_patch = instance["test_patch"]
