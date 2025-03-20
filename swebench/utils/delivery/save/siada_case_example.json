@@ -1,0 +1,130 @@
+[
+    {
+        "code_snippet": "fn igon_flag(&self) -> bool {\n  self.igon_flag.load(Ordering::Relaxed)\n}\n\nfn set_igon_flag(&mut self, flag: bool) -> bool {\n  self.igon_flag.swap(flag, Ordering::Relaxed)\n}\n\nfn power_normal_flag(&self) -> bool {\n  self.power_normal_flag.load(Ordering::Relaxed)\n}\n\nfn set_power_normal_flag(&mut self, flag: bool) -> bool {\n  self.power_normal_flag.swap(flag, Ordering::Relaxed)\n}",
+        "target_function": "fn igon_flag(&self) -> bool {\n  self.igon_flag.load(Ordering::Relaxed)\n}\n\nfn set_igon_flag(&mut self, flag: bool) -> bool {\n  self.igon_flag.swap(flag, Ordering::Relaxed)\n}\n\nfn power_normal_flag(&self) -> bool {\n  self.power_normal_flag.load(Ordering::Relaxed)\n}\n\nfn set_power_normal_flag(&mut self, flag: bool) -> bool {\n  self.power_normal_flag.swap(flag, Ordering::Relaxed)\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "线程安全问题",
+            "location": "line 179",
+            "level": "low",
+            "description": "使用Ordering::Relaxed进行原子操作可能会导致数据竞争和线程安全问题，特别是在多线程环境中。",
+            "level_reason": "总体来说， 在此函数中使用 Ordering::Relaxed 进行原子操作是合理的。 虽然可能会导致线程安全问题，但仅根据当前的代码片段， 并不能推断这是一个多线程的使用场景，很有可能工程师已经明确了这是一个线程安全的环境，才会使用 Ordering::Relaxed。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "\nextern \"C\" fn lcd_cb(code: u32) {\n  let util = Utils::get();\n  if !util.igon_flag()\n  || !util.diag8502_flag() {\n    println!(\"[DEM] lcd_cb.\");\n    print_pre_check_state();\n    return;\n  }\n}",
+        "target_function": "\nextern \"C\" fn lcd_cb(code: u32) {\n  let util = Utils::get();\n  if !util.igon_flag()\n  || !util.diag8502_flag() {\n    println!(\"[DEM] lcd_cb.\");\n    print_pre_check_state();\n    return;\n  }\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "错误处理",
+            "location": "line 179",
+            "level": "low",
+            "description": "函数调用没有错误处理。如果该函数调用失败，可能会导致后续的执行出现问题。",
+            "level_reason": "总体来说， 函数调用或者宏调用没有错误处理是合理的。 虽然该函数调用或宏调用失败，可能会导致后续的执行出现问题，但此场景下直接进行函数错误处理会造成额外冗余代码，可以在入口处统一进行函数异常处理，而不必在所有函数调用处进行错误处理。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "\npub fn active_root_touch_down(x: i32, y: i32) -> i8 {\n    global_var!(TOUCH_DOWN_FLAG, false);\n    if menu_btn_clickable!(LIGHT_MDLE_BTN, x, y) && !show() {\n        global_var!(TOUCH_DOWN_FLAG, true);\n        menu_btn_set_press!(LIGHT_MDLE_BTN, super::res::MENU_LIGHT_CTRL_RES.click);\n    }\n    return 0;\n}\n",
+        "target_function": "\npub fn active_root_touch_down(x: i32, y: i32) -> i8 {\n    global_var!(TOUCH_DOWN_FLAG, false);\n    if menu_btn_clickable!(LIGHT_MDLE_BTN, x, y) && !show() {\n        global_var!(TOUCH_DOWN_FLAG, true);\n        menu_btn_set_press!(LIGHT_MDLE_BTN, super::res::MENU_LIGHT_CTRL_RES.click);\n    }\n    return 0;\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "全局变量使用",
+            "location": "line 179",
+            "level": "low",
+            "description": "使用全局变量TOUCH_DOWN_FLAG可能会导致数据竞争和线程安全问题，特别是在多线程环境中。",
+            "level_reason": "这段代码中使用宏函数 global_var! 来操作全局变量。总体来说，使用宏函数操作全局变量是合理的。虽然可能会导致线程安全问题，而仅根据当前的代码片段，并不能推断这是一个多线程的使用场景，很有可能工程师已经明确了这是一个线程安全的环境。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "    // F021\n    let programming_attempt_counter: [u8; 2] = [0x00; 2];\n    // F022\n    let programming_success_counter: [u8; 2] = [0x00; 2];\n    // F15A\n    let write_read_friger_print: [u8; 21] = [\n        0x00, 0x16, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\n        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\n    ];\n\n    if let Err(_) =\n        dcm::interface::write_did_data(0xF021, &programming_attempt_counter as *const u8)\n    {\n        println!(\"did {:#X} write err.\", 0xF021);\n    }\n    if let Err(_) =\n        dcm::interface::write_did_data(0xF022, &programming_success_counter as *const u8)\n    {\n        println!(\"did {:#X} write err.\", 0xF022);\n    }\n    if let Err(_) = dcm::interface::write_did_data(0xF15A, &write_read_friger_print as *const u8) {\n        println!(\"did {:#X} write err.\", 0xF15A);\n    }",
+        "target_function": "    // F021\n    let programming_attempt_counter: [u8; 2] = [0x00; 2];\n    // F022\n    let programming_success_counter: [u8; 2] = [0x00; 2];\n    // F15A\n    let write_read_friger_print: [u8; 21] = [\n        0x00, 0x16, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\n        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,\n    ];\n\n    if let Err(_) =\n        dcm::interface::write_did_data(0xF021, &programming_attempt_counter as *const u8)\n    {\n        println!(\"did {:#X} write err.\", 0xF021);\n    }\n    if let Err(_) =\n        dcm::interface::write_did_data(0xF022, &programming_success_counter as *const u8)\n    {\n        println!(\"did {:#X} write err.\", 0xF022);\n    }\n    if let Err(_) = dcm::interface::write_did_data(0xF15A, &write_read_friger_print as *const u8) {\n        println!(\"did {:#X} write err.\", 0xF15A);\n    }",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "指针类型转换",
+            "location": "line 179",
+            "level": "low",
+            "description": "将数组的引用转换为指针可能会导致未定义行为或内存安全问题，特别是在数组的生命周期和指针的使用不一致的情况下。",
+            "level_reason": "总体来说， 在此函数中将数组的引用转换为指针时合理的。 虽然可能会导致未定义行为或内存安全问题，但仅根据当前的代码片段，并不能推断数组的生命周期和指针的使用并不一致，很有可能工程师已经明确二者在大部分场景使用一致，并且使用 if let Err(_) 模式匹配来处理可能的写入错误，并打印错误信息。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "pub extern \"C\" fn app_e2p_test_init(_args: usize) {\n    println!(\"app_e2p_test_init\");\n\n    task_spawn!(\n        \"app_e2p_test\u0000\",\n        Priority::High,\n        4096,\n        0 as u32,\n        move |_task: Task| {\n            println!(\"app e2p test init created\");\n            let mut e2p_inst = EEPROM::new(\n                Lpi2c {\n                    id: I2cHandleType::Lpi2c1 as u32,\n                },\n                0x50,\n            );\n            loop {\n                let mut buf = [23u8; 32];\n                println!(\"app e2p test write buf {:?}\", &buf);\n                e2p_inst.write(64, &mut buf);\n\n                println!(\"app e2p test after write buf {:?}\", &buf);\n                buf = [0u8; 32];\n                println!(\"app e2p test change buf {:?}\", &buf);\n                delay!(1000);\n                e2p_inst.read(64, &mut buf);\n                println!(\"app e2p test read buf {:?}\", &buf);\n            }\n        }\n    );\n}",
+        "target_function": "pub extern \"C\" fn app_e2p_test_init(_args: usize) {\n    println!(\"app_e2p_test_init\");\n\n    task_spawn!(\n        \"app_e2p_test\u0000\",\n        Priority::High,\n        4096,\n        0 as u32,\n        move |_task: Task| {\n            println!(\"app e2p test init created\");\n            let mut e2p_inst = EEPROM::new(\n                Lpi2c {\n                    id: I2cHandleType::Lpi2c1 as u32,\n                },\n                0x50,\n            );\n            loop {\n                let mut buf = [23u8; 32];\n                println!(\"app e2p test write buf {:?}\", &buf);\n                e2p_inst.write(64, &mut buf);\n\n                println!(\"app e2p test after write buf {:?}\", &buf);\n                buf = [0u8; 32];\n                println!(\"app e2p test change buf {:?}\", &buf);\n                delay!(1000);\n                e2p_inst.read(64, &mut buf);\n                println!(\"app e2p test read buf {:?}\", &buf);\n            }\n        }\n    );\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "错误处理",
+            "location": "line 179",
+            "level": "low",
+            "description": "e2p_inst.read和e2p_inst.write函数调用没有错误处理。如果该函数调用失败，可能会导致数据未正确处理，影响后续操作。",
+            "level_reason": "总体来说， 对读写函数调用没有错误处理是合理的。 虽然该函数调用失败，可能会导致后续的执行出现问题，但此场景下直接进行函数错误处理会造成额外冗余代码，可以在入口处统一进行函数异常处理，而不必在所有函数调用处进行错误处理。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "\npub fn set_btn_sts(){\n    set_btn_mode();\n    if show() {\n        start_hide_anim();\n    }\n}\n\npub fn start_timeout(mils: u32){\n    init_tmout_timer();\n    get_utimer!(CALLBACK_TIMER).start(mils);\n}",
+        "target_function": "\npub fn set_btn_sts(){\n    set_btn_mode();\n    if show() {\n        start_hide_anim();\n    }\n}\n\npub fn start_timeout(mils: u32){\n    init_tmout_timer();\n    get_utimer!(CALLBACK_TIMER).start(mils);\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "调用函数没有错误处理",
+            "location": "line 179",
+            "level": "low",
+            "description": "函数调用或宏调用没有错误处理。如果该函数调用或宏调用失败，可能会导致后续的执行出现问题。",
+            "level_reason": "总体来说， 函数调用或者宏调用没有错误处理是合理的。 虽然该函数调用或宏调用失败，可能会导致后续的执行出现问题，但此场景下直接进行函数错误处理会造成额外冗余代码，可以在入口处统一进行函数异常处理，而不必在所有函数调用处进行错误处理。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "\nstatic mut MESSAGE_BOX: MessageBox = MessageBox {\n    tx_qid: 0,\n    pool_id: 0,\n    rx_qid: 0,\n    payload: 0,\n    #[cfg(touchbar_version = \"tcb_v1\")]\n    is_urgent: false,\n}\n\npub fn setting_update_send() {\n    let msg = AppMsg::new(MsgType::SettingUpdate, 0, 0);\n    unsafe {\n        MESSAGE_BOX.send_self2(&msg, 0);\n    }\n}\n",
+        "target_function": "\npub fn setting_update_send() {\n    let msg = AppMsg::new(MsgType::SettingUpdate, 0, 0);\n    unsafe {\n        MESSAGE_BOX.send_self2(&msg, 0);\n    }\n}\n",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "unsafe代码块使用",
+            "location": "line 179",
+            "level": "low",
+            "description": "在unsafe代码块中调用MESSAGE_BOX.send_self2函数，可能会导致未定义行为或内存安全问题。尽管send_self2函数可能是安全的，但在没有进一步上下文的情况下，使用unsafe代码块增加了代码的复杂性和维护难度",
+            "level_reason": "这段代码中使用 unsafe 来操作全局可变的静态变量。总体来说，在函数中的使用 unsafe 操作全局变量是合理的。 虽然可能会导致线程安全问题，而仅根据当前的代码片段， 并不能推断这是一个多线程的使用场景，很有可能工程师已经明确了这是一个线程安全的环境，才会使用unsafe。因此这是一个低价值问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    },
+    {
+        "code_snippet": "fn vol_state(&self) -> VolState {\n  self.vol_state\n}\n\nfn set_igon_flag(&mut self, flag: bool) -> bool {\n  self.igon_flag.swap(flag, Ordering::Relaxed)\n}",
+        "target_function": "fn vol_state(&self) -> VolState {\n  self.vol_state\n}\n\nfn set_igon_flag(&mut self, flag: bool) -> bool {\n  self.igon_flag.swap(flag, Ordering::Relaxed)\n}",
+        "review_type": "function",
+        "issue_detail": {
+            "problem_type": "缺失返回语句",
+            "location": "line 179",
+            "level": "low",
+            "description": "函数缺少返回语句，导致函数无法正确返回值。这会导致编译错误，阻止代码正常运行。",
+            "level_reason": "Rust的函数可以通过最后一个表达式的值作为返回值。如果一个函数的最后一个表达式没有被分号;结尾，那么这个表达式的值将被作为函数的返回值。因此这并不是一个问题。"
+        },
+        "repo": "touchbar",
+        "branch": "master",
+        "file_path": "src/lib.rs",
+        "language": "rust"
+    }
+]

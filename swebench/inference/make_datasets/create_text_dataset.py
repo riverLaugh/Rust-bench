@@ -79,7 +79,7 @@ def main(
     tokenizer_name,
     push_to_hub_user,
     nname
-):
+) -> None:
     if push_to_hub_user is not None:
         hub_token = os.environ.get("HUGGING_FACE_HUB_TOKEN", None)
         assert hub_token is not None, "Must provide HUGGING_FACE_HUB_TOKEN to push to the Hub"
@@ -172,7 +172,7 @@ def main(
     else:
         dataset.save_to_disk(str(output_file))
     logger.info(f"Finsihed saving to {output_file}")
-
+    return dataset
     # if push_to_hub_user is not None:
     #     dataset.push_to_hub(f'{push_to_hub_user}/{output_file}', use_auth_token=hub_token)
     # else:

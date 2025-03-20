@@ -200,18 +200,13 @@ def stringify_locations(locations):
         result.append("")  # 空行分隔文件
     return "\n".join(result)
 
-def main():
+def main(dataset_name,split,output) -> dict:
     # 配置 argparse
-    parser = argparse.ArgumentParser(description="Convert HF dataset to JSON format.")
-    parser.add_argument('--dataset_name', type=str, default="r1v3r/auto_0207_bug", help='Hugging Face dataset name')
-    parser.add_argument('--split', type=str, default="train", help='Dataset split to use')
-    parser.add_argument('--output', type=str, default="entries.json", help='Output JSON file path')
-    args = parser.parse_args()
-    
+
     # 加载数据集
-    print(f"Loading dataset '{args.dataset_name}' split '{args.split}' from Hugging Face...")
+    print(f"Loading dataset '{dataset_name}' split '{split}' from Hugging Face...")
     try:
-        dataset = load_dataset(args.dataset_name, split=args.split)
+        dataset = load_dataset(dataset_name, split=split)
     except Exception as e:
         print(f"Error loading dataset: {e}")
         sys.exit(1)
@@ -225,7 +220,7 @@ def main():
         repo = example.get('repo', "unknown")
         base_commit = example.get('base_commit', "unknown")
         patch = example.get('patch', "")
-        
+        # test_patch = example.get('test_patch',None)
         if pd.isna(problem_statement) or not problem_statement:
             classification = 'Unknown'
         else:
@@ -263,22 +258,31 @@ def main():
                 },
                 "branch": branch,
                 "file_path": ",".join(file_paths),
-                "language": "rust"  # 固定值
+                "language": "rust",  # 固定值
+                # "test_file": test_patch
             }
             
             entries.append(entry)
             print(entry)
     
     # 保存分类为 'Feature Development' 的条目到 JSON 文件
-    output_json_path = args.output
-    print(f"Saving Feature Development entries to {output_json_path}...")
-    try:
-        with open(output_json_path, 'w', encoding='utf-8') as json_file:
-            json.dump(entries, json_file, ensure_ascii=False, indent=4)
-        print("转换完成，结果已保存。")
-    except Exception as e:
-        print(f"Error saving JSON file: {e}")
-        sys.exit(1)
+    if output is not None:
+        output_json_path = output
+        print(f"Saving Feature Development entries to {output_json_path}...")
+        try:
+            with open(output_json_path, 'w', encoding='utf-8') as json_file:
+                json.dump(entries, json_file, ensure_ascii=False, indent=4)
+            print("转换完成，结果已保存。")
+        except Exception as e:
+            print(f"Error saving JSON file: {e}")
+            sys.exit(1)
+    return entries
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Convert HF dataset to JSON format.")
+    parser.add_argument('--dataset_name', type=str, default="r1v3r/RustGPT_Bench_100", help='Hugging Face dataset name')
+    parser.add_argument('--split', type=str, default="train", help='Dataset split to use')
+    parser.add_argument('--output', type=str, default="entries.json", help='Output JSON file path')
+    args = parser.parse_args()
+    
+    main(**vars(args))
