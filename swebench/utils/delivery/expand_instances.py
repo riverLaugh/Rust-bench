@@ -86,7 +86,11 @@ def run_inference(instance, openai_api_key, model="gpt-4o-2024-08-06") ->list:
         )
         content = response.choices[0].message.content.strip()
         response_json = json.loads(content)
-        return response_json
+        print(f"OpenAI API response: {response_json}")
+        instance["problem_type"] = response_json["problem_type"]
+        instance["level"] = response_json["level"]
+        instance["level_reason"] = response_json["level_reason"]
+        return instance
     except Exception as e:
         print(f"OpenAI API error: {e}")
         return {
@@ -122,19 +126,17 @@ def generate_bug_report(num_samples,instance, openai_api,model) -> list:
         )
         content = response.choices[0].message.content.strip()
         instance["bug_report"] = content
+        print(f"Generated bug report: {content}")
         res.append(instance)
-
     return res
 
 
-
-
-def main(dataset_name_or_path: str, num_samples: int, output_dir: str):
+def main(dataset_name_or_path: str,split:str, num_samples: int, output_dir: str):
     # 加载数据集
     openai_api = os.getenv("OPENAI_API_KEY")
-    dataset_hf = create_text_dataset(dataset_name_or_path="r1v3r/RustGPT_Bench_100",splits="train",validation_ratio=0,output_dir="",prompt_style="bug_report",file_source="oracle")
+    dataset_hf = create_text_dataset(dataset_name_or_path=dataset_name_or_path,splits=[split],validation_ratio=0,output_dir="",prompt_style="bug_report",file_source="oracle",retrieval_file=None, k=None,max_context_len=None,nname="rustbench_100",tokenizer_name=None,push_to_hub_user=None)
     dataset = [x for x in dataset_hf]
-    code_entries = make_code_snippet("r1v3r/RustGPT_Bench_100", openai_api,output=None)
+    code_entries = make_code_snippet(dataset_name_or_path, split=split ,output=None)
     bug_report_dataset = []
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(generate_bug_report,num_samples ,instance, openai_api) for instance in dataset]
@@ -145,7 +147,6 @@ def main(dataset_name_or_path: str, num_samples: int, output_dir: str):
                 bug_report_dataset.extend(result)
             except Exception as e:
                 print(f"Error processing example: {e}")
-
     
     def add_code_snippet(example):
         for code in code_entries:
@@ -166,17 +167,38 @@ def main(dataset_name_or_path: str, num_samples: int, output_dir: str):
             except Exception as e:
                 print(f"Error processing example: {e}")
 
-    for i in res: #将code entries和结果合并，这是一个一对多的关系
-        for j in code_entries:
-            if i["instance_id"] == j["instance_id"]:
-                pass
-    
+    output_file = os.path.join(output_dir, "res.json")
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for entry in code_entries:
+            # 查找匹配的 response 数据
+            matching_response = next((r for r in res if r["instance_id"] == entry["instance_id"]), None)
+            if matching_response:
+                merged_json = {
+                    "code_snippet": entry["code_snippet"],
+                    "target_function": entry["target_function"],
+                    "review_type": entry["review_type"],
+                    "issue_detail": {
+                        "problem_type": matching_response["problem_type"],
+                        "location": entry["issue_detail"]["location"],
+                        "level": matching_response["level"],
+                        "description": matching_response["bug_report"],
+                        "level_reason": matching_response["level_reason"]
+                    },
+                    "repo": entry["repo"],
+                    "branch": entry["branch"],
+                    "file_path": entry["file_path"],
+                    "language": entry["language"]
+                }
+                # 将每条记录写入 JSONL 文件
+                f.write(json.dumps(merged_json, ensure_ascii=False) + '\n')
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_name_or_path", type=str, default="r1v3r/RustGPT_Bench_100", help="Dataset name or path")
     parser.add_argument("--num_samples", type=int, default=2, help="Number of samples to generate")
-    parser.add_argument("--output_dir", type=str, default="", help="Output directory")
+    parser.add_argument("--split", type=str, default="train", help="Split to use")
+    parser.add_argument("--output_dir", type=str, default="/home/riv3r/Rust-bench/swebench/utils/delivery/output", help="Output directory")
     main(**vars(parser.parse_args()))
 
 

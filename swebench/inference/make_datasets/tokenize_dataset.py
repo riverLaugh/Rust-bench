@@ -31,7 +31,7 @@ def llama(text, tokenizer):
 
 TOKENIZER_FUNCS = {
     "cl100k": (tiktoken.get_encoding("cl100k_base"), cl100k),
-    "llama": (LlamaTokenizer.from_pretrained("togethercomputer/LLaMA-2-7B-32K"), llama),
+    "llama": (None, llama),
 }
 
 

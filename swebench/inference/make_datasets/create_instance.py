@@ -193,7 +193,6 @@ def prompt_bug_report(instance):
     readmes_text = make_code_text(instance.get("readmes", ""))
     code_text = make_code_text(instance.get("file_contents", ""))
     test_patch = instance["test_patch"]
-    test_file = make_code_text(instance.get("test_file",""))
     
     instructions = (
         "请以一段连贯的文字回应，提供一份全面的 bug 报告，包括以下内容：\n"
@@ -222,7 +221,6 @@ def prompt_bug_report(instance):
         bug_report_example,
         "</bug_report_example>",
         "<Trigger Test>",
-        test_file,
         test_patch,
         "</Trigger Test>",
         ""
@@ -472,9 +470,9 @@ def add_text_inputs(
                 ) as cm:
                     readmes = cm.get_readme_files()
                     instance["readmes"] = ingest_files(readmes)
-                    test_file = get_test_directives(instance)
-                    instance["test_file"] = ingest_files(test_file)
-                    print(instance["test_file"])
+                    # test_file = get_test_directives(instance)
+                    # instance["test_file"] = ingest_files(test_file)
+                    # print(instance["test_file"])
                     if max_context_len is not None:
                         instance["file_contents"] = dict()
                         base_text_inputs = PROMPT_FUNCTIONS[prompt_style](instance)

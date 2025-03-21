@@ -51,7 +51,7 @@ setuptools.setup(
             'sentencepiece',
             'protobuf',
             'torch',
-            'flash_attn',
+            # 'flash_attn',
             'triton',
             'jedi',
             'tenacity',
