@@ -1,4 +1,5 @@
 from __future__ import annotations
+import time
 
 import docker
 import json
@@ -396,12 +397,13 @@ def main(
 
 
 def update_json_file(dataset_name, dataset, auto):
-    if not os.path.exists('./results/auto'):
-        os.makedirs('./results/auto')
-
+    # 改进后的路径生成和目录创建
+    timestamp = time.strftime("%Y-%m-%d", time.localtime())
+    result_path = os.path.join("./results", f"auto_{timestamp}")
+    os.makedirs(result_path, exist_ok=True)
     if auto :
-        dataset_name_w_results_all = "./results/auto/defaultconfig_validated.all.json"
-        dataset_name_w_results = "./results/auto/defaultconfig_validated.json"
+        dataset_name_w_results_all =  os.path.join(result_path, "defaultconfig_validated_all.json")
+        dataset_name_w_results = os.path.join(result_path, "defaultconfig_validated.json")
     else:
         if dataset_name.endswith(".json") or dataset_name.endswith(".jsonl"):
             dataset_name = dataset_name.split("/")[-1]

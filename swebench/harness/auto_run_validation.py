@@ -8,7 +8,7 @@ import re
 root_path = "/home/riv3r/SWE-bench/swebench"
 
 # 配置路径
-input_folder = os.path.join(root_path, "collect/tasks/auto")
+input_folder = os.path.join(root_path, "collect/tasks/tasks_after_2021")
 output_folder = os.path.join(root_path, "versioning/results")
 version_folder = os.path.join(root_path, "versioning/auto/version")
 env_commit_folder = os.path.join(root_path, "versioning/auto/env_commit")

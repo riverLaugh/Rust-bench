@@ -166,7 +166,7 @@ def get_cargo_test_cmd(
                 cmds.append(f'cd {"../" * (module_path.count("/") + 1)}')
         return cmds
     except AssertionError:
-        return []
+        return None
 
 
 def test_bitflags():

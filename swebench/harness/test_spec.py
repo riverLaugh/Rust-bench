@@ -2,6 +2,7 @@ import hashlib
 import json
 import platform
 import re
+import test
 import toml
 import json
 from tqdm.auto import tqdm
@@ -395,7 +396,9 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
         pool = GithubApiPool(tokens=os.environ["GITHUB_TOKENS"])
         repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
         test_commands = get_cargo_test_cmd(repo, tests_changed)
-
+    
+    if test_commands is None:
+        return None
     # write test commands
     test_commands_output_dir = os.path.join(os.path.dirname(__file__),'save','test_commands',instance['repo'].replace('/','__'))
     os.makedirs(test_commands_output_dir,exist_ok=True)
@@ -487,7 +490,8 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     eval_script_list = make_eval_script_list(
         instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
     )
-
+    if eval_script_list is None:
+        return None
     return TestSpec(
         instance_id=instance_id,
         repo=repo,
