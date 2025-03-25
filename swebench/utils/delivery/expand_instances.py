@@ -14,6 +14,10 @@ from swebench.inference.make_datasets.utils import AutoContextManager
 from tempfile import TemporaryDirectory
 from swebench.inference.make_datasets.utils import AutoContextManager, ingest_directory_contents
 
+openai_api = os.getenv("OPENAI_API_KEY")
+
+
+
 def run_inference(instance, openai_api_key, model="gpt-4o-2024-08-06") ->list:
     """
     使用 OpenAI API 获取问题类型和等级判定原因。
@@ -30,33 +34,47 @@ def run_inference(instance, openai_api_key, model="gpt-4o-2024-08-06") ->list:
     system_messages = "您是一位资深的 Rust 程序专家，擅长分析 Rust 代码中的潜在问题，并提供详细的分类和评估。您的任务是根据模型生成的 bug report、相关代码片段和正确的评估（ground truth），对问题进行分类、评估其级别并提供理由。"
 
     prompt = (
-        f"{system_messages}\n\n"
-        f"以下是模型生成的 bug report（注意：此报告不一定正确）：\n"
-        f"\"{instance["bug_report"]}\"\n\n"
-        f"以下是相关代码片段：\n"
-        f"\"{instance["code_snippet"]}\"\n\n"
-        f"以下是正确的评估（ground truth）：\n"
-        f"\"{instance["problem_statement"]}\"\n\n"
-        f"请按照以下步骤完成任务，所有回答使用中文并严格遵守字数限制：\n\n"
-        f"1. **分类问题类型（problem_type）**：\n"
-        f"   - 将 bug report 指出的问题分类为一个类型，类型名称简洁且不超过十个汉字。\n"
-        f"   - 常见类型包括：逻辑错误、性能问题、安全漏洞、代码风格问题等。\n"
-        f"   - 若现有类型不适用，可根据具体情况定义新类型。\n"
-        f"   - 分类时，请对比 bug report 和 ground truth 的差异。\n\n"
-        f"2. **评估级别（level）**：\n"
-        f"   - 评估 bug report 的级别为 'low' 或 'high'：\n"
-        f"     - 'low'：低价值问题，例如 bug report 错误或问题微不足道，建议降低类似问题的优先级。\n"
-        f"     - 'high'：高价值问题，例如 bug report 正确且问题严重（如程序崩溃或安全漏洞），需用户关注。\n"
-        f"   - 请对比 bug report 和 ground truth，根据差异选择级别。\n\n"
-        f"3. **提供评估理由（level_reason）**：\n"
-        f"   - 提供详细理由，不超过 300 字。\n"
-        f"   - 包括代码分析、问题潜在影响及选择级别的依据，辅以相关代码示例。\n\n"
-        f"请以以下 JSON 格式返回结果，确保键名是单行字符串，不含换行符：\n"
-        f"{{\n"
-        f"  \"problem_type\": \"...\",\n"
-        f"  \"level\": \"...\",\n"
-        f"  \"level_reason\": \"...\"\n"
-        f"}}"
+    f"{system_messages}\n\n"
+    f"请根据以下信息完成分析：\n"
+    f"1. 需要评估的代码片段：\n"
+    f"   ```{instance['code_snippet']}```\n\n"
+    f"2. 系统提供的问题描述（可能存在偏差）：\n"
+    f"   ```{instance['bug_report']}```\n\n"
+    f"3. 代码上下文信息：\n"
+    f"   - 文件路径：{instance['file_path']}\n"
+    f"   - 语言：{instance['language']}\n"
+    f"   - 关注函数：{instance['target_function']}\n\n"
+
+    f"请按照以下要求完成分析，所有回答用中文且符合格式限制：\n\n"
+
+    f"**第一步：问题类型分类（problem_type）**\n"
+    f"- 根据代码和问题描述，确定问题的核心类型。\n"
+    f"- 类型名称需简洁（≤10汉字），可选类型包括：\n"
+    f"  逻辑错误、性能问题、安全漏洞、资源泄漏、代码冗余、异常处理缺失等。\n"
+    f"- 若现有类型不适用，需根据问题本质定义新类型。\n\n"
+
+    f"**第二步：问题严重性评估（level）**\n"
+    f"- 判断问题的级别为 'low' 或 'high'：\n"
+    f"  - 'high'：问题可能导致程序崩溃、安全漏洞、数据损坏或严重性能下降。\n"
+    f"  - 'low'：问题轻微（如代码冗余、低效但不影响功能）或描述存在偏差。\n"
+    f"- 需结合代码行为、潜在影响及问题描述的合理性进行判断。\n\n"
+
+    f"**第三步：评估理由（level_reason）**\n"
+    f"- 请用 200-300 字的中文说明理由，需包含以下内容：\n"
+    f"  1. **代码分析**：指出具体代码行（如 `line 179`）的潜在问题。\n"
+    f"  2. **逻辑推导**：解释问题是否会导致描述中的风险（如未处理异常）。\n"
+    f"  3. **影响评估**：描述问题可能导致的后果及严重性。\n"
+    f"  4. **判定依据**：基于代码逻辑或行业最佳实践解释级别选择原因。\n"
+    f"- 禁止直接提及 'bug report' 或 'ground truth'，需基于代码本身分析。\n\n"
+
+    f"**输出格式要求**：\n"
+    f"必须严格返回以下 JSON 格式，键名单行且无换行：\n"
+    f"{{\n"
+    f"  \"problem_type\": \"填写类型名称\",\n"
+    f"  \"level\": \"low/high\",\n"
+    f"  \"level_reason\": \"详细理由文本\"\n"
+    f"}}\n"
+    f"注：所有字段必须填写，且需符合上述要求。"
     )
 
     # 调用 OpenAI API
@@ -130,16 +148,72 @@ def generate_bug_report(num_samples,instance, openai_api,model) -> list:
         res.append(instance)
     return res
 
+def create_dataset_task(dataset_name_or_path, split):
+    dataset_hf = create_text_dataset(
+        dataset_name_or_path=dataset_name_or_path,
+        splits=[split],
+        validation_ratio=0,
+        output_dir="",
+        prompt_style="bug_report",
+        file_source="oracle",
+        retrieval_file=None,
+        k=None,
+        max_context_len=None,
+        nname="rustbench_100",
+        tokenizer_name=None,
+        push_to_hub_user=None
+    )
+    return [x for x in dataset_hf[split]]
+
+def make_code_snippet_task(dataset_name_or_path, split):
+    return make_code_snippet(
+        dataset_name_or_path,
+        split=split,
+        output=None  # 根据实际需求调整参数
+    )
+
 
 def main(dataset_name_or_path: str,split:str, num_samples: int, output_dir: str):
     # 加载数据集
-    openai_api = os.getenv("OPENAI_API_KEY")
-    dataset_hf = create_text_dataset(dataset_name_or_path=dataset_name_or_path,splits=[split],validation_ratio=0,output_dir="",prompt_style="bug_report",file_source="oracle",retrieval_file=None, k=None,max_context_len=None,nname="rustbench_100",tokenizer_name=None,push_to_hub_user=None)
-    dataset = [x for x in dataset_hf]
-    code_entries = make_code_snippet(dataset_name_or_path, split=split ,output=None)
+    os.makedirs(output_dir, exist_ok=True)
+        # 定义 JSON 文件路径
+    dataset_name = dataset_name_or_path.split("/")[-1]
+    dataset_dir = os.path.join(output_dir, dataset_name)
+    os.makedirs(dataset_dir, exist_ok=True)  # 创建子目录，如果不存在
+    dataset_path = os.path.join(dataset_dir, "dataset.json")
+    code_entries_path = os.path.join(dataset_dir, "code_entries.json")
+    # 检查本地是否已有 JSON 文件
+    if os.path.exists(dataset_path) and os.path.exists(code_entries_path):
+        print("加载本地已有的数据集和代码条目...")
+        with open(dataset_path, "r", encoding="utf-8") as f:
+            dataset = json.load(f)
+        with open(code_entries_path, "r", encoding="utf-8") as f:
+            code_entries = json.load(f)
+    else:
+        print("构建数据集和代码条目...")
+        # 使用线程池并行加载数据集和代码条目
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            # 提交任务到线程池
+            future_dataset = executor.submit(create_dataset_task, dataset_name_or_path, split)
+            future_code = executor.submit(make_code_snippet_task, dataset_name_or_path, split)
+            
+            # 等待任务完成并获取结果
+            dataset = future_dataset.result()
+            code_entries = future_code.result()
+        
+        print("将数据集和代码条目保存到 JSON 文件...")
+        # 转换为 Python 列表
+        # dataset_list = [example for example in dataset[split]]
+        # print(dataset_list[0])
+        with open(dataset_path, "w", encoding="utf-8") as f:
+            json.dump(dataset, f, ensure_ascii=False, indent=4)
+        with open(code_entries_path, "w", encoding="utf-8") as f:
+            json.dump(code_entries, f, ensure_ascii=False, indent=4)
+
+
     bug_report_dataset = []
     with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(generate_bug_report,num_samples ,instance, openai_api) for instance in dataset]
+        futures = [executor.submit(generate_bug_report,num_samples ,instance, openai_api, "gpt-4o-2024-08-06") for instance in dataset]
 
         for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
             try:
@@ -155,10 +229,11 @@ def main(dataset_name_or_path: str,split:str, num_samples: int, output_dir: str)
                 break
         return example
     
-    dataset = bug_report_dataset.map(add_code_snippet) #在bug report dataset的基础上添加code snippet
+    #在bug report dataset的基础上添加code snippet
+    final_dataset = [add_code_snippet(example) for example in bug_report_dataset]
     res = []
     with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(run_inference, sample ,openai_api) for sample in dataset]
+        futures = [executor.submit(run_inference, sample ,openai_api) for sample in final_dataset]
 
         for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
             try:
@@ -166,92 +241,40 @@ def main(dataset_name_or_path: str,split:str, num_samples: int, output_dir: str)
                 res.append(result)
             except Exception as e:
                 print(f"Error processing example: {e}")
+    output_file = os.path.join(output_dir, "res.jsonl")
+    code_entry_dict = {entry["instance_id"]: entry for entry in code_entries}
 
-    output_file = os.path.join(output_dir, "res.json")
     with open(output_file, 'w', encoding='utf-8') as f:
-        for entry in code_entries:
-            # 查找匹配的 response 数据
-            matching_response = next((r for r in res if r["instance_id"] == entry["instance_id"]), None)
-            if matching_response:
+        for r in res:
+            code_entry = code_entry_dict.get(r["instance_id"])
+            if code_entry:
                 merged_json = {
-                    "code_snippet": entry["code_snippet"],
-                    "target_function": entry["target_function"],
-                    "review_type": entry["review_type"],
+                    "code_snippet": r["code_snippet"],
+                    "target_function": code_entry.get("target_function", ""),
+                    "review_type": code_entry.get("review_type", ""),
                     "issue_detail": {
-                        "problem_type": matching_response["problem_type"],
-                        "location": entry["issue_detail"]["location"],
-                        "level": matching_response["level"],
-                        "description": matching_response["bug_report"],
-                        "level_reason": matching_response["level_reason"]
+                        "problem_type": r["problem_type"],
+                        "location": code_entry.get("issue_detail", {}).get("location", ""),
+                        "level": r["level"],
+                        "description": r["bug_report"],
+                        "level_reason": r["level_reason"]
                     },
-                    "repo": entry["repo"],
-                    "branch": entry["branch"],
-                    "file_path": entry["file_path"],
-                    "language": entry["language"]
+                    "repo": code_entry.get("repo", ""),
+                    "branch": code_entry.get("branch", ""),
+                    "file_path": code_entry.get("file_path", ""),
+                    "language": code_entry.get("language", "")
                 }
-                # 将每条记录写入 JSONL 文件
                 f.write(json.dumps(merged_json, ensure_ascii=False) + '\n')
 
 
 if __name__ == "__main__":
+    # 获取脚本所在目录的绝对路径
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # 设置默认输出目录为脚本目录下的 "output" 文件夹
+    default_output_dir = os.path.join(script_dir, "output")
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset_name_or_path", type=str, default="r1v3r/RustGPT_Bench_100", help="Dataset name or path")
-    parser.add_argument("--num_samples", type=int, default=2, help="Number of samples to generate")
+    parser.add_argument("--num_samples", type=int, default=1, help="Number of samples to generate")
     parser.add_argument("--split", type=str, default="train", help="Split to use")
-    parser.add_argument("--output_dir", type=str, default="/home/riv3r/Rust-bench/swebench/utils/delivery/output", help="Output directory")
+    parser.add_argument("--output_dir", type=str, default=default_output_dir, help="Output directory")    
     main(**vars(parser.parse_args()))
-
-
-
-
-    
-
-
-
-
-    #添加相关文件
-    # input_instances_copy = {x["instance_id"]: x for x in dataset}
-    # with TemporaryDirectory(
-    #     dir="/scratch" if os.path.exists("/scratch") else "/tmp"
-    # ) as root_dir:
-    #     for instance_id, instance in tqdm(
-    #         input_instances_copy.items(),
-    #         total=len(input_instances_copy),
-    #         desc="Adding text inputs",
-    #     ):
-    #         try:
-    #             with AutoContextManager(
-    #                 instance, root_dir, verbose=verbose
-    #             ) as cm:
-    #                 readmes = cm.get_readme_files
-                    
-    #         except:
-
-    #             pass
-
-    # with ThreadPoolExecutor(max_workers=10) as executor:
-    #     futures = [executor.submit(run_api, instance, openai_api) for instance in dataset]
-
-    #     for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
-    #         try:
-    #             result = future.result()
-    #             entries.append(result)
-    #         except Exception as e:
-    #             print(f"Error processing example: {e}")
-
-    # entries = []
-    # # 使用 ThreadPoolExecutor 实现多线程
-    # with ThreadPoolExecutor(max_workers=10) as executor:  # 调整 max_workers 以控制线程数
-    #     futures = [executor.submit(process_example, example, openai_api) for example in dataset]
-
-    #     # 等待所有任务完成并收集结果，同时显示进度条
-    #     for future in tqdm(as_completed(futures), total=len(futures), desc="Processing"):
-    #         try:
-    #             result = future.result()
-    #             entries.append(result)
-    #         except Exception as e:
-    #             print(f"Error processing example: {e}")
-
-    # # 将结果保存到文件
-    # with open("classification_results.json", "w", encoding="utf-8") as f:
-    #     json.dump(entries, f, ensure_ascii=False, indent=4)
