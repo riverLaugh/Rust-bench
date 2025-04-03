@@ -158,7 +158,7 @@ def main(
         mode:str,
         pull_numbers: list,
         max_pulls: int = None,
-        cutoff_date: str = None,
+        cutoff_date: str = "20210101",
         auto: bool = False,
     ):
     """

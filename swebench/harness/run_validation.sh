@@ -4,12 +4,12 @@
 
 # 1.21
 python run_validation.py \
-    --dataset_name r1v3r/auto_0207_bug\
-    --run_id ratatui \
+    --dataset_name r1v3r/auto_0207_bug_updated\
+    --run_id acr_4_2 \
     --max_workers 4 \
-    --cache_level instance \
-    --clean 1 \
-    --instance_ids ratatui__ratatui-518
+    --cache_level instance\
+    --instance_ids bitflags__bitflags-266
+    # --instance_ids tokio-rs__tokio-2362 tokio-rs__tokio-2448 tokio-rs__tokio-5914 serde-rs__serde-2562
 
 # 1.20
 # python run_validation.py \

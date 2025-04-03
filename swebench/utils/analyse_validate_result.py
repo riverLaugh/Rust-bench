@@ -40,6 +40,6 @@ def analyse_validate_result(result_dir):
 
 
 if __name__ == "__main__":
-    json =  analyse_validate_result("/home/riv3r/SWE-bench/swebench/harness/logs/run_validation/hyper-index/gold")
+    json =  analyse_validate_result("/home/riv3r/SWE-bench/swebench/harness/logs/run_validation/acr_40/gold")
     with open(f"analyse_validate_result_{time.strftime('%Y%m%d_%H%M%S')}.json", "w") as f:
         f.write(json)

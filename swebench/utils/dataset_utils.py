@@ -134,8 +134,8 @@ def upload_version(json_file_path:str , dataset_name):
 
 if __name__ == "__main__":
     # 设置 JSON 文件路径、数据集名称和 Hugging Face API Token
-    json_file_path = "/home/riv3r/SWE-bench/swebench/utils/ipynb/output.json"  # 替换为你的 JSON 文件路径
+    json_file_path = "/home/riv3r/SWE-bench/swebench/versioning/bitflags-new-task-instances_versions.json"  # 替换为你的 JSON 文件路径
     
     dataset = Dataset.from_list(multiJson2dataset(json_file_path))
     
-    upload_to_huggingface(dataset,"r1v3r/auto_0207_bug")
+    upload_to_huggingface(dataset,"r1v3r/bitflags_after21")

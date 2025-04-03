@@ -2,7 +2,6 @@ import hashlib
 import json
 import platform
 import re
-import test
 import toml
 import json
 from tqdm.auto import tqdm
@@ -173,7 +172,9 @@ def get_rust_version_for_date(target_date: str) -> str:
     根据给定日期返回应该使用的 Rust 版本
     参数 target_date 格式为 'YYYY-MM-DD'
     """
-    target_datetime = datetime.strptime(target_date, "%Y-%m-%d")
+    # print(f"target_date:{target_date}")
+    date_part = target_date.split("T")[0]
+    target_datetime = datetime.strptime(date_part, "%Y-%m-%d")
     
     # 初始化为默认版本 1.81.0（最新版本）
     selected_version = "1.81.0"
@@ -391,13 +392,13 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     diff_cmd = "git diff"
     git_status_cmd = "git status"
 
-    test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
-    if test_commands is None:
-        pool = GithubApiPool(tokens=os.environ["GITHUB_TOKENS"])
-        repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
-        test_commands = get_cargo_test_cmd(repo, tests_changed)
+    # test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
+    # if test_commands is None:
+    pool = GithubApiPool(tokens=os.environ["GITHUB_TOKENS"])
+    repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
+    test_commands = get_cargo_test_cmd(repo, tests_changed)
     
-    if test_commands is None:
+    if test_commands is None or test_commands == []:
         return None
     # write test commands
     test_commands_output_dir = os.path.join(os.path.dirname(__file__),'save','test_commands',instance['repo'].replace('/','__'))
@@ -449,7 +450,7 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
         # 转换为日期时间
         date_time = datetime.fromtimestamp(timestamp_s)
         instance["created_at"] = date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
-    time = instance["created_at"].split("T")[0] 
+    time = instance["updated_at"].split("T")[0] 
 
     test_patch = instance["test_patch"]
     def _from_json_or_obj(key: str) -> Any:
@@ -466,6 +467,119 @@ def make_test_spec(instance: SWEbenchInstance) -> TestSpec | None:
     specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
 
     repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time)
+    try:
+        env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
+    except Exception as e:
+        logger.warning(f"Failed to create make env script for {instance_id}: {e}")
+        return None
+
+    if platform.machine() in {"aarch64", "arm64"}:
+        # use arm64 unless explicitly specified
+        arch = "arm64" if instance_id not in USE_X86 else "x86_64"
+    else:
+        arch = "x86_64"
+
+    # get cargo.toml
+    # req_path = MAP_REPO_TO_REQS_PATHS[repo]
+    # reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
+    # reqs = requests.get(reqs_url)
+    # cargo_toml = reqs.text
+    cargo_toml = ""
+    tests_changed = list(dict.fromkeys(get_test_directives(instance)))
+    image_tag = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {}).get("image_tag", None)
+    # get eval script list
+    eval_script_list = make_eval_script_list(
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    )
+    if eval_script_list is None:
+        return None
+    return TestSpec(
+        instance_id=instance_id,
+        repo=repo,
+        env_script_list=env_script_list,
+        repo_script_list=repo_script_list,
+        eval_script_list=eval_script_list,
+        version=version,
+        arch=arch,
+        tests_changed=tests_changed,
+        cargo_toml=cargo_toml,
+        FAIL_TO_PASS=fail_to_pass,
+        PASS_TO_PASS=pass_to_pass,
+        image_tag=image_tag,
+    )
+
+def make_nightly_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time) -> TestSpec | None:
+    """
+    Create a list of bash commands to set up the repository for testing.
+    This is the setup script for the instance image.
+    """
+    setup_commands = [
+        "pwd",
+        # f"git clone -o origin https://github.com/{repo} {repo_directory}",
+        # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
+        f"cargo clean",
+        f"cd {repo_directory}",
+        f"git reset --hard {base_commit}",
+    ]
+
+    # 根据时间获取对应的 Rust 版本
+    
+    setup_commands.append(f"rustup toolchain install nightly-{time}")
+    setup_commands.append(f"rustup default nightly-{time}")
+    setup_commands.append(f"cargo lts {time}")
+    setup_commands.append(f"cargo update")
+
+    if repo in MAP_REPO_TO_INSTALL:
+        setup_commands.append(MAP_REPO_TO_INSTALL[repo])
+
+    # Run pre-install set up if provided
+    if "pre_install" in specs:
+        for pre_install in specs["pre_install"]:
+            setup_commands.append(pre_install)
+
+    if "install" in specs:
+        setup_commands.append(specs["install"])
+    return setup_commands
+
+
+
+def make_nightly_test_spec(instance: SWEbenchInstance):
+    if isinstance(instance, TestSpec):
+        return instance
+    if "version" not in instance or instance["version"] is None:
+        logger.warning(f"Instance {instance['instance_id']} does not have a version field, skipping")
+        return None
+    instance_id = instance[KEY_INSTANCE_ID]
+    repo = instance["repo"]
+    version = instance["version"]
+    base_commit = instance["base_commit"]
+    problem_statement = instance["problem_statement"]
+    hints_text = instance["hints_text"]  # Unused
+    if isinstance(instance["created_at"], int):
+        # 转换为秒（datetime 需要秒级时间戳）
+        timestamp_ms = instance["created_at"]
+        timestamp_s = timestamp_ms/ 1000
+
+        # 转换为日期时间
+        date_time = datetime.fromtimestamp(timestamp_s)
+        instance["created_at"] = date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    time = instance["updated_at"].split("T")[0] 
+
+    test_patch = instance["test_patch"]
+    def _from_json_or_obj(key: str) -> Any:
+        """If key points to string, load with json"""
+        if isinstance(instance[key], str):
+            return json.loads(instance[key])
+        return instance[key]
+
+    pass_to_pass = _from_json_or_obj(PASS_TO_PASS)
+    fail_to_pass = _from_json_or_obj(FAIL_TO_PASS)
+
+    env_name = "testbed"
+    repo_directory = f"/{env_name}"
+    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
+
+    repo_script_list = make_nightly_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time)
     try:
         env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
     except Exception as e:

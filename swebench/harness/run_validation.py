@@ -37,7 +37,7 @@ from swebench.harness.docker_build import (
     setup_logger,
 )
 from swebench.harness.grading import get_eval_report
-from swebench.harness.test_spec import make_test_spec, TestSpec
+from swebench.harness.test_spec import make_nightly_test_spec, make_test_spec, TestSpec
 from swebench.harness.utils import load_swebench_dataset, str2bool
 from swebench.harness.grading import get_logs_eval   
 from swebench.harness.run_evaluation import get_gold_predictions, EvaluationError, get_dataset_from_preds
@@ -193,7 +193,7 @@ def run_instance(
                     f"Test timed out after {timeout} seconds.",
                     logger,
                 )
-
+        
         # Get git diff after running eval script
         git_diff_output_after = (
             container.exec_run("git diff", workdir="/testbed").output.decode("utf-8").strip()
@@ -235,7 +235,12 @@ def run_instance(
             elif status == "FAILED" and eval_sm_ref.get(test, None) == "PASSED":
                 report_map["PASS_TO_FAIL"].append(test)
         
-        return report_map
+        
+        if len(report_map["FAIL_TO_PASS"]) == 0 and len(report_map["PASS_TO_PASS"]) == 0 and "error[E0554]" in test_output: 
+            return False,report_map
+            
+
+        return True,report_map
     except EvaluationError as e:
         error_msg = traceback.format_exc()
         logger.info(error_msg)
@@ -296,7 +301,7 @@ def run_instances(
     reusable_images = instance_image_ids.intersection(existing_images)
     if not force_rebuild and reusable_images:
         print(f"Found {len(existing_images)} existing instance images. Will reuse them.")
-
+    nightly_instance_ids = []
     # run instances in parallel
     print(f"Running {len(instances)} instances...")
     with tqdm(total=len(instances), smoothing=0, desc="Running instances") as pbar:
@@ -327,7 +332,9 @@ def run_instances(
                 pbar.update(1)
                 try:
                     # Update progress bar, check if instance ran successfully
-                    res = future.result()
+                    stable,res = future.result()
+                    if stable is False:
+                        nightly_instance_ids.append(res['instance_id'])
                     if res:
                         instance_id = res['instance_id']
                         del res['instance_id']
@@ -335,6 +342,48 @@ def run_instances(
                 except Exception as e:
                     traceback.print_exc()
                     continue
+    nightly_instance = [x for x in instances if x['instance_id'] in nightly_instance_ids]
+    if nightly_instance:
+        nightly_test_specs = list(map(make_nightly_test_spec, nightly_instance))
+        nightly_test_specs = [test_spec for test_spec in nightly_test_specs if test_spec is not None]
+        print(f"Running {len(nightly_instance)} nightly instances...")
+        with tqdm(total=len(nightly_instance), smoothing=0, desc="Running nightly instances") as pbar:
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                # Create a future for running each instance
+                futures = {
+                    executor.submit(
+                        run_instance,
+                        test_spec,
+                        predictions[test_spec.instance_id],
+                        should_remove(
+                            test_spec.instance_image_key,
+                            cache_level,
+                            clean,
+                            reusable_images,
+                        ),
+                        force_rebuild,
+                        client,
+                        run_id,
+                        timeout,
+                        auto,
+                    ): None
+                    for test_spec in nightly_test_specs
+                }
+                # Wait for each future to complete
+                for future in as_completed(futures):
+                    pbar.update(1)
+                    try:
+                        # Update progress bar, check if instance ran successfully
+                        stable,res = future.result()
+                        if stable is False:
+                            print(f"Nightly instance {res['instance_id']} failed.")
+                        if res:
+                            instance_id = res['instance_id']
+                            del res['instance_id']
+                            results[instance_id] = res
+                    except Exception as e:
+                        traceback.print_exc()
+                        continue
     print("All instances run.")
     return results
 

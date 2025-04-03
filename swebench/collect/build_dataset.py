@@ -49,6 +49,7 @@ def create_instance(repo: Repo, pull: dict , mode:str) -> dict:
         "problem_statement": problem_statement,
         "hints_text": hints,
         "created_at": pull["created_at"],
+        "updated_at": pull["updated_at"],
     }
 
 
@@ -221,7 +222,7 @@ def main(pr_file: str, output: str, mode:str, token: Optional[str] = None, task_
             with task_lock:
                 log_file.write('Done:{}\n'.format(reponame))
                 log_file.flush()
-    log_file.close()
+        log_file.close()
     logger.info(f"[{', '.join(repos.keys())}] Total instances: {total_instances}, completed: {completed}, with tests: {with_tests}")
     logger.info(f"[{', '.join(repos.keys())}] Skipped {len(seen_prs)} pull requests that have already been beeninspected")
 

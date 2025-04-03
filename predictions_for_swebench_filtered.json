@@ -1,0 +1,12 @@
+[
+    {
+        "instance_id": "tokio-rs__tokio-2457",
+        "model_name_or_path": "QwQ-32B",
+        "model_patch": "diff --git a/tokio/src/runtime/builder.rs b/tokio/src/runtime/builder.rs\nindex 56fb898a..762a4ed9 100644\n--- a/tokio/src/runtime/builder.rs\n+++ b/tokio/src/runtime/builder.rs\n@@ -49,7 +49,7 @@ pub struct Builder {\n \n     /// The number of worker threads, used by Runtime.\n     ///\n-    /// Only used when not using the current-thread executor.\n+    /// Only used when not using the current-thread executor. If not set, defaults to the minimum of the CPU count and `max_threads`.\n     core_threads: Option<usize>,\n \n     /// Cap on thread usage.\n"
+    },
+    {
+        "instance_id": "tokio-rs__tokio-4430",
+        "model_name_or_path": "QwQ-32B",
+        "model_patch": "diff --git a/tokio/src/runtime/task/harness.rs b/tokio/src/runtime/task/harness.rs\nindex 0996e523..1cdd1a71 100644\n--- a/tokio/src/runtime/task/harness.rs\n+++ b/tokio/src/runtime/task/harness.rs\n@@ -186,10 +186,7 @@ where\n \n         // Drop the `JoinHandle` reference, possibly deallocating the task\n         self.drop_reference();\n-\n-        if let Some(panic) = maybe_panic {\n-            panic::resume_unwind(panic);\n-        }\n+        \n     }\n \n     /// Remotely aborts the task.\n"
+    }
+]
