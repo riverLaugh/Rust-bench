@@ -15,7 +15,7 @@ class GithubApiPool:
 
     def __init__(self, tokens: Union[str, list]):
         if isinstance(tokens, str):
-            self.apis = [GhApi(token=token) for token in tokens.split(",")]
+            self.apis = [GhApi(token=token) for token in tokens.split(",") if token]
         elif isinstance(tokens, list):
             self.apis = [GhApi(token=token) for token in tokens]
         else:
@@ -34,6 +34,7 @@ class GithubApiPool:
                 raise
             except Exception as e:
                 print(f"Unexpected error {e}. Retrying...")
+                self._rotate()
 
     def _rotate(self):
         if not self.apis:
