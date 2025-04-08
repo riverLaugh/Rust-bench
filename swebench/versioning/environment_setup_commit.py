@@ -6,6 +6,47 @@ from datasets import load_dataset
 from pandas import Timestamp
 import argparse
 import os
+import requests
+# def process_created_at(example):
+#     example["created_at"] = convert_created_at(example["created_at"])
+#     return example
+
+def get_pr_info(owner, repo, pull_number, access_token):
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls/{pull_number}"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        pr_data = response.json()
+        return {
+            "created_at": pr_data.get("created_at"),
+            "updated_at": pr_data.get("updated_at"),
+            "title": pr_data.get("title"),
+            "state": pr_data.get("state")
+        }
+    else:
+        print(f"Error: {response.status_code}")
+        return None
+
+def add_updated_at(sample):
+    owner = sample["repo"].split("/")[0]
+    repo = sample["repo"].split("/")[1]
+    pull_number = str(sample["pull_number"])
+    access_token = os.getenv("GITHUB_TOKEN")
+    
+    # 获取 PR 信息
+    result = get_pr_info(owner, repo, pull_number, access_token)
+    if result:
+        sample["updated_at"] = result["updated_at"]
+    else:
+        sample["updated_at"] = None  # 处理失败情况
+    
+    # 转换 created_at 格式（如果需要）
+    # sample = process_created_at(sample)
+    return sample
+
 
 def main(args):
 # 加载数据集
@@ -33,7 +74,7 @@ def main(args):
 
     # 应用转换函数
     dataset = dataset.map(parse_created_at)
-
+    dataset = dataset.map(add_updated_at)
     # 创建一个字典，用于存储每个 version 对应的最新 base_commit
     version_to_latest_commit = {}
 

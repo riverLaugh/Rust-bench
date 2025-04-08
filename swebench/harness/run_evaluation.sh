@@ -3,5 +3,5 @@ python run_evaluation.py \
     --run_id acr40_eval_qwq \
     --max_workers 4 \
     --cache_level instance \
-    --predictions_path /home/riv3r/SWE-bench/agentless_attemp_1.jsonl\
+    --predictions_path /home/riv3r/SWE-bench/output_10_processed.jsonl\
     --split train
