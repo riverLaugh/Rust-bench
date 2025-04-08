@@ -10,7 +10,7 @@ import os,requests
 from dataclasses import dataclass
 from typing import Any, Union, cast
 from datetime import datetime
-from swebench.harness.repo_arch import GithubApiPool, get_cargo_test_cmd, get_repo_arch
+from swebench.harness.repo_arch import GithubApiPool, get_cargo_test_cmd, get_cargo_test_cmd_wo_features, get_repo_arch
 from swebench.harness.make_test_cmds import make_test_cmds
 from swebench.harness.constants import (
     SWEbenchInstance,
@@ -602,6 +602,210 @@ def make_nightly_test_spec(instance: SWEbenchInstance):
     image_tag = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {}).get("image_tag", None)
     # get eval script list
     eval_script_list = make_eval_script_list(
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    )
+    if eval_script_list is None:
+        return None
+    return TestSpec(
+        instance_id=instance_id,
+        repo=repo,
+        env_script_list=env_script_list,
+        repo_script_list=repo_script_list,
+        eval_script_list=eval_script_list,
+        version=version,
+        arch=arch,
+        tests_changed=tests_changed,
+        cargo_toml=cargo_toml,
+        FAIL_TO_PASS=fail_to_pass,
+        PASS_TO_PASS=pass_to_pass,
+        image_tag=image_tag,
+    )
+
+    
+def make_eval_script_list_wo_features(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed):
+    """
+    Applies the test patch and runs the tests.
+    """
+    HEREDOC_DELIMITER = "EOF_114329324912"
+    test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
+    # Reset test files to the state they should be in before the patch.
+    reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
+    if instance["instance_id"] == "asterinas__asterinas-1138":
+        reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)} && rm -rf /testbed/osdk/my-first-os"
+    apply_test_patch_command = (
+        f"git apply -v - <<'{HEREDOC_DELIMITER}'\n{test_patch}\n{HEREDOC_DELIMITER}"
+    )
+    diff_cmd = "git diff"
+    git_status_cmd = "git status"
+
+    # test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
+    # if test_commands is None:
+    pool = GithubApiPool(tokens=os.environ["GITHUB_TOKENS"])
+    repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
+    test_commands = get_cargo_test_cmd_wo_features(repo, tests_changed)
+    
+    if test_commands is None or test_commands == []:
+        return None
+    # write test commands
+    test_commands_output_dir = os.path.join(os.path.dirname(__file__),'save','test_commands',instance['repo'].replace('/','__'))
+    os.makedirs(test_commands_output_dir,exist_ok=True)
+    test_commands_output_path = os.path.join(test_commands_output_dir,f"{instance['instance_id']}.json")
+    if not os.path.exists(test_commands_output_path):
+        with open(test_commands_output_path,'w',encoding='utf-8') as f:
+            json.dump(test_commands,f)
+
+
+    eval_commands = []
+    if "eval_commands" in specs:
+        eval_commands += specs["eval_commands"]
+    eval_commands += [
+        f"git config --global --add safe.directory {repo_directory}",  # for nonroot user
+        f"cd {repo_directory}",
+    ]
+    if "install" in specs:
+        eval_commands.append(specs["install"])
+    eval_commands += [
+        # reset_tests_command,
+        apply_test_patch_command,
+        git_status_cmd,
+        diff_cmd,
+        *(test_commands),
+        git_status_cmd,
+        reset_tests_command
+    ]
+    return eval_commands
+
+def make_test_spec_wo_features(instance: SWEbenchInstance) -> TestSpec | None:
+    if isinstance(instance, TestSpec):
+        return instance
+    if "version" not in instance or instance["version"] is None:
+        logger.warning(f"Instance {instance['instance_id']} does not have a version field, skipping")
+        return None
+    instance_id = instance[KEY_INSTANCE_ID]
+    repo = instance["repo"]
+    version = instance["version"]
+    base_commit = instance["base_commit"]
+    problem_statement = instance["problem_statement"]
+    hints_text = instance["hints_text"]  # Unused
+    if isinstance(instance["created_at"], int):
+        # 转换为秒（datetime 需要秒级时间戳）
+        timestamp_ms = instance["created_at"]
+        timestamp_s = timestamp_ms/ 1000
+
+        # 转换为日期时间
+        date_time = datetime.fromtimestamp(timestamp_s)
+        instance["created_at"] = date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    time = instance["updated_at"].split("T")[0] 
+
+    test_patch = instance["test_patch"]
+    def _from_json_or_obj(key: str) -> Any:
+        """If key points to string, load with json"""
+        if isinstance(instance[key], str):
+            return json.loads(instance[key])
+        return instance[key]
+
+    pass_to_pass = _from_json_or_obj(PASS_TO_PASS)
+    fail_to_pass = _from_json_or_obj(FAIL_TO_PASS)
+
+    env_name = "testbed"
+    repo_directory = f"/{env_name}"
+    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
+
+    repo_script_list = make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time)
+    try:
+        env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
+    except Exception as e:
+        logger.warning(f"Failed to create make env script for {instance_id}: {e}")
+        return None
+
+    if platform.machine() in {"aarch64", "arm64"}:
+        # use arm64 unless explicitly specified
+        arch = "arm64" if instance_id not in USE_X86 else "x86_64"
+    else:
+        arch = "x86_64"
+    cargo_toml = ""
+    tests_changed = list(dict.fromkeys(get_test_directives(instance)))
+    image_tag = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {}).get("image_tag", None)
+    eval_script_list = make_eval_script_list_wo_features(
+        instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
+    )
+    if eval_script_list is None:
+        return None
+    return TestSpec(
+        instance_id=instance_id,
+        repo=repo,
+        env_script_list=env_script_list,
+        repo_script_list=repo_script_list,
+        eval_script_list=eval_script_list,
+        version=version,
+        arch=arch,
+        tests_changed=tests_changed,
+        cargo_toml=cargo_toml,
+        FAIL_TO_PASS=fail_to_pass,
+        PASS_TO_PASS=pass_to_pass,
+        image_tag=image_tag,
+    )
+
+    
+def make_test_spec_nightly_wo_feature(instance: SWEbenchInstance) -> TestSpec | None:
+    if isinstance(instance, TestSpec):
+        return instance
+    if "version" not in instance or instance["version"] is None:
+        logger.warning(f"Instance {instance['instance_id']} does not have a version field, skipping")
+        return None
+    instance_id = instance[KEY_INSTANCE_ID]
+    repo = instance["repo"]
+    version = instance["version"]
+    base_commit = instance["base_commit"]
+    problem_statement = instance["problem_statement"]
+    hints_text = instance["hints_text"]  # Unused
+    if isinstance(instance["created_at"], int):
+        # 转换为秒（datetime 需要秒级时间戳）
+        timestamp_ms = instance["created_at"]
+        timestamp_s = timestamp_ms/ 1000
+
+        # 转换为日期时间
+        date_time = datetime.fromtimestamp(timestamp_s)
+        instance["created_at"] = date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    time = instance["updated_at"].split("T")[0] 
+
+    test_patch = instance["test_patch"]
+    def _from_json_or_obj(key: str) -> Any:
+        """If key points to string, load with json"""
+        if isinstance(instance[key], str):
+            return json.loads(instance[key])
+        return instance[key]
+
+    pass_to_pass = _from_json_or_obj(PASS_TO_PASS)
+    fail_to_pass = _from_json_or_obj(FAIL_TO_PASS)
+
+    env_name = "testbed"
+    repo_directory = f"/{env_name}"
+    specs = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, default_config)
+
+    repo_script_list = make_nightly_repo_script_list(specs, repo, repo_directory, base_commit, env_name,time)
+    try:
+        env_script_list = make_env_script_list(instance, specs, repo, repo_directory, env_name)
+    except Exception as e:
+        logger.warning(f"Failed to create make env script for {instance_id}: {e}")
+        return None
+
+    if platform.machine() in {"aarch64", "arm64"}:
+        # use arm64 unless explicitly specified
+        arch = "arm64" if instance_id not in USE_X86 else "x86_64"
+    else:
+        arch = "x86_64"
+
+    # get cargo.toml
+    # req_path = MAP_REPO_TO_REQS_PATHS[repo]
+    # reqs_url = os.path.join(SWE_BENCH_URL_RAW, repo, base_commit, req_path)
+    # reqs = requests.get(reqs_url)
+    # cargo_toml = reqs.text
+    cargo_toml = ""
+    tests_changed = list(dict.fromkeys(get_test_directives(instance)))
+    image_tag = MAP_REPO_VERSION_TO_SPECS.get(repo, {}).get(version, {}).get("image_tag", None)
+    # get eval script list
+    eval_script_list = make_eval_script_list_wo_features(
         instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed
     )
     if eval_script_list is None:

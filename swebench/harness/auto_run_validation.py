@@ -25,7 +25,7 @@ if not os.path.exists(versioning_log_folder):
 if not os.path.exists(dataset_folder):
     os.makedirs(dataset_folder)
 
-num_workers = 16  # 并行线程数量
+num_workers = 4  # 并行线程数量
 
 
 def setup_logging(rerun):

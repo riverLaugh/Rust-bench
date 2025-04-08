@@ -170,6 +170,67 @@ def get_cargo_test_cmd(
         return None
 
 
+def get_cargo_test_cmd_wo_features(
+        root: RepoArchitecture, tests: list[str], flags: Optional[str] = None
+) -> list[str]:
+    try:
+        submodule_test_dict = dict()
+        for test_path in tests:
+            # assert .rs file
+            if not test_path.endswith(".rs"):
+                continue
+            test_segments = test_path.split("/")
+            test_dir, test_file, test_name = test_segments[:-1], test_segments[-1], test_segments[-1].removesuffix(".rs")
+            # find nearest cargo submodule
+            module_path = root.find_module(test_dir).get_full_path()
+            # init submodule tests
+            if module_path not in submodule_test_dict:
+                submodule_test_dict[module_path] = list()
+            # try integration test
+            if f"{module_path}/tests/{test_file}" == test_path:
+                if isinstance(submodule_test_dict[module_path], list):
+                    submodule_test_dict[module_path].append(
+                        f'cargo test --no-fail-fast --test "{test_name}"'
+                    )
+            # try bin test
+            elif f"{module_path}/src/bin/{test_file}" == test_path:
+                if isinstance(submodule_test_dict[module_path], list):
+                    submodule_test_dict[module_path].append(
+                        f'cargo test --no-fail-fast --bin "{test_name}"'
+                    )
+            # try example test
+            elif f"{module_path}/examples/{test_file}" == test_path:
+                if isinstance(submodule_test_dict[module_path], list):
+                    submodule_test_dict[module_path].append(
+                        f'cargo test --no-fail-fast --example "{test_name}"'
+                    )
+            # try bench test
+            elif f"{module_path}/benches/{test_file}" == test_path:
+                if isinstance(submodule_test_dict[module_path], list):
+                    submodule_test_dict[module_path].append(
+                        f'cargo test --no-fail-fast --bench "{test_name}"'
+                    )
+            # test all
+            else:
+                submodule_test_dict[module_path] = None
+        cmds = list()
+        if flags:
+            cmds.append(f'export RUSTFLAGS="{flags}"')
+            cmds.append(f'export RUSTDOCFLAGS="{flags}"')
+        for module_path in submodule_test_dict:
+            if module_path:
+                cmds.append(f'cd "{module_path}"')
+            if submodule_test_dict[module_path]:
+                cmds.extend(submodule_test_dict[module_path])
+            else:
+                cmds.append(f"cargo test --no-fail-fast")
+            if module_path:
+                cmds.append(f'cd {"../" * (module_path.count("/") + 1)}')
+        return cmds
+    except AssertionError:
+        return None
+
+
 def test_bitflags():
     test_cases = [
         ["tests/basic.rs"],
