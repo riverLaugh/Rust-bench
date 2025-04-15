@@ -54,6 +54,7 @@ def run_instance(
         run_id: str,
         timeout: int | None = None,
         auto: bool = False,
+        config: str = "default",
     ):
     """
     Run a single instance with the given prediction.
@@ -75,9 +76,9 @@ def run_instance(
     model_name_or_path = pred.get("model_name_or_path", "None").replace("/", "__")
     version_dir = f"{test_spec.repo.replace('/','_')}.{test_spec.version.replace('.','_')}"
     if auto:
-        log_dir = RUN_EVALUATION_LOG_DIR / "auto" /run_id / model_name_or_path / version_dir / instance_id
+        log_dir = RUN_EVALUATION_LOG_DIR / "auto" /run_id /config/ model_name_or_path / version_dir / instance_id
     else:
-        log_dir = RUN_EVALUATION_LOG_DIR / run_id  / model_name_or_path/ version_dir  / instance_id
+        log_dir = RUN_EVALUATION_LOG_DIR / run_id  /config/ model_name_or_path/ version_dir  / instance_id
     log_dir.mkdir(parents=True, exist_ok=True)
 
     # Link the image build dir in the log dir
@@ -226,7 +227,10 @@ def run_instance(
                 "No reference evaluation logs found",
                 logger,
             )
+        flag = False
         for test, status in eval_sm.items():
+            if status == "PASSED":
+                flag = True
             if status == "PASSED" and eval_sm_ref.get(test, None) == "FAILED":
                 report_map["FAIL_TO_PASS"].append(test)
             elif status == "PASSED" and eval_sm_ref.get(test, None) == "PASSED":
@@ -236,12 +240,11 @@ def run_instance(
             elif status == "FAILED" and eval_sm_ref.get(test, None) == "PASSED":
                 report_map["PASS_TO_FAIL"].append(test)
         
-        
-        if len(report_map["FAIL_TO_PASS"]) == 0 and len(report_map["PASS_TO_PASS"]) == 0 and "error[E0554]" in test_output: 
-            return False,report_map
+        if flag == False: 
+            return False, report_map
             
 
-        return True,report_map
+        return True, report_map
     except EvaluationError as e:
         error_msg = traceback.format_exc()
         logger.info(error_msg)
@@ -302,6 +305,7 @@ def run_instance_batch(
                     run_id,
                     timeout,
                     auto,
+                    config.name,
                 ): test_spec.instance_id
                 for test_spec in test_specs
             }
@@ -325,6 +329,7 @@ def run_instance_batch(
                 except Exception as e:
                     print(f"Error in {config.name} instance {instance_id}: {e}")
                     failed_ids.append(instance_id)
+
 
     return results, failed_ids
 
@@ -352,13 +357,21 @@ def run_instances(
         RunConfig("nightly", make_nightly_test_spec, "Running nightly instances"),
         RunConfig("test", make_test_spec_wo_features, "Running test instances"),
         RunConfig("nightly_wo_features", make_test_spec_nightly_wo_feature, "Running nightly instances without features"),
-
     ]
 
     # 初始化实例和结果
     remaining_instances = instances
     all_results = {}
-    reusable_images = set()  # 假设已定义逻辑
+    reusable_images = set()
+    log = {}
+    if auto:
+        log_dir = RUN_EVALUATION_LOG_DIR / "auto" / run_id 
+    else:
+        log_dir = RUN_EVALUATION_LOG_DIR / run_id 
+    log_dir_file = log_dir / "log.json"
+
+    # 确保日志目录存在
+    log_dir.mkdir(parents=True, exist_ok=True)
 
     # 如果不强制重建，检查可重用镜像
     if not force_rebuild:
@@ -382,16 +395,27 @@ def run_instances(
         # 运行当前批次
         results, failed_ids = run_instance_batch(
             test_specs, predictions, client, run_id, config,
-            cache_level, clean, force_rebuild, max_workers, timeout, auto,reusable_images
+            cache_level, clean, force_rebuild, max_workers, timeout, auto, reusable_images
         )
         all_results.update(results)
+
+        # 计算成功 ID
+        test_ids = {spec.instance_id for spec in test_specs}
+        successful_ids = list(test_ids - set(failed_ids))
+        log[config.name] = successful_ids
 
         # 更新剩余实例
         remaining_instances = [inst for inst in remaining_instances if inst['instance_id'] in failed_ids]
 
+    # 记录所有配置都失败的 ID
+    log["all_failed"] = [inst['instance_id'] for inst in remaining_instances]
+
+    # 写入日志
+    with open(log_dir_file, "w") as f:
+        json.dump(log, f, indent=4)
+    
     print("All instances run.")
     return all_results
-
 
 def main(
         dataset_name: str,

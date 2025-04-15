@@ -297,6 +297,7 @@ def make_repo_script_list(specs, repo, repo_directory, base_commit, env_name,tim
     """
     setup_commands = [
         "pwd",
+        "cargo clean",
         # f"git clone -o origin https://github.com/{repo} {repo_directory}",
         # f"chmod -R 777 {repo_directory}",  # So nonroot user can run tests
         f"cd {repo_directory}",
@@ -383,7 +384,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     HEREDOC_DELIMITER = "EOF_114329324912"
     test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
     # Reset test files to the state they should be in before the patch.
-    reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
+    reset_tests_command = [f"git reset --hard {base_commit}", "git clean -fd"]
     if instance["instance_id"] == "asterinas__asterinas-1138":
         reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)} && rm -rf /testbed/osdk/my-first-os"
     apply_test_patch_command = (
@@ -394,9 +395,13 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
 
     # test_commands = make_test_cmds(instance, specs, env_name, repo_directory, base_commit, test_patch, tests_changed)
     # if test_commands is None:
+
     pool = GithubApiPool(tokens=os.environ["GITHUB_TOKENS"])
     repo = get_repo_arch(pool, instance['repo'].split("/")[0], instance['repo'].split("/")[1], base_commit)
-    test_commands = get_cargo_test_cmd(repo, tests_changed)
+    if instance['repo'] == 'bitflags/bitflags':
+        test_commands = get_cargo_test_cmd_wo_features(repo, tests_changed)
+    else:
+        test_commands = get_cargo_test_cmd(repo, tests_changed)
     
     if test_commands is None or test_commands == []:
         return None
@@ -419,13 +424,12 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     if "install" in specs:
         eval_commands.append(specs["install"])
     eval_commands += [
-        # reset_tests_command,
         apply_test_patch_command,
         git_status_cmd,
         diff_cmd,
         *(test_commands),
         git_status_cmd,
-        reset_tests_command
+        *(reset_tests_command)
     ]
     return eval_commands
 
@@ -629,7 +633,7 @@ def make_eval_script_list_wo_features(instance, specs, env_name, repo_directory,
     HEREDOC_DELIMITER = "EOF_114329324912"
     test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
     # Reset test files to the state they should be in before the patch.
-    reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)}"
+    reset_tests_command = [f"git reset --hard {base_commit}", "git clean -fd"]
     if instance["instance_id"] == "asterinas__asterinas-1138":
         reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)} && rm -rf /testbed/osdk/my-first-os"
     apply_test_patch_command = (
@@ -665,13 +669,12 @@ def make_eval_script_list_wo_features(instance, specs, env_name, repo_directory,
     if "install" in specs:
         eval_commands.append(specs["install"])
     eval_commands += [
-        # reset_tests_command,
         apply_test_patch_command,
         git_status_cmd,
         diff_cmd,
         *(test_commands),
         git_status_cmd,
-        reset_tests_command
+        *(reset_tests_command)
     ]
     return eval_commands
 

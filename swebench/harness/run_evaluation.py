@@ -415,16 +415,16 @@ def make_run_report(
             error_ids.add(instance_id)
 
     # get remaining instance images and containers
-    images = list_images(client)
-    test_specs = list(map(make_test_spec, full_dataset))
-    for spec in test_specs:
-        image_name = spec.instance_image_key
-        if image_name in images:
-            unremoved_images.add(image_name)
-    containers = client.containers.list(all=True)
-    for container in containers:
-        if run_id in container.name:
-            unstopped_containers.add(container.name)
+    # images = list_images(client)
+    # test_specs = [x for x in list(map(make_test_spec, full_dataset)) if x is not None]
+    # for spec in test_specs:
+    #     image_name = spec.instance_image_key
+    #     if image_name in images:
+    #         unremoved_images.add(image_name)
+    # containers = client.containers.list(all=True)
+    # for container in containers:
+    #     if run_id in container.name:
+    #         unstopped_containers.add(container.name)
 
     # print final report
     dataset_ids = {i[KEY_INSTANCE_ID] for i in full_dataset}

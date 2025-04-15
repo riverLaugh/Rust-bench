@@ -4,11 +4,11 @@
 
 # 1.21
 python run_validation.py \
-    --dataset_name r1v3r/auto_0207_bug_updated\
-    --run_id acr_4_2 \
+    --dataset_name r1v3r/top20_crates\
+    --run_id top20_crates_bitflags \
     --max_workers 4 \
-    --cache_level instance\
-    --instance_ids bitflags__bitflags-266
+    --cache_level instance \
+    --force_rebuild 1
     # --instance_ids tokio-rs__tokio-2362 tokio-rs__tokio-2448 tokio-rs__tokio-5914 serde-rs__serde-2562
 
 # 1.20
