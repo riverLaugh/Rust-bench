@@ -150,7 +150,7 @@ def run_instance(
 
         # Attempt to apply patch to container
         val = container.exec_run(
-            "git apply --allow-empty -v /tmp/patch.diff",
+            "git apply -v /tmp/patch.diff",
             workdir="/testbed",
             user="root",
         )

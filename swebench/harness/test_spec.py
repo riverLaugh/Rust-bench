@@ -384,7 +384,7 @@ def make_eval_script_list(instance, specs, env_name, repo_directory, base_commit
     HEREDOC_DELIMITER = "EOF_114329324912"
     test_files = re.findall(DIFF_MODIFIED_FILE_REGEX, test_patch)
     # Reset test files to the state they should be in before the patch.
-    reset_tests_command = [f"git reset --hard {base_commit}", "git clean -fd"]
+    reset_tests_command = [f"git reset --hard {base_commit}", "git clean -fd","cargo lts"]
     if instance["instance_id"] == "asterinas__asterinas-1138":
         reset_tests_command = f"git checkout {base_commit} {' '.join(test_files)} && rm -rf /testbed/osdk/my-first-os"
     apply_test_patch_command = (

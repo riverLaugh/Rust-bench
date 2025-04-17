@@ -3,11 +3,12 @@
 # r1v3r/serde-None-task-instances_versions
 
 # 1.21
-python run_validation.py \
+python3 run_validation.py \
     --dataset_name r1v3r/top20_crates\
-    --run_id top20_crates_bitflags \
-    --max_workers 4 \
+    --run_id BurntSushi__memchr-126\
+    --max_workers 10 \
     --cache_level instance \
+    --instance_ids BurntSushi__memchr-126\
     --force_rebuild 1
     # --instance_ids tokio-rs__tokio-2362 tokio-rs__tokio-2448 tokio-rs__tokio-5914 serde-rs__serde-2562
 
